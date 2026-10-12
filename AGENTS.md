@@ -13,3 +13,5 @@
 - Los sources del proyecto ChatGPT superior son referencias de solo lectura.
 
 - Prioridad de producto: herramienta gráfica de apoyo a las clases de Cristian. Mantener el taller isométrico como acceso principal, escenarios comparables, lectura de colores/objetos y vista de proyección. Los dibujos deben cambiar con cálculos explicados; no presentar una metáfora como un modelo real.
+
+- Base relacional: backend/ se aloja como Site privado solo propietario. No ampliar su audiencia: el panel permite al docente ver y editar todos los registros. Los datos y exportaciones personales nunca se suben a GitHub. La integración docs/database-config.js se retira con enabled:false. GitHub Pages no aloja la base. El registro/importación es docente, sin sincronización automática desde los navegadores de los alumnos.
