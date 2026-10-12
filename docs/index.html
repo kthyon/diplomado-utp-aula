@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#244f42">
+  <meta name="description" content="Aula interactiva de Machine Learning y Deep Learning para Agronegocios. Diplomado UTP con Cristian Alvarado.">
+  <title>Aula UTP · Del dato al descubrimiento</title>
+  <link rel="icon" href="assets/semilla.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"><script type="module" src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Ir al contenido</a>
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="#inicio"><span class="brand-mark">🌱</span><span>Aula <b>UTP</b><small>CIENCIA DE DATOS</small></span></a>
+  <div class="edition">AGRONEGOCIOS <span>2026–2</span></div>
+  <nav aria-label="Navegación principal">
+    <a href="#inicio" data-nav="inicio"><span>⌂</span> Mi aula</a>
+    <div class="nav-label">TU RECORRIDO</div>
+    <a href="#curso/ml" data-nav="ml"><span>↗</span> Machine Learning <small>05</small></a>
+    <a href="#curso/dl" data-nav="dl"><span>✳</span> Deep Learning <small>06</small></a>
+    <div class="nav-label">APRENDER HACIENDO</div>
+    <a href="#explorar" data-nav="explorar"><span>◉</span> Explora una idea</a>
+    <a href="#biblioteca" data-nav="biblioteca"><span>▤</span> Mi biblioteca</a>
+    <a href="#progreso" data-nav="progreso"><span>◷</span> Mi progreso</a>
+  </nav>
+  <div class="sidebar-bottom"><div class="teacher-avatar">CA</div><div><b>Cristian Alvarado</b><small>Tu docente</small></div></div>
+  <a class="teacher-link" href="#docente">Espacio del docente <span>↗</span></a>
+</aside>
+<div class="app">
+  <header class="topbar">
+    <button class="menu-button" id="menu-button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <div class="breadcrumb">DIPLOMADO UTP <span>/</span> <b id="page-label">Mi aula</b></div>
+    <form id="search-form" class="search"><span aria-hidden="true">⌕</span><input id="search" aria-label="Buscar temas y conceptos" placeholder="Buscar un concepto…" autocomplete="off"><button aria-label="Buscar">↵</button></form>
+    <button id="name-button" class="profile-button" aria-label="Personalizar mi nombre"><span id="profile-avatar">TÚ</span><b id="profile-name">Mi espacio</b></button>
+  </header>
+  <main id="main" tabindex="-1"></main>
+  <footer class="site-footer"><span>Diplomado en Ciencia de Datos para Agronegocios · UTP</span><span>Concepto → ejemplo → exploración → comprensión</span></footer>
+</div>
+<dialog id="modal" aria-labelledby="modal-title"><div id="modal-body"></div><button class="modal-close" id="modal-close" aria-label="Cerrar ventana">×</button></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<noscript>Activa JavaScript para usar los simuladores y recorrer el aula. Los cuadernos están disponibles en el repositorio del diplomado.</noscript>
+</body></html>
+
