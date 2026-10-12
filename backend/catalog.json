@@ -1,0 +1,158 @@
+{
+  "courses": [
+    {
+      "id": "ml",
+      "title": "Machine Learning"
+    },
+    {
+      "id": "dl",
+      "title": "Deep Learning"
+    }
+  ],
+  "topics": [
+    {
+      "id": "ml-problema",
+      "course_id": "ml",
+      "title": "Primero la pregunta, después el modelo",
+      "position": 1
+    },
+    {
+      "id": "ml-preparacion",
+      "course_id": "ml",
+      "title": "Un registro vacío no es cero",
+      "position": 2
+    },
+    {
+      "id": "ml-regresion",
+      "course_id": "ml",
+      "title": "Una predicción también tiene error",
+      "position": 3
+    },
+    {
+      "id": "ml-clasificacion",
+      "course_id": "ml",
+      "title": "De una puntuación a una categoría",
+      "position": 4
+    },
+    {
+      "id": "ml-metricas",
+      "course_id": "ml",
+      "title": "Diez plantas, cuatro resultados posibles",
+      "position": 5
+    },
+    {
+      "id": "ml-umbral",
+      "course_id": "ml",
+      "title": "La decisión tiene un umbral",
+      "position": 6
+    },
+    {
+      "id": "ml-clustering",
+      "course_id": "ml",
+      "title": "Parecidos no son categorías de calidad",
+      "position": 7
+    },
+    {
+      "id": "ml-pca",
+      "course_id": "ml",
+      "title": "Resumir sin inventar clases",
+      "position": 8
+    },
+    {
+      "id": "ml-ensambles",
+      "course_id": "ml",
+      "title": "Varias respuestas, una comparación justa",
+      "position": 9
+    },
+    {
+      "id": "ml-series",
+      "course_id": "ml",
+      "title": "El futuro va después",
+      "position": 10
+    },
+    {
+      "id": "ml-refuerzo",
+      "course_id": "ml",
+      "title": "Aprender de las consecuencias",
+      "position": 11
+    },
+    {
+      "id": "ml-integracion",
+      "course_id": "ml",
+      "title": "Explicar el resultado antes de usarlo",
+      "position": 12
+    },
+    {
+      "id": "dl-redes",
+      "course_id": "dl",
+      "title": "Una red transforma entradas",
+      "position": 1
+    },
+    {
+      "id": "dl-activaciones",
+      "course_id": "dl",
+      "title": "La activación cambia la respuesta",
+      "position": 2
+    },
+    {
+      "id": "dl-entrenamiento",
+      "course_id": "dl",
+      "title": "El error guía los ajustes",
+      "position": 3
+    },
+    {
+      "id": "dl-vision",
+      "course_id": "dl",
+      "title": "Tres preguntas distintas para una imagen",
+      "position": 4
+    },
+    {
+      "id": "dl-cnn",
+      "course_id": "dl",
+      "title": "Aprender patrones locales de píxeles",
+      "position": 5
+    },
+    {
+      "id": "dl-transferencia",
+      "course_id": "dl",
+      "title": "Reutilizar lo aprendido",
+      "position": 6
+    },
+    {
+      "id": "dl-secuencias",
+      "course_id": "dl",
+      "title": "El orden puede cambiar el significado",
+      "position": 7
+    },
+    {
+      "id": "dl-atencion",
+      "course_id": "dl",
+      "title": "Relacionar elementos con contexto",
+      "position": 8
+    },
+    {
+      "id": "dl-transformers",
+      "course_id": "dl",
+      "title": "Atención más información de orden",
+      "position": 9
+    },
+    {
+      "id": "dl-yolo",
+      "course_id": "dl",
+      "title": "De una foto a un registro",
+      "position": 10
+    },
+    {
+      "id": "dl-evaluacion",
+      "course_id": "dl",
+      "title": "Una imagen marcada no prueba calidad",
+      "position": 11
+    },
+    {
+      "id": "dl-integracion",
+      "course_id": "dl",
+      "title": "Del modelo a una decisión responsable",
+      "position": 12
+    }
+  ]
+}
