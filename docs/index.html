@@ -4,16 +4,16 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#244f42">
   <meta name="description" content="Aula interactiva de Machine Learning y Deep Learning para Agronegocios. Diplomado UTP con Cristian Alvarado.">
-  <title>Aula UTP · Del dato al descubrimiento</title>
-  <link rel="icon" href="assets/semilla.svg" type="image/svg+xml">
+  <title>Nexo IA · Del dato al descubrimiento</title>
+  <link rel="icon" href="assets/nexo-ia.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css"><script type="module" src="app.js"></script>
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="identity.css"><script type="module" src="app.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir al contenido</a>
 <aside class="sidebar" id="sidebar">
-  <a class="brand" href="#inicio"><span class="brand-mark">🌱</span><span>Aula <b>UTP</b><small>CIENCIA DE DATOS</small></span></a>
+  <a class="brand" href="#inicio" aria-label="Nexo IA · Inicio"><img class="brand-mark" src="assets/nexo-ia.svg" alt="" width="45" height="45"><span>Nexo <b>IA</b><small>INTELIGENCIA APLICADA</small></span></a>
   <div class="edition">AGRONEGOCIOS <span>2026–2</span></div>
   <nav aria-label="Navegación principal">
     <a href="#inicio" data-nav="inicio"><span>⌂</span> Mi aula</a>
@@ -25,8 +25,10 @@
     <a href="#biblioteca" data-nav="biblioteca"><span>▤</span> Mi biblioteca</a>
     <a href="#progreso" data-nav="progreso"><span>◷</span> Mi progreso</a>
   </nav>
-  <div class="sidebar-bottom"><div class="teacher-avatar">CA</div><div><b>Cristian Alvarado</b><small>Tu docente</small></div></div>
-  <a class="teacher-link" href="#docente">Espacio del docente <span>↗</span></a>
+  <section class="teacher-card" aria-label="Docente del diplomado">
+    <div class="sidebar-bottom"><img class="teacher-avatar" src="assets/cristian-alvarado.jpg" alt="Retrato de Cristian Alvarado" width="52" height="60"><div><b>Cristian Alvarado</b><small>Docente · Diplomado UTP</small></div></div>
+    <a class="teacher-link" href="#docente">Espacio docente <span aria-hidden="true">↗</span></a>
+  </section>
 </aside>
 <div class="app">
   <header class="topbar">
@@ -42,4 +44,3 @@
 <div id="toast" role="status" aria-live="polite"></div>
 <noscript>Activa JavaScript para usar los simuladores y recorrer el aula. Los cuadernos están disponibles en el repositorio del diplomado.</noscript>
 </body></html>
-
