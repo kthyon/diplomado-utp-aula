@@ -47,7 +47,7 @@
 @media(max-width:560px){.visual-home .hero{padding:23px;gap:22px}.visual-home .hero h1{font-size:38px}.hero-art.ai-diagram{height:auto;min-height:0;padding:15px 12px}.ai-diagram-header{font-size:7px;letter-spacing:.7px}.ai-diagram-tag{font-size:7px}.ai-diagram figcaption{font-size:8px;gap:8px}.ai-diagram figcaption span{font-size:7px}.iso-stage{padding:14px 10px}.iso-stage-bar{font-size:9px}.iso-svg{min-height:0}.iso-legend{font-size:10px;justify-content:flex-start}.iso-metric{min-width:100px;padding:11px}.iso-metric span{font-size:10px}.iso-controls{padding:18px 15px}.iso-control-fields{padding:16px 12px}.iso-top h2{font-size:20px}}
 @media(prefers-reduced-motion:reduce){.ai-data-flow path,.ai-neuron{animation:none!important}}
 @media(max-width:560px){
-  .hero-art.ai-diagram svg{display:none}
+  .visual-home .hero-art.ai-diagram svg,.hero-art.ai-diagram svg{display:none}
   .ai-mobile-flow{display:grid;gap:7px;padding:20px 0 16px;text-align:center}
   .ai-mobile-flow>div{padding:12px 9px;background:#ffffff08;border:1px solid #ffffff18;border-radius:11px}
   .ai-mobile-flow small{display:block;font-size:8px;letter-spacing:1px;color:#9fb8ad;margin-bottom:7px}
