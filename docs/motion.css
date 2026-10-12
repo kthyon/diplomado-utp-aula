@@ -1,0 +1,60 @@
+/* Shared interaction feedback. All content remains visible without JavaScript. */
+:root{--motion-ease:cubic-bezier(.22,1,.36,1);--motion-fast:180ms;--motion-medium:320ms}
+main.fade-in{animation:none}
+.button,.profile-button,.menu-button,.sidebar nav a,.teacher-link,.sidebar-bottom,.iso-tabs button,.iso-preset,.quiz button,.lesson-nav a{transition:transform var(--motion-fast) var(--motion-ease),background-color var(--motion-fast),border-color var(--motion-fast),box-shadow var(--motion-fast),color var(--motion-fast)}
+.button,.iso-tabs button,.iso-preset,.quiz button{position:relative;isolation:isolate;overflow:hidden}
+.button:active:not(:disabled),.profile-button:active,.menu-button:active,.iso-tabs button:active,.iso-preset:active,.quiz button:active:not(:disabled){transform:scale(.97)}
+.button:focus-visible,.sidebar nav a:focus-visible,.teacher-link:focus-visible,.sidebar-bottom:focus-visible,.iso-tabs button:focus-visible,.iso-preset:focus-visible,.quiz button:focus-visible{outline:2px solid var(--green);outline-offset:4px;box-shadow:0 0 0 5px #d2eaa055}
+.sidebar nav a>span,.teacher-link span,.teacher-avatar,.brand-mark,.profile-button>span{transition:transform var(--motion-medium) var(--motion-ease)}
+.sidebar nav a.active>span{transform:scale(1.1)}
+.sidebar{transition:transform var(--motion-medium) var(--motion-ease)}
+.menu-button[aria-expanded=true]{transform:rotate(90deg)}
+.search{transition:border-color var(--motion-fast),box-shadow var(--motion-fast),background-color var(--motion-fast)}
+.search:focus-within{border-color:#77957d;box-shadow:0 0 0 4px #d2eaa045;background:#fff}
+dialog input,.study-note,.teacher-select,.controls select,.iso-controls select{transition:border-color var(--motion-fast),box-shadow var(--motion-fast)}
+dialog input:focus,.study-note:focus,.teacher-select:focus,.controls select:focus,.iso-controls select:focus{border-color:#77957d;box-shadow:0 0 0 4px #d2eaa045}
+dialog input:user-invalid{border-color:#c47948;box-shadow:0 0 0 3px #c4794818}
+.course-card,.resource-grid .panel,.badge,.glossary details,.topic-row,.iso-metric{transition:transform var(--motion-medium) var(--motion-ease),box-shadow var(--motion-medium),border-color var(--motion-fast),background-color var(--motion-fast)}
+.topic-row{border-radius:8px}
+.track>span{transition:width 650ms var(--motion-ease)}
+.quiz button.correct{animation:answer-confirm 360ms var(--motion-ease)}
+.quiz button.wrong{animation:answer-retry 280ms ease-out}
+.quiz-feedback:not(:empty){animation:feedback-enter 240ms var(--motion-ease)}
+.glossary details[open] p{animation:feedback-enter 240ms var(--motion-ease)}
+.glossary summary{transition:color var(--motion-fast)}
+.glossary details[open] summary{color:var(--green)}
+dialog::backdrop{animation:backdrop-enter 220ms ease-out}
+#toast{transition:opacity 220ms,transform 300ms var(--motion-ease);transform:translate(-50%,12px)}
+#toast.show{transform:translate(-50%,0)}
+.motion-ripple{position:absolute;pointer-events:none;border-radius:50%;background:currentColor;opacity:0;z-index:-1}
+.stat strong,.metric strong,.iso-metric strong{font-variant-numeric:tabular-nums}
+.iso-hotspot{transition:filter var(--motion-fast)}
+input[type=range]::-webkit-slider-thumb{transition:box-shadow var(--motion-fast),transform var(--motion-fast)}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 6px #244f421a}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12);box-shadow:0 0 0 6px #244f421a}
+@media(hover:hover) and (pointer:fine){
+  .button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 16px #244f421c}
+  .sidebar nav a:hover:not(.active){background:var(--soft);transform:translateX(3px)}
+  .sidebar nav a:hover>span{transform:translateY(-2px)}
+  .teacher-link:hover span{transform:translate(2px,-2px)}
+  .sidebar-bottom:hover{background:#edf3e8}
+  .sidebar-bottom:hover .teacher-avatar{transform:scale(1.06)}
+  .brand:hover .brand-mark{transform:rotate(-5deg)}
+  .profile-button:hover>span{transform:scale(1.08)}
+  .course-card:hover,.resource-grid .panel:hover{transform:translateY(-4px);border-color:#c2d1b7;box-shadow:0 16px 36px #244f4210}
+  .badge:not(.inactive):hover{transform:translateY(-3px);box-shadow:0 10px 26px #244f4210}
+  .topic-row:not(.locked):hover{background:#f3f7ee;transform:translateX(3px)}
+  .glossary details:hover{border-color:#c2d1b7}
+  .iso-tabs button:hover,.iso-preset:hover,.lesson-nav a:hover{transform:translateY(-2px);box-shadow:0 4px 10px #244f4210}
+  .quiz button:hover:not(.correct):not(.wrong):not(:disabled){border-color:#92ac85;background:#f8fbf3}
+  .inline-link:hover{text-decoration-thickness:2px;text-underline-offset:4px}
+}
+@keyframes answer-confirm{50%{transform:scale(1.015)}}
+@keyframes answer-retry{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+@keyframes feedback-enter{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes backdrop-enter{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .motion-ripple{display:none}
+  .button:hover,.button:active,.sidebar nav a:hover,.sidebar nav a>span,.teacher-link span,.teacher-avatar,.brand-mark,.profile-button>span,.course-card:hover,.resource-grid .panel:hover,.badge:hover,.topic-row:hover,.iso-tabs button:hover,.iso-preset:hover,.lesson-nav a:hover,.quiz button:active,.profile-button:active,.menu-button[aria-expanded=true]{transform:none!important}
+}
