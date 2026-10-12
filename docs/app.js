@@ -1,6 +1,6 @@
 import {initStudentRegistration,saveStudentProgress,studentConnected,openStudentRegistration} from './student-registration.js';
 import {STUDENT_RECORDS} from './database-config.js';
-import {heroVisual} from './hero-visual.js?v=2';
+import {heroVisual} from './hero-space.js?v=1';
 import {COURSES,LESSONS,GLOSSARY,NOTEBOOKS,SOURCES,REPO,findLesson,classOf} from './content.js';
 import {canAccess} from './math.js';
 import {mountSimulator} from './simulators.js';
