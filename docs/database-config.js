@@ -2,5 +2,5 @@
 export const STUDENT_RECORDS = {
  enabled:true,
  url:'https://nexo-ia-registros-utp.niftyacorn2048.chatgpt.site',
- mode:'teacher-private'
+ mode:'self-registration'
 };
