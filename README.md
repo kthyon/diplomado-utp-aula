@@ -49,3 +49,10 @@ Cuando se cambien conceptos, gráficos, ejemplos o cuadernos en este hilo, actua
 
 Fuentes primarias de conceptos se enlazan en cada tema. Los horarios y fechas corresponden al cronograma compartido. Las infografías son los apoyos visuales de DL creados previamente en este hilo.
 
+## Taller visual para acompañar la clase
+
+La portada presenta una herramienta de explicación y exploración. El taller contiene seis escenas isométricas: predicción de cosecha, decisiones de alerta, imputación de lluvia, activaciones, ajuste de un parámetro y tareas de visión. Cada escena tiene controles, tres escenarios preparados, inspección de objetos y una comparación A/B que conserva una copia independiente de los valores. La vista para proyectar oculta la navegación y amplía las etiquetas.
+
+Los ejemplos son didácticos y están identificados como inventados. Las ilustraciones responden a los cálculos de scene-models.js; no ejecutan modelos de Colab ni simulan causalidad agronómica. La pérdida de entrenamiento se explica como una metáfora de un parámetro. La ruta de temas, su habilitación manual, las copias personales en Colab y la bienvenida con Generalidades 2 se conservan. Las escenas introductorias están disponibles para explicar en clase; no habilitan los cuadernos ni marcan temas como vistos.
+
+Uso: abre Taller visual, elige una pregunta, guarda el escenario A, modifica B y compara las cifras y el dibujo. Pulsa Vista para proyectar para usarlo frente al grupo.
