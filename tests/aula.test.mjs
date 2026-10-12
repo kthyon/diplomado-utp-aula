@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {COURSES,LESSONS,NOTEBOOKS} from '../docs/content.js';
 import {median,mae,ols,confusion,dbscan,projectionVariance,gradientStep,canAccess} from '../docs/math.js';
+test('El tema de ensambles muestra comparación de modelos, no una recta',()=>assert.equal(LESSONS.find(l=>l.id==='ml-ensambles').sim,'ensembles'));
 test('Métricas de las diez plantas: TP3 FP2 TN4 FN1',()=>{const m=confusion([1,1,1,1,0,0,0,0,0,0],[.9,.8,.7,.4,.75,.55,.3,.2,.1,.05],.5);assert.deepEqual([m.tp,m.fp,m.tn,m.fn],[3,2,4,1]);assert.equal(m.precision,.6);assert.equal(m.recall,.75);assert.equal(m.accuracy,.7);assert.equal(confusion([1,0],[.1,.2],.9).precision,null)});
 test('Mediana, error y recta tienen valores correctos',()=>{assert.equal(median([700,500,600]),600);assert.equal(median([2,8]),5);assert.equal(mae([3,4,5],[2.5,4.5,4]),2/3);assert.deepEqual(ols([1,2,3],[3,5,7]),{slope:2,intercept:1})});
 test('DBSCAN agrupa, identifica ruido e incluye al propio punto',()=>{assert.deepEqual(dbscan([[0,0],[0,.1],[4,4]],.2,2),[0,0,-1]);assert.deepEqual(dbscan([[0,0]],.2,1),[0])});

@@ -10,7 +10,7 @@ Web: https://kthyon.github.io/diplomado-utp-aula/
 
 ## Qué incluye
 
-8 clases, 24 temas, 11 exploradores (regresión, imputación, matriz y umbral, DBSCAN, proyección PCA, activaciones, gradiente, atención, tareas de visión, series y GridWorld), comprobaciones voluntarias, notas personales, insignias, búsqueda y biblioteca. Los exploradores son didácticos; no sustituyen entrenamientos ni evalúan modelos reales.
+8 clases, 24 temas, 12 exploradores (regresión, imputación, matriz y umbral, DBSCAN, proyección PCA, comparación de ensambles, activaciones, gradiente, atención, tareas de visión, series y GridWorld), comprobaciones voluntarias, notas personales, insignias, búsqueda y biblioteca. Los exploradores son didácticos; no sustituyen entrenamientos ni evalúan modelos reales.
 
 ## Habilitación manual
 
