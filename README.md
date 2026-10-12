@@ -57,8 +57,8 @@ Los ejemplos son didácticos y están identificados como inventados. Las ilustra
 
 Uso: abre Taller visual, elige una pregunta, guarda el escenario A, modifica B y compara las cifras y el dibujo. Pulsa Vista para proyectar para usarlo frente al grupo.
 
-## Base relacional privada
+## Registro de estudiantes
 
-En Espacio docente, Abrir registro privado permite administrar estudiantes, inscripciones a ML/DL, temas vistos y notas. El servicio Sites mantiene un D1/SQLite separado. El código y las migraciones están en backend/; los datos personales no se versionan. El panel es exclusivamente del propietario; no cambiar a público. El estudiante puede descargar su progreso local y compartirlo voluntariamente para que el docente lo importe. No hay sincronización automática.
+El botón Registro rápido permite a cada estudiante crear su registro con nombre completo o correo UTP. El acceso se protege con ChatGPT; no se presenta el formulario como Google OAuth. Al mantener abierta la ventana de registro, su avance y notas personales se guardan automáticamente. Si la cierra, el aula conserva cambios locales y requiere reconectar para subirlos. Cada registro se asocia a una identidad autenticada; escribir el nombre de otro alumno no da acceso a sus datos.
 
-Exportar todos los registros descarga una copia privada. Vaciar registros borra estudiantes y datos asociados en cascada, conservando temas/asignaturas. Para quitar la integración, cambiar enabled:false en docs/database-config.js. Ver backend/README.md para despliegue, limpieza y retirada.
+Espacio docente abre la administración solo para el docente, identificado por ADMIN_EMAIL en el servicio. Allí aparecen los registros, temas vistos y notas. El backend y migraciones están en backend/; los datos nunca se publican en GitHub. Exportar descarga una copia privada y Vaciar registros borra el grupo en cascada, manteniendo el catálogo. Para retirar la integración: enabled:false en docs/database-config.js.
