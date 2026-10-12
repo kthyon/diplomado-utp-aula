@@ -2,6 +2,7 @@
 
 - La web de este proyecto se publica en GitHub Pages: kthyon/diplomado-utp-aula.
 - Mantener dos asignaturas y generalidades, clases con desbloqueo manual y progreso individual.
+- Generalidades se muestra como ventana con Generalidades 2 de Google Slides, una sola vez por navegador al entrar a una asignatura. No duplicar su contenido en una página de texto; conservar el enlace vivo para que los cambios de la PPT aparezcan al abrir o actualizar el visor.
 - Cada cambio de contenido acordado en el hilo debe reflejarse aquí y publicarse con un commit. Sincronizar snapshots de notebooks cuando cambien en Drive. Actualizar también la presentación si sus fragmentos dejan de coincidir.
 - Conservar docs/releases.json salvo solicitud de habilitar/cerrar temas. No abrir temas automáticamente por fechas.
 - Nunca incrustar tokens, contraseñas o una falsa contraseña de docente. El desbloqueo global se publica por GitHub Actions con permisos de la cuenta.
