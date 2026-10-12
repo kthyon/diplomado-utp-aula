@@ -16,6 +16,8 @@ Web: https://kthyon.github.io/diplomado-utp-aula/
 
 Generalidades y dos exploradores introductorios están abiertos. Los temas de ambas asignaturas comienzan cerrados.
 
+La bienvenida muestra **Generalidades 2** incrustada desde Google Slides al entrar por primera vez en una asignatura. La marca se guarda por navegador, compartida por ambas asignaturas; no es una marca por cuenta. Se puede reabrir con «Volver a ver la bienvenida» y proyectar en otra pestaña. Editar la presentación original se refleja al abrir o actualizar el visor, sin una copia ni otro commit. Si se borra el almacenamiento del navegador, la bienvenida aparecerá de nuevo. Las generalidades ya no se duplican como una página de texto.
+
 1. Abre **Espacio del docente** en la web.
 2. Selecciona una clase o un tema y pulsa **Preparar desbloqueo**.
 3. En GitHub Actions, abre **Run workflow**, elige el destino indicado y ejecuta **Desbloquear temas de clase**.
