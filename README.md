@@ -59,6 +59,6 @@ Uso: abre Taller visual, elige una pregunta, guarda el escenario A, modifica B y
 
 ## Registro de estudiantes
 
-El botón Registro rápido permite a cada estudiante crear su registro con nombre completo o correo UTP. El acceso se protege con ChatGPT; no se presenta el formulario como Google OAuth. Al mantener abierta la ventana de registro, su avance y notas personales se guardan automáticamente. Si la cierra, el aula conserva cambios locales y requiere reconectar para subirlos. Cada registro se asocia a una identidad autenticada; escribir el nombre de otro alumno no da acceso a sus datos.
+El botón Registro rápido permite a cada estudiante crear su registro con nombre completo o correo UTP. El acceso se protege con ChatGPT; no se presenta el formulario como Google OAuth. Registro rápido abre la vista conectada del mismo taller. En ella, el avance y notas personales se guardan automáticamente; si falla la conexión, se conservan cambios pendientes en el navegador. Cada registro se asocia a una identidad autenticada; escribir el nombre de otro alumno no da acceso a sus datos.
 
 Espacio docente abre la administración solo para el docente, identificado por ADMIN_EMAIL en el servicio. Allí aparecen los registros, temas vistos y notas. El backend y migraciones están en backend/; los datos nunca se publican en GitHub. Exportar descarga una copia privada y Vaciar registros borra el grupo en cascada, manteniendo el catálogo. Para retirar la integración: enabled:false en docs/database-config.js.
