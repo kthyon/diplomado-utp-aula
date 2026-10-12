@@ -6,12 +6,12 @@
 .brand small{font-family:'DM Sans',sans-serif;font-size:7px;font-weight:600;letter-spacing:1.5px;margin-top:5px;color:#58736a}
 .teacher-card{margin-top:auto;padding-top:22px;flex-shrink:0}
 .sidebar-bottom{margin:0;padding:14px 10px 12px;gap:10px;border:1px solid var(--line);border-bottom:0;border-radius:12px 12px 0 0;background:#f7f9f5;align-items:center}
-.teacher-avatar{display:block;width:46px;height:56px;flex-shrink:0;border-radius:9px;object-fit:cover;object-position:50% 24%;border:1px solid #dce4dd}
+.teacher-avatar{display:block;width:46px;height:46px;flex-shrink:0;border-radius:50%;object-fit:cover;object-position:50% 24%;border:1px solid #dce4dd}
 .sidebar-bottom>div{min-width:0}
 .sidebar-bottom b{display:block;font-size:11px;font-weight:700;line-height:1.45;letter-spacing:-.15px}
 .sidebar-bottom small{font-size:8px;line-height:1.5;margin-top:4px;color:#587065}
 .teacher-link{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0;padding:12px 13px;border:1px solid var(--line);border-radius:0 0 12px 12px;background:#f7f9f5;color:var(--green);font-size:10px;font-weight:600;transition:background .2s}
 .teacher-link span{float:none;font-size:16px;line-height:1}
 .teacher-link:hover,.teacher-link:focus-visible{background:#eaf0e6}
-@media(min-width:851px) and (max-width:1150px){.sidebar-bottom{padding-left:8px;padding-right:8px;gap:8px}.teacher-avatar{width:38px;height:48px}.sidebar-bottom b{font-size:10px}.sidebar-bottom small{font-size:7px}.brand{font-size:25px;gap:9px}.brand small{font-size:6px}}
+@media(min-width:851px) and (max-width:1150px){.sidebar-bottom{padding-left:8px;padding-right:8px;gap:8px}.teacher-avatar{width:38px;height:38px}.sidebar-bottom b{font-size:10px}.sidebar-bottom small{font-size:7px}.brand{font-size:25px;gap:9px}.brand small{font-size:6px}}
 @media(max-height:760px){.sidebar{padding-top:22px;padding-bottom:20px}.edition{margin-top:22px;margin-bottom:14px}.nav-label{margin-top:20px;margin-bottom:8px}.sidebar nav a{padding-top:11px;padding-bottom:11px}.teacher-card{padding-top:18px}}
