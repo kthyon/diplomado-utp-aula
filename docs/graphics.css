@@ -1,0 +1,47 @@
+/* Graphic system: legible axes, distinct series and contained controls. */
+.hero-art.ai-diagram{display:flex;flex-direction:column;justify-content:space-between;align-items:stretch;margin:0;padding:22px 20px 18px;background:radial-gradient(ellipse at 50% 40%,#244f42,#153a32 70%);border:1px solid #ffffff18;border-radius:18px;box-shadow:0 16px 40px #153d3617;min-width:0}
+.ai-diagram-header{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:9px;letter-spacing:1.1px;color:#c5d8c9;font-weight:600}
+.ai-diagram-header>span:first-child{display:flex;align-items:center;gap:7px}
+.ai-diagram-header i{width:5px;height:5px;border-radius:50%;background:#d2eaa0}
+.ai-diagram-tag{padding:5px 8px;border:1px solid #ffffff20;border-radius:5px;white-space:nowrap;font-size:8px;letter-spacing:.8px}
+.visual-home .hero-art.ai-diagram svg,.hero-art.ai-diagram svg{display:block;width:100%;height:auto;max-height:none;overflow:visible;margin:12px 0 8px}
+.ai-diagram figcaption{display:flex;justify-content:space-between;gap:10px;padding-top:13px;border-top:1px solid #ffffff15;font-size:10px;color:#d8e7d9;line-height:1.5}
+.ai-diagram figcaption span{font-size:8px;color:#97b3a6}
+.visual-home .hero{grid-template-columns:1fr 1.15fr;align-items:center;padding:32px;gap:30px}
+.ai-data-flow path{stroke-dasharray:4 12;animation:ai-flow 3s linear infinite}
+.ai-neuron{animation:ai-node 3.6s ease-in-out infinite}
+@keyframes ai-flow{to{stroke-dashoffset:-64}}
+@keyframes ai-node{50%{opacity:.55}}
+.iso-studio{border-color:#dce5dd;box-shadow:0 14px 40px #193d3209;border-radius:20px}
+.iso-stage{background:radial-gradient(ellipse at 50% 50%,#eef4e8 0%,#f9fbf7 72%);border-right-color:#e0e8df}
+.iso-stage-bar{font-size:10px;letter-spacing:.7px;color:#52685b;line-height:1.5}
+.iso-canvas{width:100%;min-width:0}
+.iso-svg{display:block;width:100%;height:auto;max-height:520px;filter:drop-shadow(0 12px 12px #244f4208)}
+.iso-inspect{border:1px solid #d5e0d3;background:#ffffffd9;border-radius:12px;padding:14px 16px;color:#304d3c;min-height:72px;line-height:1.75}
+.iso-metrics{gap:10px;margin-top:14px}
+.iso-metric{background:white;border-color:#dce5d8;border-radius:12px;padding:14px 16px}
+.iso-metric span{color:#536c59;font-size:11px;line-height:1.5}
+.iso-metric strong{font-size:24px;font-weight:700;letter-spacing:-.6px;margin-top:7px;overflow-wrap:anywhere}
+.iso-controls{background:#fff;min-width:0;border-left:0}
+.iso-control-fields{background:#f6f9f3;border:1px solid #e2e9dc;border-radius:12px;padding:18px 14px;gap:22px}
+.iso-slider label,.iso-controls label{line-height:1.6}
+.iso-legend{gap:12px;font-size:11px;padding:12px;background:#ffffffb0;border-radius:10px;margin:0 0 14px;color:#3f5f4c}
+.iso-legend>span{display:inline-flex;align-items:center;gap:6px}
+.iso-legend i{width:11px;height:11px;margin:0;flex-shrink:0}
+.iso-question{background:#f4f8f0}
+.iso-hotspot:focus-visible{outline:0;filter:drop-shadow(0 0 7px #548ec8)}
+.iso-pair article{border:1px solid #d8e2d0;border-radius:14px;background:#fff}
+.iso-tabs button{min-height:40px}
+.simulator{border-color:#dce5dd;border-radius:18px;box-shadow:0 8px 28px #193d3206}
+.sim-grid>div:first-child{min-width:0}
+.plot{background:#f8faf6;border:1px solid #e1e8df;border-radius:12px;aspect-ratio:500/310;min-height:0;height:auto}
+.plot text{font-family:'DM Sans',sans-serif;fill:#3e5949}
+.controls{min-width:0}
+.metric{background:#edf4e7;border:1px solid #dce7d4;border-radius:10px}
+.metric strong{overflow-wrap:anywhere;font-size:23px;font-variant-numeric:tabular-nums}
+.sim-caption{line-height:1.8;color:#526759;font-size:12px}
+.matrix>div.cell{background:#dceccf;color:#244f42}.matrix>div.error{background:#f4e1d2;color:#774e34}
+@media(max-width:1150px){.visual-home .hero{gap:20px;padding:28px;grid-template-columns:1fr 1.12fr}.ai-diagram-header{font-size:8px}.hero-art.ai-diagram{padding:16px}.iso-stage-bar{font-size:9px}}
+@media(max-width:850px){.visual-home .hero{grid-template-columns:1fr}.hero-art.ai-diagram{width:100%;max-width:580px;margin:0 auto}.hero-art.ai-diagram svg{max-height:290px}.visual-home .hero h1{font-size:46px}.iso-metric strong{font-size:21px}}
+@media(max-width:560px){.visual-home .hero{padding:23px;gap:22px}.visual-home .hero h1{font-size:38px}.hero-art.ai-diagram{height:auto;min-height:0;padding:15px 12px}.ai-diagram-header{font-size:7px;letter-spacing:.7px}.ai-diagram-tag{font-size:7px}.ai-diagram figcaption{font-size:8px;gap:8px}.ai-diagram figcaption span{font-size:7px}.iso-stage{padding:14px 10px}.iso-stage-bar{font-size:9px}.iso-svg{min-height:0}.iso-legend{font-size:10px;justify-content:flex-start}.iso-metric{min-width:100px;padding:11px}.iso-metric span{font-size:10px}.iso-controls{padding:18px 15px}.iso-control-fields{padding:16px 12px}.iso-top h2{font-size:20px}}
+@media(prefers-reduced-motion:reduce){.ai-data-flow path,.ai-neuron{animation:none!important}}
