@@ -1,6 +1,15 @@
-import test from 'node:test';import assert from 'node:assert/strict';import worker,{validateStudent,validateProgress} from '../worker.js';
+import test from 'node:test';import assert from 'node:assert/strict';import worker,{validateStudent,validateProgress,handleStudent} from '../worker.js';
 test('anonymous callers cannot read or write records',async()=>{for(const method of ['GET','POST','DELETE']){const r=await worker.fetch(new Request('https://records.test/api/records',{method}),{});assert.equal(r.status,401);}});
 test('authenticated writes must come from the private panel origin',async()=>{const r=await worker.fetch(new Request('https://records.test/api/clean',{method:'POST',headers:{'oai-authenticated-user-id':'teacher','origin':'https://evil.test'},body:'{}'}),{DB:{}});assert.equal(r.status,403);});
 test('an optional administrator identity restriction is enforced',async()=>{const r=await worker.fetch(new Request('https://records.test/api/records',{headers:{'oai-authenticated-user-id':'other','oai-authenticated-user-email':'other@example.test'}}),{ADMIN_EMAIL:'teacher@example.test',DB:{}});assert.equal(r.status,403);});
 test('student identity normalization and validation',()=>{assert.deepEqual(validateStudent({full_name:'  Ejemplo de Prueba ',email:' TEST@EXAMPLE.TEST '}),{full_name:'Ejemplo de Prueba',email:'test@example.test'});assert.throws(()=>validateStudent({full_name:'A'}));assert.throws(()=>validateStudent({full_name:'Nombre Apellido',email:'bad'}));assert.equal(validateStudent({full_name:'Nombre Apellido'}).email,null);});
 test('imports reject unknown topics and oversized notes, deduplicate progress',()=>{const catalog={topics:[{id:'ml-a'}]};assert.deepEqual(validateProgress({completed:['ml-a','ml-a'],notes:{'ml-a':'nota'}},catalog),{completed:['ml-a'],notes:[['ml-a','nota']]});assert.throws(()=>validateProgress({completed:['other'],notes:{}},catalog));assert.throws(()=>validateProgress({completed:[],notes:{'ml-a':'x'.repeat(10001)}},catalog));});
+test('student queries use the authenticated subject, not a claimed student id',async()=>{
+ const queries=[];const db={prepare(sql){return {bind(...args){queries.push({sql,args});return {first:async()=>null}}}}};
+ const r=await handleStudent(new Request('https://records.test/api/me?id=other-student'),db,'verified-subject');
+ assert.deepEqual(await r.json(),{student:null});assert.deepEqual(queries,[{sql:'SELECT id FROM students WHERE auth_subject=?',args:['verified-subject']}]);
+});
+test('a signed-in student cannot list the group or access cleanup',async()=>{
+ for(const [path,method] of [['records','GET'],['clean','POST'],['students','POST']]){
+ const r=await worker.fetch(new Request('https://records.test/api/'+path,{method,headers:{'oai-authenticated-user-id':'student','oai-authenticated-user-email':'student@utp.edu.co','origin':'https://records.test'}}),{DB:{},ADMIN_EMAIL:'teacher@example.test'});assert.equal(r.status,403);}
+});
