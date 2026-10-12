@@ -56,3 +56,9 @@ La portada presenta una herramienta de explicación y exploración. El taller co
 Los ejemplos son didácticos y están identificados como inventados. Las ilustraciones responden a los cálculos de scene-models.js; no ejecutan modelos de Colab ni simulan causalidad agronómica. La pérdida de entrenamiento se explica como una metáfora de un parámetro. La ruta de temas, su habilitación manual, las copias personales en Colab y la bienvenida con Generalidades 2 se conservan. Las escenas introductorias están disponibles para explicar en clase; no habilitan los cuadernos ni marcan temas como vistos.
 
 Uso: abre Taller visual, elige una pregunta, guarda el escenario A, modifica B y compara las cifras y el dibujo. Pulsa Vista para proyectar para usarlo frente al grupo.
+
+## Base relacional privada
+
+En Espacio docente, Abrir registro privado permite administrar estudiantes, inscripciones a ML/DL, temas vistos y notas. El servicio Sites mantiene un D1/SQLite separado. El código y las migraciones están en backend/; los datos personales no se versionan. El panel es exclusivamente del propietario; no cambiar a público. El estudiante puede descargar su progreso local y compartirlo voluntariamente para que el docente lo importe. No hay sincronización automática.
+
+Exportar todos los registros descarga una copia privada. Vaciar registros borra estudiantes y datos asociados en cascada, conservando temas/asignaturas. Para quitar la integración, cambiar enabled:false en docs/database-config.js. Ver backend/README.md para despliegue, limpieza y retirada.
