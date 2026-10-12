@@ -1,4 +1,4 @@
-import {heroVisual} from './hero-visual.js?v=1';
+import {heroVisual} from './hero-visual.js?v=2';
 import {COURSES,LESSONS,GLOSSARY,NOTEBOOKS,SOURCES,REPO,findLesson,classOf} from './content.js';
 import {canAccess} from './math.js';
 import {mountSimulator} from './simulators.js';

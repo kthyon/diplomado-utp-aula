@@ -20,6 +20,7 @@ export function heroVisual() {
       ${output(64,'Predicción','Estimar un valor','#d2eaa0')}${output(142,'Alerta','Revisar un caso','#e7ae82')}${output(220,'Detección','Localizar un objeto','#8ab8ce')}
       <rect x="224" y="254" width="72" height="25" rx="12.5" fill="#d2eaa016" stroke="#d2eaa03a"/><text x="260" y="271" text-anchor="middle" fill="#d2eaa0" font-size="11" letter-spacing="1">ML · DL</text></g>
     </svg>
+    <div class="ai-mobile-flow" aria-hidden="true"><div><small>01 · DATOS</small><strong>Lluvia · Suelo · Imágenes</strong></div><span class="ai-flow-arrow">↓</span><div class="ai-mobile-model"><small>02 · APRENDIZAJE DE PATRONES</small><strong>Machine Learning<br>Deep Learning</strong><span class="ai-mini-network">● ─ ● ─ ●</span></div><span class="ai-flow-arrow">↓</span><div><small>03 · SALIDAS PARA INTERPRETAR</small><strong>Predicción · Alerta · Detección</strong></div></div>
     <figcaption>Datos → modelo → interpretación <span>Esquema conceptual</span></figcaption>
   </figure>`;
 }
