@@ -1,7 +1,7 @@
 /* Nexo IA: identity and faculty card. */
 .sidebar{overflow-y:auto;min-height:0}
 .brand{gap:11px;font-family:Manrope,sans-serif;font-weight:600;letter-spacing:-1.2px;flex-shrink:0}
-.brand-mark{display:block;flex-shrink:0;border-radius:13px;box-shadow:0 5px 14px #153d3614}
+.brand-mark{display:block;flex-shrink:0;border-radius:13px;transform:rotate(-5deg);box-shadow:0 6px 16px #153d3626}
 .brand b{color:var(--green);font-weight:800}
 .brand small{font-family:'DM Sans',sans-serif;font-size:7px;font-weight:600;letter-spacing:1.5px;margin-top:5px;color:#58736a}
 .teacher-card{margin-top:auto;padding-top:22px;flex-shrink:0}

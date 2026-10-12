@@ -56,5 +56,5 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12);box-shadow:
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .motion-ripple{display:none}
-  .button:hover,.button:active,.sidebar nav a:hover,.sidebar nav a>span,.teacher-link span,.teacher-avatar,.brand-mark,.profile-button>span,.course-card:hover,.resource-grid .panel:hover,.badge:hover,.topic-row:hover,.iso-tabs button:hover,.iso-preset:hover,.lesson-nav a:hover,.quiz button:active,.profile-button:active,.menu-button[aria-expanded=true]{transform:none!important}
+  .button:hover,.button:active,.sidebar nav a:hover,.sidebar nav a>span,.teacher-link span,.teacher-avatar,.profile-button>span,.course-card:hover,.resource-grid .panel:hover,.badge:hover,.topic-row:hover,.iso-tabs button:hover,.iso-preset:hover,.lesson-nav a:hover,.quiz button:active,.profile-button:active,.menu-button[aria-expanded=true]{transform:none!important}
 }
