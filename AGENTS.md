@@ -12,3 +12,4 @@
 - Probar cálculos y acceso, revisar escritorio/móvil, crear commit y verificar despliegue.
 - Los sources del proyecto ChatGPT superior son referencias de solo lectura.
 
+- Prioridad de producto: herramienta gráfica de apoyo a las clases de Cristian. Mantener el taller isométrico como acceso principal, escenarios comparables, lectura de colores/objetos y vista de proyección. Los dibujos deben cambiar con cálculos explicados; no presentar una metáfora como un modelo real.
