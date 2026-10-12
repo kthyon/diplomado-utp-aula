@@ -4,9 +4,9 @@ Servicio relacional Cloudflare D1 (SQLite) alojado por Sites, separado del aula 
 
 ## Acceso y alcance
 
-Mantener el Site **privado, solo propietario**. El servicio depende de esa frontera de acceso: no cambiar su audiencia a pública ni compartirlo con alumnos sin implementar antes autorización por rol y por registro. Las API también rechazan visitantes sin identidad de Sites y las escrituras desde otro origen. No hay contraseñas ni claves en el navegador.
+El Site permite el ingreso de estudiantes autenticados con ChatGPT. La identidad estable de Sites se vincula mediante students.auth_subject. Cada estudiante solo consulta y escribe su propia fila y avance por /api/me; los identificadores que envíe el navegador nunca definen el propietario. Las rutas de administración exigen además el correo verificado ADMIN_EMAIL configurado como secreto en Sites. No hay contraseñas ni claves en GitHub ni en el navegador. Todas las escrituras exigen el mismo origen.
 
-El docente registra y edita estudiantes, consulta y marca temas vistos e importa los JSON de progreso compartidos por los alumnos. El progreso del taller continúa siendo local y **no se sincroniza automáticamente**. El panel no envía invitaciones ni correos y no modifica el desbloqueo manual de las clases.
+Los estudiantes se registran con nombre completo o correo UTP desde Registro rápido. El acceso requiere iniciar sesión con ChatGPT; el formulario no es Google OAuth ni verifica por sí mismo que un correo pertenezca a la universidad. La conexión usa una ventana autenticada y mensajes restringidos a los orígenes exactos del aula y del servicio. Mientras permanece abierta, guarda el avance y notas; al cerrarla, el aula mantiene los cambios locales y pide reconectar para guardarlos. No se incluyen notas privadas del docente en las respuestas del estudiante. El docente puede consultar el grupo, importar avances, exportar y vaciar registros. La habilitación de temas sigue siendo manual y no depende de la base.
 
 ## Tablas
 
