@@ -1,5 +1,5 @@
 import {initStudentRegistration,saveStudentProgress,studentConnected,openStudentRegistration,registerStudent,isConnectedView} from './student-registration.js?v=4';
-import {searchCatalog} from './search.js';
+import {searchCatalog} from './search.js?v=1';
 import {STUDENT_RECORDS} from './database-config.js';
 import {toolSection} from './tools.js';
 import {heroVisual} from './hero-space.js?v=1';
