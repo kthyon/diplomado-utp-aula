@@ -64,10 +64,12 @@ Uso: abre Taller visual, elige una pregunta, guarda el escenario A, modifica B y
 
 ## Registro de estudiantes
 
-El botón Registro rápido permite a cada estudiante crear su registro con nombre completo obligatorio y correo opcional de cualquier proveedor. El acceso se protege con ChatGPT; no se presenta el formulario como Google OAuth. Registro rápido abre la vista conectada del mismo taller. En ella, el avance y notas personales se guardan automáticamente; si falla la conexión, se conservan cambios pendientes en el navegador. Cada registro se asocia a una identidad autenticada; escribir el nombre de otro alumno no da acceso a sus datos.
+El acceso con el nombre del estudiante reúne su perfil y progreso; desde allí puede conectar su registro con nombre completo obligatorio y correo opcional de cualquier proveedor. El acceso se protege con ChatGPT; no se presenta el formulario como Google OAuth. Conectar mi registro abre la vista conectada del mismo taller. En ella, el avance y notas personales se guardan automáticamente; si falla la conexión, se conservan cambios pendientes en el navegador. Cada registro se asocia a una identidad autenticada; escribir el nombre de otro alumno no da acceso a sus datos.
 
 Espacio docente abre la administración solo para el docente, identificado por ADMIN_EMAIL en el servicio. Allí aparecen los registros, temas vistos y notas. El backend y migraciones están en backend/; los datos nunca se publican en GitHub. Exportar descarga una copia privada y Vaciar registros borra el grupo en cascada, manteniendo el catálogo. Para retirar la integración: enabled:false en docs/database-config.js.
 
 ## Herramientas en la portada
 
 La sección duplicada del taller en inicio se sustituye por una caja de herramientas: n8n para explorar integraciones, Hugging Face y accesos a OpenAI, Google AI Studio y Anthropic. Los enlaces apuntan a plataformas y catálogos de integración oficiales, sin fijar modelos ni versiones. El taller permanece en la navegación como sección propia. La aplicación no configura conexiones ni consume APIs de esos proveedores.
+
+El catálogo de herramientas reúne 32 plataformas con el mismo formato, incluido n8n. Tiene búsqueda por tarea, filtros por seis usos y carga progresiva. Usa los logos oficiales almacenados en `docs/assets/tool-logos/`; el origen de cada archivo está en `sources.json`. No fijar nombres de modelos ni versiones.

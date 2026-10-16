@@ -1,0 +1,258 @@
+[
+  {
+    "id": "anthropic",
+    "name": "Anthropic",
+    "file": "anthropic.png",
+    "source": "https://cdn.prod.website-files.com/67ce28cfec624e2b733f8a52/67d31dd7aa394792257596c5_webclip.png",
+    "officialSite": "https://www.anthropic.com/",
+    "bytes": 3175
+  },
+  {
+    "id": "canva",
+    "name": "Canva",
+    "file": "canva.ico",
+    "source": "https://static.canva.com/static/images/favicon.ico",
+    "officialSite": "https://www.canva.com/",
+    "bytes": 4414
+  },
+  {
+    "id": "cohere",
+    "name": "Cohere",
+    "file": "cohere.png",
+    "source": "https://cohere.com/apple-touch-icon.png",
+    "officialSite": "https://cohere.com/",
+    "bytes": 8022
+  },
+  {
+    "id": "colab",
+    "name": "Google Colab",
+    "file": "colab.ico",
+    "source": "https://ssl.gstatic.com/colaboratory-static/common/59eb03e8f5d14c95e975744699cdd239/img/favicon.ico",
+    "officialSite": "https://colab.research.google.com/",
+    "bytes": 73070
+  },
+  {
+    "id": "copilot",
+    "name": "Microsoft Copilot",
+    "file": "copilot.svg",
+    "source": "https://copilot.microsoft.com/static/cmc/favicon.svg",
+    "officialSite": "https://copilot.microsoft.com/",
+    "bytes": 3436
+  },
+  {
+    "id": "deepseek",
+    "name": "DeepSeek",
+    "file": "deepseek.ico",
+    "source": "https://www.deepseek.com/favicon.ico",
+    "officialSite": "https://www.deepseek.com/",
+    "bytes": 209762
+  },
+  {
+    "id": "elevenlabs",
+    "name": "ElevenLabs",
+    "file": "elevenlabs.svg",
+    "source": "https://elevenlabs.io/icon.svg?c23f5371fdd26632",
+    "officialSite": "https://elevenlabs.io/",
+    "bytes": 404
+  },
+  {
+    "id": "firecrawl",
+    "name": "Firecrawl",
+    "file": "firecrawl.ico",
+    "source": "https://www.firecrawl.dev/favicon.ico",
+    "officialSite": "https://www.firecrawl.dev/",
+    "bytes": 15406
+  },
+  {
+    "id": "firefly",
+    "name": "Adobe Firefly",
+    "file": "firefly.png",
+    "source": "https://firefly.adobe.com/releases/ead12e2e15aaf8b20856b3e5a2ae9741b10b2178/assets/fi_touch_icon_180-BmBtoxt-.png",
+    "officialSite": "https://firefly.adobe.com/",
+    "bytes": 4553
+  },
+  {
+    "id": "flowise",
+    "name": "Flowise",
+    "file": "flowise.ico",
+    "source": "https://flowiseai.com/favicon.ico",
+    "officialSite": "https://flowiseai.com/",
+    "bytes": 15406
+  },
+  {
+    "id": "gamma",
+    "name": "Gamma",
+    "officialSite": "https://gamma.app/",
+    "file": "gamma.svg",
+    "source": "https://static.gamma.app/favicons/favicon_light.svg",
+    "bytes": 2227
+  },
+  {
+    "id": "github",
+    "name": "GitHub",
+    "file": "github.svg",
+    "source": "https://github.githubassets.com/favicons/favicon.svg",
+    "officialSite": "https://github.com/",
+    "bytes": 959
+  },
+  {
+    "id": "google-ai",
+    "name": "Google AI Studio",
+    "file": "google-ai.png",
+    "source": "https://www.gstatic.com/images/branding/productlogos/ai_studio/v1/web-32dp/logo_ai_studio_color_1x_web_32dp.png",
+    "officialSite": "https://aistudio.google.com/",
+    "bytes": 1325
+  },
+  {
+    "id": "gradio",
+    "name": "Gradio",
+    "file": "gradio.png",
+    "source": "https://gradio.app/favicon.png",
+    "officialSite": "https://www.gradio.app/",
+    "bytes": 1557
+  },
+  {
+    "id": "groq",
+    "name": "Groq",
+    "file": "groq.svg",
+    "source": "https://groq.com/favicon.svg",
+    "officialSite": "https://groq.com/",
+    "bytes": 362
+  },
+  {
+    "id": "hugging-face",
+    "name": "Hugging Face",
+    "file": "hugging-face.ico",
+    "source": "https://huggingface.co/favicon.ico",
+    "officialSite": "https://huggingface.co/",
+    "bytes": 205556
+  },
+  {
+    "id": "kaggle",
+    "name": "Kaggle",
+    "file": "kaggle.ico",
+    "source": "https://www.kaggle.com/static/images/favicon-new.ico",
+    "officialSite": "https://www.kaggle.com/",
+    "bytes": 15406
+  },
+  {
+    "id": "make",
+    "name": "Make",
+    "file": "make.png",
+    "source": "https://cdn.prod.website-files.com/6a294495bc84130c6dd0c4fd/6a7b9441756d01907cfc9bc0_favicon-32x32.png",
+    "officialSite": "https://www.make.com/",
+    "bytes": 29619
+  },
+  {
+    "id": "mistral",
+    "name": "Mistral AI",
+    "file": "mistral.ico",
+    "source": "https://mistral.ai/favicon.ico",
+    "officialSite": "https://mistral.ai/",
+    "bytes": 2107
+  },
+  {
+    "id": "n8n",
+    "name": "n8n",
+    "file": "n8n.ico",
+    "source": "https://n8n.io/favicon.ico",
+    "officialSite": "https://n8n.io/",
+    "bytes": 15086
+  },
+  {
+    "id": "notebook",
+    "name": "Gemini Notebook",
+    "file": "notebook.png",
+    "source": "https://notebook.google/_/static/branding/v6/light_mode/favicon/apple-touch-icon.png",
+    "officialSite": "https://notebook.google/",
+    "bytes": 4513
+  },
+  {
+    "id": "ollama",
+    "name": "Ollama",
+    "file": "ollama.png",
+    "source": "https://ollama.com/public/apple-touch-icon.png",
+    "officialSite": "https://ollama.com/",
+    "bytes": 5579
+  },
+  {
+    "id": "openai",
+    "name": "OpenAI",
+    "officialSite": "https://openai.com/",
+    "file": "openai.svg",
+    "source": "https://openai.com/favicon.svg",
+    "bytes": 2439
+  },
+  {
+    "id": "perplexity",
+    "name": "Perplexity",
+    "file": "perplexity.svg",
+    "source": "https://www.perplexity.ai/favicon.svg",
+    "officialSite": "https://www.perplexity.ai/",
+    "bytes": 2438
+  },
+  {
+    "id": "pinecone",
+    "name": "Pinecone",
+    "file": "pinecone.ico",
+    "source": "https://www.pinecone.io/favicon.ico?favicon.16aah0kd0o17q.ico",
+    "officialSite": "https://www.pinecone.io/",
+    "bytes": 15086
+  },
+  {
+    "id": "qdrant",
+    "name": "Qdrant",
+    "file": "qdrant.png",
+    "source": "https://qdrant.tech/favicon/apple-touch-icon.png",
+    "officialSite": "https://qdrant.tech/",
+    "bytes": 4977
+  },
+  {
+    "id": "replit",
+    "name": "Replit",
+    "file": "replit.png",
+    "source": "https://replit.com/public/icons/favicon-prompt-192-rebrand.png",
+    "officialSite": "https://replit.com/",
+    "bytes": 612
+  },
+  {
+    "id": "streamlit",
+    "name": "Streamlit",
+    "file": "streamlit.svg",
+    "source": "https://streamlit.io/favicon.svg",
+    "officialSite": "https://streamlit.io/",
+    "bytes": 1720
+  },
+  {
+    "id": "supabase",
+    "name": "Supabase",
+    "file": "supabase.png",
+    "source": "https://supabase.com/favicon/apple-icon-180x180.png",
+    "officialSite": "https://supabase.com/",
+    "bytes": 4478
+  },
+  {
+    "id": "tavily",
+    "name": "Tavily",
+    "file": "tavily.svg",
+    "source": "https://www.tavily.com/icon.svg?icon.0v6b1ltlljvdd.svg",
+    "officialSite": "https://www.tavily.com/",
+    "bytes": 2260
+  },
+  {
+    "id": "teachable",
+    "name": "Teachable Machine",
+    "officialSite": "https://teachablemachine.withgoogle.com/",
+    "file": "teachable.png",
+    "source": "https://teachablemachine.withgoogle.com/assets/img/favicon.png",
+    "bytes": 3285
+  },
+  {
+    "id": "zapier",
+    "name": "Zapier",
+    "file": "zapier.ico",
+    "source": "https://zapier.com/favicon.ico",
+    "officialSite": "https://zapier.com/",
+    "bytes": 57638
+  }
+]

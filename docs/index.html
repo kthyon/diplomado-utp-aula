@@ -8,12 +8,13 @@
   <link rel="icon" href="assets/nexo-ia.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="identity.css?v=3"><link rel="stylesheet" href="isometric.css?v=2"><script type="module" src="app.js?v=12"></script>
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="identity.css?v=3"><link rel="stylesheet" href="isometric.css?v=2"><script type="module" src="app.js?v=13"></script>
   <link rel="stylesheet" href="motion.css?v=2"><script type="module" src="motion.js?v=1"></script>
   <link rel="stylesheet" href="graphics.css?v=3"><link rel="stylesheet" href="hero-space.css?v=1">
   <link rel="stylesheet" href="hero-ambient.css?v=2">
   <link rel="stylesheet" href="three-scenes.css?v=1"><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"}}</script>
-<link rel="stylesheet" href="header-clarity.css?v=1"><link rel="stylesheet" href="experience.css?v=1">
+<link rel="stylesheet" href="header-clarity.css?v=1"><link rel="stylesheet" href="experience.css?v=2">
+<link rel="stylesheet" href="tools.css?v=1">
 </head>
 <body>
 <a class="skip" href="#main">Ir al contenido</a>
@@ -41,7 +42,7 @@
   <header class="topbar">
     <button class="menu-button" id="menu-button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">☰</button>
     <div class="breadcrumb">DIPLOMADO UTP <span>/</span> <b id="page-label">Mi aula</b></div>
-    <form id="search-form" class="search" role="search"><span aria-hidden="true">⌕</span><input id="search" aria-label="Buscar temas y conceptos" placeholder="Buscar un concepto…" autocomplete="off"><button aria-label="Buscar">↵</button></form>
+    <form id="search-form" class="search" role="search"><span aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></span><input type="search" id="search" aria-label="Buscar temas y conceptos" placeholder="Buscar un concepto…" autocomplete="off"><button type="submit" aria-label="Buscar conceptos">Buscar</button></form>
     <button id="name-button" class="profile-button" aria-label="Personalizar mi nombre"><span id="profile-avatar">TÚ</span><span class="account-copy"><b id="profile-name">Mi cuenta</b><small id="profile-status">Nombre, registro y progreso</small></span></button>
   </header>
   <main id="main" tabindex="-1"></main>
