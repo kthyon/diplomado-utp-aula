@@ -1,3 +1,9 @@
+import {validFullName} from './access-policy.js';
+import {STUDENT_RECORDS} from './database-config.js';
+let identityReady=false;
+if(location.origin===new URL(STUDENT_RECORDS.url).origin){try{const session=await fetch('/api/session').then(r=>r.json());if(session.role==='teacher')identityReady=true;else{const record=await fetch('/api/me').then(r=>r.json());identityReady=validFullName(record.name)}}catch{}}
+else{try{identityReady=validFullName(JSON.parse(localStorage.getItem('utp-aula-v1')||'{}').name)}catch{}}
+if(!identityReady){location.replace('./?destino='+encodeURIComponent('laboratorio.html'+location.hash));await new Promise(()=>{})}
 import {initialNetwork,forward,learn,loss,neighbors,PEOPLE,evaluate} from './lab-models.js';
 import {createPlantScene} from './lab-greenhouse.js';
 

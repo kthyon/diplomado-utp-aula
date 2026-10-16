@@ -1,80 +1,15 @@
-name: Desbloquear temas de clase
+name: Verificar calendario del aula
 on:
   workflow_dispatch:
-    inputs:
-      destino:
-        description: Destino
-        required: true
-        type: choice
-        options:
-          - ml-clase-1
-          - ml-clase-2
-          - ml-clase-3
-          - ml-clase-4
-          - dl-clase-1
-          - dl-clase-2
-          - dl-clase-3
-          - dl-clase-4
-          - ml-problema
-          - ml-preparacion
-          - ml-regresion
-          - ml-clasificacion
-          - ml-metricas
-          - ml-umbral
-          - ml-clustering
-          - ml-pca
-          - ml-ensambles
-          - ml-series
-          - ml-refuerzo
-          - ml-integracion
-          - dl-redes
-          - dl-activaciones
-          - dl-entrenamiento
-          - dl-vision
-          - dl-cnn
-          - dl-transferencia
-          - dl-secuencias
-          - dl-atencion
-          - dl-transformers
-          - dl-yolo
-          - dl-evaluacion
-          - dl-integracion
 permissions:
-  contents: write
-  pages: write
-  id-token: write
-concurrency:
-  group: aula-pages
-  cancel-in-progress: false
+  contents: read
 jobs:
-  habilitar-y-publicar:
+  comprobar-calendario:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Habilitar sin dejar huecos
-        env:
-          DESTINO: ${{ inputs.destino }}
-        run: node scripts/release.mjs "$DESTINO"
-      - name: Comprobar aula
-        run: node --test tests/*.test.mjs
-      - name: Guardar cambio en un commit
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/releases.json
-          git diff --cached --quiet || git commit -m 'Habilitar temas de clase'
-          git push origin main
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs
-      - name: Publicar el nuevo estado
-        id: deployment
-        uses: actions/deploy-pages@v4
-
+      - name: Comprobar fechas, permanencia y acceso
+        run: node --test tests/access-policy.test.mjs

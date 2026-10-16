@@ -12,20 +12,19 @@ Web: https://kthyon.github.io/diplomado-utp-aula/
 
 8 clases, 24 temas, 12 exploradores (regresión, imputación, matriz y umbral, DBSCAN, proyección PCA, comparación de ensambles, activaciones, gradiente, atención, tareas de visión, series y GridWorld), comprobaciones voluntarias, notas personales, insignias, búsqueda y biblioteca. Los exploradores son didácticos; no sustituyen entrenamientos ni evalúan modelos reales.
 
-## Habilitación manual
+## Entrada y apertura de clases
 
-Generalidades y dos exploradores introductorios están abiertos. Los temas de ambas asignaturas comienzan cerrados.
+Antes de entrar a cualquier contenido, incluido el laboratorio mediante un enlace directo, cada estudiante debe escribir su nombre y apellidos. Un correo o alias no reemplaza el nombre. El correo es opcional y admite cualquier proveedor. El nombre y el avance se conservan en el navegador; conectar el registro permite sincronizarlos desde la vista autenticada del aula.
 
-La bienvenida muestra **Generalidades 2** incrustada desde Google Slides al entrar por primera vez en una asignatura. La marca se guarda por navegador, compartida por ambas asignaturas; no es una marca por cuenta. Se puede reabrir con «Volver a ver la bienvenida» y proyectar en otra pestaña. Editar la presentación original se refleja al abrir o actualizar el visor, sin una copia ni otro commit. Si se borra el almacenamiento del navegador, la bienvenida aparecerá de nuevo. Las generalidades ya no se duplican como una página de texto.
+Cada encuentro abre todos sus temas a las **00:00 de su fecha, hora de Colombia (America/Bogota)**. Una vez abierto, permanece disponible, sin fecha de cierre. Las ocho fechas están en `docs/content.js:COURSES`: 23, 24, 30 y 31 de octubre; 6, 7, 13 y 14 de noviembre de 2026. El progreso es voluntario: marcar un tema como visto no es un requisito para abrir el siguiente.
 
-1. Abre **Espacio del docente** en la web.
-2. Selecciona una clase o un tema y pulsa **Preparar desbloqueo**.
-3. En GitHub Actions, abre **Run workflow**, elige el destino indicado y ejecuta **Desbloquear temas de clase**.
-4. El flujo habilita todos los temas hasta ese destino en la asignatura, guarda un commit y publica el estado nuevo. No abre temas por fecha.
+La vista docente autenticada muestra los 24 temas y todos los cuadernos desde el primer día. El rol lo verifica el backend con la identidad del docente y `ADMIN_EMAIL`; no depende del nombre escrito, del hash de la URL ni del almacenamiento local. Entra desde **Espacio docente** y usa **Abrir aula docente** desde el panel del grupo.
 
-Un estudiante debe recorrer y marcar como visto el tema anterior para entrar al siguiente que ya haya habilitado el docente. Esta secuencia es pedagógica: el sitio y su repositorio son públicos, no protegen archivos privados. Las insignias y puntos no son notas ni certificaciones.
+`docs/access-policy.js` calcula la apertura acumulativa. `docs/releases.json` documenta la política y ya no contiene decisiones manuales de apertura. El antiguo flujo de desbloqueo se sustituye por una comprobación del calendario. La apertura organiza la navegación pedagógica; los archivos del repositorio y de GitHub Pages siguen siendo públicos.
 
-La habilitación se conserva en `docs/releases.json`. El docente también puede editar ese archivo y guardar un commit. Para volver a bloquear temas, conserva un prefijo continuo de la lista de la asignatura; el test valida que no haya huecos. No hay contraseña ficticia ni tokens incrustados en JavaScript.
+La bienvenida muestra **Generalidades 2** incrustada desde Google Slides al entrar por primera vez en una asignatura. La marca se guarda por navegador, compartida por ambas asignaturas. Se puede reabrir con **Ver generalidades** y proyectar en otra pestaña; los cambios de la presentación original se consultan al abrir o actualizar el visor.
+
+La navegación incluye acceso por teclado, foco visible, estado de página, títulos de ventanas y menú móvil que retira los enlaces ocultos del recorrido del teclado. Se respeta la preferencia de movimiento reducido.
 
 ## Copias de Colab
 
@@ -39,13 +38,13 @@ Los cuadernos de ML provienen de los materiales revisados en este hilo. Los de D
 
 Sitio estático sin instalación ni dependencias de construcción. Sirve `docs/` con un servidor HTTP. Ejecuta `node --test tests/*.test.mjs` y comprueba sintaxis con `node --check docs/app.js` y `node --check docs/simulators.js`.
 
-GitHub Pages debe usar **GitHub Actions** como fuente. `pages.yml` comprueba y publica cada commit a main. `desbloquear.yml` publica directamente después de su commit porque los pushes con GITHUB_TOKEN no disparan un segundo workflow. Solo cuentas con permisos de escritura pueden ejecutar estos flujos.
+GitHub Pages debe usar **GitHub Actions** como fuente. `pages.yml` comprueba y publica cada commit a main. `desbloquear.yml` solo verifica el calendario y ya no modifica ni publica habilitaciones.
 
-El progreso del estudiante se guarda en localStorage, con exportación e importación JSON. No se envía a servidores ni se sincroniza entre dispositivos. Google Fonts y los enlaces externos tienen sus propios servicios. El aula no incluye analíticas.
+El progreso del estudiante se guarda en localStorage, con exportación e importación JSON. Al conectar el registro, el avance y las notas se sincronizan con la base privada del curso y el docente puede consultarlos. Google Fonts y los enlaces externos tienen sus propios servicios. El aula no incluye analíticas.
 
 ## Mantenimiento desde el hilo de GPT
 
-Cuando se cambien conceptos, gráficos, ejemplos o cuadernos en este hilo, actualizar las copias y la interfaz correspondiente, comprobarlas, crear un commit y verificar GitHub Pages. No basta con modificar Drive. Mantener el estado de habilitación manual existente; no abrir temas por una actualización editorial. No es un monitor automático del chat: se realiza al trabajar en las siguientes solicitudes de este hilo.
+Cuando se cambien conceptos, gráficos, ejemplos o cuadernos en este hilo, actualizar las copias y la interfaz correspondiente, comprobarlas, crear un commit y verificar GitHub Pages. No basta con modificar Drive. Conservar las fechas del calendario al hacer cambios editoriales; cualquier modificación de fechas debe ser explícita. No es un monitor automático del chat: se realiza al trabajar en las siguientes solicitudes de este hilo.
 
 Fuentes primarias de conceptos se enlazan en cada tema. Los horarios y fechas corresponden al cronograma compartido. Las infografías son los apoyos visuales de DL creados previamente en este hilo.
 
@@ -59,12 +58,16 @@ Las ideas de riego, escalado y métricas se tomaron como referencia del canal It
 
 La portada presenta una herramienta de explicación y exploración. El taller contiene seis escenas isométricas: predicción de cosecha, decisiones de alerta, imputación de lluvia, activaciones, ajuste de un parámetro y tareas de visión. Cada escena tiene controles, tres escenarios preparados, inspección de objetos y una comparación A/B que conserva una copia independiente de los valores. La vista para proyectar oculta la navegación y amplía las etiquetas.
 
-Los ejemplos son didácticos y están identificados como inventados. Las ilustraciones responden a los cálculos de scene-models.js; no ejecutan modelos de Colab ni simulan causalidad agronómica. La pérdida de entrenamiento se explica como una metáfora de un parámetro. La ruta de temas, su habilitación manual, las copias personales en Colab y la bienvenida con Generalidades 2 se conservan. Las escenas introductorias están disponibles para explicar en clase; no habilitan los cuadernos ni marcan temas como vistos.
+Los ejemplos son didácticos y están identificados como inventados. Las ilustraciones responden a los cálculos de scene-models.js; no ejecutan modelos de Colab ni simulan causalidad agronómica. La pérdida de entrenamiento se explica como una metáfora de un parámetro. La ruta de temas, su apertura por calendario, las copias personales en Colab y la bienvenida con Generalidades 2 se conservan. Las escenas introductorias están disponibles para explicar en clase; no habilitan los cuadernos ni marcan temas como vistos.
 
 Uso: abre Taller visual, elige una pregunta, guarda el escenario A, modifica B y compara las cifras y el dibujo. Pulsa Vista para proyectar para usarlo frente al grupo.
 
 ## Registro de estudiantes
 
-El botón Registro rápido permite a cada estudiante crear su registro con nombre completo o correo UTP. El acceso se protege con ChatGPT; no se presenta el formulario como Google OAuth. Registro rápido abre la vista conectada del mismo taller. En ella, el avance y notas personales se guardan automáticamente; si falla la conexión, se conservan cambios pendientes en el navegador. Cada registro se asocia a una identidad autenticada; escribir el nombre de otro alumno no da acceso a sus datos.
+El botón Registro rápido permite a cada estudiante crear su registro con nombre completo obligatorio y correo opcional de cualquier proveedor. El acceso se protege con ChatGPT; no se presenta el formulario como Google OAuth. Registro rápido abre la vista conectada del mismo taller. En ella, el avance y notas personales se guardan automáticamente; si falla la conexión, se conservan cambios pendientes en el navegador. Cada registro se asocia a una identidad autenticada; escribir el nombre de otro alumno no da acceso a sus datos.
 
 Espacio docente abre la administración solo para el docente, identificado por ADMIN_EMAIL en el servicio. Allí aparecen los registros, temas vistos y notas. El backend y migraciones están en backend/; los datos nunca se publican en GitHub. Exportar descarga una copia privada y Vaciar registros borra el grupo en cascada, manteniendo el catálogo. Para retirar la integración: enabled:false en docs/database-config.js.
+
+## Herramientas en la portada
+
+La sección duplicada del taller en inicio se sustituye por una caja de herramientas: n8n para explorar integraciones, Hugging Face y accesos a OpenAI, Google AI Studio y Anthropic. Los enlaces apuntan a plataformas y catálogos de integración oficiales, sin fijar modelos ni versiones. El taller permanece en la navegación como sección propia. La aplicación no configura conexiones ni consume APIs de esos proveedores.

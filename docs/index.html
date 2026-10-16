@@ -8,11 +8,12 @@
   <link rel="icon" href="assets/nexo-ia.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="identity.css?v=3"><link rel="stylesheet" href="isometric.css?v=2"><script type="module" src="app.js?v=10"></script>
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="identity.css?v=3"><link rel="stylesheet" href="isometric.css?v=2"><script type="module" src="app.js?v=11"></script>
   <link rel="stylesheet" href="motion.css?v=2"><script type="module" src="motion.js?v=1"></script>
   <link rel="stylesheet" href="graphics.css?v=3"><link rel="stylesheet" href="hero-space.css?v=1">
   <link rel="stylesheet" href="hero-ambient.css?v=2">
   <link rel="stylesheet" href="three-scenes.css?v=1"><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"}}</script>
+<link rel="stylesheet" href="header-clarity.css"><link rel="stylesheet" href="experience.css?v=1">
 </head>
 <body>
 <a class="skip" href="#main">Ir al contenido</a>
@@ -25,7 +26,8 @@
     <a href="#curso/ml" data-nav="ml"><span>↗</span> Machine Learning <small>05</small></a>
     <a href="#curso/dl" data-nav="dl"><span>✳</span> Deep Learning <small>06</small></a>
     <div class="nav-label">APRENDER HACIENDO</div>
-    <a href="#explorar" data-nav="explorar"><span>◉</span> Explora una idea</a>\n    <a href="https://kthyon.github.io/diplomado-utp-aula/laboratorio.html"><span>⌁</span> Laboratorio visual</a>
+    <a href="#explorar" data-nav="explorar"><span>◉</span> Explora una idea</a>
+    <a href="laboratorio.html"><span>⌁</span> Laboratorio visual</a>
     <a href="#biblioteca" data-nav="biblioteca"><span>▤</span> Mi biblioteca</a>
     <a href="#progreso" data-nav="progreso"><span>◷</span> Mi progreso</a>
   </nav>
@@ -34,12 +36,13 @@
     <a class="teacher-link" href="#docente">Espacio docente <span aria-hidden="true">↗</span></a>
   </section>
 </aside>
+<button class="sidebar-shade" id="menu-shade" aria-label="Cerrar menú" tabindex="-1"></button>
 <div class="app">
   <header class="topbar">
-    <button class="menu-button" id="menu-button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <button class="menu-button" id="menu-button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">☰</button>
     <div class="breadcrumb">DIPLOMADO UTP <span>/</span> <b id="page-label">Mi aula</b></div>
-    <form id="search-form" class="search"><span aria-hidden="true">⌕</span><input id="search" aria-label="Buscar temas y conceptos" placeholder="Buscar un concepto…" autocomplete="off"><button aria-label="Buscar">↵</button></form>
-    <button id="name-button" class="profile-button" aria-label="Personalizar mi nombre"><span id="profile-avatar">TÚ</span><b id="profile-name">Mi espacio</b></button>
+    <form id="search-form" class="search" role="search"><span aria-hidden="true">⌕</span><input id="search" aria-label="Buscar temas y conceptos" placeholder="Buscar un concepto…" autocomplete="off"><button aria-label="Buscar">↵</button></form>
+    <button id="name-button" class="profile-button" aria-label="Personalizar mi nombre"><span id="profile-avatar">TÚ</span><span class="account-copy"><b id="profile-name">Mi cuenta</b><small id="profile-status">Nombre, registro y progreso</small></span></button>
   </header>
   <main id="main" tabindex="-1"></main>
   <footer class="site-footer"><span>Diplomado en Ciencia de Datos para Agronegocios · UTP</span><span>Concepto → ejemplo → exploración → comprensión</span></footer>

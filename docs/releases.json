@@ -1,6 +1,9 @@
 {
-  "version": 1,
-  "updatedAt": "2026-10-11",
+  "version": 2,
+  "mode": "schedule",
+  "timeZone": "America/Bogota",
+  "opensAt": "00:00",
+  "keepAvailable": true,
+  "scheduleSource": "content.js:COURSES",
   "released": {"ml": [], "dl": []}
 }
-

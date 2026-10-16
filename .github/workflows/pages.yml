@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: '22'
       - name: Comprobar simuladores, rutas y cuadernos
-        run: node --test tests/*.test.mjs
+        run: node --test tests/*.test.mjs backend/tests/*.test.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -30,4 +30,3 @@ jobs:
       - name: Publicar
         id: deployment
         uses: actions/deploy-pages@v4
-
