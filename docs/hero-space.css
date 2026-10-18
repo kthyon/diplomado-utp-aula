@@ -16,14 +16,19 @@
 /* Original orb preserved. Only controls and small-screen legibility are enhanced. */
 .visual-home .hero{background:transparent;border:0;padding:28px 0;overflow:visible}
 .space-icon .ui-icon{width:24px;height:24px;vertical-align:middle}
-.space-toggle{font:inherit;font-size:10px;color:#eaf5e3;border:1px solid #d2eaa05c;background:#ffffff0a;border-radius:999px;min-height:40px;padding:8px 12px;white-space:nowrap;transition:background .2s,border-radius .25s}
-.space-toggle:hover{background:#ffffff18}.space-toggle:active{border-radius:12px}.space-toggle:focus-visible{outline:2px solid #f2ffda;outline-offset:3px}
+
+
 .nexo-space figcaption{align-items:center;font-size:10px}.hero .space-note{font-size:9px!important;color:#bdd4c7!important;max-width:none;line-height:1.6!important}
-@media(max-width:560px){.hero-art.nexo-space{height:auto;margin-top:0}.space-stage{height:355px}.space-card{width:88px;border-radius:18px;padding:10px 7px;display:block;text-align:center}.space-card strong{font-size:12px;line-height:1.3;margin-top:7px}.space-card small,.space-card div>span{display:none}.space-icon .ui-icon{width:21px;height:21px}.space-label strong{font-size:12px}.space-label small{font-size:7px}.nexo-space figcaption{flex-wrap:wrap;gap:10px;font-size:10px}.hero .space-note{font-size:9px!important}.space-toggle{min-height:44px}.visual-home .hero{padding:18px 0;gap:28px}}
-@media(prefers-reduced-motion:reduce){.space-toggle{display:none}}
+@media(max-width:560px){.hero-art.nexo-space{height:auto;margin-top:0}.space-stage{height:355px}.space-card{width:88px;border-radius:18px;padding:10px 7px;display:block;text-align:center}.space-card strong{font-size:12px;line-height:1.3;margin-top:7px}.space-card small,.space-card div>span{display:none}.space-icon .ui-icon{width:21px;height:21px}.space-label strong{font-size:12px}.space-label small{font-size:7px}.nexo-space figcaption{flex-wrap:wrap;gap:10px;font-size:10px}.hero .space-note{font-size:9px!important}.visual-home .hero{padding:18px 0;gap:28px}}
 
 /* Only the outer backdrop changes shape. The scene and floating cards stay intact. */
 .hero-art.nexo-space{background:transparent;border:0;border-radius:0;box-shadow:none;overflow:visible}
-.hero-art.nexo-space::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 46% 65% at 50% 51%,#303330 0%,#303330fa 20%,#354130db 38%,#40563d73 58%,#4f6d4100 79%),linear-gradient(180deg,#557348 0%,#4f6d42 49.7%,#53684b 50%,#53664c 100%);-webkit-mask:url('assets/orb-frame.svg') center/100% 100% no-repeat;mask:url('assets/orb-frame.svg') center/100% 100% no-repeat}
+.hero-art.nexo-space::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 46% 65% at 50% 51%,#303330 0%,#303330fa 20%,#354130db 38%,#40563d73 58%,#4f6d4100 79%),linear-gradient(180deg,#557348 0%,#4f6d42 49.7%,#53684b 50%,#53664c 100%);-webkit-mask:url('assets/orb-frame.svg?v=2') center/100% 100% no-repeat;mask:url('assets/orb-frame.svg?v=2') center/100% 100% no-repeat}
 .nexo-space header>span:last-child{color:#eaf5e3}.hero .space-note{color:#eaf5e3!important}
-@supports not (mask-image:url('assets/orb-frame.svg')){.hero-art.nexo-space::before{border-radius:28px;clip-path:polygon(1% 0,99% 0,90% 50%,99% 100%,1% 100%,10% 50%)}}
+@supports not (mask-image:url('assets/orb-frame.svg')){.hero-art.nexo-space::before{border-radius:18px;clip-path:polygon(1% 0,99% 0,90% 50%,99% 100%,1% 100%,10% 50%)}}
+
+/* Give the frame labels room without shifting the sphere or its mini cards. */
+.nexo-space header{padding-inline:20px}
+.nexo-space figcaption{padding-inline:20px;min-height:52px;justify-content:flex-start}
+.hero .space-note{margin:8px 20px 4px!important;line-height:1.7!important;font-size:10px!important}
+@media(max-width:560px){.nexo-space header{padding-inline:15px}.nexo-space figcaption{padding-inline:20px;font-size:10px;min-height:44px}.hero .space-note{margin:8px 20px 5px!important}}
