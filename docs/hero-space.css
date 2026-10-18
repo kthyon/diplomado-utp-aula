@@ -24,5 +24,6 @@
 
 /* Only the outer backdrop changes shape. The scene and floating cards stay intact. */
 .hero-art.nexo-space{background:transparent;border:0;border-radius:0;box-shadow:none;overflow:visible}
-.hero-art.nexo-space::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 48%,#24594b,#12392f 65%,#0e3029);-webkit-mask:url('assets/orb-frame.svg') center/100% 100% no-repeat;mask:url('assets/orb-frame.svg') center/100% 100% no-repeat}
+.hero-art.nexo-space::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 46% 65% at 50% 51%,#303330 0%,#303330fa 20%,#354130db 38%,#40563d73 58%,#4f6d4100 79%),linear-gradient(180deg,#557348 0%,#4f6d42 49.7%,#53684b 50%,#53664c 100%);-webkit-mask:url('assets/orb-frame.svg') center/100% 100% no-repeat;mask:url('assets/orb-frame.svg') center/100% 100% no-repeat}
+.nexo-space header>span:last-child{color:#eaf5e3}.hero .space-note{color:#eaf5e3!important}
 @supports not (mask-image:url('assets/orb-frame.svg')){.hero-art.nexo-space::before{border-radius:28px;clip-path:polygon(1% 0,99% 0,90% 50%,99% 100%,1% 100%,10% 50%)}}
