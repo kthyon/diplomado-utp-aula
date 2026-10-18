@@ -12,3 +12,12 @@
 @media(max-width:850px){.hero-art.nexo-space{width:100%;max-width:620px;margin:0 auto}.space-stage{height:390px}.visual-home .hero{padding:28px}}
 @media(max-width:560px){.visual-home .hero{padding:22px;gap:28px}.hero-art.nexo-space{padding:16px 10px 12px;border-radius:19px}.nexo-space header{font-size:6px;letter-spacing:.6px}.space-stage{height:330px}.space-card{width:95px;gap:5px;padding:10px 6px;border-radius:10px}.space-card strong{font-size:10px}.space-card small{font-size:5px;letter-spacing:.5px}.space-card div>span{font-size:6px}.space-icon{font-size:18px}.space-rain,.space-soil,.space-image{left:0;transform:rotateZ(-3deg)}.space-predict,.space-alert,.space-detect{right:0;transform:rotateZ(3deg)}.space-label strong{font-size:12px}.space-label small{font-size:5px}.space-hint{display:none}.nexo-space figcaption{font-size:7px}.hero .space-note{font-size:5px!important}}
 @media(prefers-reduced-motion:reduce){.space-depth{transform:none}}
+
+/* Original orb preserved. Only controls and small-screen legibility are enhanced. */
+.visual-home .hero{background:transparent;border:0;padding:28px 0;overflow:visible}
+.space-icon .ui-icon{width:24px;height:24px;vertical-align:middle}
+.space-toggle{font:inherit;font-size:10px;color:#eaf5e3;border:1px solid #d2eaa05c;background:#ffffff0a;border-radius:999px;min-height:40px;padding:8px 12px;white-space:nowrap;transition:background .2s,border-radius .25s}
+.space-toggle:hover{background:#ffffff18}.space-toggle:active{border-radius:12px}.space-toggle:focus-visible{outline:2px solid #f2ffda;outline-offset:3px}
+.nexo-space figcaption{align-items:center;font-size:10px}.hero .space-note{font-size:9px!important;color:#bdd4c7!important;max-width:none;line-height:1.6!important}
+@media(max-width:560px){.hero-art.nexo-space{height:auto;margin-top:0}.space-stage{height:355px}.space-card{width:88px;border-radius:18px;padding:10px 7px;display:block;text-align:center}.space-card strong{font-size:12px;line-height:1.3;margin-top:7px}.space-card small,.space-card div>span{display:none}.space-icon .ui-icon{width:21px;height:21px}.space-label strong{font-size:12px}.space-label small{font-size:7px}.nexo-space figcaption{flex-wrap:wrap;gap:10px;font-size:10px}.hero .space-note{font-size:9px!important}.space-toggle{min-height:44px}.visual-home .hero{padding:18px 0;gap:28px}}
+@media(prefers-reduced-motion:reduce){.space-toggle{display:none}}

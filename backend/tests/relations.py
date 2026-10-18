@@ -2,7 +2,8 @@ import sqlite3
 from pathlib import Path
 db=sqlite3.connect(':memory:')
 db.execute('PRAGMA foreign_keys=ON')
-db.executescript((Path(__file__).resolve().parents[1]/'drizzle/0000_registros.sql').read_text())
+for migration in sorted((Path(__file__).resolve().parents[1]/'drizzle').glob('*.sql')):
+ db.executescript(migration.read_text())
 db.execute("INSERT INTO courses VALUES ('ml','ML')")
 db.execute("INSERT INTO courses VALUES ('dl','DL')")
 db.execute("INSERT INTO topics VALUES ('ml-a','ml','Tema',1)")

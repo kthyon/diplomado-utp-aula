@@ -73,3 +73,7 @@ Espacio docente abre la administración solo para el docente, identificado por A
 La sección duplicada del taller en inicio se sustituye por una caja de herramientas: n8n para explorar integraciones, Hugging Face y accesos a OpenAI, Google AI Studio y Anthropic. Los enlaces apuntan a plataformas y catálogos de integración oficiales, sin fijar modelos ni versiones. El taller permanece en la navegación como sección propia. La aplicación no configura conexiones ni consume APIs de esos proveedores.
 
 El catálogo de herramientas reúne 32 plataformas con el mismo formato, incluido n8n. Tiene búsqueda por tarea, filtros por seis usos y carga progresiva. Usa los logos oficiales almacenados en `docs/assets/tool-logos/`; el origen de cada archivo está en `sources.json`. No fijar nombres de modelos ni versiones.
+
+## Revisión de octubre de 2026
+
+La [auditoría](AUDITORIA.md) documenta cobertura, correcciones, fuentes y límites de verificación. El acabado usa superficies claras, formas suaves y movimiento inspirado en Material 3 Expressive. Se conserva el orbe original, con iconos coherentes y control de pausa; se respetan los logos y los colores explicativos de los gráficos. Importar progreso conserva la cuenta actual, y las notas privadas del docente se mantienen separadas de las notas del estudiante.

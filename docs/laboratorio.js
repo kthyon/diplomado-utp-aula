@@ -20,7 +20,7 @@ const stories={
  ],labels:['La situación','Los datos','La decisión','El error','El aprendizaje']},
  vecinos:{title:'Cambiar la escala cambia los vecinos',kicker:'KNN · aprender por semejanza',steps:[
   'Queremos predecir si una persona comprará. Para hacerlo, consultamos tres casos parecidos.',
-  'Sin escalar, las diferencias en pesos dominan a las diferencias de edad. Dos vecinos votan «no compra».',
+  'Sin escalar, las diferencias en pesos dominan a las diferencias de edad. Los tres vecinos votan «no compra».',
   'Al poner ambas variables en una escala comparable, cambian los vecinos. Ahora dos votan «compra».',
   'Mismos datos, distinta forma de medir la distancia. Escalar puede cambiar la decisión; no garantiza mejorarla.'
  ],labels:['La pregunta','Sin escalar','Con escalado','La idea clave']},
@@ -37,7 +37,8 @@ let custom=false,water={net:initialNetwork(),x:[.9,.2],y:1,steps:0};
 let query={age:43,income:4200000,k:3},threshold=1;
 const playIcon='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg>';
 const pauseIcon='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2h4v12H3zm6 0h4v12H9z"/></svg>';
-const slider=(id,label,min,max,increment,value)=>`<label><span>${label}<output id="${id}-value">${value}</output></span><input id="${id}" type="range" min="${min}" max="${max}" step="${increment}" value="${value}"></label>`;
+const slider=(id,label,min,max,increment,value)=>`<label for="${id}"><span>${label}<output id="${id}-value">${value}</output></span><input id="${id}" aria-label="${label}" type="range" min="${min}" max="${max}" step="${increment}" value="${value}"></label>`;
+function sliderValue(id,value){const text=String(value);$(id+'-value').textContent=text;$(id).setAttribute('aria-valuetext',text);}
 
 function greenhouse(){return `<svg class="scenery" viewBox="0 0 1200 470" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="house-sky" x2="0" y2="1"><stop stop-color="#648b73"/><stop offset="1" stop-color="#183d3a"/></linearGradient><radialGradient id="house-light"><stop stop-color="#ead69a" stop-opacity=".4"/><stop offset="1" stop-color="#ead69a" stop-opacity="0"/></radialGradient><linearGradient id="bed" x2="1" y2="1"><stop stop-color="#395844"/><stop offset="1" stop-color="#193b36"/></linearGradient><g id="sprout"><path d="M0 0V-25" stroke="#426e52" stroke-width="2"/><ellipse cx="-6" cy="-15" rx="9" ry="4" fill="#66865b" transform="rotate(25 -6 -15)"/><ellipse cx="7" cy="-24" rx="9" ry="4" fill="#86a675" transform="rotate(-25 7 -24)"/></g></defs><path fill="url(#house-sky)" d="M0 0H1200V470H0z"/><circle cx="195" cy="83" r="200" fill="url(#house-light)"/><circle cx="195" cy="83" r="27" fill="#e5d697" opacity=".7"/><path d="M0 290L540 200l660 90v180H0" fill="#24483c"/><path d="M540 200L370 470h430z" fill="#81966b" opacity=".16"/><g fill="none" stroke="#a7c0a5" stroke-width="2" opacity=".22"><path d="M0 380V50L540-110l660 220v300M100 360V80L540-40l550 190v245M225 330V115L540 22l410 170v185M340 300V145L540 85l285 145v130M440 275V180l100-30 150 95v95M540 0v210M0 50l540 160 660-100M100 80l440 130 550-60M225 115l315 95 410-18M340 145l200 65 285 20"/></g><path d="M0 352l405-104 69 28L0 450zM1200 358L720 251l-43 24 523 175z" fill="#696d46"/><path d="M0 352l405-104 69 16L0 417zM1200 358L720 251l-43 13 523 153z" fill="url(#bed)"/>${Array.from({length:17},(_,i)=>`<use href="#sprout" transform="translate(${i*27} ${349-i*6.2}) scale(${1.1-i*.035})"/><use href="#sprout" transform="translate(${1200-i*28} ${350-i*5.9}) scale(${1.1-i*.035})"/>`).join('')}<path d="M0 470V410q30-90 85-95-32 60-28 155z" fill="#174438" opacity=".8"/><g fill="#43745c" opacity=".65">${Array.from({length:6},(_,i)=>`<ellipse cx="${18+i*9}" cy="${435-i*20}" rx="23" ry="7" transform="rotate(-25 ${18+i*9} ${435-i*20})"/>`).join('')}</g></svg>`;}
 
@@ -59,7 +60,7 @@ function updateKNN(){
  $('knn-plot').innerHTML=`<path d="M80 40V290H790" stroke="#8094aa" fill="none" opacity=".5"/>${[20,30,40,50,60].map(a=>`<text x="${px(a)}" y="314" text-anchor="middle">${a}</text>`).join('')}${[2,4,6,8].map(v=>`<path d="M80 ${py(v*1e6)}H790" stroke="#91a7bb" opacity=".1"/><text x="65" y="${py(v*1e6)+5}" text-anchor="end">${v} M</text>`).join('')}<text x="80" y="23">Ingreso mensual · COP</text><text x="440" y="345" text-anchor="middle">Edad · años</text>${(step||custom)?r.selected.map(p=>`<path class="neighbor-line" d="M${px(query.age)} ${py(query.income)}L${px(p.age)} ${py(p.income)}"/>`).join(''):''}${PEOPLE.map(p=>`<circle class="person-dot" cx="${px(p.age)}" cy="${py(p.income)}" r="12" fill="${p.buy?'#94d8cf':'#b7c1d6'}" stroke="#142b40" stroke-width="3"/><text x="${px(p.age)}" y="${py(p.income)-20}" text-anchor="middle">${p.id}</text>`).join('')}<path d="M${px(query.age)} ${py(query.income)-13}l13 13-13 13-13-13z" fill="#eed5a3" stroke="#142b40" stroke-width="2"/>`;
  $('knn-outcome').textContent=step||custom?`${scaled?'Con escalado':'Sin escalar'} → ${r.prediction?'Compra':'No compra'}`:'¿Comprará?';
  $('knn-detail').innerHTML=`<h3>${r.prediction?'Compra':'No compra'}</h3><p>${r.yes} de ${query.k} vecinos votan «compra».</p><table><thead><tr><th>Vecino</th><th>Edad</th><th>Ingreso COP</th><th>Distancia</th><th>Voto</th></tr></thead><tbody>${r.selected.map(p=>`<tr><td>${p.id}</td><td>${p.age}</td><td>${f(p.income,0)}</td><td>${f(p.distance)}</td><td>${p.buy?'Compra':'No compra'}</td></tr>`).join('')}</tbody></table><p class="hint">Los ejes se ajustan para mostrar ambos datos. Las longitudes del dibujo no son las distancias numéricas originales.</p><details><summary>Cómo se calcula</summary><p>Distancia euclídea y voto uniforme. La escala se ajusta solo con los seis casos de referencia, sin incluir la persona nueva.</p><p class="formula">z = (valor − media) / desviación típica<br>Edad: media ${f(r.stats[0].mean)}, desviación ${f(r.stats[0].sd)}<br>Ingreso: media ${f(r.stats[1].mean,0)} COP, desviación ${f(r.stats[1].sd,0)} COP</p><p>No se está midiendo el rendimiento en personas nuevas.</p></details>`;
- $('age-value').textContent=query.age;$('income-value').textContent=f(query.income,0);
+ sliderValue('age',query.age);sliderValue('income',f(query.income,0));
 }
 
 function metricsScene(){return `<span class="scene-badge">100 piezas · un defecto</span><svg class="piece-grid" id="pieces-view" viewBox="0 0 490 280" role="img" aria-label="Cien piezas y un único defecto marcado con borde naranja"></svg><div class="metric-spotlight" id="metric-spotlight"></div><span class="piece-key" id="piece-key"></span>`;}
@@ -69,7 +70,7 @@ function updateMetrics(){
  $('metric-spotlight').innerHTML=!custom&&step===0?'<strong>1</strong><p>defecto entre 100 piezas</p>':!custom&&step===1?'<strong>99 %</strong><p>de aciertos</p><p class="accent">0 defectos detectados</p>':`<strong>${r.tp?'1':'0'} / ${r.tp+r.fn}</strong><p class="success">defectos detectados</p><p>${r.fp} falsas alertas</p>`;
  $('piece-key').textContent=step>=2||custom?'Verde: defecto detectado · naranja: falsa alerta':'El borde naranja señala el defecto real';
  $('metrics-detail').innerHTML=`<h3>¿Qué estamos contando?</h3><p>Exactitud: <strong>${pct(r.accuracy)}</strong> · ${r.tp+r.tn} aciertos de 100.</p><p>Recall: <strong>${pct(r.recall)}</strong> · ${r.tp} de ${r.tp+r.fn} defectos detectados.</p><p>Precisión: <strong>${pct(r.precision)}</strong> · ${r.precision===null?'sin alertas no se puede calcular':`Alertas correctas: ${r.tp} de ${r.tp+r.fp}`}.</p><p class="hint">Solo cambia el umbral. Las puntuaciones y el defecto real permanecen iguales. Son cifras inventadas para aprender a contar resultados.</p>`;
- $('threshold-value').textContent=f(threshold);
+ sliderValue('threshold',f(threshold));
 }
 
 function exploration(){
@@ -83,7 +84,7 @@ function updateWater(){
  $('network-view').innerHTML=networkSVG(r);
  $('soil-label').innerHTML=`<i></i>${water.x[0]>.6?'Suelo seco':water.x[0]<.35?'Suelo húmedo':'Humedad intermedia'}`;
  if(custom){const texts=$('network-view').querySelectorAll('.input-layer text');texts[1].textContent=water.x[0]>.6?'Suelo seco':water.x[0]<.35?'Suelo húmedo':'Suelo intermedio';texts[2].textContent=water.x[1]>.6?'Calor alto':'Calor suave';}
- $('dryness-value').textContent=f(water.x[0]);$('heat-value').textContent=f(water.x[1]);
+ sliderValue('dryness',f(water.x[0]));sliderValue('heat',f(water.x[1]));
  $('water-detail').innerHTML=`<h3>${r.p>=.5?'Regar':'No regar'} · salida ${f(r.p,3)}</h3><p>Respuesta que enseñamos: <strong>${water.y?'regar':'no regar'}</strong>. ${water.steps} pasos de aprendizaje.</p><p>La pérdida en este caso es <strong>${f(loss(r.p,water.y),3)}</strong>. Menor pérdida significa mejor ajuste a esta etiqueta.</p><p class="hint">Aprender este ejemplo no demuestra que responda bien en otros. Es una red pequeña de una sola capa oculta.</p><details><summary>Ver conexiones y cálculo</summary><table><thead><tr><th>Neurona</th><th>Peso suelo</th><th>Peso calor</th><th>Sesgo</th><th>Salida</th></tr></thead><tbody>${water.net.w.map((w,i)=>`<tr><td>${i+1}</td><td>${f(w[0],3)}</td><td>${f(w[1],3)}</td><td>${f(water.net.b[i],3)}</td><td>${f(r.h[i],3)}</td></tr>`).join('')}</tbody></table><p class="formula">h = sigmoide(peso₁ × suelo + peso₂ × calor + sesgo)<br>Pesos de salida: ${water.net.v.map(v=>f(v,3)).join(' · ')}<br>Sesgo de salida: ${f(water.net.c,3)}<br>Tasa de aprendizaje: 0,50</p><p>Se ajustan 13 parámetros por retropropagación con entropía cruzada binaria. Salida ≥ 0,50: regar. La salida no es una probabilidad validada de necesidad de riego.</p></details>`;
  updatePlant(water.x[0],on,playing);
 }
@@ -142,5 +143,6 @@ document.addEventListener('input',e=>{
  if(['age','income','knn-k','scaled'].includes(e.target.id)){explore();query={age:Number($('age').value),income:Number($('income').value),k:Number($('knn-k').value)};updateKNN();$('caption').textContent='Los trazos unen a la persona nueva con los vecinos que votan. Compara la selección al cambiar la escala.';}
  if(e.target.id==='threshold'){threshold=Number(e.target.value)/100;explore();updateMetrics();$('caption').textContent='Cambiar el umbral cambia las alertas. El defecto real sigue siendo el mismo.';}
 });
+document.querySelector('.skip').addEventListener('click',e=>{e.preventDefault();$('experimento').focus();$('experimento').scrollIntoView({block:'start'});});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
 window.addEventListener('hashchange',mount);mount();

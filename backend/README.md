@@ -1,4 +1,4 @@
-# Registro privado de Nexo IA
+# Registro privado de Diplomado UTP IA
 
 Servicio relacional Cloudflare D1 (SQLite) alojado por Sites, separado del aula de GitHub Pages. El código y las migraciones se versionan en GitHub; los registros, notas y exportaciones personales no se guardan en el repositorio.
 
@@ -6,7 +6,7 @@ Servicio relacional Cloudflare D1 (SQLite) alojado por Sites, separado del aula 
 
 El Site permite el ingreso de estudiantes autenticados con ChatGPT. La identidad estable de Sites se vincula mediante students.auth_subject. Cada estudiante solo consulta y escribe su propia fila y avance por /api/me; los identificadores que envíe el navegador nunca definen el propietario. Las rutas de administración exigen además el correo verificado ADMIN_EMAIL configurado como secreto en Sites. No hay contraseñas ni claves en GitHub ni en el navegador. Todas las escrituras exigen el mismo origen.
 
-Los estudiantes se registran con nombre completo o correo UTP desde Registro rápido. El acceso requiere iniciar sesión con ChatGPT; el formulario no es Google OAuth ni verifica por sí mismo que un correo pertenezca a la universidad. Registro rápido abre /aula/, una vista autenticada del taller servida desde el mismo origen que /api/me. Los materiales y código públicos se consultan desde GitHub Pages; los datos personales solo viajan a la API de la base. Allí guarda el avance y notas automáticamente, sin ventanas auxiliares. Si se pierde la conexión, conserva los cambios pendientes en el navegador para reintentarlos. No se incluyen notas privadas del docente en las respuestas del estudiante. El docente puede consultar el grupo, importar avances, exportar y vaciar registros. La habilitación de temas sigue siendo manual y no depende de la base.
+Los estudiantes se registran con nombre completo obligatorio y correo opcional de cualquier proveedor desde su perfil. El acceso requiere iniciar sesión con ChatGPT. Conectar mi registro abre /aula/, una vista autenticada del taller servida desde el mismo origen que /api/me. Los materiales y código públicos se consultan desde GitHub Pages; los datos personales solo viajan a la API de la base. Allí se guardan el avance y las notas automáticamente. Si se pierde la conexión, los cambios permanecen en el navegador y pueden reintentarse desde Mi progreso o al recuperar la conexión. Las notas privadas del docente se conservan separadas de las notas del estudiante, incluso al importar o reiniciar su avance. El docente puede consultar el grupo, importar avances, exportar y vaciar registros. Cada encuentro abre automáticamente a las 00:00 de su fecha en Colombia y permanece disponible; el rol docente verificado tiene acceso completo.
 
 ## Tablas
 
@@ -29,6 +29,6 @@ Los estudiantes se registran con nombre completo o correo UTP desde Registro rá
 
 ## Publicación
 
-`node build.mjs` genera `dist/server/index.js` con el catálogo incrustado. Sites aplica `drizzle/0000_registros.sql` al D1 del proyecto antes de publicar. Usar el flujo de publicación privada de la skill Sites, preservando `.openai/hosting.json`. La copia del código en GitHub no despliega automáticamente este servicio: publicar los cambios de backend también en Sites.
+`node build.mjs` genera `dist/server/index.js` con el catálogo incrustado. Sites aplica las migraciones de `drizzle/` al D1 del proyecto antes de publicar. Usar el flujo de publicación de Sites conservando la audiencia actual y `.openai/hosting.json`. La copia del código en GitHub no despliega automáticamente este servicio: publicar los cambios de backend también en Sites.
 
-Pruebas: `node --test tests/*.test.mjs` y `python tests/relations.py`. La prueba SQLite usa únicamente registros ficticios en memoria.
+Pruebas: `node --test tests/*.test.mjs` y `python tests/relations.py`. La integración usa SQLite real en memoria con ambas migraciones y cuentas ficticias; no escribe registros de producción. Si Python no está en PATH, indicar su ejecutable mediante `AULA_TEST_PYTHON`.
