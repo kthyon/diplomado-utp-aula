@@ -76,4 +76,4 @@ El catálogo de herramientas reúne 32 plataformas con el mismo formato, incluid
 
 ## Revisión de octubre de 2026
 
-La [auditoría](AUDITORIA.md) documenta cobertura, correcciones, fuentes y límites de verificación. El acabado usa superficies claras, formas suaves y movimiento inspirado en Material 3 Expressive. Se conserva el orbe original, con iconos coherentes y control de pausa; se respetan los logos y los colores explicativos de los gráficos. Importar progreso conserva la cuenta actual, y las notas privadas del docente se mantienen separadas de las notas del estudiante.
+La [auditoría](AUDITORIA.md) documenta cobertura, correcciones, fuentes y límites de verificación. El acabado usa superficies claras, formas suaves y movimiento inspirado en Material 3 Expressive. Se conserva el orbe original, con iconos coherentes y un fondo con profundidad; se respetan los logos y los colores explicativos de los gráficos. Importar progreso conserva la cuenta actual, y las notas privadas del docente se mantienen separadas de las notas del estudiante.
