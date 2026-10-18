@@ -24,3 +24,20 @@
 [data-theme=dark] .theme-toggle{background:transparent;color:var(--ink)}[data-theme=dark] .theme-toggle:hover{background:var(--soft)}
 @media(max-width:560px){.theme-toggle{padding:10px;width:44px;height:44px;min-width:44px}.topbar{column-gap:8px}.theme-toggle [data-theme-label]{display:none}.topbar .profile-button{max-width:190px}}
 
+
+/* Dark surfaces and text roles: avoid inheriting light-mode colours. */
+[data-theme=dark] :is(.brand-program,.class-number,.class-header small,.iso-question p,.iso-idea small,.iso-discuss small,.iso-limit,.iso-parameters,.iso-reset,.sim-caption,.resource small,.source-line,.schedule-item p,.schedule-item small){color:var(--muted)}
+[data-theme=dark] :is(.brand-course,.brand-course b,.iso-metric strong,.metric strong,.controls label,.iso-controls label){color:var(--ink)}
+[data-theme=dark] :is(.empty-state,.iso-studio,.simulator,.iso-pair article,.visual-paths a,.quote,.skip){background:var(--paper);color:var(--ink);border-color:var(--line)}
+[data-theme=dark] :is(.iso-idea,.iso-discuss,.iso-comparison,.metric,.plant,.date-box){background:var(--soft);color:var(--ink);border-color:var(--line)}
+[data-theme=dark] :is(.iso-tabs button small,.iso-tabs button[aria-pressed=true] small,.tool-filter[aria-pressed=true]>span){background:#233020;color:#e0edc7}
+[data-theme=dark] :is(.iso-slider output,.controls output,.visual-paths a b,.iso-preset,.iso-reset){color:var(--accent)}
+[data-theme=dark] .iso-preset{background:var(--paper);border-color:var(--line)}
+[data-theme=dark] .iso-preset.chosen{background:var(--selected);color:var(--on-selected);border-color:var(--accent)}
+[data-theme=dark] :is(.metric span,.empty-state p,.visual-paths a small,.iso-explain p,.iso-idea p,.iso-discuss p,.iso-comparison p,.studio-preview p){color:var(--muted)}
+[data-theme=dark] :is(.iso-stage-bar,.three-tools>span){color:#3d5138}
+[data-theme=dark] .quiz button.wrong{background:#4a2c26;color:#ffded3;border-color:#c98c79}
+[data-theme=dark] :is(.topic-row.locked,.badge.inactive){opacity:1}
+[data-theme=dark] :is(.tool-search input::placeholder,.topbar .search input::placeholder){color:#c2cbbb;opacity:1}
+[data-theme=dark] :is(.iso-number,.topic-index){color:var(--accent)}
+[data-theme=dark] :is(.iso-explain,.iso-question,.iso-comparison){border-color:var(--line)}
