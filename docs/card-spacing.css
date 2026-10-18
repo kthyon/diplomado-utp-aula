@@ -1,0 +1,11 @@
+/* Keep content inside rounded surfaces on desktop and narrow screens. */
+:root{--card-inset:clamp(24px,2.5vw,32px)}
+:is(.panel,.course-card,.tool-card,.tool-controls,.tool-empty,.search-empty,.next-class,.schedule-item,.entry-card,.quiz){padding:var(--card-inset);min-width:0}
+.visual-home .hero{padding:var(--card-inset);gap:clamp(24px,3vw,40px);box-sizing:border-box}
+.hero-art.nexo-space{padding:22px 20px 18px;box-sizing:border-box}
+.badge{padding:26px 22px}.class-header{padding:24px}.topics{padding:12px 18px}.glossary details{padding:20px 22px}.glossary summary{line-height:1.6}.glossary details>p{margin:14px 0 0}
+:is(.panel,.course-card,.tool-card,.next-class,.entry-card,.quiz)>:first-child{margin-top:0}
+:is(.panel,.course-card,.tool-card,.next-class,.entry-card,.quiz)>:last-child{margin-bottom:0}
+.tool-card-heading{gap:14px;margin-bottom:18px}.tool-card p{margin-bottom:20px}.tool-card .tool-actions{padding-top:4px}
+@media(max-width:560px){:root{--card-inset:24px}.visual-home .hero{padding:24px 22px;gap:26px}.hero-art.nexo-space{padding:20px 14px 16px}.space-card{padding:12px 8px}.next-class{padding:24px}.entry-card{padding:28px 24px}.badge{padding:24px 18px}.class-header{padding:22px}.topics{padding:10px 14px}.glossary details{padding:20px}}
+
