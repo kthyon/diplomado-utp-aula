@@ -1,4 +1,4 @@
-.theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;min-height:44px;padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:500 12px 'Roboto Flex',Roboto,Arial,sans-serif;cursor:pointer}.theme-toggle svg{width:18px;height:18px;flex-shrink:0}.theme-toggle .theme-sun{display:none}.theme-toggle:hover{background:var(--soft)}
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:44px;height:44px;padding:10px;border:0;border-radius:50%;background:transparent;color:var(--ink);cursor:pointer}.theme-toggle svg{width:21px;height:21px;flex-shrink:0}.theme-toggle [data-theme-label],.theme-toggle .theme-sun{display:none}.theme-toggle:hover{background:var(--soft)}
 :root[data-theme=dark]{--bg:#171c18;--paper:#222923;--ink:#e4e9de;--muted:#b4bdae;--accent:#c1d59a;--accent-hover:#d3e5ad;--focus:#c1d59a;--selected:#3c4d30;--on-selected:#e0edc7;--green:var(--accent);--lime:#3c4d30;--line:#424c40;--orange:#e9ae87;--soft:#2d382a;--shadow:0 2px 8px #0003;background:var(--bg);color:var(--ink)}
 [data-theme=dark] .theme-toggle .theme-sun{display:block}[data-theme=dark] .theme-toggle .theme-moon{display:none}
 [data-theme=dark] :is(body,.sidebar,.topbar){background:var(--bg);color:var(--ink)}
@@ -21,5 +21,6 @@
 [data-theme=dark] .tool-card .brand-icon{background:#fff;border-color:#fff}
 [data-theme=dark] :is(.tool-primary,.course-card .card-bottom,.site-footer,.stat,.topic-row){border-color:var(--line)}
 [data-theme=dark] :is(.iso-metric span,.iso-control-fields label,.iso-inspect,.iso-legend){color:var(--ink)}
-[data-theme=dark] .theme-toggle{background:var(--paper);color:var(--ink);border-color:var(--line)}
+[data-theme=dark] .theme-toggle{background:transparent;color:var(--ink)}[data-theme=dark] .theme-toggle:hover{background:var(--soft)}
 @media(max-width:560px){.theme-toggle{padding:10px;width:44px;height:44px;min-width:44px}.topbar{column-gap:8px}.theme-toggle [data-theme-label]{display:none}.topbar .profile-button{max-width:190px}}
+
