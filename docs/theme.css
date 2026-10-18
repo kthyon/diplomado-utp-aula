@@ -1,0 +1,25 @@
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;min-height:44px;padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:500 12px 'Roboto Flex',Roboto,Arial,sans-serif;cursor:pointer}.theme-toggle svg{width:18px;height:18px;flex-shrink:0}.theme-toggle .theme-sun{display:none}.theme-toggle:hover{background:var(--soft)}
+:root[data-theme=dark]{--bg:#171c18;--paper:#222923;--ink:#e4e9de;--muted:#b4bdae;--accent:#c1d59a;--accent-hover:#d3e5ad;--focus:#c1d59a;--selected:#3c4d30;--on-selected:#e0edc7;--green:var(--accent);--lime:#3c4d30;--line:#424c40;--orange:#e9ae87;--soft:#2d382a;--shadow:0 2px 8px #0003;background:var(--bg);color:var(--ink)}
+[data-theme=dark] .theme-toggle .theme-sun{display:block}[data-theme=dark] .theme-toggle .theme-moon{display:none}
+[data-theme=dark] :is(body,.sidebar,.topbar){background:var(--bg);color:var(--ink)}
+[data-theme=dark] :is(.brand,.brand b,.breadcrumb b,h1,h2,h3,h4,.hero h1,.section-heading h2,.course-card h3,.topic-row h4,.stat strong,.reading .concept,.glossary summary,.badge h4,.next-class h2){color:var(--ink)}
+[data-theme=dark] :is(.breadcrumb,.edition,.nav-label,.nav-icon,.sidebar nav a,.sidebar nav a[aria-disabled=true],.account-copy small,.sidebar-bottom small,.page-intro p,.field-note,.eyebrow,.hero>div>p,.course-card p,.course-meta,.card-bottom,.topic-row p,.topic-state,.reading-list,.glossary p,.panel p,.panel li,.stat span,.badge small,.empty-state p,.next-class p,.site-footer,.tool-section-head p,.tool-card p,.tool-kind,.tool-results-meta p,.tool-footnote,.tool-empty p){color:var(--muted)}
+[data-theme=dark] :is(.panel,.course-card,.class-block,.glossary details,.badge,.badge.inactive,.stats,.next-class,.entry-card,.schedule-item,.tool-controls,.tool-card,.tool-empty,dialog,.teacher-card .sidebar-bottom,.teacher-card .teacher-link,.pill,.search-empty,.resource-grid .panel,.iso-controls,.iso-metric){background:var(--paper);border-color:var(--line);color:var(--ink)}
+[data-theme=dark] :is(.class-header,.quiz,.case,.tool-search,.tool-filter,.iso-question,.iso-control-fields,.iso-inspect,.iso-legend,.edition span,.course-card .tag,.badge .badge-icon,.badge.inactive .badge-icon,.teacher-mode){background:var(--soft);border-color:var(--line);color:var(--ink)}
+[data-theme=dark] :is(.sidebar nav a:hover,.profile-button:hover,.teacher-link:hover,.sidebar-bottom:hover,.topic-row:hover,.lesson-nav a,.iso-tabs button){background:var(--soft);color:var(--ink);border-color:var(--line)}
+[data-theme=dark] :is(.sidebar nav a.active,.profile-button>span:first-child,.button.lime,.tool-filter[aria-pressed=true],.iso-tabs button[aria-pressed=true]){background:var(--selected);color:var(--on-selected);border-color:var(--selected)}
+[data-theme=dark] .profile-button>.account-copy{background:transparent;color:var(--ink)}
+[data-theme=dark] :is(.button,.quiz button.correct){background:var(--accent);color:#223015}[data-theme=dark] .button:hover:not(:disabled){background:var(--accent-hover);color:#223015}
+[data-theme=dark] :is(.button.secondary,.quiz button,.tool-filter){background:var(--paper);color:var(--accent);border-color:var(--line)}[data-theme=dark] .button.secondary:hover{background:var(--soft);color:var(--accent)}
+[data-theme=dark] :is(.topbar .search,.topbar .search:focus-within){background:#293429;border-color:var(--line)}
+[data-theme=dark] :is(input,textarea,select,.entry-card input,.registration-fields input,dialog input,.study-note,.teacher-select){background:var(--bg);color:var(--ink);border-color:var(--line)}
+[data-theme=dark] :is(.topbar .search input,.tool-search input){background:transparent;color:var(--ink)}[data-theme=dark] :is(.topbar .search input::placeholder,input::placeholder,textarea::placeholder){color:var(--muted)}
+[data-theme=dark] :is(.topbar .search>span,.tool-search>svg,.menu-button){color:var(--muted)}[data-theme=dark] :is(.topbar .search button,.topbar .search button:hover){background:var(--selected);color:var(--on-selected)}
+[data-theme=dark] :is(.inline-link,.teacher-link,.lesson-nav a,.tool-actions a,.tool-actions a.tool-primary,.tool-results-meta button){color:var(--accent)}
+[data-theme=dark] :is(.track,.tool-filter>span){background:var(--soft);color:var(--muted)}[data-theme=dark] .track>span{background:var(--accent)}
+[data-theme=dark] :is(.visual-home .hero,.hero){background:radial-gradient(ellipse at 75% 50%,#35482d,#242e22 65%,#222923)}[data-theme=dark] .hero h1 em{color:var(--accent)}
+[data-theme=dark] .tool-card .brand-icon{background:#fff;border-color:#fff}
+[data-theme=dark] :is(.tool-primary,.course-card .card-bottom,.site-footer,.stat,.topic-row){border-color:var(--line)}
+[data-theme=dark] :is(.iso-metric span,.iso-control-fields label,.iso-inspect,.iso-legend){color:var(--ink)}
+[data-theme=dark] .theme-toggle{background:var(--paper);color:var(--ink);border-color:var(--line)}
+@media(max-width:560px){.theme-toggle{padding:10px;gap:6px;font-size:11px;min-width:44px}.topbar{column-gap:8px}.theme-toggle [data-theme-label]{max-width:65px}.topbar .profile-button{max-width:190px}}
