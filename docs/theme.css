@@ -22,4 +22,4 @@
 [data-theme=dark] :is(.tool-primary,.course-card .card-bottom,.site-footer,.stat,.topic-row){border-color:var(--line)}
 [data-theme=dark] :is(.iso-metric span,.iso-control-fields label,.iso-inspect,.iso-legend){color:var(--ink)}
 [data-theme=dark] .theme-toggle{background:var(--paper);color:var(--ink);border-color:var(--line)}
-@media(max-width:560px){.theme-toggle{padding:10px;gap:6px;font-size:11px;min-width:44px}.topbar{column-gap:8px}.theme-toggle [data-theme-label]{max-width:65px}.topbar .profile-button{max-width:190px}}
+@media(max-width:560px){.theme-toggle{padding:10px;width:44px;height:44px;min-width:44px}.topbar{column-gap:8px}.theme-toggle [data-theme-label]{display:none}.topbar .profile-button{max-width:190px}}
