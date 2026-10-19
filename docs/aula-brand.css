@@ -16,7 +16,8 @@
 [data-theme=dark] .sidebar .brand-course b{color:#95B51B}
 
 /* Only the leaf moves; its square and wordmark remain still. */
-.sidebar .brand-leaf{transform-box:view-box;transform-origin:23px 57px}
+.sidebar .brand-leaf{transform-box:view-box;transform-origin:23px 57px;animation:aula-leaf-breeze 16s ease-in-out infinite}
 .sidebar .brand:is(:hover,:focus-visible) .brand-leaf{animation:aula-leaf-sway 1.4s ease-in-out infinite}
+@keyframes aula-leaf-breeze{0%,58%,100%{transform:rotate(0deg)}65%{transform:rotate(-7deg)}72%{transform:rotate(5deg)}79%{transform:rotate(-3deg)}86%{transform:rotate(1.5deg)}93%{transform:rotate(0deg)}}
 @keyframes aula-leaf-sway{0%,100%{transform:rotate(0deg)}30%{transform:rotate(-9deg)}70%{transform:rotate(6deg)}}
 @media(prefers-reduced-motion:reduce){.sidebar .brand .brand-leaf{animation:none!important}}
