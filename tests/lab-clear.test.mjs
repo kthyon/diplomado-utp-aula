@@ -2,6 +2,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {initialNetwork,forward,meanLoss,trainEpoch,packageNeighbors,evaluate,EMAILS} from '../docs/lab-clear-models.js';
 import {neuronCalculation,outputUpdate,chooseThreshold} from '../docs/lab-clear-models.js';
+import {workedDistance,scorePlot} from '../docs/lab-explanations.js';
+test('coincident packages show no contribution, and the mobile score follows the selected item',()=>{
+ const query={length:22,mass:4000},raw=packageNeighbors(query,false,'g'),scaled=packageNeighbors(query,true,'g');
+ const rendered=workedDistance(raw,scaled,'A',query,'g');
+ assert.match(rendered,/Ambos paquetes coinciden/);
+ assert.equal((rendered.match(/width:0%/g)||[]).length,4);
+ const scores=scorePlot(evaluate(.8),.8,99);
+ assert.equal((scores.match(/Pieza 99: 0,90/g)||[]).length,2);
+ for(const plot of scores.matchAll(/<svg[^>]*>([\s\S]*?)<\/svg>/g)){
+  const positions=[...plot[1].matchAll(/<circle cx="([^"]+)" cy="([^"]+)"/g)].map(m=>m[1]+','+m[2]);
+  assert.equal(positions.length,99);
+  assert.equal(new Set(positions).size,99,'each real item must occupy a distinct visible position');
+ }
+});
 test('worked neuron and displayed gradient update match actual network calculations',()=>{const net=initialNetwork(),x=EMAILS[0].x,r=neuronCalculation(net,x,0);assert.ok(Math.abs(r.sum-(.9*.6+.8*(-.2)-.1))<1e-12);assert.ok(Math.abs(r.activation-forward(net,x).h[0])<1e-12);const u=outputUpdate(net),next=trainEpoch(net);assert.ok(Math.abs(u.after-next.c)<1e-12);assert.ok(meanLoss(next)<meanLoss(net));assert.ok(Math.abs(u.gradient-EMAILS.reduce((s,row)=>s+forward(net,row.x).p-row.y,0)/8)<1e-12);});
 test('chosen cutoffs satisfy the stated goals and include equality at the boundary',()=>{const a=chooseThreshold('detect'),b=chooseThreshold('clean');assert.equal(a.threshold,.82);assert.equal(a.fn,0);assert.equal(a.fp,2);assert.equal(b.threshold,.91);assert.equal(b.fp,0);assert.equal(b.fn,1);assert.equal(evaluate(.82).tp,1);assert.equal(evaluate(.83).tp,0);});
 test('predicting leaves weights unchanged; training reduces full-dataset loss',()=>{let net=initialNetwork();const original=structuredClone(net),before=meanLoss(net);forward(net,EMAILS[0].x);assert.deepEqual(net,original);for(let i=0;i<100;i++)net=trainEpoch(net);assert.ok(meanLoss(net)<before*.2);assert.ok(forward(net,EMAILS[0].x).p>.5);assert.ok(forward(net,EMAILS[4].x).p<.5);});

@@ -85,12 +85,12 @@ export const LESSON_GUIDES={
       }
     ],
     "lab": {
-      "title": "De los datos a la comprobación",
-      "objective": "Construir: ficha de una predicción.",
-      "instruction": "Avanza por datos, patrón, predicción y comparación. Selecciona el lote B antes de revelar su rendimiento.",
-      "watch": "Separa el valor predicho del reservado; solo el último permite calcular el error.",
-      "expected": "Para B: predicción 2,75 t/ha, observado 3,10 t/ha y error absoluto 0,35 t/ha.",
-      "notebookGuide": "En Laboratorio ML explicado, sección 1.1, trabaja con la tabla de 240 fincas simuladas: lluvia, temperatura y fertilizante son las tres entradas; rendimiento es la respuesta. Las siguientes secciones separan las fincas de entrenamiento y de prueba."
+      "title": "Predecir antes de conocer la respuesta",
+      "objective": "Separar entrada, predicción y comprobación en una ficha de un lote.",
+      "instruction": "Avanza hasta «Predecir un caso nuevo». Elige B, anota su predicción y luego revela el rendimiento.",
+      "watch": "La predicción se calcula con lluvia; el rendimiento reservado aparece al comprobar, sin cambiar el patrón aprendido.",
+      "expected": "B tiene 550 mm: 0,005 × 550 = 2,75 t/ha. Observado: 3,10 t/ha. Error absoluto: |3,10 − 2,75| = 0,35 t/ha.",
+      "notebookGuide": "En tu copia de Laboratorio ML explicado, ejecuta hasta 1.3. La tabla contiene 240 fincas simuladas y tres entradas; la separación deja 180 para entrenar y 60 para prueba. Es otro conjunto, distinto del pequeño ejemplo visual."
     },
     "takeaway": "Define la unidad de cada fila, las entradas disponibles al decidir y la respuesta que quieres estimar. Comprueba las predicciones con casos que quedaron fuera del ajuste.",
     "next": "Antes de aprender, revisemos qué hacer cuando falta una entrada.",
@@ -98,13 +98,13 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Ficha de una predicción",
       "steps": [
-        "Define la decisión: anticipar producción para organizar transporte. Anota una fila por lote y periodo, la entrada disponible y la respuesta con sus unidades.",
-        "Usa el lote B: registra 550 mm, predicción 2,75 t/ha y, después de revelarlo, observado 3,10 t/ha. Calcula la diferencia absoluta.",
-        "En tu copia de Laboratorio ML, identifica las columnas equivalentes de 1.1. Escribe qué información conocerías antes de cosechar y cuál debes reservar."
+        "Registra para B: lluvia conocida, rendimiento predicho y rendimiento revelado, con unidades. Calcula su error absoluto.",
+        "En 1.1 del cuaderno, identifica qué representa una fila y separa las tres entradas de la respuesta rendimiento.",
+        "Comprueba en 1.3 los tamaños 180 y 60. Anota qué grupo puede usarse para ajustar y cuál queda reservado para comprobar."
       ],
-      "check": "La ficha separa entrada, predicción y observado; el error de B es 0,35 t/ha. La respuesta reservada no aparece entre las entradas.",
-      "transfer": "Para anticipar pedidos de una bodega, cambia lote por producto-semana, define pedidos como respuesta y usa solo información disponible al planear.",
-      "stretch": "Si ya programas: crea una tabla con columnas entrada, predicción, observado y error absoluto para los casos de prueba del cuaderno."
+      "check": "La ficha de B da 2,75 t/ha predichas y 0,35 t/ha de error. En el cuaderno, rendimiento no aparece como entrada y las 60 filas de prueba quedan fuera del ajuste.",
+      "transfer": "Para anticipar pedidos, define una fila por producto y semana. Distingue información disponible al planear de pedidos observados después.",
+      "stretch": "Repite con A o C en el explorador y compara sus errores absolutos. El patrón no cambia al revelar otra respuesta."
     },
     "prerequisite": "Partimos de una pregunta: ¿cuánto producirá un lote antes de cosecharlo? Primero identifica qué representa una fila, qué sabemos al decidir y qué queremos estimar.",
     "understanding": {
@@ -185,12 +185,12 @@ export const LESSON_GUIDES={
       }
     ],
     "lab": {
-      "title": "Una ausencia conserva su significado",
-      "objective": "Construir: tabla preparada y regla de limpieza.",
-      "instruction": "En el explorador de lluvia, cambia A de 500 a 100 mm y deja C y D iguales.",
-      "watch": "Lee los registros y la barra de B: su color identifica una estimación.",
-      "expected": "100, 600, 700 mantiene mediana 600. B no cambia; una media sí habría cambiado.",
-      "notebookGuide": "En Laboratorio ML explicado, sigue 1.2 y 1.3: identifica las ausencias y separa entrenamiento/prueba antes de aprender la preparación. Explica de dónde sale la regla que después se aplica a la prueba."
+      "title": "Completar sin inventar una medición",
+      "objective": "Preparar una columna conservando la marca de dato ausente.",
+      "instruction": "Deja C en 600 y D en 700 mm. Cambia A de 500 a 100 mm y compara el valor asignado a B.",
+      "watch": "B conserva el color de estimación; los controles solo cambian registros conocidos de entrenamiento.",
+      "expected": "La mediana de 500, 600 y 700 es 600 mm. La de 100, 600 y 700 también es 600 mm: B no cambia. Seguimos sin conocer su lluvia real.",
+      "notebookGuide": "En Laboratorio ML explicado, ejecuta 1.2–1.5 en orden. 1.2 crea 20 ausencias; 1.3 separa los conjuntos y 1.5 muestra la mediana aprendida por el pipeline solo con entrenamiento."
     },
     "takeaway": "Aprende la regla de preparación con entrenamiento, aplícala a los otros conjuntos y conserva la diferencia entre una medición y una estimación.",
     "next": "Con entradas preparadas, calcularemos una predicción y su error.",
@@ -198,13 +198,13 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Tabla preparada y regla de limpieza",
       "steps": [
-        "Copia las filas del caso; conserva la columna original y crea otra para el valor que usará el modelo.",
-        "Calcula la mediana solo con las medidas conocidas de entrenamiento, completa B y añade una marca de dato estimado. Repite cambiando A a 100.",
-        "En 1.2–1.3 de Laboratorio ML, localiza la separación y la preparación. Registra qué regla se aprende en entrenamiento y cuál se reutiliza en prueba."
+        "Registra A, B, C y D con dos columnas: registro original y valor preparado. Marca B como estimado en ambas pruebas del explorador.",
+        "Ejecuta 1.2–1.5 del cuaderno y anota ausencias iniciales, tamaño de entrenamiento y mediana de lluvia impresa.",
+        "Localiza SimpleImputer dentro del pipeline. Comprueba que fit recibe X_tr, y_tr; la prueba se transforma al predecir, sin volver a aprender la mediana."
       ],
-      "check": "La mediana sigue en 600 mm al cambiar A; B conserva su marca de estimación. No se usa la prueba para recalcular la regla.",
-      "transfer": "Aplica el mismo esquema a tiempos de entrega sin registrar: conserva la ausencia original y la unidad minutos; no la conviertas en entrega inmediata.",
-      "stretch": "Si ya programas: cuenta ausencias antes y después de la transformación y comprueba que los datos originales se conservan."
+      "check": "B recibe 600 mm en las dos pruebas visuales y conserva su marca de estimación. La mediana del cuaderno procede de sus propias filas de entrenamiento; no tiene por qué ser 600 mm.",
+      "transfer": "Para tiempos de entrega sin registrar, conserva la ausencia original y la unidad minutos. Una ausencia no significa entrega inmediata.",
+      "stretch": "En una celda nueva de tu copia, consulta X_tr.isna().sum() y lineal[0].statistics_ para relacionar ausencias por columna con las estadísticas de imputación aprendidas."
     },
     "prerequisite": "Ya separamos las entradas de la respuesta. Ahora necesitamos que cada columna conserve un significado y una unidad comparables antes de ajustar la regla.",
     "understanding": {
@@ -302,12 +302,12 @@ export const LESSON_GUIDES={
       }
     ],
     "lab": {
-      "title": "Ajustar y comprobar son pasos distintos",
-      "objective": "Construir: tabla de predicciones y referencia.",
-      "instruction": "Fija pendiente en 0,025 e intercepto en 1. Lee el MAE y pulsa «Ajustar a estos puntos».",
-      "watch": "Cambian la recta y las distancias; los seis puntos permanecen fijos.",
-      "expected": "El MAE pasa de 0,20 a aproximadamente 0,04 t/ha. Sigue siendo error sobre los puntos utilizados.",
-      "notebookGuide": "En Regresión, sección 1, ajusta la recta. En Laboratorio ML explicado, secciones 1.4–1.6, compara referencia y regresión con las mismas 60 fincas de prueba; calcula allí sus errores. El primer cuaderno usa fertilizante; el segundo utiliza lluvia, temperatura y fertilizante."
+      "title": "Ajustar una recta y medir su error",
+      "objective": "Comparar dos ajustes sin confundir ajuste con evaluación reservada.",
+      "instruction": "Fija pendiente 0,025 e intercepto 1. Anota el MAE y pulsa «Ajustar a estos puntos»; registra el nuevo MAE.",
+      "watch": "Los seis puntos no cambian. Las líneas verticales son diferencias entre observado y predicho; MAE promedia sus magnitudes.",
+      "expected": "El MAE pasa de 0,20 a aproximadamente 0,04 t/ha. Ambos valores describen los seis puntos usados para ajustar, no fincas nuevas.",
+      "notebookGuide": "En Laboratorio ML explicado, ejecuta 1.1–1.6. La tabla resultados compara referencia y regresión sobre las mismas 60 fincas reservadas; comparacion muestra observado, predicción lineal y error por finca."
     },
     "takeaway": "El MAE describe el tamaño medio del error en las unidades de la respuesta. Para evaluar casos nuevos, calcúlalo con datos reservados.",
     "next": "Cambiaremos la pregunta: de cuánto rendimiento a qué categoría asignar.",
@@ -315,13 +315,13 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Tabla de predicciones y referencia",
       "steps": [
-        "Compara la recta inicial con la ajustada en el explorador y anota ambos MAE, indicando que usan los mismos puntos de ajuste.",
-        "En 1.4–1.6 de Laboratorio ML, conserva las mismas filas reservadas para la referencia y la regresión; registra observado y ambas predicciones.",
-        "Calcula los errores absolutos y su promedio. Escribe cuál usarías en un ensayo de planificación y qué margen de error observaste."
+        "Anota pendiente, intercepto y MAE antes y después del ajuste visual, indicando que se usan los mismos seis puntos.",
+        "En 1.6 del cuaderno, registra los dos MAE de resultados y revisa las primeras filas de comparacion.",
+        "Comprueba una fila: error = |observado − predicción|. Decide qué modelo seguirías probando a partir de su MAE en prueba y expresa el error en t/ha."
       ],
-      "check": "El ajuste visual pasa de 0,20 a cerca de 0,04 t/ha. La decisión del cuaderno usa su propia prueba reservada y sus cifras, no el error del ajuste visual.",
-      "transfer": "Para estimar minutos de atención por solicitud, mantén el mismo procedimiento y expresa el MAE en minutos.",
-      "stretch": "Si ya programas: añade una columna de error absoluto por caso y ordena las filas para inspeccionar los errores mayores."
+      "check": "El ajuste visual reduce su MAE a cerca de 0,04 t/ha. La comparación reservada del cuaderno usa sus propios MAE; el error por fila coincide con la diferencia absoluta calculada.",
+      "transfer": "Para estimar minutos de atención, conserva una referencia sencilla y evalúa ambas reglas sobre las mismas solicitudes reservadas; expresa MAE en minutos.",
+      "stretch": "En una celda nueva de tu copia, usa comparacion.sort_values('error_absoluto_t_ha', ascending=False).head() para inspeccionar los errores mayores."
     },
     "prerequisite": "Tenemos una tabla preparada y una respuesta numérica. Ahora distinguimos la regla que calcula una cantidad del criterio que usa el entrenamiento para ajustarla.",
     "understanding": {
@@ -419,12 +419,12 @@ export const LESSON_GUIDES={
       }
     ],
     "lab": {
-      "title": "Dos decisiones equivocadas",
-      "objective": "Construir: lista de plantas por revisar.",
-      "instruction": "Deja el umbral en 0,50 y localiza P4 y P5 en el explorador completo.",
-      "watch": "Realidad escrita; borde naranja significa alerta.",
-      "expected": "P4: plaga sin alerta; P5: sana con alerta. El explorador contiene las diez plantas.",
-      "notebookGuide": "En Clasificación e Iris, empieza por la sección 1: puntuación y umbral. Las secciones 2–4 amplían bosque, SVM y KNN con otros datos; sus porcentajes no comparan modelos sobre una misma tarea."
+      "title": "Construir una lista de revisión",
+      "objective": "Convertir puntuaciones en alertas y comprobar dos errores distintos.",
+      "instruction": "Fija el umbral en 0,50. Anota qué plantas tienen borde de alerta y compara P4 y P5 con su realidad escrita.",
+      "watch": "El borde marca una decisión. La etiqueta «Con plaga» o «Sana» describe la realidad inventada con la que la comprobamos.",
+      "expected": "Se alertan P1, P2, P3, P5 y P6. P4 tiene plaga y queda omitida; P5 y P6 están sanas y generan falsas alertas.",
+      "notebookGuide": "En Clasificación e Iris, ejecuta la sección 1: su puntuación busca alto rendimiento a partir de un índice hídrico simulado, no plagas. Identifica entrada, clase positiva y umbral; allí las métricas se calculan sobre entrenamiento."
     },
     "takeaway": "Define la categoría positiva y la regla de alerta. Conserva puntuación, decisión y realidad en columnas separadas.",
     "next": "Contaremos esos aciertos y errores para interpretar las métricas.",
@@ -432,13 +432,13 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Lista de plantas por revisar",
       "steps": [
-        "En el explorador, fija 0,50 y copia identificador, puntuación y decisión de cada planta. Escribe la regla: alerta si puntuación ≥ umbral.",
-        "Añade la realidad conocida para comprobar después la lista. Marca P4 como omisión y P5 como falsa alerta.",
-        "En la sección 1 de Clasificación e Iris, aplica esa separación entre puntuación, decisión y realidad; anota qué representa la clase positiva allí."
+        "Crea una lista con planta, puntuación y decisión para las diez plantas a umbral 0,50. Regla: puntuación ≥ umbral → alerta.",
+        "Añade la realidad escrita y marca P4 como omisión, P5 y P6 como falsas alertas. Separa decisión de confirmación de plaga.",
+        "En la sección 1 del cuaderno, localiza la comparación de puntuaciones con el umbral e identifica qué significa 1 en ese otro ejemplo."
       ],
-      "check": "La lista incluye cinco alertas en las diez plantas; una puntuación no se confunde con porcentaje de daño ni con confirmación de plaga.",
-      "transfer": "Para priorizar solicitudes de soporte, define qué significa urgente y usa la lista para revisión humana, con seguimiento de solicitudes omitidas.",
-      "stretch": "Si ya programas: crea una columna booleana comparando cada puntuación con el umbral; verifica el caso de igualdad."
+      "check": "La lista contiene cinco alertas. P4 no se alerta aunque tiene plaga; P5 y P6 se alertan aunque están sanas. Una puntuación no equivale a porcentaje de daño.",
+      "transfer": "Para priorizar soporte, define primero qué cuenta como solicitud urgente. La alerta inicia revisión; registra también solicitudes urgentes que quedaron fuera.",
+      "stretch": "Sube el umbral a 0,70 y revisa P3, cuya puntuación es exactamente 0,70. Debe conservar su alerta porque la regla incluye la igualdad."
     },
     "prerequisite": "En regresión la salida era una cantidad. Ahora la pregunta es si una planta pertenece a una categoría, y una puntuación debe convertirse en una decisión.",
     "understanding": {
@@ -528,12 +528,12 @@ export const LESSON_GUIDES={
       }
     ],
     "lab": {
-      "title": "Leer una casilla antes del porcentaje",
-      "objective": "Construir: reporte de calidad de las alertas.",
-      "instruction": "Con umbral 0,50, cruza fila «Con plaga» con columna «Sin plaga».",
-      "watch": "Fila: realidad; columna: predicción. Esa casilla cuenta omisiones.",
-      "expected": "Con umbral 0,50: TP = 3, FP = 2, FN = 1 y TN = 4. Recall = 3/4 = 75 %; precision = 3/5 = 60 %; accuracy = (3+4)/10 = 70 %.",
-      "notebookGuide": "En Laboratorio ML explicado, abre la sección 2 y reconstruye los cuatro conteos de las diez plantas antes de leer los porcentajes. Identifica el denominador de cada métrica."
+      "title": "Contar antes de calcular porcentajes",
+      "objective": "Construir un reporte que distinga omisiones y falsas alertas.",
+      "instruction": "Fija 0,50. Cuenta las plantas de cada casilla de la matriz y calcula cuántas plagas detectaste y cuántas alertas acertaron.",
+      "watch": "Filas = realidad; columnas = predicción. Detectadas / todas las plantas con plaga responde algo distinto de detectadas / todas las alertas.",
+      "expected": "TP = 3, FP = 2, FN = 1 y TN = 4. Sensibilidad (recall) = 3/4 = 75 %; precisión = 3/5 = 60 %; exactitud = 7/10 = 70 %.",
+      "notebookGuide": "Ejecuta la sección 2 de Laboratorio ML explicado. Usa las mismas diez realidades y decisiones del caso 0,50. Reconstruye los cuatro conteos antes de leer las métricas impresas."
     },
     "takeaway": "Escribe el numerador y el denominador de cada métrica: detectar plagas, acertar alertas y acertar decisiones son preguntas diferentes.",
     "next": "Mover el umbral cambiará esos conteos sin cambiar las plantas.",
@@ -541,13 +541,13 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Reporte de calidad de las alertas",
       "steps": [
-        "Con umbral 0,50, clasifica las diez plantas en detección correcta, falsa alerta, omisión y descarte correcto.",
-        "Calcula recall, precision y accuracy escribiendo numerador y denominador. Reproduce los conteos de la sección 2 de Laboratorio ML.",
-        "Redacta una decisión operativa: qué error conviene investigar primero y qué casos concretos revisarías."
+        "Reúne las diez plantas en cuatro grupos: detección correcta, falsa alerta, omisión y descarte correcto. Anota identificadores y cantidades.",
+        "Calcula sensibilidad, precisión y exactitud con numerador y denominador. Contrasta tus resultados con la matriz y la tabla de la sección 2 del cuaderno.",
+        "Escribe qué revisarías primero: P4 requiere atención por la omisión; P5 y P6 consumen revisiones innecesarias en este ejemplo."
       ],
-      "check": "TP (detecciones correctas) = 3; FP (falsas alertas) = 2; FN (omisiones) = 1; TN (descartes correctos) = 4. Suman diez. Recall = 3/4, precision = 3/5 y accuracy = 7/10.",
-      "transfer": "En detección de solicitudes urgentes, una omisión retrasa atención y una falsa alerta consume capacidad: reporta ambos efectos.",
-      "stretch": "Si ya programas: calcula las proporciones desde los conteos y contempla un denominador cero sin inventar un porcentaje."
+      "check": "Los conteos 3 + 2 + 1 + 4 suman diez. Los denominadores son cuatro plantas con plaga, cinco alertas y diez plantas, respectivamente.",
+      "transfer": "En solicitudes urgentes, informa cuántas se omitieron y cuántas revisiones resultaron innecesarias; un único porcentaje no explica ambos efectos.",
+      "stretch": "Sube el umbral a 0,95: no habrá alertas. Comprueba que la precisión queda sin definir porque su denominador es cero; no la conviertas en 0 % ni 100 %."
     },
     "prerequisite": "Ya tenemos decisiones y etiquetas reales. Ahora contamos qué tipo de error cometemos antes de resumirlo en un porcentaje.",
     "understanding": {
@@ -625,26 +625,26 @@ export const LESSON_GUIDES={
       }
     ],
     "lab": {
-      "title": "Guardar las puntuaciones, cambiar decisiones",
-      "objective": "Construir: política para un equipo de cuatro revisiones.",
-      "instruction": "En las diez plantas, mueve el umbral de 0,50 a 0,70 y después a 0,30.",
-      "watch": "Cuenta bordes y omisiones; las puntuaciones escritas permanecen iguales.",
-      "expected": "A umbral 0,70: 4 alertas, 1 falsa alerta y 1 omisión. A 0,30: 7 alertas, 3 falsas alertas y 0 omisiones. Las diez puntuaciones permanecen iguales.",
-      "notebookGuide": "En la sección 2 de Laboratorio ML explicado, cambia el umbral conservando puntuaciones y realidades. Comprueba qué conteos cambian y qué error tendría más consecuencias en el uso propuesto."
+      "title": "Ajustar la carga de revisión",
+      "objective": "Elegir una regla compatible con cuatro revisiones y describir su riesgo.",
+      "instruction": "Compara umbrales 0,30, 0,50 y 0,70. Registra alertas, falsas alertas y omisiones para cada uno.",
+      "watch": "Las puntuaciones y realidades permanecen fijas; cambian las decisiones. Cuenta cuántas alertas caben en una ronda de cuatro revisiones.",
+      "expected": "0,30 → 7 alertas, 3 falsas y 0 omisiones. 0,50 → 5 alertas, 2 falsas y 1 omisión. 0,70 → 4 alertas, 1 falsa y 1 omisión.",
+      "notebookGuide": "La sección 2 de Laboratorio ML explicado tiene decisiones fijas, sin selector de umbral: sirve para verificar los conteos de 0,50. Compara los tres umbrales en este explorador y guarda la tabla en tu copia o bitácora."
     },
     "takeaway": "Elige la regla considerando revisiones necesarias, falsas alertas y omisiones; indica qué harás con los casos que no entren en la revisión.",
     "next": "Después buscaremos grupos cuando no tenemos categorías conocidas.",
     "explorer": "threshold",
     "build": {
-      "title": "Política para un equipo de cuatro revisiones",
+      "title": "Política para cuatro revisiones",
       "steps": [
-        "Supón que solo puedes revisar cuatro plantas en esta ronda. Compara umbrales 0,30, 0,50 y 0,70 conservando puntuaciones.",
-        "Registra para cada umbral cuántas alertas, falsas alertas y omisiones produce. Selecciona una regla compatible con la capacidad y describe el riesgo restante.",
-        "En la sección 2 del cuaderno, reproduce la tabla de comparación y escribe qué harás con las plantas sin revisar. Para elegir una regla de uso real, emplea validación y conserva aparte la prueba final."
+        "En el explorador, construye una tabla de tres filas: umbral, alertas, falsas alertas y omisiones. Conserva las mismas diez plantas.",
+        "Entre los tres cortes, identifica el que produce como máximo cuatro alertas. Anota las plantas alertadas y cuál planta con plaga queda sin revisar.",
+        "Escribe la regla elegida y una acción para casos pendientes, como programar otra inspección. Verifica en la sección 2 del cuaderno solo la fila correspondiente a 0,50."
       ],
-      "check": "A 0,70 hay cuatro alertas y una omisión; cabe en la capacidad propuesta, pero no resuelve todo el riesgo. La política indica qué hacer con los casos sin revisar.",
-      "transfer": "En una mesa de ayuda, cambia plantas por solicitudes y fija capacidad por turno antes de elegir una regla de prioridad.",
-      "stretch": "Si ya programas: genera una tabla de varios umbrales, calcula revisiones y omisiones y filtra los compatibles con una capacidad dada."
+      "check": "A 0,70 se alertan P1, P2, P3 y P5: cuatro revisiones, una falsa alerta y una omisión, P4. Cumplir capacidad no elimina el riesgo de dejar una plaga sin atender.",
+      "transfer": "En soporte, fija capacidad por turno y el coste de retrasar solicitudes urgentes antes de elegir un umbral con datos de validación.",
+      "stretch": "Prueba 0,40: detecta las cuatro plantas con plaga, pero emite seis alertas. Añade esa fila y explica por qué excede la capacidad elegida."
     },
     "prerequisite": "Las métricas explican las consecuencias de una regla. Ahora elegimos una regla de acción usando esas consecuencias y la capacidad de revisión.",
     "understanding": {
@@ -743,12 +743,12 @@ export const LESSON_GUIDES={
       }
     ],
     "lab": {
-      "title": "La configuración también cambia el resultado",
-      "objective": "Construir: mapa de grupos y casos por investigar.",
-      "instruction": "En los 29 puntos, deja mínimo 4 y compara radio 10 con radio 3.",
-      "watch": "Los puntos conservan posición; cambian colores y cantidad sin agrupar. Gris significa sin grupo.",
-      "expected": "Radio 10: dos grupos y tres sin grupo. Radio 3: ningún grupo y 29 sin grupo.",
-      "notebookGuide": "En Laboratorio ML explicado, la sección 4 desarrolla DBSCAN con otras observaciones. El cuaderno Agrupación añade K-Means y Mean-Shift: compara qué necesita cada método, sin interpretar los números de grupo como calidad."
+      "title": "Agrupar sin etiquetas previas",
+      "objective": "Separar grupos por densidad de registros que requieren revisión individual.",
+      "instruction": "Deja el mínimo en 4. Compara radio 10 con radio 3 y anota grupos y puntos sin asignar.",
+      "watch": "Las coordenadas de los 29 puntos no cambian. El color identifica un grupo; gris significa sin grupo con esa configuración.",
+      "expected": "Radio 10: dos grupos y tres puntos sin asignar. Radio 3: cero grupos y 29 sin asignar. No cambiaron los datos, cambió la regla de cercanía.",
+      "notebookGuide": "En Laboratorio ML explicado, ejecuta la sección 4. Usa otro conjunto de 123 puntos y escala antes de DBSCAN. La salida cuenta etiquetas y el gráfico ubica cada grupo; −1 significa no agrupado."
     },
     "takeaway": "Un grupo significa cercanía con las variables y parámetros elegidos. Antes de darle un significado operativo, revisa qué comparten sus registros.",
     "next": "PCA resumirá variables, sin formar grupos.",
@@ -756,13 +756,13 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Mapa de grupos y casos por investigar",
       "steps": [
-        "Compara radio 10 y radio 3 con mínimo 4 en el explorador. Conserva las coordenadas y registra grupos y puntos sin asignar.",
-        "En la sección 4 de Laboratorio ML, reproduce DBSCAN y crea una lista de observaciones por grupo, dejando aparte las no asignadas.",
-        "Propón una revisión por grupo y otra para casos aislados. Usa nombres neutrales; confirma el significado con las variables antes de tomar acciones."
+        "Registra radio, mínimo, grupos y puntos sin asignar para las dos configuraciones del explorador.",
+        "En la sección 4 del cuaderno, lee el conteo de cada etiqueta y ubícala en la leyenda. Verifica que todos los conteos sumen 123; usa sus propias cifras.",
+        "Describe qué observaciones revisarías juntas y cuáles individualmente. Mantén nombres neutrales: el grupo no indica calidad y −1 no demuestra una falla."
       ],
-      "check": "El explorador da dos grupos y tres puntos sin asignar con radio 10; con radio 3 deja los 29 sin grupo. Ningún identificador se interpreta como calidad.",
-      "transfer": "Para organizar incidencias de equipos por similitud, revisa escalas y variables antes de agrupar; un caso aislado merece inspección.",
-      "stretch": "Si ya programas: prueba otra escala de las variables y compara la estabilidad de las asignaciones."
+      "check": "El explorador produce 2 grupos y 3 sin asignar frente a 0 y 29. El cuaderno tiene 123 puntos distintos; sus conteos no se sustituyen por los del explorador.",
+      "transfer": "Para agrupar incidencias de equipos, define primero medidas y escalas. Comprueba el significado de cada grupo antes de asignarle una acción.",
+      "stretch": "En tu copia, cambia únicamente eps en DBSCAN de la sección 4 y ejecuta de nuevo desde el principio en un entorno reiniciado. Así la semilla reproduce los mismos puntos y puedes comparar conteos sin cambiar también los datos."
     },
     "prerequisite": "Hasta aquí conocíamos la respuesta de cada ejemplo. Ahora exploramos similitudes sin etiquetas de grupo: la pregunta y la forma de comprobar resultados cambian.",
     "understanding": {
@@ -843,12 +843,12 @@ export const LESSON_GUIDES={
       }
     ],
     "lab": {
-      "title": "Buscar una dirección que conserve dispersión",
-      "objective": "Construir: vista de dos componentes.",
-      "instruction": "En el explorador de 22 puntos, compara direcciones 0°, 90° y 37°.",
-      "watch": "Verde: dirección; naranja: proyecciones; líneas finas: parte descartada. Los puntos originales permanecen fijos.",
-      "expected": "Para los 22 puntos del explorador: 0° conserva aproximadamente 63,1 %; 90°, 36,9 %; 37°, 98,0 %. El caso resuelto usa cuatro puntos exactamente diagonales y por eso sus porcentajes son otros.",
-      "notebookGuide": "En PCA, transforma las tres variables escaladas en dos componentes. Identifica qué registro representa cada punto y lee la varianza explicada de cada componente y su suma. La tabla del cuaderno muestra el porcentaje correspondiente a sus datos."
+      "title": "Elegir qué variación conservar",
+      "objective": "Construir una vista reducida e indicar qué información descarta.",
+      "instruction": "Compara direcciones 0°, 90° y 37°. Anota el porcentaje de varianza conservada para cada dirección.",
+      "watch": "Verde = dirección; naranja = proyección; líneas finas = parte descartada. Las 22 observaciones originales permanecen fijas.",
+      "expected": "0° conserva aproximadamente 63,1 %; 90°, 36,9 %; 37°, 98,0 %. Son porcentajes de varianza de estos 22 puntos, no porcentajes de aciertos.",
+      "notebookGuide": "En PCA, ejecuta el bloque completo: genera 200 registros con X1, X2 y X3, los escala y dibuja PC1–PC2 y PC1. Lee los porcentajes calculados para esas vistas; no uses los del explorador."
     },
     "takeaway": "Al reducir variables, informa la variación conservada y mantén la relación de cada punto con su registro original.",
     "next": "Pasaremos de combinar variables a combinar predicciones de varios modelos.",
@@ -856,13 +856,13 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Vista de dos componentes",
       "steps": [
-        "Compara 0°, 90° y 37° en el explorador; registra la variación conservada con cada dirección.",
-        "En el cuaderno PCA, ejecuta el paso de tres variables escaladas a dos componentes. Conserva el identificador de cada registro al dibujarlo.",
-        "Añade al gráfico qué representan los puntos, la variación conservada y qué no puedes interpretar a partir de esa vista."
+        "Registra los porcentajes de 0°, 90° y 37° en el explorador y señala qué dirección conserva más de las tres.",
+        "En el cuaderno, localiza la varianza explicada por componente y su acumulado. Anota cuánto conservan PC1 sola y PC1 más PC2.",
+        "Acompaña la vista PC1–PC2 con una lectura: cada punto es un registro; los ejes son combinaciones de las tres variables escaladas; indica porcentaje conservado y descartado."
       ],
-      "check": "Las direcciones del explorador conservan aproximadamente 63,1 %, 36,9 % y 98,0 %. La vista del cuaderno informa su propio porcentaje y mantiene correspondencia con los registros.",
-      "transfer": "Usa una vista resumida para explorar muchas medidas de operación; vuelve a las variables originales antes de explicar por qué dos registros se parecen.",
-      "stretch": "Si ya programas: compara la variación acumulada de uno y dos componentes después de escalar."
+      "check": "El explorador da aproximadamente 63,1 %, 36,9 % y 98,0 %. La vista del cuaderno informa su propio porcentaje y su complemento hasta 100 %; no se interpreta como exactitud de clasificación.",
+      "transfer": "Para explorar muchas medidas operativas, usa la vista resumida para encontrar patrones y vuelve a las columnas originales para explicarlos.",
+      "stretch": "En una celda nueva de tu copia, crea pd.DataFrame(X_pca[:, :2], index=df.index, columns=['PC1', 'PC2']) y comprueba la correspondencia de una fila con su registro original."
     },
     "prerequisite": "Agrupar asignaba registros a conjuntos. PCA cambia la representación de sus variables: resumir columnas y formar grupos son tareas distintas.",
     "understanding": {
@@ -950,12 +950,12 @@ export const LESSON_GUIDES={
       }
     ],
     "lab": {
-      "title": "Comparar con el mismo criterio",
-      "objective": "Construir: tabla comparativa de modelos.",
-      "instruction": "Ahora usa otro conjunto: las 60 fincas del gráfico. Cambia el selector de MAE a RMSE.",
-      "watch": "Una barra corta significa menor error; cambiar métrica no vuelve a entrenar.",
-      "expected": "Boosting tiene menor error aquí: MAE 0,301 y RMSE 0,411 t/ha. Las cuatro barras comparten prueba.",
-      "notebookGuide": "En la sección 3 de Laboratorio ML explicado, localiza las mismas fincas reservadas para todos los modelos. Compara primero MAE y después explica qué error pesa más al usar RMSE."
+      "title": "Comparar modelos en la misma prueba",
+      "objective": "Seleccionar un candidato con errores expresados en unidades útiles.",
+      "instruction": "Cambia el selector de MAE a RMSE. Registra ambos errores de referencia, árbol, bosque y boosting.",
+      "watch": "Una barra corta indica menor error. El gráfico contiene resultados guardados de las mismas 60 fincas; el selector no entrena modelos.",
+      "expected": "Boosting tiene el menor error entre estos cuatro: MAE 0,301 y RMSE 0,411 t/ha. Eso describe esta prueba, sin establecer un ganador universal.",
+      "notebookGuide": "Ejecuta Laboratorio ML explicado desde el comienzo hasta la sección 3. Reutiliza X_tr y X_te del bloque 1 para todos los modelos; tabla muestra MAE, RMSE y R² de tu ejecución."
     },
     "takeaway": "Compara modelo y combinación con la misma respuesta, los mismos casos reservados y la misma métrica.",
     "next": "Cuando los casos son semanas, también importa el orden de la prueba.",
@@ -963,13 +963,13 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Tabla comparativa de modelos",
       "steps": [
-        "Reproduce el promedio de A y B del caso resuelto y calcula sus errores con las mismas tres fincas.",
-        "En el explorador y la sección 3 de Laboratorio ML, compara referencia, árbol, bosque y boosting sobre su misma prueba. Registra MAE y RMSE con unidades.",
-        "Elige un candidato para seguir probando y justifica la elección con error y necesidades de uso. Conserva la referencia en la tabla."
+        "Compara las cuatro barras en MAE y RMSE. Registra los valores con unidades y conserva la referencia como punto de comparación.",
+        "En la sección 3 del cuaderno, localiza fit(X_tr, y_tr) y predict(X_te). Comprueba que todos usan las mismas filas reservadas y copia los MAE y RMSE de tabla.",
+        "Elige un candidato para seguir probando y justifica la elección con sus dos errores. Anota que cambiar de conjunto o de condiciones exige otra comprobación."
       ],
-      "check": "En el explorador, boosting tiene el menor error entre los cuatro modelos: MAE 0,301 y RMSE 0,411 t/ha. Registra los resultados de tu ejecución del cuaderno y compáralos sobre sus mismas fincas de prueba.",
-      "transfer": "Al comparar estimadores de duración de tareas, usa las mismas tareas reservadas y una referencia sencilla.",
-      "stretch": "Si ya programas: repite la evaluación con otras particiones de entrenamiento sin reutilizar la prueba final para elegir ajustes."
+      "check": "La tabla tiene cuatro modelos, una única prueba y dos errores en t/ha. En los resultados guardados, boosting da 0,301 de MAE y 0,411 de RMSE; tu ejecución se documenta con sus propias cifras.",
+      "transfer": "Para comparar estimadores de duración, usa las mismas tareas reservadas. MAE conserva unidades; RMSE da más peso a errores grandes.",
+      "stretch": "En tu copia, inspecciona tabla[['modelo', 'MAE_t_ha', 'RMSE_t_ha']].sort_values('MAE_t_ha') y compara con ordenar por RMSE."
     },
     "prerequisite": "Ya sabemos evaluar una predicción y representar datos. Ahora combinamos modelos, conservando la misma pregunta, los mismos casos y la misma métrica.",
     "understanding": {
@@ -1056,12 +1056,12 @@ export const LESSON_GUIDES={
       }
     ],
     "lab": {
-      "title": "Tres estrategias, el mismo futuro",
-      "objective": "Construir: pronóstico con fecha de corte.",
-      "instruction": "En la serie de 84 semanas, cambia «Estrategia de pronóstico»: Último valor, Repetir ciclo de 12 semanas y Tendencia.",
-      "watch": "Los datos permanecen fijos. Las tres estrategias usan las primeras 60 semanas y se evalúan sobre las últimas 24.",
-      "expected": "Sobre las 24 semanas reservadas del explorador: MAE de último valor ≈ 14,90; ciclo de 12 semanas ≈ 11,35; tendencia ≈ 7,65 unidades de producto.",
-      "notebookGuide": "En Laboratorio ML explicado, sección 5, identifica las semanas de entrenamiento y las 24 de prueba. Genera los tres pronósticos sin usar las respuestas de prueba y compara sus MAE. Lee los resultados de esa tabla, calculados con la serie del cuaderno."
+      "title": "Pronosticar desde una fecha de corte",
+      "objective": "Comparar tres pronósticos hechos con el mismo pasado.",
+      "instruction": "Selecciona Último valor, Repetir ciclo de 12 semanas y Tendencia. Anota el MAE de cada estrategia sobre las 24 semanas reservadas.",
+      "watch": "El corte está después de la semana 60. Los pronósticos usan solo el pasado; las ventas negras del tramo futuro permiten comprobarlos.",
+      "expected": "MAE aproximado: último valor 14,90; ciclo de 12 semanas 11,35; tendencia 7,65 unidades. Son 84 semanas simuladas fijas del explorador.",
+      "notebookGuide": "En la sección 5 de Laboratorio ML explicado, conserva corte = 60 y periodo = 12. Su serie tiene otra variación simulada; lee sus MAE de la tabla, sin esperar las cifras del explorador."
     },
     "takeaway": "Registra fecha de corte, horizonte y error. Compara las reglas sobre las mismas fechas posteriores al corte.",
     "next": "Veremos decisiones donde una acción cambia la situación siguiente.",
@@ -1069,13 +1069,13 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Pronóstico con fecha de corte",
       "steps": [
-        "Fija el cierre de la semana 60. En el explorador compara último valor, ciclo y tendencia sobre las mismas 24 semanas futuras.",
-        "En la sección 5 de Laboratorio ML, conserva su corte temporal y crea una tabla de semana, observado, pronóstico y error para cada regla.",
-        "Escoge una regla para el ejercicio de compras y anota fecha de emisión, horizonte, MAE y cuándo volverías a comprobarla."
+        "Registra las tres estrategias y sus MAE visuales. Anota que el pronóstico se emite al cierre de la semana 60 para las 24 siguientes.",
+        "Ejecuta la sección 5 del cuaderno y copia su tabla de métodos y MAE. Localiza pasado, futuro y pronosticos para verificar qué valores usa cada regla.",
+        "Elige una regla para un ensayo de compras. Registra momento de emisión, horizonte de 24 semanas, error observado y cuándo volverías a evaluarla."
       ],
-      "check": "En el explorador los MAE son aproximadamente 14,90; 11,35 y 7,65 unidades. Ninguna regla recibe las ventas reservadas al generar el pronóstico.",
-      "transfer": "Para prever carga de soporte por semana, conserva el orden temporal y expresa el error en cantidad de solicitudes.",
-      "stretch": "Si ya programas: desplaza el corte en varias fechas históricas y compara errores por horizonte sin mezclar pasado y futuro."
+      "check": "Las tres reglas usan las mismas 60 semanas pasadas y se comparan sobre las mismas 24 futuras. Los MAE del cuaderno corresponden a su propia serie, sin mezclar datos futuros al pronosticar.",
+      "transfer": "Para anticipar carga semanal de soporte, conserva el orden temporal y expresa el error en cantidad de solicitudes.",
+      "stretch": "En una celda nueva de tu copia, crea pd.DataFrame({'semana': t[corte:], 'observado': futuro, **pronosticos}) y comprueba que tiene 24 filas."
     },
     "prerequisite": "La evaluación anterior reservaba casos. Si queremos anticipar semanas futuras, también debemos respetar cuándo estuvo disponible cada dato.",
     "understanding": {
@@ -1175,12 +1175,12 @@ export const LESSON_GUIDES={
       }
     ],
     "lab": {
-      "title": "Recorrer y contabilizar",
-      "objective": "Construir: registro de recorrido y política aprendida.",
-      "instruction": "Pulsa «Nuevo recorrido», cuatro veces derecha y una vez abajo.",
-      "watch": "Relaciona casilla, pasos y recompensa; al terminar, los movimientos se desactivan.",
-      "expected": "Meta alcanzada en cinco pasos, recompensa acumulada 6. No se entrenó Q-learning al pulsar botones.",
-      "notebookGuide": "En Q-learning en GridWorld, distingue el recorrido manual de la política aprendida al actualizar valores Q. Relaciona recompensas por episodio con las decisiones de la política; no interpretes una ruta aislada como prueba de optimalidad."
+      "title": "Distinguir un recorrido de una política aprendida",
+      "objective": "Registrar acciones y recompensas antes de examinar Q-learning.",
+      "instruction": "Pulsa «Nuevo recorrido». Avanza cuatro veces a la derecha y una hacia abajo; después reinicia y prueba un movimiento hacia arriba desde el inicio.",
+      "watch": "La ruta termina al alcanzar meta o pozo. Un movimiento contra el borde no cambia de casilla, pero cuenta como paso y resta 1.",
+      "expected": "Derecha × 4 y abajo × 1 alcanza la meta en cinco pasos: −1 −1 −1 −1 +10 = 6. Subir desde el inicio deja el agente allí con un paso y recompensa −1. Ninguna ruta manual entrena una política.",
+      "notebookGuide": "En Q-learning en GridWorld, ejecuta el bloque completo. Distingue entrenamiento de 2000 episodios, tabla Q y demostración final con política aprendida; trayectoria y total permiten comprobar esa demostración."
     },
     "takeaway": "Registra estados, acciones y recompensas para evaluar un recorrido. Aprender una política requiere actualizarla a partir de la experiencia.",
     "next": "Cerraremos distinguiendo una demostración correcta de evidencia suficiente para utilizarla.",
@@ -1188,13 +1188,13 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Registro de recorrido y política aprendida",
       "steps": [
-        "Desde un recorrido nuevo, ejecuta cuatro veces derecha y una abajo. Registra estado, acción y recompensa de cada paso.",
-        "En Q-learning en GridWorld, ejecuta el entrenamiento y sigue un recorrido con la política aprendida. Conserva ambos registros por separado.",
-        "Compara pasos, llegada a la meta y recompensa. Explica qué se decidió manualmente y qué se aprendió con actualizaciones Q."
+        "Registra los cinco movimientos hacia la meta con casilla, acción y recompensa. Comprueba la suma 6 y el final del episodio.",
+        "Ejecuta el cuaderno y localiza la actualización de Q, el gráfico de recompensas y las flechas de la política. Cada salida muestra una parte distinta del aprendizaje.",
+        "Lee la trayectoria y recompensa impresas de la demostración final. Cuenta sus movimientos y compara con tu ruta manual, sin confundir la curva de entrenamiento con esa única demostración."
       ],
-      "check": "La ruta manual llega en cinco pasos y acumula 6. La ruta aprendida se comprueba al ejecutar; una ruta exitosa aislada no demuestra optimalidad.",
-      "transfer": "Para estudiar movimientos en una bodega simulada, define estados, acciones, obstáculos y costes antes de evaluar una política.",
-      "stretch": "Si ya programas: repite varios episodios con una política fija y resume llegada a meta y recompensa, además del ejemplo individual."
+      "check": "La ruta manual tiene cinco pasos y recompensa 6; el borde añade un paso de −1 sin movimiento. La ruta aprendida se comprueba con su salida ejecutada; una sola ruta exitosa no prueba optimalidad.",
+      "transfer": "Para estudiar rutas de una bodega simulada, define estados, acciones, obstáculos y recompensas antes de aprender una política.",
+      "stretch": "En tu copia, repite la demostración con Q fija, sin ejecutar el bloque de entrenamiento otra vez, y compara llegada a meta, pasos y recompensa de varios episodios."
     },
     "prerequisite": "Pronosticar estima lo que ocurrirá. En refuerzo una acción puede cambiar lo que ocurrirá después: necesitamos representar esa interacción.",
     "understanding": {
@@ -1270,12 +1270,12 @@ export const LESSON_GUIDES={
       }
     ],
     "lab": {
-      "title": "Reconstruir la evidencia de la comparación",
-      "objective": "Construir: prototipo ML: de la tabla a una decisión.",
-      "instruction": "Para cada regla, suma las distancias al observado y divide entre tres. Explica qué afirmación respalda la comparación y cuál no; después localiza la evaluación reservada en Laboratorio ML.",
-      "watch": "Ambas reglas usan las mismas fincas. En el cuaderno, identifica qué datos se reservaron y dónde se calculan sus errores.",
-      "expected": "Referencia: 2/3 ≈ 0,67 t/ha; candidata: 0,5/3 ≈ 0,17 t/ha. Respalda una mejora en esta prueba inventada, sin demostrar beneficio real ni causalidad.",
-      "notebookGuide": "En Laboratorio ML explicado, vuelve a 1.4–1.6: referencia, candidata y prueba reservada. Explica qué respalda la comparación y qué evidencia faltaría antes de usarla en una cooperativa real."
+      "title": "Unir datos, predicción y evidencia",
+      "objective": "Construir una salida reproducible para apoyar una decisión operativa.",
+      "instruction": "En la tabla del ejemplo resuelto, calcula el error absoluto de cada predicción y promedia las tres filas para cada regla.",
+      "watch": "Referencia y candidata se comparan con los mismos tres observados. El error mide la diferencia de rendimiento, no un beneficio económico demostrado.",
+      "expected": "Referencia: 2/3 ≈ 0,67 t/ha; candidata: 0,5/3 ≈ 0,17 t/ha. La candidata mejora en esos tres casos inventados; falta comprobar otros periodos y condiciones.",
+      "notebookGuide": "En tu copia de Laboratorio ML explicado, ejecuta 1.1–1.6 en orden. Usa resultados para comparar los dos MAE y comparacion para inspeccionar predicciones y errores de fincas reservadas."
     },
     "takeaway": "Reúne pregunta, datos, referencia, error y decisión de uso en un resultado que puedas volver a ejecutar.",
     "next": "En Deep Learning conservaremos este recorrido, con más capas y parámetros.",
@@ -1283,13 +1283,13 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Prototipo ML: de la tabla a una decisión",
       "steps": [
-        "En tu copia de Laboratorio ML, completa preparación, referencia, candidata y evaluación de 1.1–1.6. Conserva las mismas filas de prueba.",
-        "Reúne una salida con identificador, predicción, observado y error; añade MAE de referencia y candidata y las unidades.",
-        "Escribe cómo usarías esa salida para planear transporte, cuándo pedirías revisión y qué datos faltan para probarla en otro periodo."
+        "Ejecuta 1.1–1.6 desde el comienzo. Registra fila, entradas, respuesta, unidades y separación 180/60; identifica dónde se aprende la preparación.",
+        "Conserva la tabla de MAE de referencia y candidata y las primeras filas de comparacion. Recalcula el error absoluto de una fila.",
+        "Escribe cómo usarías la predicción para planear transporte: para un lote de área conocida, toneladas estimadas = t/ha predichas × hectáreas. Indica que falta evaluar errores en toneladas y comprobar otro periodo antes de usarla en operación."
       ],
-      "check": "El caso pequeño permite verificar 0,67 frente a 0,17 t/ha; tu prototipo documenta sus propios errores y se puede volver a ejecutar desde su copia.",
-      "transfer": "Cambia la tarea a estimar duración de solicitudes: redefine fila, entradas y respuesta antes de reutilizar el flujo.",
-      "stretch": "Si ya programas: encapsula preparación y modelo en un pipeline y comprueba una nueva fila con el mismo esquema."
+      "check": "El caso pequeño da MAE 0,67 frente a 0,17 t/ha. Tu prototipo conserva sus propias cifras, usa una prueba reservada y puede repetirse desde la copia personal sin sustituir la respuesta por la predicción.",
+      "transfer": "Para estimar duración de solicitudes, redefine fila, entradas y respuesta. Mantén preparación aprendida en entrenamiento, referencia y evaluación reservada.",
+      "stretch": "En una celda nueva de tu copia, usa X_te.head(1), lineal.predict(X_te.head(1)) y y_te.loc[X_te.head(1).index] para inspeccionar entrada, predicción y observado de la misma fila reservada."
     },
     "prerequisite": "Los métodos resolvían preguntas distintas. Para integrarlos, vuelve a la pregunta original y reúne la evidencia de preparación, comparación y uso.",
     "understanding": {
@@ -1372,23 +1372,23 @@ export const LESSON_GUIDES={
     "takeaway": "Sigue entradas → productos por pesos → suma con sesgo → activación. Ese recorrido permite comprobar una neurona antes de interpretar una red.",
     "next": "Compararemos activaciones para la misma señal.",
     "lab": {
-      "title": "Cambiar una pieza y seguir el cálculo",
-      "objective": "Construir: calculadora de una neurona.",
-      "instruction": "Pulsa Restablecer ejemplo. Conserva las entradas y pesos; cambia Sesgo b de 0,5 a −0,5.",
-      "watch": "Sigue los productos, la suma z y la salida ReLU.",
-      "expected": "Los productos siguen en 1 y −1; z pasa de 0,5 a −0,5 y ReLU de 0,5 a 0.",
-      "notebookGuide": "En el bloque 09 de Laboratorio DL ilustrado, separa la neurona con parámetros fijados de la red cuyos parámetros se entrenan. El cuaderno usa otras entradas y activación: sigue productos, suma y transformación."
+      "title": "Comprobar una neurona",
+      "objective": "Calcular la salida y verificar qué cambia al mover un solo parámetro.",
+      "instruction": "Pulsa «Restablecer ejemplo». Anota suma y salida; cambia solo «Sesgo b» de 0,5 a −0,5 y vuelve a anotarlas.",
+      "watch": "Los productos x × w permanecen en 1 y −1; cambia el sesgo que se añade antes de ReLU.",
+      "expected": "Con sesgo 0,5: z = 0,5 y salida = 0,5. Con sesgo −0,5: z = −0,5 y salida = 0. Son parámetros elegidos, sin entrenamiento.",
+      "notebookGuide": "En tu copia de Laboratorio DL, ejecuta las dos celdas de preparación y la primera celda de código del bloque 09. Allí se fijan entradas [0,6; 0,2], pesos [2; −1] y sesgo −0,5; se aplica sigmoide, no ReLU."
     },
     "build": {
       "title": "Calculadora de una neurona",
       "steps": [
-        "Registra las entradas 2 y 1, pesos 0,5 y −1 y sesgo 0,5. Construye una fila por producto y calcula suma y ReLU.",
-        "Cambia solo el sesgo a −0,5; conserva ambas cuentas y comprueba el resultado en el explorador.",
-        "En el bloque 09 de Laboratorio DL, localiza la operación equivalente y distingue parámetros fijados de parámetros entrenados."
+        "Crea dos filas: sesgo, producto 2 × 0,5, producto 1 × (−1), suma z y salida ReLU. Usa sesgos 0,5 y −0,5; comprueba ambas filas en el explorador.",
+        "Ejecuta la neurona explícita del bloque 09. Registra 0,6 × 2 − 0,2 − 0,5 = 0,5 y la salida sigmoide que imprime, aproximadamente 0,622.",
+        "En esa celda cambia solo el sesgo de −0,5 a −1 y ejecútala de nuevo. Comprueba z = 0 y sigmoide = 0,5; conserva ambas cuentas."
       ],
-      "check": "La primera cuenta da suma 0,5 y salida 0,5; la segunda da suma −0,5 y salida 0. Cada número puede rastrearse hasta su entrada.",
-      "transfer": "Esta cuenta permite inspeccionar una pequeña red antes de interpretar una salida de priorización; los pesos del ejemplo no definen una política real.",
-      "stretch": "Si ya programas: escribe una función que reciba entradas, pesos y sesgo y comprueba ambos casos."
+      "check": "Cada salida se reproduce con sus entradas, pesos, sesgo y activación. Mover el sesgo a mano no se presenta como entrenamiento.",
+      "transfer": "Usa el mismo registro para inspeccionar una neurona de una red pequeña: entrada, productos, sesgo, suma y transformación.",
+      "stretch": "Crea una función con esos cinco elementos y verifica los dos casos de la web y los dos del cuaderno."
     },
     "prerequisite": "Conservamos de ML las entradas, la respuesta, el entrenamiento y la prueba. Lo nuevo es cómo varias capas construyen la regla y sus representaciones intermedias.",
     "understanding": {
@@ -1477,23 +1477,23 @@ export const LESSON_GUIDES={
     "takeaway": "Compara activaciones manteniendo la entrada fija. Verifica su rango antes de interpretar la salida como puntuación o conectarla a otra operación.",
     "next": "Veremos cómo se ajustan parámetros utilizando el error.",
     "lab": {
-      "title": "Contrastar una fila",
-      "objective": "Construir: tabla de pruebas de activación.",
-      "instruction": "Fija Señal de entrada en −2 y cambia Función entre ReLU, Sigmoid y tanh.",
-      "watch": "Compara el número de salida con la fila correspondiente; después repite con 2.",
-      "expected": "Obtienes valores redondeados de la tabla. Mover los controles no entrena una función.",
-      "notebookGuide": "En el bloque 09, localiza la activación dentro del modelo y explica qué señal transforma. Distingue esa operación de la pérdida de entrenamiento y de la métrica calculada con datos reservados."
+      "title": "La misma entrada, tres salidas",
+      "objective": "Construir una tabla que distinga el rango y el signo de cada activación.",
+      "instruction": "Fija «Señal de entrada» en −2. Cambia «Función» entre ReLU, Sigmoid y tanh; registra las tres salidas. Repite con 0 y 2.",
+      "watch": "El punto muestra entrada en el eje X y salida en el eje Y. Cambiar función conserva la entrada.",
+      "expected": "Para −2: 0; 0,119; −0,964. Para 0: 0; 0,5; 0. Para 2: 2; 0,881; 0,964, en el orden ReLU, sigmoid y tanh.",
+      "notebookGuide": "En la primera celda de código del bloque 09 de Laboratorio DL, ejecuta las curvas de activación. En la celda siguiente, localiza ReLU en las capas ocultas y la sigmoide que se aplica al evaluar la salida."
     },
     "build": {
       "title": "Tabla de pruebas de activación",
       "steps": [
-        "Construye una tabla para entradas −2, 0 y 2 con ReLU, sigmoid y tanh. Obtén las salidas con el explorador.",
-        "Anota el rango de cada función y decide cuál admite negativos, cuál descarta señales negativas y cuál queda entre 0 y 1.",
-        "En el bloque 09, localiza la activación del modelo y registra qué transforma. Mantén separadas activación, pérdida y métrica."
+        "Completa una tabla con tres entradas (−2, 0 y 2) y tres columnas de salida (ReLU, sigmoid y tanh) usando los controles.",
+        "Marca qué función devuelve negativos, cuál convierte las entradas negativas en cero y cuál produce valores entre 0 y 1. Comprueba las curvas del bloque 09.",
+        "Localiza nn.ReLU() y torch.sigmoid en el entrenamiento del bloque 09. Anota que BCEWithLogitsLoss recibe la salida sin sigmoide: no añadas otra antes de esa pérdida."
       ],
-      "check": "Para −2, las salidas son 0, aproximadamente 0,119 y −0,964. Para 2, ReLU devuelve 2: no es un porcentaje.",
-      "transfer": "Antes de conectar una salida a una regla de alerta, comprueba su significado y rango; estar entre 0 y 1 no demuestra calibración.",
-      "stretch": "Si ya programas: grafica las tres funciones con el mismo conjunto de entradas y comprueba límites y signos."
+      "check": "Las nueve salidas coinciden con el explorador al redondear. ReLU(2) = 2, no 200 %; sigmoide(0) = 0,5, sin demostrar una probabilidad calibrada.",
+      "transfer": "Antes de usar una salida en una regla de alerta, verifica su rango y significado; una activación no es una métrica de aciertos.",
+      "stretch": "Reproduce las nueve salidas con las funciones de PyTorch y compara con tu tabla usando los valores sin redondear."
     },
     "prerequisite": "La neurona ya produjo una suma. La activación determina cómo se transforma antes de pasar a otra capa o a la salida.",
     "understanding": {
@@ -1590,23 +1590,23 @@ export const LESSON_GUIDES={
     "takeaway": "Comprueba parámetro anterior, gradiente, tasa, parámetro nuevo y pérdida. Evalúa por separado el funcionamiento con casos reservados.",
     "next": "Pasaremos a preguntas sobre imágenes.",
     "lab": {
-      "title": "Comparar pasos desde el mismo inicio",
-      "objective": "Construir: registro de ajustes y pérdidas.",
-      "instruction": "Fija Tasa de aprendizaje en 0,10 y pulsa Dar un paso. Reinicia; fija 1,10 y repite.",
-      "watch": "Lee el parámetro antes y después, el gradiente y la pérdida; contrástalos con la curva.",
-      "expected": "Con 0,1: gradiente −10, parámetro −1, pérdida 16. Con 1,1: parámetro 9 y pérdida 36.",
-      "notebookGuide": "En el bloque 09, sigue pérdida, cálculo de gradientes y actualización de parámetros. Relaciona esos pasos con la cuenta de esta página; después distingue bajar la pérdida de funcionar bien con casos nuevos."
+      "title": "Elegir un paso que reduzca la pérdida",
+      "objective": "Comparar dos actualizaciones desde el mismo estado inicial.",
+      "instruction": "Pulsa «Reiniciar», fija «Tasa de aprendizaje» en 0,10 y pulsa «Dar un paso». Registra el resultado. Reinicia y repite con 1,10.",
+      "watch": "Lee la cuenta de actualización y la pérdida. En ambas pruebas el parámetro empieza en −2 y la pérdida en 25.",
+      "expected": "El gradiente inicial es −10. Con tasa 0,10: parámetro −1 y pérdida 16. Con 1,10: parámetro 9 y pérdida 36; un paso mayor empeora esta cuenta.",
+      "notebookGuide": "En Laboratorio DL, el bloque 01 contiene la celda «Pérdida L(w) = (w−3)^2»: compara TASA = 0.10 y 1.10 ejecutando la celda desde el inicio. El bloque 09 entrena otra red y usa otra pérdida; sus cifras no son las de este ejemplo."
     },
     "build": {
       "title": "Registro de ajustes y pérdidas",
       "steps": [
-        "Reinicia y realiza un paso con tasa 0,10; guarda parámetro anterior, gradiente, tasa, parámetro nuevo y pérdida.",
-        "Reinicia desde el mismo punto y repite con 1,10. Compara las dos filas antes de elegir cómo continuar.",
-        "En el bloque 09, ejecuta el entrenamiento y registra la pérdida. Comprueba el resultado en casos reservados antes de usar la red."
+        "Guarda una fila por tasa con parámetro inicial, gradiente, tasa, parámetro nuevo y pérdida después de un paso. Reinicia antes de cambiar la tasa.",
+        "En la celda de descenso del bloque 01, ejecuta 12 pasos con TASA = 0.10; registra peso y pérdida finales. Repite con 1.10 desde el mismo inicio y compara las trayectorias.",
+        "Ejecuta el entrenamiento del bloque 09 con su configuración original. Registra pérdida inicial/final de la curva y la exactitud de prueba impresa; distingue los datos de cada resultado."
       ],
-      "check": "Con 0,10 el parámetro queda en −1 y la pérdida en 16; con 1,10 queda en 9 y 36. Reiniciar permite una comparación desde el mismo estado.",
-      "transfer": "Al ajustar una red para clasificar registros, usa la evolución de pérdida para detectar problemas y la prueba reservada para evaluar el uso.",
-      "stretch": "Si ya programas: compara dos tasas con igual inicialización y número de pasos, conservando curvas y evaluación reservada."
+      "check": "La comparación de un paso reproduce −1/16 y 9/36. En la red, una curva descendente describe entrenamiento; la exactitud impresa usa los 80 casos reservados, sin prometer un porcentaje.",
+      "transfer": "Al probar configuraciones de una red, conserva el inicio y registra pérdida y evaluación por separado. Si eliges mirando una reserva, úsala como validación y conserva otra prueba final.",
+      "stretch": "En una copia, compara dos tasas del bloque 09 conservando semilla, separación y épocas; registra los resultados sin garantizar qué tasa ganará."
     },
     "prerequisite": "Ya podemos calcular una salida con pesos fijos. Aprender exige compararla con una respuesta y decidir cómo modificar los parámetros.",
     "understanding": {
@@ -1689,23 +1689,23 @@ export const LESSON_GUIDES={
     "takeaway": "Pide una salida acorde con el trabajo: etiqueta para clasificar, cajas para localizar y máscaras para delimitar píxeles.",
     "next": "Examinaremos una operación que ayuda a construir representaciones de píxeles.",
     "lab": {
-      "title": "Cambiar la pregunta",
-      "objective": "Construir: especificación de una tarea visual.",
-      "instruction": "En «Una escena, tres tipos de salida», cambia Pregunta entre Clasificación, Detección y Segmentación.",
-      "watch": "Observa qué información aparece sobre los mismos frutos.",
-      "expected": "Ves una etiqueta global, tres cajas o tres regiones coloreadas. El dibujo no ejecuta un modelo.",
-      "notebookGuide": "En YOLO, sigue las secciones 4–6: mira primero la foto, ejecuta la detección y relaciona una caja con su fila. Aquí el cuaderno realiza detección; no ejecuta segmentación de los frutos dibujados."
+      "title": "Elegir la salida que necesita la tarea",
+      "objective": "Distinguir una etiqueta global, cajas por objeto y máscaras de píxeles.",
+      "instruction": "En «Pregunta», recorre Clasificación, Detección y Segmentación. Para cada opción, anota qué información nueva aparece sobre la misma escena.",
+      "watch": "Una etiqueta describe la imagen; las cajas localizan objetos; las máscaras delimitan regiones. La escena conserva los mismos tres frutos.",
+      "expected": "Obtienes una etiqueta, tres cajas o tres regiones coloreadas. Son salidas dibujadas para comparar tareas, no predicciones de una red.",
+      "notebookGuide": "En tu copia de YOLO, ejecuta las secciones 2–6 en orden: preparación, pesos, foto, inferencia y tabla. Relaciona una caja de la foto con una fila; este cuaderno ejecuta detección, no segmentación."
     },
     "build": {
-      "title": "Especificación de una tarea visual",
+      "title": "De una foto a una salida definida",
       "steps": [
-        "Elige una necesidad: seleccionar fotos, localizar objetos o delimitar contornos. Escribe la salida que debe producir y un ejemplo de cómo se usaría.",
-        "Contrasta etiqueta, cajas y máscaras en la misma escena del explorador; señala qué información necesita tu operación.",
-        "En las secciones 4–6 de YOLO, ejecuta la detección sobre la foto del cuaderno y relaciona una caja con su fila de resultados."
+        "Escribe la necesidad «localizar objetos visibles para revisarlos» y especifica la salida: categoría, puntuación y cuatro coordenadas por caja. Compárala con etiqueta y máscara en el explorador.",
+        "Ejecuta YOLO hasta la sección 6. Elige una fila, localiza su caja en la foto y registra categoría, puntuación, ancho y alto en píxeles.",
+        "Comprueba ancho = x2 − x1 y alto = y2 − y1 con esa fila. Si la tabla está vacía, registra cero detecciones conservadas y revisa foto, categorías y umbral."
       ],
-      "check": "La especificación pide etiqueta, caja o máscara según el uso. La ejecución del cuaderno produce detecciones; no se le atribuyen las máscaras del dibujo.",
-      "transfer": "Para contar equipos visibles necesitas localizarlos y definir cómo tratar duplicados u objetos ocultos; una etiqueta global no basta.",
-      "stretch": "Si ya programas: separa en la salida identificador de imagen, clase, puntuación y coordenadas antes de calcular un conteo."
+      "check": "Una fila se puede rastrear a su caja y sus dimensiones. No se atribuyen máscaras al detector ni se interpreta una tabla vacía como ausencia confirmada de objetos.",
+      "transfer": "Para revisar equipos en una foto de bodega, define las categorías requeridas y la salida antes de decidir si necesitas clasificación, detección o segmentación.",
+      "stretch": "Usa el recorte de la sección 9 de YOLO para comprobar las coordenadas de una caja sin añadir un segundo clasificador."
     },
     "prerequisite": "Una red recibe números. Antes de elegir un modelo para fotos, aclaremos cómo se representa una imagen y qué salida necesita la operación.",
     "understanding": {
@@ -1784,23 +1784,23 @@ export const LESSON_GUIDES={
     "takeaway": "Cada celda del mapa sale de una ventana, los mismos pesos y una suma de productos. Un filtro fijo permite verificar esa operación.",
     "next": "Veremos cómo reutilizar filtros y otros parámetros aprendidos previamente.",
     "lab": {
-      "title": "Relacionar ventana y mapa",
-      "objective": "Construir: mapa de respuestas locales.",
-      "instruction": "En Filtro selecciona horizontal y compara Fila de la ventana 1 y 3. Vuelve a fila 1 y selecciona promedio.",
-      "watch": "Relaciona ventana, productos y celda del mapa; conserva Columna de la ventana en 1.",
-      "expected": "Horizontal devuelve 3 y 0; promedio en la primera ventana devuelve 1/3 ≈ 0,333.",
-      "notebookGuide": "En el bloque 10 de Laboratorio DL ilustrado, compara el filtro fijo con los filtros de la CNN entrenada. El cuaderno usa un dígito de 8×8 y un filtro de otra orientación; sigue la misma operación sin esperar mapas idénticos."
+      "title": "Construir un mapa a partir de ventanas",
+      "objective": "Reproducir las nueve respuestas de un filtro fijo.",
+      "instruction": "Selecciona «Filtro: Horizontal» y «Columna de la ventana: 1». Recorre las filas 1, 2 y 3; registra sus sumas. Vuelve a fila 1 y elige Promedio.",
+      "watch": "La ventana sombreada señala los nueve píxeles que producen la celda marcada del mapa.",
+      "expected": "Horizontal: 3, 3 y 0 para las tres filas. Cada columna repite esos valores. Promedio en fila 1, columna 1: 1/3 ≈ 0,333.",
+      "notebookGuide": "En Laboratorio DL, ejecuta el bloque 10: entrena una CNN de clasificación de dígitos y muestra después un filtro fijo sobre una imagen 8 × 8. Ese filtro y su relleno son distintos del explorador; no deben producir mapas iguales."
     },
     "build": {
       "title": "Mapa de respuestas locales",
       "steps": [
-        "Usa la imagen 5 × 5 del caso. Calcula los productos de la primera ventana con el filtro horizontal y registra su suma.",
-        "Desplaza la ventana para completar el mapa 3 × 3; comprueba sus valores en el explorador. Repite la primera ventana con el filtro promedio.",
-        "En el bloque 10, ejecuta el filtro sobre el dígito y distingue ese filtro fijo de los filtros aprendidos de la CNN."
+        "Calcula la primera ventana: multiplica cada píxel por su coeficiente y suma los nueve productos. Registra 3 con Horizontal y 1/3 con Promedio.",
+        "Con Horizontal, recorre las nueve posiciones y construye el mapa [3,3,3], [3,3,3], [0,0,0]. Verifica cada celda con el explorador.",
+        "Ejecuta el bloque 10 y registra la exactitud impresa de la CNN y una pareja «Real → pred.». Separa esos resultados del mapa del filtro fijo, que no es aprendido."
       ],
-      "check": "El mapa horizontal es [3,3,3], [3,3,3], [0,0,0]. El promedio de la primera ventana es 1/3. El mapa aún no es una detección de objetos.",
-      "transfer": "Para inspeccionar cambios de intensidad en una imagen, usa el mapa como transformación intermedia y valida aparte la tarea final.",
-      "stretch": "Si ya programas: implementa el recorrido de ventanas sin padding y verifica que una entrada 5 × 5 con filtro 3 × 3 produce 3 × 3."
+      "check": "El mapa manual 3 × 3 coincide celda a celda. El cuaderno clasifica dígitos; ni el filtro fijo ni su mapa localizan objetos por sí solos.",
+      "transfer": "Para inspeccionar cambios de intensidad, un mapa de filtro puede ser una transformación intermedia; la aceptación del producto necesita una tarea y una evaluación propias.",
+      "stretch": "Implementa el recorrido sin relleno y comprueba la dimensión 5 − 3 + 1 = 3 en ambos ejes."
     },
     "prerequisite": "Ya vimos píxeles y canales. Ahora una CNN transforma ventanas locales en mapas que otras capas pueden combinar.",
     "understanding": {
@@ -1875,23 +1875,23 @@ export const LESSON_GUIDES={
     "takeaway": "Comprueba entradas y categorías del modelo. Reutilizar pesos, traducir nombres y ajustar parámetros son operaciones diferentes.",
     "next": "Examinaremos problemas donde también importa el orden de las entradas.",
     "lab": {
-      "title": "Reconocer qué se está reutilizando",
-      "objective": "Construir: ficha de compatibilidad del modelo.",
-      "instruction": "Lee la carga de pesos y la llamada modelo.predict del cuaderno YOLO.",
-      "watch": "Localiza el archivo de pesos, modelo.names y TRADUCCION.",
-      "expected": "Distingues categorías aprendidas y traducción de nombres; no hay entrenamiento.",
-      "notebookGuide": "En YOLO, las secciones 3 y 5 muestran carga de pesos e inferencia. En la sección 6, distingue las categorías del modelo de la traducción de nombres. Ninguno de esos pasos adapta los pesos a café defectuoso."
+      "title": "Comprobar si el modelo cubre la categoría",
+      "objective": "Determinar qué se reutiliza y qué no aprende al ejecutar inferencia.",
+      "instruction": "En YOLO, ejecuta hasta la sección 3. Consulta «modelo.names»: busca la categoría person y comprueba si existe una categoría café defectuoso.",
+      "watch": "El archivo de pesos aporta categorías aprendidas; TRADUCCION solo cambia sus nombres visibles.",
+      "expected": "person figura entre las categorías; café defectuoso no. Cargar pesos o traducir una etiqueta no adapta el modelo a una clase nueva.",
+      "notebookGuide": "YOLO, secciones 3, 5 y 6: carga de pesos, inferencia y lectura de filas. La sección 9 filtra una categoría existente. El cuaderno no realiza ajuste fino ni entrena clases nuevas."
     },
     "build": {
       "title": "Ficha de compatibilidad del modelo",
       "steps": [
-        "Define la categoría que necesitas detectar y consulta modelo.names en YOLO. Registra si está entre las categorías aprendidas.",
-        "Ejecuta inferencia sobre la foto del cuaderno y conserva clase, puntuación y caja. Comprueba que TRADUCCION solo cambia nombres visibles.",
-        "Completa una decisión: reutilizar si cubre la tarea o planear adaptación con ejemplos etiquetados y prueba reservada si no la cubre."
+        "Crea una ficha con categoría requerida, categoría original en modelo.names y decisión. Contrasta dos necesidades: localizar personas y detectar café defectuoso.",
+        "Ejecuta la inferencia y el filtro de personas de la sección 9. Registra una detección si aparece; si no, deja constancia del resultado con ese umbral y esa foto.",
+        "Completa la ficha: para personas se reutiliza una clase existente; para café defectuoso hacen falta datos etiquetados y adaptación fuera de este cuaderno. No cambies la traducción para simular una clase aprendida."
       ],
-      "check": "La ficha distingue pesos, categorías y traducción. El detector disponible no aprende café defectuoso al cambiar un nombre; este laboratorio ejecuta inferencia.",
-      "transfer": "Antes de reutilizar un detector para inventario, contrasta sus categorías con los objetos que realmente necesitas registrar.",
-      "stretch": "Si ya programas: añade una comprobación que rechace una categoría solicitada cuando no figura en modelo.names."
+      "check": "La ficha distingue clase conocida, nombre traducido y clase ausente. Los resultados corresponden a inferencia con pesos previos, no a un entrenamiento realizado aquí.",
+      "transfer": "Antes de reutilizar un detector en inventario, contrasta sus categorías con cada objeto requerido y revisa imágenes del entorno de uso.",
+      "stretch": "Añade una comprobación que avise cuando una categoría solicitada no esté entre los valores de modelo.names."
     },
     "prerequisite": "Entrenar todos los filtros desde cero puede exigir muchos ejemplos. La transferencia reutiliza representaciones aprendidas y comprueba si sirven para la nueva tarea.",
     "understanding": {
@@ -1970,23 +1970,23 @@ export const LESSON_GUIDES={
     "takeaway": "Conserva el orden y registra cada actualización del estado. El estado resume lo leído hasta ese paso.",
     "next": "Combinaremos información de varias fuentes usando pesos calculados.",
     "lab": {
-      "title": "Comprobar ambos órdenes",
-      "objective": "Construir: registro de estados por paso.",
-      "instruction": "En Orden de la secuencia elige ascendente y pulsa Ver el siguiente paso tres veces. Reinicia pasos y repite con descendente.",
-      "watch": "Relaciona entrada actual, estado anterior y nuevo estado en cada paso.",
-      "expected": "Obtienes 21,25 y 13,75. Cambia el orden; la regla y los valores permanecen iguales.",
-      "notebookGuide": "En el bloque 11, compara contar palabras con conservar su orden y revisa la serie con LSTM. La regla fija de esta página solo explica un estado recurrente: en el cuaderno distingue parámetros aprendidos y evaluación."
+      "title": "Conservar los valores y cambiar el orden",
+      "objective": "Construir el rastro de un estado que depende del orden.",
+      "instruction": "Elige Ascendente en «Orden de la secuencia» y pulsa «Ver el siguiente paso» tres veces. Cambia a Descendente y recorre sus tres pasos desde cero.",
+      "watch": "Cada fila usa solo el estado anterior y la entrada actual. El promedio no cambia al invertir los valores.",
+      "expected": "Ascendente: estados 5; 12,5; 21,25. Descendente: 15; 17,5; 13,75. Ambos conjuntos promedian 20. La regla fija no se entrena.",
+      "notebookGuide": "En Laboratorio DL, bloque 11, la celda de LSTM usa las 12 lecturas previas para pronosticar un paso. Ejecuta las preparaciones y esa celda; compara los dos MAE que imprime sobre los mismos 60 instantes reservados."
     },
     "build": {
-      "title": "Registro de estados por paso",
+      "title": "Registro de estados y pronóstico",
       "steps": [
-        "Calcula los estados de 10, 20, 30 con estado inicial cero y la regla del caso; guarda entrada, estado anterior y nuevo estado.",
-        "Repite con 30, 20, 10 y verifica ambas secuencias en el explorador. Compara el estado final y el promedio.",
-        "En el bloque 11, ejecuta la parte de secuencias y localiza entradas ordenadas y respuesta; distingue la regla fija de un modelo entrenado."
+        "Guarda tres filas por orden con entrada actual, estado anterior y estado nuevo. Comprueba los seis pasos en el explorador.",
+        "Ejecuta la LSTM del bloque 11. Registra VENTANA = 12, CORTE = 180 y los MAE de LSTM y «último valor» impresos; no presupongas qué método gana.",
+        "En el gráfico, compara ambas predicciones con la lectura simulada. Anota que cada predicción usa una ventana disponible y anticipa un solo instante, no toda la serie de una vez."
       ],
-      "check": "Ambas secuencias promedian 20, pero sus estados finales son 21,25 y 13,75. Ninguna fila utiliza una entrada posterior.",
-      "transfer": "Para resumir lecturas consecutivas de un equipo, conserva su orden y marca los tiempos; el estado ilustrativo aún no predice averías.",
-      "stretch": "Si ya programas: implementa la recurrencia y comprueba que invertir la lista cambia su estado final con la misma regla."
+      "check": "Los estados finales son 21,25 y 13,75 pese a la misma media. La comparación del cuaderno usa futuro reservado y conserva el orden; su MAE no procede de la regla manual.",
+      "transfer": "Para pronosticar una lectura de equipo, define cuándo estará disponible cada entrada y compara con una referencia simple como repetir la última lectura.",
+      "stretch": "Inspecciona entradas[test, −1] y verifica que es la última lectura anterior al instante que se pronostica."
     },
     "prerequisite": "Una imagen conserva relaciones espaciales. Una secuencia conserva un orden temporal o de posiciones: no basta tratar sus elementos como una bolsa sin orden.",
     "understanding": {
@@ -2073,23 +2073,23 @@ export const LESSON_GUIDES={
     "takeaway": "Sigue consulta y claves → puntuaciones → pesos → suma ponderada de valores. Los pesos indican cuánto aporta cada valor a esa combinación.",
     "next": "Ubicaremos esta operación dentro de una arquitectura para secuencias.",
     "lab": {
-      "title": "Seguir la mezcla completa",
-      "objective": "Construir: tabla de consulta, pesos y resultado.",
-      "instruction": "En Consulta Q elige [1,0], después [0,1] y finalmente [0,0].",
-      "watch": "Sigue productos, escala, softmax y suma ponderada; verifica que los pesos sumen 1.",
-      "expected": "Las salidas son aproximadamente 13,302; 16,698 y 15. Nada se entrena al cambiar Q.",
-      "notebookGuide": "En el bloque 12, sigue Q/K/V, sus productos y la combinación de valores con matrices. Relaciona cada paso con el cálculo de dos fuentes de esta página; la tabla de atención no demuestra una causa."
+      "title": "Cambiar la consulta, conservar las fuentes",
+      "objective": "Reproducir una mezcla por atención desde sus productos hasta su salida.",
+      "instruction": "En «Consulta Q», recorre [1,0], [0,1] y [0,0]. Para cada consulta, anota peso de A, peso de B y salida combinada.",
+      "watch": "K y V permanecen fijos. Los productos se dividen por √2; softmax produce los pesos que multiplican 10 y 20.",
+      "expected": "Los pesos suman 1 en cada caso. Las salidas son aproximadamente 13,302; 16,698 y 15; la consulta nula asigna 0,5 a cada fuente.",
+      "notebookGuide": "En la primera celda de código del bloque 12 de Laboratorio DL, sigue Q @ K.T / √2, softmax y atencion @ V. Allí hay tres fichas y valores vectoriales; los resultados no son los de las dos fuentes del explorador."
     },
     "build": {
       "title": "Tabla de consulta, pesos y resultado",
       "steps": [
-        "Con las claves y valores del caso, calcula productos, escala y pesos para Q = [1,0]. Comprueba la suma ponderada.",
-        "Conserva claves y valores; repite con [0,1] y [0,0]. Guarda las tres filas con sus pesos y resultados.",
-        "En el bloque 12, ejecuta Q/K/V y relaciona cada matriz con las operaciones de tu tabla."
+        "Crea tres filas con consulta, dos productos Q·K, dos pesos y salida. Usa el explorador y comprueba salida = peso A × 10 + peso B × 20.",
+        "Ejecuta la atención del bloque 12. Comprueba que las tres filas de pesos suman 1 y relaciona cada fila del mapa con la ficha que consulta.",
+        "Selecciona una fila de la matriz atencion y verifica su combinación con V usando los valores sin redondear. Registra sus dos componentes de salida y compáralas con resultado."
       ],
-      "check": "Los pesos de cada fila suman 1; las salidas son aproximadamente 13,302; 16,698 y 15. Cambia la consulta, no los datos ni los parámetros.",
-      "transfer": "Este cálculo ayuda a inspeccionar cómo un bloque mezcla información; para usarlo en una aplicación debes definir la tarea y evaluar sus respuestas.",
-      "stretch": "Si ya programas: comprueba que softmax y el producto por V reproducen las tres salidas usando pesos sin redondear."
+      "check": "La tabla web reproduce las tres salidas. En el cuaderno, atencion @ V coincide con resultado; los pesos numéricos elegidos no demuestran relaciones semánticas aprendidas ni causas.",
+      "transfer": "Para inspeccionar un bloque de atención, identifica primero quién consulta, cuáles son las fuentes y qué valores se mezclan.",
+      "stretch": "Calcula np.allclose(atencion.sum(axis=1), 1) y verifica la combinación de una fila sin usar los pesos redondeados del gráfico."
     },
     "prerequisite": "La recurrencia resume el pasado paso a paso. La atención permite combinar directamente representaciones de varias posiciones; empezaremos por entender una mezcla ponderada.",
     "understanding": {
@@ -2196,23 +2196,23 @@ export const LESSON_GUIDES={
     "takeaway": "Define la regla de respuesta y conserva el orden de los elementos. Comprueba las predicciones con etiquetas conocidas de casos reservados.",
     "next": "Pasaremos a fotos que producen registros de objetos.",
     "lab": {
-      "title": "Seguir el bloque 12",
-      "objective": "Construir: banco de pruebas para una secuencia.",
-      "instruction": "Calcula las etiquetas de las cuatro secuencias de la tabla con la regla primero > último. En el bloque 12, sigue entrada, información de posición, atención y salida; ejecuta el modelo y compara sus predicciones con las etiquetas esperadas.",
-      "watch": "Distingue etiquetas esperadas, pérdida de entrenamiento y evaluación en prueba.",
-      "expected": "Las etiquetas calculadas con la regla son 0, 1, 0 y 1. Al ejecutar el cuaderno, compara cada predicción de la red con su etiqueta esperada y registra sus aciertos en prueba.",
-      "notebookGuide": "En el bloque 12, resuelve primero las etiquetas de las secuencias y después sigue entrada, posición, encoder y salida. Compara predicción y etiqueta reservada al ejecutar; no deduzcas la exactitud a partir de la arquitectura."
+      "title": "Comprobar una tarea de orden",
+      "objective": "Separar la etiqueta esperada de la salida de un Transformer entrenado.",
+      "instruction": "Resuelve las cuatro etiquetas del ejemplo con la regla «primero > último». En el bloque 12 de Laboratorio DL, ejecuta el Transformer y revisa las dos secuencias que imprime al final: [1,2,3,4] y [4,3,2,1].",
+      "watch": "La regla da la respuesta esperada. El cuaderno calcula puntuaciones de clase, pérdida y exactitud sobre secuencias reservadas.",
+      "expected": "Las cuatro etiquetas del ejemplo son 0, 1, 0 y 1; las dos secuencias impresas requieren 0 y 1. Sus salidas de red y la exactitud se conocen al ejecutar, no se garantizan.",
+      "notebookGuide": "Bloque 12, segunda celda de código: seq genera secuencias, np.unique elimina duplicados, y calcula etiquetas y train_test_split las separa. OrdenTransformer combina embedding, posición, encoder y salida; la celda imprime exactitud y puntuación de clase 1 para dos ejemplos."
     },
     "build": {
       "title": "Banco de pruebas para una secuencia",
       "steps": [
-        "Usa la regla primero > último para obtener las etiquetas de las cuatro secuencias del caso. Conserva esas respuestas como comprobación.",
-        "En el bloque 12, ejecuta el modelo y localiza entrada, posición, encoder y salida. Contrasta predicciones con etiquetas reservadas.",
-        "Crea dos secuencias adicionales cambiando el orden, calcula sus etiquetas y registra predicción y acierto al probarlas con el mismo formato del cuaderno."
+        "Calcula a mano las cuatro etiquetas del ejemplo. Anota que invertir [1,2,3,4] cambia su etiqueta de 0 a 1 aunque conserve los mismos números.",
+        "Ejecuta el Transformer del bloque 12. Registra los conteos de entrenamiento/prueba y la exactitud impresa; comprueba que no hay secuencias idénticas compartidas.",
+        "Para los dos ejemplos que imprime la celda, guarda secuencia, etiqueta esperada y puntuación de clase 1. Revisa si cada salida favorece la clase esperada y distingue estos dos casos de la evaluación completa."
       ],
-      "check": "Las cuatro etiquetas del caso son 0, 1, 0 y 1. El registro distingue la respuesta calculada de lo que predice la red; los aciertos se conocen al ejecutar.",
-      "transfer": "En tareas con registros ordenados, define primero qué respuesta esperas y cómo la comprobarás antes de elegir una arquitectura.",
-      "stretch": "Si ya programas: crea una función de etiquetado y prueba también igualdad entre extremos; la etiqueta debe ser 0."
+      "check": "Se conocen las etiquetas por la regla, pero no se inventan predicciones ni exactitud. Los ejemplos impresos son dos; la prueba completa contiene 129 secuencias con la semilla del cuaderno.",
+      "transfer": "En una tarea con registros ordenados, define primero la respuesta comprobable y una reserva de secuencias distintas antes de elegir arquitectura.",
+      "stretch": "En una copia, cambia ejemplos por nuevas secuencias de cuatro enteros de 1 a 7, calcula sus etiquetas y contrasta las clases con argmax. No las presentes como una prueba independiente sin revisar su presencia en entrenamiento."
     },
     "prerequisite": "Ya entendimos cómo atención mezcla valores. Ahora la ubicamos en una red completa que también necesita representar las unidades, su posición y la salida de la tarea.",
     "understanding": {
@@ -2279,23 +2279,23 @@ export const LESSON_GUIDES={
     "takeaway": "Relaciona cada fila con su imagen, categoría, puntuación y caja. Revisa las detecciones antes de convertir su conteo en una decisión operativa.",
     "next": "Comprobaremos si la caja conservada coincide con la ubicación conocida.",
     "lab": {
-      "title": "Filtrar sin mover la caja",
-      "objective": "Construir: registro visual: de la foto a las filas.",
-      "instruction": "Con Desplazamiento horizontal de la caja en 10, cambia Umbral de puntuación entre 0,50; 0,80 y 0,90.",
-      "watch": "Observa la propuesta conservada, la puntuación fija y el objeto de referencia.",
-      "expected": "Conservas una predicción en los dos primeros casos y ninguna en el último. La ubicación no cambia.",
-      "notebookGuide": "En YOLO, sigue las secciones 5–8: inferencia, filas, conteos y umbral. Explica cómo una detección llega al registro y por qué un registro vacío no demuestra que el objeto no exista."
+      "title": "Filtrar propuestas sin moverlas",
+      "objective": "Construir un registro que conecte foto, caja, puntuación y conteo.",
+      "instruction": "Fija «Desplazamiento horizontal de la caja» en 10. Cambia «Umbral de puntuación» a 0,50; 0,80 y 0,90; registra cuántas filas se conservan.",
+      "watch": "La puntuación permanece en 0,80 y la caja no se mueve. Cambia solo la regla para conservarla.",
+      "expected": "Se conserva una fila a 0,50 y 0,80, y ninguna a 0,90. La igualdad cuenta como conservar; el objeto conocido sigue presente aunque descartes la propuesta.",
+      "notebookGuide": "En tu copia de YOLO, ejecuta en orden hasta la sección 8. Obtendrás foto marcada, tabla por detección, conteos y comparación de umbrales. La sección 11 permite guardar CSV y configuración."
     },
     "build": {
       "title": "Registro visual: de la foto a las filas",
       "steps": [
-        "En las secciones 5–8 de YOLO, ejecuta la inferencia de la foto del cuaderno y registra clase, puntuación y coordenadas de las cajas.",
-        "Conserva las propuestas y compara dos umbrales; cuenta por clase las filas que quedan, sin presentar el conteo como inventario confirmado.",
-        "Usa el explorador para comprobar la igualdad con puntuación 0,80 y explica qué significa una tabla vacía cuando subes a 0,90."
+        "Ejecuta YOLO hasta la sección 7. Elige una detección y registra su categoría, puntuación y coordenadas; comprueba que corresponde a una caja de la foto.",
+        "Ejecuta la comparación de la sección 8 con 0,15; 0,50 y 0,85. Guarda los conteos que devuelve tu ejecución y revisa qué propuestas desaparecen; no son métricas de exactitud.",
+        "Ejecuta la sección 11 para crear detecciones.csv, conteo.csv y configuracion.json. Comprueba que el total por categorías coincide con las filas de la tabla guardada, que usa UMBRAL = 0,25."
       ],
-      "check": "El caso conserva una fila a 0,50 y 0,80 y ninguna a 0,90. En tu ejecución, cada conteo se puede rastrear a filas y cajas de la misma imagen.",
-      "transfer": "Para registrar objetos visibles en una bodega, guarda la imagen de origen y revisa duplicados y omisiones antes de actualizar existencias.",
-      "stretch": "Si ya programas: genera una tabla con identificador de imagen y detección además de clase, puntuación y coordenadas."
+      "check": "Cada conteo puede rastrearse a filas y cajas. Los archivos finales pertenecen a la inferencia inicial de 0,25, no a cada panel de comparación; ningún conteo se presenta como inventario confirmado.",
+      "transfer": "Para registrar objetos visibles en una bodega, conserva imagen y configuración, y revisa duplicados y omisiones antes de actualizar existencias.",
+      "stretch": "Genera un identificador de imagen para cada fila al combinar varias fotos; no confundas detecciones repetidas entre fotos con objetos únicos."
     },
     "prerequisite": "Volvemos a detección: una arquitectura debe producir ubicaciones y categorías. YOLO es una familia concreta para esa tarea, con parámetros entrenados previamente en el cuaderno.",
     "understanding": {
@@ -2371,22 +2371,22 @@ export const LESSON_GUIDES={
     "next": "Consideraremos las consecuencias de convertir predicciones en acciones.",
     "lab": {
       "title": "Separar filtro y coincidencia",
-      "objective": "Construir: prueba de aceptación de cajas.",
-      "instruction": "Deja IoU mínima para coincidencia en 0,50. Compara desplazamientos 10 y 30 con umbral 0,50; vuelve a 10 y sube el umbral a 0,90.",
-      "watch": "Lee IoU y Verdaderos positivos, Falsos positivos y Objetos omitidos.",
-      "expected": "Obtienes respectivamente TP/FP/FN = 1/0/0; 0/1/1 y 0/0/1.",
-      "notebookGuide": "En YOLO, revisa las cajas y registros de las secciones 6–8. El cuaderno demuestra inferencia, no una evaluación mAP con etiquetas de referencia. La cuenta de IoU de esta página permite practicar una comprobación de localización."
+      "objective": "Construir tres pruebas de aceptación de una caja.",
+      "instruction": "Fija «IoU mínima para coincidencia» en 0,50. Con umbral de puntuación 0,50, prueba desplazamientos 10 y 30. Vuelve a 10 y sube el umbral a 0,90.",
+      "watch": "Registra IoU, filas conservadas, verdaderos positivos, falsos positivos y objetos omitidos. La puntuación y la referencia permanecen fijas.",
+      "expected": "Las tres pruebas dan IoU 0,60; 1/7 ≈ 0,143; 0,60 y TP/FP/FN 1/0/0; 0/1/1; 0/0/1. Descartar una mala propuesta no borra el objeto omitido.",
+      "notebookGuide": "En YOLO, las secciones 6–8 permiten inspeccionar propuestas y filtros. No hay anotaciones de referencia ni evaluación mAP en ese cuaderno; la evaluación numérica de esta práctica usa la caja conocida del explorador."
     },
     "build": {
       "title": "Prueba de aceptación de cajas",
       "steps": [
-        "Fija IoU mínima 0,50. Con umbral de puntuación 0,50, compara desplazamientos 10 y 30 y registra IoU, TP, FP y FN.",
-        "Vuelve a desplazamiento 10 y sube el umbral a 0,90; documenta por qué desaparece la propuesta, pero no el objeto de referencia.",
-        "En las cajas del cuaderno YOLO, indica qué anotaciones de referencia necesitarías para repetir esta evaluación con fotos reales."
+        "Crea tres filas con desplazamiento, umbral de puntuación, IoU mínima, IoU obtenida, TP, FP y FN. Reproduce las tres pruebas del explorador.",
+        "Comprueba la primera IoU: intersección 30 × 40 = 1200; unión 1600 + 1600 − 1200 = 2000; cociente 0,60. Con desplazamiento 30, verifica 400/2800.",
+        "En una foto del cuaderno YOLO, identifica qué falta para repetir la prueba: categoría y caja de referencia por objeto. Especifica también cómo evitarías emparejar dos propuestas con el mismo objeto."
       ],
-      "check": "Las tres pruebas dan TP/FP/FN = 1/0/0, 0/1/1 y 0/0/1. La cuenta usa una caja de referencia; el cuaderno de inferencia no calcula mAP.",
-      "transfer": "Para aceptar una automatización de conteo, revisa objetos omitidos y duplicados además de la puntuación de las cajas conservadas.",
-      "stretch": "Si ya programas: verifica que la función IoU devuelve 1 para cajas idénticas y 0 para cajas sin solapamiento."
+      "check": "Las tres filas reproducen los conteos esperados. Se separan umbral de puntuación e IoU; no se atribuyen métricas mAP al cuaderno de inferencia.",
+      "transfer": "Antes de aceptar una automatización de conteo, comprueba objetos omitidos, duplicados y coincidencias espaciales con referencias anotadas.",
+      "stretch": "Comprueba los extremos en el explorador: desplazamiento 0 produce IoU 1; desplazamiento 40 produce IoU 0. Mantén la propuesta conservada para interpretar FP y FN."
     },
     "prerequisite": "Conservar una propuesta por puntuación solo decide qué sale del detector. Evaluarla exige compararla con objetos anotados y verificar clase y ubicación.",
     "understanding": {
@@ -2470,22 +2470,22 @@ export const LESSON_GUIDES={
     "next": "Cierra explicando pregunta, datos, comparación, decisión y evidencia que falta.",
     "lab": {
       "title": "Cambiar el coste, conservar los casos",
-      "objective": "Construir: prototipo de revisión asistida.",
-      "instruction": "Usa los mismos conteos, pero reduce de 8 a 1 el coste de aceptar un defecto. Localiza COSTO_DEFECTO_ACEPTADO en el bloque 14.",
-      "watch": "Compara todos los umbrales y revisar todos; no cambian puntuaciones ni conteos.",
-      "expected": "Los costes pasan a 6, 5, 4, 4 y 10. Hay empate entre 0,70 y 0,90; la elección depende de los supuestos.",
-      "notebookGuide": "En el bloque 14 de Laboratorio DL ilustrado, localiza el coste de aceptar un defecto y conserva los conteos al cambiarlo. Compara todas las políticas, incluida revisar todos, y explicita el supuesto sobre la revisión manual."
+      "objective": "Comparar políticas de revisión con consecuencias explícitas.",
+      "instruction": "En el bloque 14 de Laboratorio DL, ejecuta primero con COSTO_DEFECTO_ACEPTADO = 8. Guarda la tabla; cambia ese valor a 1 y vuelve a ejecutar la celda.",
+      "watch": "Puntuaciones, revisiones y defectos omitidos permanecen iguales. Solo cambia el coste asignado a aceptar un defecto.",
+      "expected": "Con coste 8: 6, 12, 11 y 25 para umbrales 0,30; 0,50; 0,70; 0,90. Con coste 1: 6, 5, 4 y 4. Revisar todos cuesta 10 en ambos casos.",
+      "notebookGuide": "Ejecuta las preparaciones y la celda del bloque 14. La tabla usa diez granos ficticios; la línea discontinua representa revisar todos. El ejercicio supone que la revisión detecta todos los defectos y usa costes ficticios."
     },
     "build": {
-      "title": "Prototipo de revisión asistida",
+      "title": "Tabla de decisión para revisión asistida",
       "steps": [
-        "En el bloque 14, conserva puntuaciones y conteos. Calcula costes de las cuatro reglas y de revisar todos con coste de defecto aceptado igual a 8.",
-        "Cambia ese coste a 1 y vuelve a calcular la tabla. Selecciona una política para cada escenario y documenta el supuesto de revisión manual perfecta.",
-        "Define la salida del prototipo: casos para revisión, casos aceptados, motivo y seguimiento de errores. Explica qué verificarías antes de usarlo en una operación."
+        "Guarda las cuatro políticas de la tabla con coste 8 y añade la alternativa «revisar todos»: diez revisiones, cero defectos aceptados, coste 10.",
+        "Repite con coste 1 sin modificar casos ni puntuaciones. Marca el mínimo y todos los empates: 0,30 es mínimo en el primer escenario; 0,70 y 0,90 empatan en el segundo.",
+        "Escribe una regla para cada escenario: qué casos se revisan, cuáles se aceptan y qué coste supone. Declara que la revisión perfecta es una simplificación que habría que medir antes del uso."
       ],
-      "check": "Con coste 8, el mínimo del caso es 6 a umbral 0,30. Con coste 1, las políticas cuestan 6, 5, 4, 4 y 10; 0,70 y 0,90 empatan. Los costes son ficticios.",
-      "transfer": "Para priorizar inspecciones de productos, adapta el coste y la capacidad al proceso, mide errores de revisión y prueba la política antes de automatizar.",
-      "stretch": "Si ya programas: genera la tabla para varios costes y capacidades, incluyendo siempre revisar todos como alternativa."
+      "check": "Cada coste se reproduce como revisiones × 1 + defectos aceptados × coste elegido. El mínimo cambia por el supuesto de coste, sin que el modelo haya aprendido de nuevo.",
+      "transfer": "Para priorizar inspecciones, añade costes observados, capacidad de revisión y errores humanos; vuelve a comparar políticas con datos separados.",
+      "stretch": "Genera una tabla para varios costes de defecto e incluye siempre revisar todos. Si agregas un límite de capacidad, declara qué políticas dejan de ser viables."
     },
     "prerequisite": "Una detección evaluada todavía debe convertirse en una acción útil. Ahora conectamos las salidas con revisión, capacidad y costes declarados.",
     "understanding": {

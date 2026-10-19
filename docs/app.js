@@ -1,4 +1,4 @@
-import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=4';
+import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=5';
 import {mountProblemExplorer} from './learning-explorers.js';
 import {mountDLExplorer} from './dl-explorers.js';
 import {icon} from './icons.js';
@@ -8,12 +8,12 @@ import {searchCatalog} from './search.js?v=3';
 import {STUDENT_RECORDS} from './database-config.js';
 import {toolSection,mountTools} from './tools.js?v=2';
 import {heroVisual} from './hero-space.js?v=7';
-import {COURSES,LESSONS,GLOSSARY,NOTEBOOKS,SOURCES,REPO,findLesson,classOf} from './content.js?v=7';
+import {COURSES,LESSONS,GLOSSARY,NOTEBOOKS,SOURCES,REPO,findLesson,classOf} from './content.js?v=8';
 import {canAccess} from './math.js';
 import {colombiaDay,scheduleReleases,validFullName,mayEnter} from './access-policy.js';
 import {mountSimulator} from './simulators.js?v=4';
 import {showWelcome,maybeShowWelcome} from './welcome.js';
-import {mountIdeaStudio} from './idea-studio.js?v=2';
+import {mountIdeaStudio} from './idea-studio.js?v=3';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let state=normalizeProgress({});
 try{state=normalizeProgress(JSON.parse(localStorage.getItem('utp-aula-v1')||'{}'))}catch{}

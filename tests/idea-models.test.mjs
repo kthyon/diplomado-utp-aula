@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {TOPICS,initialIdea,ideaCase,ideaResult,stepIdea,SHIPMENTS} from '../docs/idea-models.js';
+import {renderIdeaPlot} from '../docs/idea-studio.js';
 
 test('el ajuste OLS mejora la misma prueba de seis observaciones sin alterar los datos',()=>{
  const initial=ideaResult('prediction',initialIdea('prediction')),fit=ideaResult('prediction',ideaCase('prediction',2));
@@ -20,6 +21,21 @@ test('el historial de actualizaciones no muta el escenario guardado y se detiene
  assert.equal(next.theta,9);assert.equal(next.history.at(-1),36);assert.deepEqual(start,saved);
  const long=stepIdea(next,30);assert.equal(long.states.length,16);assert.equal(long.history.length,16);
  assert.ok(long.history.every(Number.isFinite));
+});
+test('cambiar la tasa conserva el valor realmente aplicado en cada actualización',()=>{
+ const start=initialIdea('adjustment'),first=stepIdea(start);
+ assert.equal(first.theta,-1);assert.deepEqual(first.rates,[.1]);
+ const second=stepIdea({...first,rate:.5});
+ assert.equal(second.theta,3);assert.deepEqual(second.rates,[.1,.5]);
+ for(let i=1;i<second.states.length;i++)assert.equal(second.states[i],second.states[i-1]-second.rates[i-1]*2*(second.states[i-1]-3));
+ assert.deepEqual(first.rates,[.1]);
+});
+test('la curva de pérdida muestra la función visible sin convertir su recorte en una meseta',()=>{
+ const plot=renderIdeaPlot('adjustment',initialIdea('adjustment'));
+ const points=plot.match(/<polyline points="([^"]+)"/)[1].split(' ').map(pair=>pair.split(',').map(Number));
+ assert.ok(points.every(([x,y])=>Number.isFinite(x)&&y>=50-1e-9&&y<=285+1e-9));
+ assert.ok(points.filter(([,y])=>Math.abs(y-50)<1e-9).length<=2);
+ assert.ok(points.some(([,y])=>y>284));
 });
 test('KNN calcula la escala solo con los históricos y cambia los votos conservando la consulta',()=>{
  const raw=ideaCase('neighbors',0),scaled=ideaCase('neighbors',1),before=structuredClone(SHIPMENTS);

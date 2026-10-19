@@ -1,5 +1,8 @@
 .idea-studio{--idea-line:var(--line);--idea-surface:var(--paper);border:1px solid var(--line);background:var(--paper);border-radius:22px;overflow:hidden;margin:24px 0 36px;color:var(--ink)}
 .idea-mobile-switch{display:none}
+.idea-simulation{font-size:11px;font-weight:550;letter-spacing:.04em;color:var(--muted)}
+.idea-pick.is-selected>rect,.idea-pick.is-selected>ellipse,.idea-pick:focus-visible>rect,.idea-pick:focus-visible>ellipse{stroke:var(--ink);stroke-width:3}
+.idea-pick>.idea-hit{fill:transparent!important;stroke:none!important;pointer-events:all}
 .idea-page>.page-intro{margin-bottom:20px}.idea-page>.page-intro h1{font-size:38px}.idea-page>.page-intro p{max-width:1000px}
 .idea-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 26px;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted)}
 .idea-nav{display:flex;flex-wrap:wrap;gap:8px;padding:22px 26px 0}.idea-nav button,.idea-cases button{font:inherit;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:12px;cursor:pointer;line-height:1.5;min-height:44px;padding:10px 15px;font-size:13px}
