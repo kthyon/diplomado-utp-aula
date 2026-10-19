@@ -1,0 +1,12 @@
+/* Aula: growing knowledge, agriculture and connected data. */
+.sidebar .brand{gap:12px;align-items:center}
+.sidebar .brand .brand-mark{width:48px;height:48px;transform:none;border-radius:15px;box-shadow:0 5px 14px #173f351a}
+.sidebar .brand:hover .brand-mark{transform:none}
+.sidebar .brand-program{font-family:inherit;font-size:11px;letter-spacing:.09em;font-weight:550}
+.sidebar .brand-course{font-family:inherit;font-size:27px;letter-spacing:-.8px;font-weight:700;line-height:1.15}
+.site-footer{align-items:center;flex-wrap:wrap;font-size:11px;line-height:1.8}
+.site-footer .developer-credit{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap}
+.developer-credit a{color:var(--ink);font-weight:650;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line)}
+.developer-credit a:hover,.developer-credit a:focus-visible{text-decoration-color:currentColor}
+.ll-footer .developer-credit{display:block;margin-top:12px}
+@media(max-width:560px){.site-footer{align-items:flex-start;flex-direction:column;gap:6px;font-size:11px}}
