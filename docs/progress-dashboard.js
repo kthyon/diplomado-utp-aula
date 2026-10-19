@@ -1,0 +1,18 @@
+const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const percentage=(seen,total)=>total?Math.round(seen/total*1000)/10:0;
+const number=value=>value.toLocaleString('es-CO',{maximumFractionDigits:1});
+export function summarizeProgress(courses,completed=[],day=''){
+ const seen=new Set(completed);
+ const subjects=Object.values(courses).map(course=>{
+  const classes=course.classes.map((meeting,index)=>{
+   const count=meeting.topics.filter(id=>seen.has(id)).length,total=meeting.topics.length;
+   return {...meeting,index,seen:count,total,percent:percentage(count,total),complete:total>0&&count===total,open:meeting.iso<=day};
+  });
+  const total=classes.reduce((s,c)=>s+c.total,0),count=classes.reduce((s,c)=>s+c.seen,0);
+  return {id:course.id,title:course.title,classes,total,seen:count,percent:percentage(count,total)};
+ });
+ const total=subjects.reduce((s,c)=>s+c.total,0),count=subjects.reduce((s,c)=>s+c.seen,0);
+ return {subjects,total,seen:count,percent:percentage(count,total),completedClasses:subjects.flatMap(s=>s.classes).filter(c=>c.complete).length,totalClasses:subjects.reduce((sum,s)=>sum+s.classes.length,0)};
+}
+function bar(label,percent){return `<div class="track progress-meter" role="progressbar" aria-label="${esc(label)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}" aria-valuetext="${number(percent)} por ciento"><span style="width:${percent}%"></span></div>`;}
+export function renderProgressDashboard(summary){return `<section class="panel progress-overview" aria-labelledby="progress-heading"><div class="progress-overview-top"><div><span class="eyebrow">TU RECORRIDO DEL DIPLOMADO</span><h2 id="progress-heading">Tu avance, clase a clase</h2><p>${summary.seen} de ${summary.total} temas registrados como vistos · ${summary.completedClasses} de ${summary.totalClasses} encuentros con todos sus temas vistos.</p></div><strong class="progress-percentage">${number(summary.percent)}<small>%</small></strong></div>${bar('Avance total del diplomado',summary.percent)}<p class="progress-explanation">Cada tema que marcas como visto suma al porcentaje. Un encuentro se completa al registrar sus tres temas. El total incluye las dos asignaturas, también los encuentros que todavía no han abierto.</p><p class="progress-attendance"><strong>Este indicador no registra asistencia.</strong> Faltar a clase no cambia automáticamente el avance. Puedes recuperar los contenidos cuando estén abiertos; el registro indica lo que has marcado como visto, no una nota ni una certificación.</p></section><div class="progress-subjects">${summary.subjects.map(subject=>`<section class="panel progress-subject" aria-labelledby="progress-${esc(subject.id)}"><div class="progress-subject-top"><h2 id="progress-${esc(subject.id)}">${esc(subject.title)}</h2><strong>${number(subject.percent)} %</strong></div><p>${subject.seen} de ${subject.total} temas vistos</p>${bar('Avance en '+subject.title,subject.percent)}<ol class="progress-meetings">${subject.classes.map(meeting=>`<li><div class="progress-meeting-head"><span>Encuentro ${meeting.index+1} · ${esc(meeting.date)}</span><strong>${number(meeting.percent)} %</strong></div><h3>${esc(meeting.title)}</h3>${bar(subject.title+', encuentro '+(meeting.index+1),meeting.percent)}<div class="progress-meeting-foot"><span>${meeting.seen} de ${meeting.total} temas vistos</span><span class="progress-state ${meeting.complete?'is-complete':''}">${meeting.complete?'✓ Temas registrados':meeting.seen?'En progreso':meeting.open?'Sin temas registrados':'Aún no abre'}</span></div></li>`).join('')}</ol><a href="#curso/${esc(subject.id)}" class="inline-link">Ver los encuentros y sus temas →</a></section>`).join('')}</div>`;}
