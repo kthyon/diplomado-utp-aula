@@ -1,5 +1,8 @@
 import {initialNetwork,forward,gradients,loss,evaluate} from './lab-models.js';
 export {initialNetwork,forward,loss,evaluate};
+export function neuronCalculation(net,x,index=0){const products=net.w[index].map((w,i)=>w*x[i]),sum=products.reduce((a,b)=>a+b,net.b[index]);return {products,bias:net.b[index],sum,activation:1/(1+Math.exp(-sum))};}
+export function outputUpdate(net){const gradient=EMAILS.reduce((sum,row)=>sum+forward(net,row.x).p-row.y,0)/EMAILS.length;return {before:net.c,gradient,rate:1.2,after:net.c-1.2*gradient};}
+export function chooseThreshold(goal='detect'){const options=Array.from({length:101},(_,i)=>({threshold:i/100,...evaluate(i/100)}));return goal==='detect'?options.filter(r=>r.recall===1).sort((a,b)=>a.fp-b.fp||b.threshold-a.threshold)[0]:options.filter(r=>r.fp===0).sort((a,b)=>b.recall-a.recall||a.threshold-b.threshold)[0];}
 // Invented examples: fractions of promotional words and links, plus a known label.
 export const EMAILS=[{x:[.9,.8],y:1},{x:[.8,.9],y:1},{x:[.7,.7],y:1},{x:[.8,.6],y:1},{x:[.1,.2],y:0},{x:[.2,.1],y:0},{x:[.15,.15],y:0},{x:[.3,.2],y:0}];
 export const meanLoss=net=>EMAILS.reduce((sum,r)=>sum+loss(forward(net,r.x).p,r.y),0)/EMAILS.length;
