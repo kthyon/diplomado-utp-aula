@@ -1,6 +1,6 @@
-/* Aula: growing knowledge, agriculture and connected data. */
+/* Aula: a simple leaf and a forest/teal palette. */
 .sidebar .brand{gap:12px;align-items:center}
-.sidebar .brand .brand-mark{width:48px;height:48px;transform:rotate(-6deg);border-radius:15px;box-shadow:0 5px 14px #173f351a}
+.sidebar .brand .brand-mark{width:48px;height:48px;transform:rotate(-6deg);border-radius:15px;box-shadow:none}
 .sidebar .brand:hover .brand-mark{transform:rotate(-6deg)}
 .sidebar .brand-program{font-family:inherit;font-size:11px;letter-spacing:.09em;font-weight:550}
 .sidebar .brand-course{font-family:inherit;font-size:27px;letter-spacing:-.8px;font-weight:700;line-height:1.15}
@@ -11,6 +11,6 @@
 .ll-footer .developer-credit{display:block;margin-top:12px}
 @media(max-width:560px){.site-footer{align-items:flex-start;flex-direction:column;gap:6px;font-size:11px}}
 .sidebar .brand-course{color:#173f35}
-.sidebar .brand-course b{color:#9a632b;font-weight:700}
-[data-theme=dark] .sidebar .brand-course{color:#dbeba9}
-[data-theme=dark] .sidebar .brand-course b{color:#e9b985}
+.sidebar .brand-course b{color:#24796d;font-weight:700}
+[data-theme=dark] .sidebar .brand-course{color:#e4f1e9}
+[data-theme=dark] .sidebar .brand-course b{color:#84d6c5}
