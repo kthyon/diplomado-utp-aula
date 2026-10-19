@@ -2,7 +2,7 @@ export const LESSON_GUIDES={
   "ml-problema": {
     "objective": "Diseñar una primera predicción útil para planear una operación.",
     "relevance": "Una cooperativa necesita anticipar producción para organizar transporte antes de cosechar.",
-    "concept": "Machine Learning o aprendizaje automático obtiene reglas a partir de datos para tareas como predecir cantidades o asignar categorías. En aprendizaje supervisado, cada ejemplo de entrenamiento incluye entradas y una respuesta conocida. El modelo ajusta su regla con esos ejemplos y después calcula respuestas para otros casos usando solo sus entradas. Si la respuesta buscada es una cantidad, como rendimiento en toneladas por hectárea (t/ha), la tarea se llama regresión.",
+    "concept": "El aprendizaje automático (Machine Learning, ML) construye modelos a partir de ejemplos para resolver una tarea. Un modelo es una regla que transforma entradas en una salida; un algoritmo de aprendizaje es el procedimiento que ajusta esa regla. En aprendizaje supervisado cada ejemplo contiene entradas y una respuesta conocida. Entrenar usa esas parejas para ajustar parámetros; predecir aplica la regla ajustada a entradas de otro caso, sin conocer su respuesta. Generalizar significa funcionar también en casos nuevos del contexto de uso. Una relación aprendida no demuestra por sí misma una causa.",
     "case": {
       "title": "Anticipar un lote reservado",
       "context": "Caso resuelto con datos inventados del mismo periodo: lluvia en milímetros (mm) y rendimiento en toneladas por hectárea (t/ha). Las primeras cuatro filas sirven para ajustar la regla. B quedó fuera de ese ajuste; aquí mostramos su respuesta conocida para comprobar el resultado.",
@@ -58,6 +58,30 @@ export const LESSON_GUIDES={
       {
         "term": "Caso reservado",
         "meaning": "Ejemplo que queda fuera del ajuste y se usa después para comprobar la predicción."
+      },
+      {
+        "term": "Observación o muestra",
+        "meaning": "Un caso de la tabla: aquí, un lote durante un periodo."
+      },
+      {
+        "term": "Variable o característica",
+        "meaning": "Una propiedad registrada de cada caso; por ejemplo, lluvia en mm."
+      },
+      {
+        "term": "Modelo",
+        "meaning": "Regla que recibe entradas y calcula una salida; aquí, una relación entre lluvia y rendimiento."
+      },
+      {
+        "term": "Algoritmo de aprendizaje",
+        "meaning": "Procedimiento que ajusta la regla usando datos; no es la predicción resultante."
+      },
+      {
+        "term": "Parámetro",
+        "meaning": "Valor ajustable de la regla, como la pendiente de una recta."
+      },
+      {
+        "term": "X e y",
+        "meaning": "X reúne las entradas; y contiene las respuestas conocidas del aprendizaje supervisado."
       }
     ],
     "lab": {
@@ -81,6 +105,11 @@ export const LESSON_GUIDES={
       "check": "La ficha separa entrada, predicción y observado; el error de B es 0,35 t/ha. La respuesta reservada no aparece entre las entradas.",
       "transfer": "Para anticipar pedidos de una bodega, cambia lote por producto-semana, define pedidos como respuesta y usa solo información disponible al planear.",
       "stretch": "Si ya programas: crea una tabla con columnas entrada, predicción, observado y error absoluto para los casos de prueba del cuaderno."
+    },
+    "prerequisite": "Partimos de una pregunta: ¿cuánto producirá un lote antes de cosecharlo? Primero identifica qué representa una fila, qué sabemos al decidir y qué queremos estimar.",
+    "understanding": {
+      "question": "¿Qué distingue entrenar, predecir y comprobar una predicción?",
+      "answer": "Entrenar ajusta la regla con ejemplos conocidos; predecir calcula una salida para otro caso; comprobar compara esa salida con su respuesta observada. La respuesta de prueba no se usa para ajustar."
     }
   },
   "ml-preparacion": {
@@ -137,6 +166,22 @@ export const LESSON_GUIDES={
       {
         "term": "Entrenamiento",
         "meaning": "Datos con los que aprendemos preparación y modelo."
+      },
+      {
+        "term": "Conjunto de prueba",
+        "meaning": "Casos apartados para evaluar la solución final; no sirven para elegir la preparación."
+      },
+      {
+        "term": "Fuga de información",
+        "meaning": "Uso durante el desarrollo de datos que no estarían disponibles al predecir, o que pertenecen a la prueba reservada."
+      },
+      {
+        "term": "Escalado",
+        "meaning": "Cambio de representación de una variable, por ejemplo restar su media y dividir por su desviación estándar. Es importante en métodos basados en distancias; no todos los modelos lo necesitan igual."
+      },
+      {
+        "term": "Pipeline",
+        "meaning": "Secuencia que aplica preparación y modelo en el mismo orden al entrenar y al predecir."
       }
     ],
     "lab": {
@@ -160,6 +205,11 @@ export const LESSON_GUIDES={
       "check": "La mediana sigue en 600 mm al cambiar A; B conserva su marca de estimación. No se usa la prueba para recalcular la regla.",
       "transfer": "Aplica el mismo esquema a tiempos de entrega sin registrar: conserva la ausencia original y la unidad minutos; no la conviertas en entrega inmediata.",
       "stretch": "Si ya programas: cuenta ausencias antes y después de la transformación y comprueba que los datos originales se conservan."
+    },
+    "prerequisite": "Ya separamos las entradas de la respuesta. Ahora necesitamos que cada columna conserve un significado y una unidad comparables antes de ajustar la regla.",
+    "understanding": {
+      "question": "¿Por qué completar una ausencia y escalar una variable son operaciones diferentes?",
+      "answer": "Imputar estima un valor faltante. Escalar cambia la representación numérica de valores disponibles. Ninguna operación debe aprender estadísticas de la prueba; tampoco convierte una estimación en una medida real."
     }
   },
   "ml-regresion": {
@@ -233,6 +283,26 @@ export const LESSON_GUIDES={
       {
         "term": "MAE",
         "meaning": "Promedio de esas distancias."
+      },
+      {
+        "term": "Intercepto",
+        "meaning": "Salida de la recta cuando la entrada vale cero. Puede no tener interpretación práctica si cero queda fuera de los datos observados."
+      },
+      {
+        "term": "Pendiente",
+        "meaning": "Cambio de la salida por cada unidad adicional de entrada; aquí se expresa en (t/ha)/(kg/ha)."
+      },
+      {
+        "term": "Ajuste por mínimos cuadrados",
+        "meaning": "Procedimiento que elige los parámetros minimizando la suma de errores al cuadrado en entrenamiento."
+      },
+      {
+        "term": "Residuo",
+        "meaning": "Observado menos predicho. Su signo indica por encima o por debajo; el error absoluto elimina ese signo."
+      },
+      {
+        "term": "Extrapolación",
+        "meaning": "Predicción fuera del intervalo de entradas observado al entrenar; requiere especial comprobación."
       }
     ],
     "lab": {
@@ -256,6 +326,11 @@ export const LESSON_GUIDES={
       "check": "El ajuste visual pasa de 0,20 a cerca de 0,04 t/ha. La decisión del cuaderno usa su propia prueba reservada y sus cifras, no el error del ajuste visual.",
       "transfer": "Para estimar minutos de atención por solicitud, mantén el mismo procedimiento y expresa el MAE en minutos.",
       "stretch": "Si ya programas: añade una columna de error absoluto por caso y ordena las filas para inspeccionar los errores mayores."
+    },
+    "prerequisite": "Tenemos una tabla preparada y una respuesta numérica. Ahora distinguimos la regla que calcula una cantidad del criterio que usa el entrenamiento para ajustarla.",
+    "understanding": {
+      "question": "¿De dónde salen pendiente e intercepto y qué mide el MAE?",
+      "answer": "En la demostración eliges pendiente e intercepto manualmente. En el entrenamiento los estima el algoritmo con los datos. El MAE resume el error absoluto de las predicciones en las unidades de la respuesta; no indica causalidad."
     }
   },
   "ml-clasificacion": {
@@ -329,6 +404,22 @@ export const LESSON_GUIDES={
       {
         "term": "Umbral",
         "meaning": "Límite elegido para activar la alerta."
+      },
+      {
+        "term": "Etiqueta real",
+        "meaning": "Categoría registrada para un ejemplo por observación o anotación; sirve de respuesta durante el entrenamiento y de referencia al evaluar."
+      },
+      {
+        "term": "Clase positiva",
+        "meaning": "Categoría que queremos detectar: en este caso, con plaga. Positiva no significa beneficiosa."
+      },
+      {
+        "term": "Clasificación binaria y multiclase",
+        "meaning": "Binaria distingue dos clases; multiclase elige entre más de dos categorías mutuamente excluyentes."
+      },
+      {
+        "term": "Calibración",
+        "meaning": "Correspondencia entre probabilidades estimadas y frecuencias observadas. Una puntuación de 0,80 por sí sola no demuestra esa correspondencia."
       }
     ],
     "lab": {
@@ -352,6 +443,11 @@ export const LESSON_GUIDES={
       "check": "La lista incluye cinco alertas en las diez plantas; una puntuación no se confunde con porcentaje de daño ni con confirmación de plaga.",
       "transfer": "Para priorizar solicitudes de soporte, define qué significa urgente y usa la lista para revisión humana, con seguimiento de solicitudes omitidas.",
       "stretch": "Si ya programas: crea una columna booleana comparando cada puntuación con el umbral; verifica el caso de igualdad."
+    },
+    "prerequisite": "En regresión la salida era una cantidad. Ahora la pregunta es si una planta pertenece a una categoría, y una puntuación debe convertirse en una decisión.",
+    "understanding": {
+      "question": "¿Puntuación, clase predicha y clase real son lo mismo?",
+      "answer": "No. La puntuación es una salida numérica; el umbral la convierte en clase predicha. La clase real se obtiene mediante observación o anotación y permite evaluar la decisión. Mover el umbral no cambia la realidad."
     }
   },
   "ml-metricas": {
@@ -413,6 +509,26 @@ export const LESSON_GUIDES={
       {
         "term": "Accuracy",
         "meaning": "Proporción de casos totales acertados."
+      },
+      {
+        "term": "Verdadero positivo (TP)",
+        "meaning": "Planta con plaga que sí recibió alerta."
+      },
+      {
+        "term": "Falso positivo (FP)",
+        "meaning": "Planta sana que recibió una alerta incorrecta."
+      },
+      {
+        "term": "Falso negativo (FN)",
+        "meaning": "Planta con plaga que quedó sin alerta."
+      },
+      {
+        "term": "Verdadero negativo (TN)",
+        "meaning": "Planta sana que quedó correctamente sin alerta."
+      },
+      {
+        "term": "Desbalance de clases",
+        "meaning": "Una categoría aparece mucho más que otra. Su frecuencia afecta cómo interpretamos los porcentajes."
       }
     ],
     "lab": {
@@ -436,6 +552,11 @@ export const LESSON_GUIDES={
       "check": "TP (detecciones correctas) = 3; FP (falsas alertas) = 2; FN (omisiones) = 1; TN (descartes correctos) = 4. Suman diez. Recall = 3/4, precision = 3/5 y accuracy = 7/10.",
       "transfer": "En detección de solicitudes urgentes, una omisión retrasa atención y una falsa alerta consume capacidad: reporta ambos efectos.",
       "stretch": "Si ya programas: calcula las proporciones desde los conteos y contempla un denominador cero sin inventar un porcentaje."
+    },
+    "prerequisite": "Ya tenemos decisiones y etiquetas reales. Ahora contamos qué tipo de error cometemos antes de resumirlo en un porcentaje.",
+    "understanding": {
+      "question": "Si casi todas las plantas están sanas, ¿por qué la exactitud puede ocultar un problema?",
+      "answer": "Un sistema que siempre responde sana acertaría muchas veces, pero detectaría cero plantas con plaga. Por eso revisamos recall, precisión y los cuatro conteos, indicando cuál es la clase positiva."
     }
   },
   "ml-umbral": {
@@ -493,6 +614,18 @@ export const LESSON_GUIDES={
       {
         "term": "Validación",
         "meaning": "Datos para elegir reglas durante el desarrollo."
+      },
+      {
+        "term": "Capacidad de revisión",
+        "meaning": "Número de alertas que realmente podemos atender en un periodo."
+      },
+      {
+        "term": "Coste de error",
+        "meaning": "Consecuencia asignada a una falsa alerta o a una omisión; debe declararse en el contexto."
+      },
+      {
+        "term": "Regla de decisión",
+        "meaning": "Instrucción que convierte una salida en acción; aquí, dar alerta si puntuación ≥ umbral."
       }
     ],
     "lab": {
@@ -516,6 +649,11 @@ export const LESSON_GUIDES={
       "check": "A 0,70 hay cuatro alertas y una omisión; cabe en la capacidad propuesta, pero no resuelve todo el riesgo. La política indica qué hacer con los casos sin revisar.",
       "transfer": "En una mesa de ayuda, cambia plantas por solicitudes y fija capacidad por turno antes de elegir una regla de prioridad.",
       "stretch": "Si ya programas: genera una tabla de varios umbrales, calcula revisiones y omisiones y filtra los compatibles con una capacidad dada."
+    },
+    "prerequisite": "Las métricas explican las consecuencias de una regla. Ahora elegimos una regla de acción usando esas consecuencias y la capacidad de revisión.",
+    "understanding": {
+      "question": "¿Cambiar el umbral vuelve a entrenar el modelo?",
+      "answer": "En este ejemplo, no: conserva sus puntuaciones y cambia la decisión. Elegimos el corte con validación y después medimos la política elegida en una prueba separada."
     }
   },
   "ml-clustering": {
@@ -582,6 +720,26 @@ export const LESSON_GUIDES={
       {
         "term": "Sin grupo",
         "meaning": "Punto que no queda conectado a un grupo con esa configuración."
+      },
+      {
+        "term": "Aprendizaje no supervisado",
+        "meaning": "Busca estructura en las entradas sin recibir etiquetas de respuesta para esa tarea."
+      },
+      {
+        "term": "Distancia",
+        "meaning": "Medida de separación entre registros. Cambia con las variables, las unidades y el escalado."
+      },
+      {
+        "term": "DBSCAN",
+        "meaning": "Método que conecta zonas con suficientes puntos cercanos; permite formas irregulares y puntos sin grupo."
+      },
+      {
+        "term": "K-Means",
+        "meaning": "Agrupa alrededor de K centros y asigna cada punto al centro más cercano. K se elige antes del ajuste y responde a un criterio distinto al de DBSCAN."
+      },
+      {
+        "term": "Hiperparámetro",
+        "meaning": "Configuración elegida antes del ajuste, como radio y mínimo de puntos; se diferencia de un parámetro aprendido."
       }
     ],
     "lab": {
@@ -605,6 +763,11 @@ export const LESSON_GUIDES={
       "check": "El explorador da dos grupos y tres puntos sin asignar con radio 10; con radio 3 deja los 29 sin grupo. Ningún identificador se interpreta como calidad.",
       "transfer": "Para organizar incidencias de equipos por similitud, revisa escalas y variables antes de agrupar; un caso aislado merece inspección.",
       "stretch": "Si ya programas: prueba otra escala de las variables y compara la estabilidad de las asignaciones."
+    },
+    "prerequisite": "Hasta aquí conocíamos la respuesta de cada ejemplo. Ahora exploramos similitudes sin etiquetas de grupo: la pregunta y la forma de comprobar resultados cambian.",
+    "understanding": {
+      "question": "¿Por qué un grupo de DBSCAN no equivale a una clase real ni a una recomendación agrícola?",
+      "answer": "El grupo surge de las variables, su escala y los parámetros elegidos. Hay que investigar qué comparten sus miembros y comprobar si esa agrupación ayuda en la operación. Un punto sin grupo tampoco es automáticamente un dato erróneo."
     }
   },
   "ml-pca": {
@@ -661,6 +824,22 @@ export const LESSON_GUIDES={
       {
         "term": "Componente",
         "meaning": "Nueva dirección que combina variables."
+      },
+      {
+        "term": "Centrado",
+        "meaning": "Restar la media de entrenamiento a cada variable para estudiar variaciones respecto a ella."
+      },
+      {
+        "term": "Varianza explicada",
+        "meaning": "Proporción de la dispersión total que conserva una componente; no es una métrica de clasificación."
+      },
+      {
+        "term": "Cargas de una componente",
+        "meaning": "Pesos con que las variables originales participan en una nueva dirección. Ayudan a interpretar el eje."
+      },
+      {
+        "term": "Escala de variables",
+        "meaning": "Si una columna tiene números mucho mayores, puede dominar PCA. Decidir si se estandariza forma parte del análisis."
       }
     ],
     "lab": {
@@ -684,6 +863,11 @@ export const LESSON_GUIDES={
       "check": "Las direcciones del explorador conservan aproximadamente 63,1 %, 36,9 % y 98,0 %. La vista del cuaderno informa su propio porcentaje y mantiene correspondencia con los registros.",
       "transfer": "Usa una vista resumida para explorar muchas medidas de operación; vuelve a las variables originales antes de explicar por qué dos registros se parecen.",
       "stretch": "Si ya programas: compara la variación acumulada de uno y dos componentes después de escalar."
+    },
+    "prerequisite": "Agrupar asignaba registros a conjuntos. PCA cambia la representación de sus variables: resumir columnas y formar grupos son tareas distintas.",
+    "understanding": {
+      "question": "¿Conservar 90 % de varianza significa lograr 90 % de exactitud?",
+      "answer": "No. El porcentaje describe dispersión de las entradas conservada por la proyección; no compara predicciones con respuestas reales. Incluso una dirección con poca variación podría ser útil para una tarea predictiva."
     }
   },
   "ml-ensambles": {
@@ -743,6 +927,22 @@ export const LESSON_GUIDES={
       {
         "term": "Boosting",
         "meaning": "Añadir modelos en secuencia para reducir la pérdida conjunta."
+      },
+      {
+        "term": "Árbol de decisión",
+        "meaning": "Modelo que aplica preguntas sucesivas sobre características hasta llegar a una predicción. Sus cortes se aprenden al entrenar."
+      },
+      {
+        "term": "Bosque aleatorio",
+        "meaning": "Ensamble de árboles entrenados con muestras aleatorias de filas y selecciones de características; combina sus salidas."
+      },
+      {
+        "term": "RMSE",
+        "meaning": "Raíz del promedio de errores al cuadrado. Tiene las unidades de la respuesta y da mayor peso relativo a errores grandes que el MAE."
+      },
+      {
+        "term": "Diversidad de errores",
+        "meaning": "Grado en que los modelos se equivocan en casos o direcciones distintos; combinar errores idénticos no los elimina."
       }
     ],
     "lab": {
@@ -766,6 +966,11 @@ export const LESSON_GUIDES={
       "check": "En el explorador, boosting tiene el menor error entre los cuatro modelos: MAE 0,301 y RMSE 0,411 t/ha. Registra los resultados de tu ejecución del cuaderno y compáralos sobre sus mismas fincas de prueba.",
       "transfer": "Al comparar estimadores de duración de tareas, usa las mismas tareas reservadas y una referencia sencilla.",
       "stretch": "Si ya programas: repite la evaluación con otras particiones de entrenamiento sin reutilizar la prueba final para elegir ajustes."
+    },
+    "prerequisite": "Ya sabemos evaluar una predicción y representar datos. Ahora combinamos modelos, conservando la misma pregunta, los mismos casos y la misma métrica.",
+    "understanding": {
+      "question": "¿Un bosque de muchos árboles garantiza superar a un árbol?",
+      "answer": "No. La combinación puede reducir algunos errores, pero depende de los datos y de cuánto se parezcan las equivocaciones. Se decide mediante validación; la prueba final mide el resultado elegido."
     }
   },
   "ml-series": {
@@ -828,6 +1033,22 @@ export const LESSON_GUIDES={
       {
         "term": "Horizonte",
         "meaning": "Cuánto adelante queremos pronosticar."
+      },
+      {
+        "term": "Tendencia",
+        "meaning": "Cambio sostenido del nivel de una serie a lo largo del tiempo."
+      },
+      {
+        "term": "Estacionalidad",
+        "meaning": "Patrón que tiende a repetirse con una periodicidad, como semanas de un ciclo; debe comprobarse con historia suficiente."
+      },
+      {
+        "term": "Referencia ingenua",
+        "meaning": "Regla sencilla como repetir el último valor observado; permite juzgar si un modelo aporta mejora."
+      },
+      {
+        "term": "Evaluación temporal",
+        "meaning": "Comparación que entrena con pasado y evalúa periodos posteriores, idealmente en varios cortes."
       }
     ],
     "lab": {
@@ -851,6 +1072,11 @@ export const LESSON_GUIDES={
       "check": "En el explorador los MAE son aproximadamente 14,90; 11,35 y 7,65 unidades. Ninguna regla recibe las ventas reservadas al generar el pronóstico.",
       "transfer": "Para prever carga de soporte por semana, conserva el orden temporal y expresa el error en cantidad de solicitudes.",
       "stretch": "Si ya programas: desplaza el corte en varias fechas históricas y compara errores por horizonte sin mezclar pasado y futuro."
+    },
+    "prerequisite": "La evaluación anterior reservaba casos. Si queremos anticipar semanas futuras, también debemos respetar cuándo estuvo disponible cada dato.",
+    "understanding": {
+      "question": "¿Por qué una buena predicción del pasado podría fallar como pronóstico?",
+      "answer": "Podría haberse construido usando información que llegó después de la fecha de decisión. Un pronóstico válido usa solo historia disponible y se comprueba en un horizonte posterior al corte."
     }
   },
   "ml-refuerzo": {
@@ -918,6 +1144,30 @@ export const LESSON_GUIDES={
       {
         "term": "Política",
         "meaning": "Regla para elegir acciones según el estado."
+      },
+      {
+        "term": "Agente y entorno",
+        "meaning": "El agente elige acciones; el entorno define qué sucede y qué recompensa recibe."
+      },
+      {
+        "term": "Acción",
+        "meaning": "Elección disponible en un estado; aquí, intentar moverse a una casilla vecina."
+      },
+      {
+        "term": "Episodio",
+        "meaning": "Recorrido desde el inicio hasta una condición de cierre, como meta o pozo."
+      },
+      {
+        "term": "Retorno",
+        "meaning": "Recompensas acumuladas de un recorrido; aquí se suman sin descuento."
+      },
+      {
+        "term": "Valor Q",
+        "meaning": "Estimación del retorno futuro de elegir una acción en un estado y continuar después según el procedimiento de aprendizaje."
+      },
+      {
+        "term": "Exploración y aprovechamiento",
+        "meaning": "Explorar prueba alternativas para aprender; aprovechar elige lo que parece mejor con la información actual."
       }
     ],
     "lab": {
@@ -941,6 +1191,11 @@ export const LESSON_GUIDES={
       "check": "La ruta manual llega en cinco pasos y acumula 6. La ruta aprendida se comprueba al ejecutar; una ruta exitosa aislada no demuestra optimalidad.",
       "transfer": "Para estudiar movimientos en una bodega simulada, define estados, acciones, obstáculos y costes antes de evaluar una política.",
       "stretch": "Si ya programas: repite varios episodios con una política fija y resume llegada a meta y recompensa, además del ejemplo individual."
+    },
+    "prerequisite": "Pronosticar estima lo que ocurrirá. En refuerzo una acción puede cambiar lo que ocurrirá después: necesitamos representar esa interacción.",
+    "understanding": {
+      "question": "¿Qué falta para que una ruta elegida manualmente sea aprendizaje por refuerzo?",
+      "answer": "Que un agente use experiencias de estados, acciones y recompensas para actualizar su política o valores. Moverlo manualmente solo permite explorar el entorno y sus reglas."
     }
   },
   "ml-integracion": {
@@ -992,6 +1247,22 @@ export const LESSON_GUIDES={
       {
         "term": "Generalización",
         "meaning": "Desempeño en casos nuevos del contexto de uso."
+      },
+      {
+        "term": "Sobreajuste",
+        "meaning": "El modelo se adapta demasiado a particularidades del entrenamiento y funciona peor en casos nuevos."
+      },
+      {
+        "term": "Subajuste",
+        "meaning": "La regla no captura suficientemente la relación relevante, incluso en entrenamiento."
+      },
+      {
+        "term": "Reproducibilidad",
+        "meaning": "Poder reconstruir el procedimiento registrando datos, separación, preparación, configuración y cálculo."
+      },
+      {
+        "term": "Cambio de distribución",
+        "meaning": "Las condiciones o frecuencias del uso difieren de las de entrenamiento; puede deteriorar el desempeño."
       }
     ],
     "lab": {
@@ -1015,11 +1286,16 @@ export const LESSON_GUIDES={
       "check": "El caso pequeño permite verificar 0,67 frente a 0,17 t/ha; tu prototipo documenta sus propios errores y se puede volver a ejecutar desde su copia.",
       "transfer": "Cambia la tarea a estimar duración de solicitudes: redefine fila, entradas y respuesta antes de reutilizar el flujo.",
       "stretch": "Si ya programas: encapsula preparación y modelo en un pipeline y comprueba una nueva fila con el mismo esquema."
+    },
+    "prerequisite": "Los métodos resolvían preguntas distintas. Para integrarlos, vuelve a la pregunta original y reúne la evidencia de preparación, comparación y uso.",
+    "understanding": {
+      "question": "¿Qué evidencia necesitamos además de una métrica favorable?",
+      "answer": "Casos representativos del uso esperado, separación correcta de datos, comparación justa con una referencia, revisión de errores y condiciones para supervisar o detener el uso. Tres casos ilustrativos no bastan."
     }
   },
   "dl-redes": {
     "objective": "Construir el cálculo de una neurona y rastrear cómo sus entradas producen una salida.",
-    "concept": "Deep Learning o aprendizaje profundo utiliza redes neuronales con varias capas de transformaciones. Una neurona básica multiplica cada entrada por un peso, suma los productos y un sesgo, y aplica una función de activación. Las capas conectan estas operaciones para construir representaciones intermedias y una salida. Entrenar ajusta los pesos y otros parámetros; calcular una salida con parámetros fijados es un paso diferente.",
+    "concept": "Deep Learning es una parte del aprendizaje automático que usa redes neuronales de varias capas para aprender representaciones. Una representación es una forma numérica de describir los datos; las capas intermedias transforman esa descripción para la tarea. Una neurona multiplica entradas por pesos, suma un sesgo y aplica una activación. Varias neuronas forman una capa; una red conecta capas de entrada, intermedias y salida. Entrenar ajusta parámetros con una pérdida. La cuenta con pesos fijos de esta página explica el recorrido hacia la salida, pero todavía no aprende ni demuestra capacidad predictiva.",
     "relevance": "Permite explicar el cálculo antes de confiar en una etiqueta o una puntuación.",
     "case": {
       "title": "Dos señales y un ajuste",
@@ -1070,6 +1346,22 @@ export const LESSON_GUIDES={
       {
         "term": "Activación",
         "meaning": "Regla aplicada a esa suma."
+      },
+      {
+        "term": "Representación",
+        "meaning": "Descripción numérica de los datos que otra capa puede transformar. No es necesariamente interpretable como una propiedad física."
+      },
+      {
+        "term": "Capa oculta",
+        "meaning": "Transformación intermedia entre entrada y salida; oculta significa que su salida no es la respuesta objetivo observada."
+      },
+      {
+        "term": "Arquitectura",
+        "meaning": "Organización de capas, conexiones y tamaños. Se elige como configuración; los pesos se ajustan durante el entrenamiento."
+      },
+      {
+        "term": "Inferencia",
+        "meaning": "Cálculo de una salida con los parámetros actuales, sin actualizarlos."
       }
     ],
     "explorer": "neuron",
@@ -1093,6 +1385,11 @@ export const LESSON_GUIDES={
       "check": "La primera cuenta da suma 0,5 y salida 0,5; la segunda da suma −0,5 y salida 0. Cada número puede rastrearse hasta su entrada.",
       "transfer": "Esta cuenta permite inspeccionar una pequeña red antes de interpretar una salida de priorización; los pesos del ejemplo no definen una política real.",
       "stretch": "Si ya programas: escribe una función que reciba entradas, pesos y sesgo y comprueba ambos casos."
+    },
+    "prerequisite": "Conservamos de ML las entradas, la respuesta, el entrenamiento y la prueba. Lo nuevo es cómo varias capas construyen la regla y sus representaciones intermedias.",
+    "understanding": {
+      "question": "¿Qué diferencia una neurona, una capa y una red?",
+      "answer": "Una neurona calcula una transformación; una capa reúne transformaciones que producen una representación; una red conecta capas. El entrenamiento cambia pesos y sesgos, mientras la inferencia usa los valores ya fijados."
     }
   },
   "dl-activaciones": {
@@ -1154,6 +1451,26 @@ export const LESSON_GUIDES={
       {
         "term": "Rango de salida",
         "meaning": "Conjunto de valores que puede devolver una función."
+      },
+      {
+        "term": "Entrada z",
+        "meaning": "Suma ponderada más sesgo antes de la activación; no es necesariamente una medida original ni una probabilidad."
+      },
+      {
+        "term": "ReLU",
+        "meaning": "Función que devuelve el mayor entre cero y su entrada. Se usa habitualmente en capas intermedias."
+      },
+      {
+        "term": "Sigmoide",
+        "meaning": "Función que transforma un número en un valor entre 0 y 1. En una salida binaria puede representar una probabilidad estimada si la tarea y el entrenamiento lo justifican."
+      },
+      {
+        "term": "tanh",
+        "meaning": "Función que transforma su entrada en un valor entre −1 y 1."
+      },
+      {
+        "term": "Capa de salida",
+        "meaning": "Última transformación. Su tamaño y activación deben corresponder a la cantidad o categorías que se quieren predecir."
       }
     ],
     "explorer": "activation",
@@ -1177,6 +1494,11 @@ export const LESSON_GUIDES={
       "check": "Para −2, las salidas son 0, aproximadamente 0,119 y −0,964. Para 2, ReLU devuelve 2: no es un porcentaje.",
       "transfer": "Antes de conectar una salida a una regla de alerta, comprueba su significado y rango; estar entre 0 y 1 no demuestra calibración.",
       "stretch": "Si ya programas: grafica las tres funciones con el mismo conjunto de entradas y comprueba límites y signos."
+    },
+    "prerequisite": "La neurona ya produjo una suma. La activación determina cómo se transforma antes de pasar a otra capa o a la salida.",
+    "understanding": {
+      "question": "¿Por qué apilar capas sin activaciones no lineales puede aportar menos de lo esperado?",
+      "answer": "Una sucesión de transformaciones afines sigue siendo una transformación afín. Las activaciones no lineales permiten representar otros patrones. Eso aumenta capacidad, pero no garantiza buen desempeño sin datos y entrenamiento adecuados."
     }
   },
   "dl-entrenamiento": {
@@ -1234,6 +1556,34 @@ export const LESSON_GUIDES={
       {
         "term": "Gradiente",
         "meaning": "Indica cómo cambia la pérdida al variar parámetros."
+      },
+      {
+        "term": "Tasa de aprendizaje",
+        "meaning": "Tamaño elegido para los pasos de actualización. Es un hiperparámetro, no un peso aprendido."
+      },
+      {
+        "term": "Retropropagación",
+        "meaning": "Procedimiento que calcula la influencia de cada parámetro sobre la pérdida propagando derivadas por las capas."
+      },
+      {
+        "term": "Optimizador",
+        "meaning": "Regla que utiliza gradientes para actualizar parámetros, como descenso por gradiente."
+      },
+      {
+        "term": "Lote o batch",
+        "meaning": "Subconjunto de ejemplos procesado para calcular una actualización."
+      },
+      {
+        "term": "Época",
+        "meaning": "Un recorrido completo por los ejemplos de entrenamiento. No equivale a una sola actualización cuando hay varios lotes."
+      },
+      {
+        "term": "Validación",
+        "meaning": "Datos separados para observar generalización y elegir configuraciones durante el desarrollo."
+      },
+      {
+        "term": "Regularización y parada temprana",
+        "meaning": "Estrategias para limitar el sobreajuste: restringir el ajuste o detenerlo según validación. No garantizan mejora por sí solas."
       }
     ],
     "explorer": "training",
@@ -1257,6 +1607,11 @@ export const LESSON_GUIDES={
       "check": "Con 0,10 el parámetro queda en −1 y la pérdida en 16; con 1,10 queda en 9 y 36. Reiniciar permite una comparación desde el mismo estado.",
       "transfer": "Al ajustar una red para clasificar registros, usa la evolución de pérdida para detectar problemas y la prueba reservada para evaluar el uso.",
       "stretch": "Si ya programas: compara dos tasas con igual inicialización y número de pasos, conservando curvas y evaluación reservada."
+    },
+    "prerequisite": "Ya podemos calcular una salida con pesos fijos. Aprender exige compararla con una respuesta y decidir cómo modificar los parámetros.",
+    "understanding": {
+      "question": "Si baja la pérdida de entrenamiento, ¿ya sabemos que la red generaliza?",
+      "answer": "No. Hay que observar datos separados. Si la pérdida de entrenamiento baja y la de validación empieza a subir, puede haber sobreajuste. La prueba final permanece aparte de las decisiones de desarrollo."
     }
   },
   "dl-vision": {
@@ -1304,6 +1659,26 @@ export const LESSON_GUIDES={
       {
         "term": "Máscara",
         "meaning": "Píxeles asignados a un objeto o categoría."
+      },
+      {
+        "term": "Píxel",
+        "meaning": "Celda de una imagen digital. Su valor describe intensidad o color, no un objeto completo."
+      },
+      {
+        "term": "Canal",
+        "meaning": "Una componente del valor de cada píxel; una imagen RGB tiene rojo, verde y azul."
+      },
+      {
+        "term": "Tensor",
+        "meaning": "Arreglo de números con varias dimensiones. Una imagen puede organizarse por alto, ancho y canales; un lote añade una dimensión de ejemplos."
+      },
+      {
+        "term": "Anotación",
+        "meaning": "Respuesta de referencia preparada para entrenar o evaluar: etiqueta, caja o máscara según la tarea."
+      },
+      {
+        "term": "Normalización de imagen",
+        "meaning": "Transformación de intensidades según la entrada esperada por el modelo; dividir entre 255 es una opción común para imágenes de 8 bits, no una regla universal."
       }
     ],
     "explorer": "vision",
@@ -1327,6 +1702,11 @@ export const LESSON_GUIDES={
       "check": "La especificación pide etiqueta, caja o máscara según el uso. La ejecución del cuaderno produce detecciones; no se le atribuyen las máscaras del dibujo.",
       "transfer": "Para contar equipos visibles necesitas localizarlos y definir cómo tratar duplicados u objetos ocultos; una etiqueta global no basta.",
       "stretch": "Si ya programas: separa en la salida identificador de imagen, clase, puntuación y coordenadas antes de calcular un conteo."
+    },
+    "prerequisite": "Una red recibe números. Antes de elegir un modelo para fotos, aclaremos cómo se representa una imagen y qué salida necesita la operación.",
+    "understanding": {
+      "question": "¿Qué etiquetas hay que preparar para clasificar, detectar y segmentar?",
+      "answer": "Para clasificación, una categoría por imagen en la tarea descrita; para detección, categoría y caja por objeto; para segmentación, categorías o identidades por píxel. Son anotaciones diferentes y requieren evaluaciones acordes."
     }
   },
   "dl-cnn": {
@@ -1374,6 +1754,26 @@ export const LESSON_GUIDES={
       {
         "term": "Filtro",
         "meaning": "Pesos que se aplican en cada posición."
+      },
+      {
+        "term": "Convolución en una CNN",
+        "meaning": "Operación que reutiliza un filtro en distintas posiciones y forma un mapa de respuestas; las bibliotecas suelen implementarla sin invertir el filtro."
+      },
+      {
+        "term": "Mapa de características",
+        "meaning": "Tabla de respuestas producida por un filtro al recorrer la entrada. Cada celda corresponde a una región."
+      },
+      {
+        "term": "Stride o paso",
+        "meaning": "Cuántas posiciones se desplaza el filtro entre cálculos; influye en el tamaño del mapa."
+      },
+      {
+        "term": "Padding o relleno",
+        "meaning": "Valores añadidos al borde para controlar el tamaño de salida y el tratamiento de los límites."
+      },
+      {
+        "term": "Pooling",
+        "meaning": "Resumen de regiones del mapa, por ejemplo mediante su máximo o promedio. Reduce resolución; no es sinónimo de convolución."
       }
     ],
     "explorer": "convolution",
@@ -1397,6 +1797,11 @@ export const LESSON_GUIDES={
       "check": "El mapa horizontal es [3,3,3], [3,3,3], [0,0,0]. El promedio de la primera ventana es 1/3. El mapa aún no es una detección de objetos.",
       "transfer": "Para inspeccionar cambios de intensidad en una imagen, usa el mapa como transformación intermedia y valida aparte la tarea final.",
       "stretch": "Si ya programas: implementa el recorrido de ventanas sin padding y verifica que una entrada 5 × 5 con filtro 3 × 3 produce 3 × 3."
+    },
+    "prerequisite": "Ya vimos píxeles y canales. Ahora una CNN transforma ventanas locales en mapas que otras capas pueden combinar.",
+    "understanding": {
+      "question": "¿Un filtro que responde a un borde ya reconoce un fruto?",
+      "answer": "No. Produce un mapa de respuestas locales. Una CNN combina muchos filtros, activaciones y capas hasta obtener una salida de la tarea; sus pesos se aprenden con datos. El filtro fijo permite entender una sola operación."
     }
   },
   "dl-transferencia": {
@@ -1404,8 +1809,8 @@ export const LESSON_GUIDES={
     "concept": "Un modelo preentrenado tiene parámetros ajustados previamente con otros datos. Aprendizaje por transferencia reutiliza parte de ese conocimiento para una tarea: puede conservar un extractor de características o ajustar parámetros mediante entrenamiento adicional, llamado ajuste fino. Inferencia es usar el modelo para obtener predicciones sin actualizar esos parámetros. Antes de reutilizarlo, comprueba qué entradas acepta, qué salidas produce y si sus categorías cubren tu necesidad.",
     "relevance": "Permite decidir si un modelo existente responde al problema o necesita adaptación.",
     "case": {
-      "title": "Un detector de objetos no aprende café por renombrarlo",
-      "context": "Una cooperativa quiere distinguir café sano de defectuoso. El detector del cuaderno produce categorías de COCO, un conjunto de imágenes de objetos comunes, como persona y bus. Sus categorías de salida no incluyen café sano o defectuoso. Comparamos tres acciones posibles.",
+      "title": "Reutilizar un detector para una tarea nueva",
+      "context": "Una cooperativa quiere detectar granos y distinguir su condición. Primero revisa las categorías del detector cargado: el archivo utilizado en el cuaderno reconoce objetos comunes y no incluye las categorías de café requeridas. La tabla distingue usar el modelo, traducir su interfaz y proponer un nuevo entrenamiento.",
       "columns": [
         "Acción",
         "¿Actualiza pesos?",
@@ -1418,9 +1823,9 @@ export const LESSON_GUIDES={
           "Reutiliza lo aprendido"
         ],
         [
-          "Cambiar bus por café en la tabla",
+          "Traducir los nombres de salida al español",
           "No",
-          "Solo cambia un texto"
+          "Hace legible la interfaz; conserva las categorías aprendidas"
         ],
         [
           "Ajustar parámetros con café etiquetado",
@@ -1430,7 +1835,7 @@ export const LESSON_GUIDES={
       ],
       "reasoning": [
         "Compara la categoría que necesitas con las categorías del archivo cargado.",
-        "Cambiar una etiqueta visible conserva parámetros y patrones: no enseña una categoría.",
+        "Traducir una categoría conserva sus patrones y parámetros: mejora la lectura, pero no añade una categoría nueva.",
         "Adaptar requiere ejemplos etiquetados, ajuste apropiado y evaluación reservada; el nombre del modelo no basta."
       ],
       "conclusion": "Cargar los pesos permite predecir las categorías disponibles. Para abordar café defectuoso hacen falta una tarea, datos etiquetados y una evaluación propios; cambiar el texto de una categoría mantiene el mismo detector.",
@@ -1448,6 +1853,22 @@ export const LESSON_GUIDES={
       {
         "term": "Ajuste fino",
         "meaning": "Actualizar parámetros previos con nuevos ejemplos."
+      },
+      {
+        "term": "Extractor de características",
+        "meaning": "Parte del modelo que convierte la entrada en una representación reutilizable."
+      },
+      {
+        "term": "Congelar parámetros",
+        "meaning": "Mantenerlos sin cambios durante el nuevo entrenamiento."
+      },
+      {
+        "term": "Cabeza de salida",
+        "meaning": "Capas finales que convierten la representación en la salida específica de la tarea."
+      },
+      {
+        "term": "Dominio",
+        "meaning": "Condiciones de los datos, como cultivo, iluminación, cámara y tipo de imagen. Un cambio de dominio puede afectar los resultados."
       }
     ],
     "explorer": null,
@@ -1471,6 +1892,11 @@ export const LESSON_GUIDES={
       "check": "La ficha distingue pesos, categorías y traducción. El detector disponible no aprende café defectuoso al cambiar un nombre; este laboratorio ejecuta inferencia.",
       "transfer": "Antes de reutilizar un detector para inventario, contrasta sus categorías con los objetos que realmente necesitas registrar.",
       "stretch": "Si ya programas: añade una comprobación que rechace una categoría solicitada cuando no figura en modelo.names."
+    },
+    "prerequisite": "Entrenar todos los filtros desde cero puede exigir muchos ejemplos. La transferencia reutiliza representaciones aprendidas y comprueba si sirven para la nueva tarea.",
+    "understanding": {
+      "question": "¿Cargar un detector y traducir sus categorías constituye ajuste fino?",
+      "answer": "No. Cargarlo e inferir conserva los parámetros; traducir cambia el texto visible. El ajuste fino requiere entrenamiento adicional con datos y una pérdida. Evaluar el dominio local sigue siendo necesario."
     }
   },
   "dl-secuencias": {
@@ -1526,6 +1952,22 @@ export const LESSON_GUIDES={
       {
         "term": "Recurrente",
         "meaning": "Usa el resultado del paso anterior."
+      },
+      {
+        "term": "Paso temporal",
+        "meaning": "Posición de una lectura en la secuencia. Para sensores también deben registrarse fecha e intervalo."
+      },
+      {
+        "term": "RNN",
+        "meaning": "Red neuronal recurrente: comparte una transformación aprendida que actualiza un estado paso a paso."
+      },
+      {
+        "term": "LSTM",
+        "meaning": "Tipo de red recurrente con un estado de memoria y compuertas aprendidas que regulan conservar, actualizar y usar información."
+      },
+      {
+        "term": "Compuerta",
+        "meaning": "Mecanismo numérico que regula cuánto de una información pasa a otra operación; no implica comprensión humana."
       }
     ],
     "explorer": "sequence",
@@ -1549,11 +1991,16 @@ export const LESSON_GUIDES={
       "check": "Ambas secuencias promedian 20, pero sus estados finales son 21,25 y 13,75. Ninguna fila utiliza una entrada posterior.",
       "transfer": "Para resumir lecturas consecutivas de un equipo, conserva su orden y marca los tiempos; el estado ilustrativo aún no predice averías.",
       "stretch": "Si ya programas: implementa la recurrencia y comprueba que invertir la lista cambia su estado final con la misma regla."
+    },
+    "prerequisite": "Una imagen conserva relaciones espaciales. Una secuencia conserva un orden temporal o de posiciones: no basta tratar sus elementos como una bolsa sin orden.",
+    "understanding": {
+      "question": "¿El estado recurrente guarda una copia exacta de todo lo anterior?",
+      "answer": "No. Es un resumen que depende de la regla y de sus parámetros. En la demostración es una mezcla numérica fija; una RNN aprende su transformación y una LSTM usa mecanismos adicionales para regular la memoria."
     }
   },
   "dl-atencion": {
     "objective": "Construir una combinación ponderada de fuentes y rastrear su cálculo.",
-    "concept": "La atención por producto escalar combina información mediante pesos que dependen de una consulta Q. Comparamos Q con la clave K de cada fuente; esa comparación produce puntuaciones. Tras escalarlas, softmax transforma las puntuaciones en pesos que suman 1; cada peso multiplica el valor V asociado a su fuente. La suma de esas contribuciones es la salida.",
+    "concept": "La atención combina información de varias posiciones según una consulta. Primero imagina dos fuentes con valores 10 y 20: asignarles pesos 0,75 y 0,25 produce una mezcla 12,5. En atención por producto escalar esos pesos se calculan, no se eligen como porcentajes fijos: una consulta Q se compara con la clave K de cada fuente, se escalan las puntuaciones y softmax las convierte en pesos que suman 1. Cada peso multiplica el valor V asociado y se suman las contribuciones. En una red, Q, K y V se obtienen mediante transformaciones aprendidas de las representaciones. Aquí están fijados para poder seguir la cuenta.",
     "relevance": "Permite explicar una combinación interna sin presentarla como comprensión humana o explicación causal.",
     "case": {
       "title": "Una consulta, dos fuentes",
@@ -1604,6 +2051,26 @@ export const LESSON_GUIDES={
       {
         "term": "Softmax",
         "meaning": "Convierte puntuaciones en pesos: divide la exponencial de cada puntuación por la suma de todas las exponenciales."
+      },
+      {
+        "term": "Vector",
+        "meaning": "Lista ordenada de números que representa un elemento. Sus componentes no necesitan tener un significado físico individual."
+      },
+      {
+        "term": "Producto escalar",
+        "meaning": "Multiplicar componentes correspondientes de dos vectores y sumar los productos; produce una puntuación de comparación."
+      },
+      {
+        "term": "Dimensión d",
+        "meaning": "Cantidad de componentes de cada consulta y clave; en el ejemplo vale 2 y se usa su raíz para escalar las puntuaciones."
+      },
+      {
+        "term": "Mezcla ponderada",
+        "meaning": "Suma de valores multiplicados por sus pesos. Aquí los pesos son positivos y suman 1."
+      },
+      {
+        "term": "Autoatención",
+        "meaning": "Atención en la que consultas, claves y valores proceden de representaciones de la misma secuencia."
       }
     ],
     "explorer": "attention",
@@ -1627,6 +2094,11 @@ export const LESSON_GUIDES={
       "check": "Los pesos de cada fila suman 1; las salidas son aproximadamente 13,302; 16,698 y 15. Cambia la consulta, no los datos ni los parámetros.",
       "transfer": "Este cálculo ayuda a inspeccionar cómo un bloque mezcla información; para usarlo en una aplicación debes definir la tarea y evaluar sus respuestas.",
       "stretch": "Si ya programas: comprueba que softmax y el producto por V reproducen las tres salidas usando pesos sin redondear."
+    },
+    "prerequisite": "La recurrencia resume el pasado paso a paso. La atención permite combinar directamente representaciones de varias posiciones; empezaremos por entender una mezcla ponderada.",
+    "understanding": {
+      "question": "¿Qué papel cumplen Q, K, V y los pesos de atención?",
+      "answer": "Q plantea la comparación; K describe cada fuente para compararla; V contiene lo que se combinará. Las comparaciones producen pesos, y estos ponderan V. Un peso alto no demuestra una causa ni que la fuente sea correcta."
     }
   },
   "dl-transformers": {
@@ -1702,6 +2174,26 @@ export const LESSON_GUIDES={
       {
         "term": "Posición",
         "meaning": "Lugar de esa unidad en la secuencia."
+      },
+      {
+        "term": "Embedding o representación vectorial",
+        "meaning": "Forma de representar una unidad de entrada mediante un vector. Cuando es aprendido, sus valores se ajustan para la tarea."
+      },
+      {
+        "term": "Codificación de posición",
+        "meaning": "Información sobre el lugar de cada unidad; permite distinguir órdenes que una mezcla sin posición podría confundir."
+      },
+      {
+        "term": "Encoder",
+        "meaning": "Conjunto de bloques que transforma la secuencia en representaciones contextualizadas. El laboratorio usa un encoder para clasificar."
+      },
+      {
+        "term": "Cabezas de atención",
+        "meaning": "Comparaciones realizadas en espacios de representación distintos y combinadas dentro de un bloque. Más cabezas no garantizan mejor resultado."
+      },
+      {
+        "term": "Conexión residual y normalización",
+        "meaning": "La conexión residual suma la entrada de un bloque a su transformación; la normalización ajusta la escala de activaciones. Ayudan al funcionamiento del bloque, pero no sustituyen su entrenamiento."
       }
     ],
     "explorer": null,
@@ -1725,6 +2217,11 @@ export const LESSON_GUIDES={
       "check": "Las cuatro etiquetas del caso son 0, 1, 0 y 1. El registro distingue la respuesta calculada de lo que predice la red; los aciertos se conocen al ejecutar.",
       "transfer": "En tareas con registros ordenados, define primero qué respuesta esperas y cómo la comprobarás antes de elegir una arquitectura.",
       "stretch": "Si ya programas: crea una función de etiquetado y prueba también igualdad entre extremos; la etiqueta debe ser 0."
+    },
+    "prerequisite": "Ya entendimos cómo atención mezcla valores. Ahora la ubicamos en una red completa que también necesita representar las unidades, su posición y la salida de la tarea.",
+    "understanding": {
+      "question": "¿Un Transformer es lo mismo que atención o que un chatbot?",
+      "answer": "No. Atención es una operación dentro de la arquitectura. Un Transformer añade representación de entrada, posición y otras transformaciones. Puede resolver distintas tareas; el ejercicio clasifica secuencias numéricas y no genera conversación."
     }
   },
   "dl-yolo": {
@@ -1772,6 +2269,22 @@ export const LESSON_GUIDES={
       {
         "term": "Umbral",
         "meaning": "Límite para conservar una puntuación."
+      },
+      {
+        "term": "Coordenadas de caja",
+        "meaning": "Valores que ubican el rectángulo. En formato xyxy son x izquierda, y superior, x derecha e y inferior; otras herramientas usan centro, ancho y alto."
+      },
+      {
+        "term": "Puntuación de detección",
+        "meaning": "Salida numérica usada para filtrar propuestas; su definición depende del modelo y no equivale al IoU."
+      },
+      {
+        "term": "Supresión de duplicados",
+        "meaning": "Procedimiento que reduce propuestas redundantes, como NMS en detectores que la emplean. No todas las variantes usan el mismo posprocesamiento."
+      },
+      {
+        "term": "Pesos preentrenados",
+        "meaning": "Archivo de parámetros aprendidos anteriormente; determina capacidades y categorías de la configuración cargada."
       }
     ],
     "explorer": "detection",
@@ -1795,6 +2308,11 @@ export const LESSON_GUIDES={
       "check": "El caso conserva una fila a 0,50 y 0,80 y ninguna a 0,90. En tu ejecución, cada conteo se puede rastrear a filas y cajas de la misma imagen.",
       "transfer": "Para registrar objetos visibles en una bodega, guarda la imagen de origen y revisa duplicados y omisiones antes de actualizar existencias.",
       "stretch": "Si ya programas: genera una tabla con identificador de imagen y detección además de clase, puntuación y coordenadas."
+    },
+    "prerequisite": "Volvemos a detección: una arquitectura debe producir ubicaciones y categorías. YOLO es una familia concreta para esa tarea, con parámetros entrenados previamente en el cuaderno.",
+    "understanding": {
+      "question": "¿Qué información necesita una fila de detección para poder interpretarla?",
+      "answer": "La imagen de origen, categoría, puntuación, coordenadas y convención de la caja. Después hay que revisar omisiones y duplicados; la cantidad de filas no es automáticamente la cantidad real de objetos."
     }
   },
   "dl-evaluacion": {
@@ -1850,6 +2368,22 @@ export const LESSON_GUIDES={
       {
         "term": "FP y FN",
         "meaning": "FP: propuesta conservada sin coincidencia. FN: objeto de referencia que no tiene una propuesta coincidente."
+      },
+      {
+        "term": "Referencia anotada",
+        "meaning": "Categoría y ubicación que se usan como verdad de comparación, sujetas a la calidad de la anotación."
+      },
+      {
+        "term": "Emparejamiento uno a uno",
+        "meaning": "Asignación que evita que varias detecciones obtengan crédito por un mismo objeto."
+      },
+      {
+        "term": "Umbral de IoU",
+        "meaning": "Criterio elegido para aceptar una localización; cumple una función diferente del umbral de puntuación."
+      },
+      {
+        "term": "AP y mAP",
+        "meaning": "AP resume la relación entre precisión y recall al recorrer puntuaciones con un criterio de coincidencia; mAP promedia AP según clases y el protocolo indicado. Siempre hay que declarar ese protocolo."
       }
     ],
     "explorer": "detection",
@@ -1873,6 +2407,11 @@ export const LESSON_GUIDES={
       "check": "Las tres pruebas dan TP/FP/FN = 1/0/0, 0/1/1 y 0/0/1. La cuenta usa una caja de referencia; el cuaderno de inferencia no calcula mAP.",
       "transfer": "Para aceptar una automatización de conteo, revisa objetos omitidos y duplicados además de la puntuación de las cajas conservadas.",
       "stretch": "Si ya programas: verifica que la función IoU devuelve 1 para cajas idénticas y 0 para cajas sin solapamiento."
+    },
+    "prerequisite": "Conservar una propuesta por puntuación solo decide qué sale del detector. Evaluarla exige compararla con objetos anotados y verificar clase y ubicación.",
+    "understanding": {
+      "question": "¿Por qué dos cajas para un solo objeto no deben contarse como dos aciertos?",
+      "answer": "El emparejamiento de evaluación asigna como máximo una detección al objeto de referencia. Una propuesta adicional sin otro objeto coincidente es un falso positivo; tampoco se borra una omisión por descartar una caja."
     }
   },
   "dl-integracion": {
@@ -1936,6 +2475,22 @@ export const LESSON_GUIDES={
       {
         "term": "Referencia",
         "meaning": "Alternativa sencilla con la que comparar."
+      },
+      {
+        "term": "Coste supuesto",
+        "meaning": "Valor elegido para comparar consecuencias en el ejemplo; no es un precio observado ni un parámetro aprendido."
+      },
+      {
+        "term": "Revisión humana",
+        "meaning": "Acción cuya capacidad y posibilidad de error deben declararse. El caso simplifica su eficacia para poder comparar políticas."
+      },
+      {
+        "term": "Latencia",
+        "meaning": "Tiempo entre recibir una entrada y producir una respuesta; puede limitar el uso aunque la métrica sea buena."
+      },
+      {
+        "term": "Seguimiento",
+        "meaning": "Comprobación del desempeño durante el uso ante cambios de datos, condiciones o costes."
       }
     ],
     "explorer": null,
@@ -1959,6 +2514,11 @@ export const LESSON_GUIDES={
       "check": "Con coste 8, el mínimo del caso es 6 a umbral 0,30. Con coste 1, las políticas cuestan 6, 5, 4, 4 y 10; 0,70 y 0,90 empatan. Los costes son ficticios.",
       "transfer": "Para priorizar inspecciones de productos, adapta el coste y la capacidad al proceso, mide errores de revisión y prueba la política antes de automatizar.",
       "stretch": "Si ya programas: genera la tabla para varios costes y capacidades, incluyendo siempre revisar todos como alternativa."
+    },
+    "prerequisite": "Una detección evaluada todavía debe convertirse en una acción útil. Ahora conectamos las salidas con revisión, capacidad y costes declarados.",
+    "understanding": {
+      "question": "¿La arquitectura más compleja produce necesariamente la mejor decisión operativa?",
+      "answer": "No. La elección depende de datos representativos, errores, coste, capacidad y tiempo de respuesta. La política elegida con validación debe comprobarse en una prueba separada y supervisarse cuando cambien las condiciones."
     }
   }
 };
