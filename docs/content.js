@@ -19,7 +19,7 @@ const LESSON_BASE=[
   {
     "id": "ml-problema",
     "title": "Primero la pregunta, después el modelo",
-    "concept": "Un modelo aprende una regla a partir de ejemplos. Antes de escoger un algoritmo, define qué quieres estimar, qué representa cada fila y qué información estará disponible al usarlo. Regresión estima una cantidad; clasificación asigna una categoría.",
+    "concept": "Durante el ajuste se usan entradas X y respuestas y conocidas. Durante una predicción nueva, el modelo recibe X y calcula una estimación de y. Para evaluarlo, separa ejemplos de prueba antes de ajustar; sus respuestas se consultan para medir error. Si la salida es una categoría se trata de clasificación; si es una cantidad se trata de regresión.",
     "notebooks": [
       "laboratorio-ml.ipynb"
     ],
@@ -38,7 +38,7 @@ const LESSON_BASE=[
   {
     "id": "ml-preparacion",
     "title": "Un registro vacío no es cero",
-    "concept": "Imputar significa completar un dato ausente con una estimación. Esa regla debe aprenderse con entrenamiento y aplicarse sin recalcularla a prueba. Un pipeline encadena preparación y modelo.",
+    "concept": "En un pipeline, la preparación y el modelo forman una secuencia. Primero se ajusta la preparación con entrenamiento; luego se transforman entrenamiento y prueba con esa misma regla. Imputar con la mediana es una opción, no una regla apropiada para toda ausencia: investiga por qué faltan datos y conserva su significado.",
     "notebooks": [
       "laboratorio-ml.ipynb"
     ],
@@ -50,14 +50,14 @@ const LESSON_BASE=[
         "De la respuesta de la finca de prueba."
       ],
       "answer": 1,
-      "feedback": "Usar datos de prueba para aprender la preparación introduce información reservada. La cifra de 600 mm es ilustrativa; el laboratorio calcula su propia mediana."
+      "feedback": "La mediana se aprende con las medidas conocidas de entrenamiento. La prueba conserva respuestas para comprobar el modelo y no participa en aprender esa regla."
     },
     "source": "https://scikit-learn.org/stable/common_pitfalls.html"
   },
   {
     "id": "ml-regresion",
     "title": "Una predicción también tiene error",
-    "concept": "La regresión relaciona entradas con una cantidad. El MAE promedia distancias absolutas entre predicción y respuesta conocida. Tiene las unidades del objetivo. Para juzgar una mejora, compara con una referencia sencilla sobre los mismos datos de prueba.",
+    "concept": "La recta usa y estimada = b + w × x. b es el intercepto y w la pendiente. El ajuste por mínimos cuadrados elige b y w para minimizar la suma de errores al cuadrado en entrenamiento. El MAE, en cambio, promedia errores absolutos. Ajustar con un criterio y evaluar con otro son operaciones que deben identificarse.",
     "notebooks": [
       "regresion.ipynb",
       "laboratorio-ml.ipynb"
@@ -77,7 +77,7 @@ const LESSON_BASE=[
   {
     "id": "ml-clasificacion",
     "title": "De una puntuación a una categoría",
-    "concept": "Clasificación aprende con categorías conocidas. Algunos modelos producen probabilidades o puntuaciones; una regla de decisión las transforma en clases. Una frontera divide el espacio de entradas según las decisiones del modelo.",
+    "concept": "La clase positiva es la categoría que interesa detectar; aquí, con plaga. Una decisión positiva es una alerta. Los modelos pueden producir probabilidades estimadas u otras puntuaciones; una salida entre 0 y 1 no garantiza que, entre cien casos puntuados con 0,80, ochenta sean positivos. Esa correspondencia se estudia mediante calibración.",
     "notebooks": [
       "clasificacion.ipynb"
     ],
@@ -89,14 +89,14 @@ const LESSON_BASE=[
         "Solo si el modelo tiene muchos árboles."
       ],
       "answer": 1,
-      "feedback": "La definición de la salida importa. El simulador usa probabilidad ilustrativa de plaga; el cuaderno de logística usa rendimiento alto."
+      "feedback": "En estas plantas, la puntuación se compara con un umbral para decidir alerta. No mide la proporción dañada de la planta."
     },
     "source": "https://scikit-learn.org/stable/modules/classification_threshold.html"
   },
   {
     "id": "ml-metricas",
     "title": "Diez plantas, cuatro resultados posibles",
-    "concept": "Una matriz cruza realidad y predicción. Precision mide qué proporción de alertas era correcta; recall, qué proporción de positivos detectamos; accuracy, qué proporción de casos acertamos. Sus consecuencias pueden ser diferentes.",
+    "concept": "TP = positivo real con alerta; FP = negativo real con alerta; FN = positivo real sin alerta; TN = negativo real sin alerta. Precision = TP/(TP+FP), recall = TP/(TP+FN), accuracy = (TP+TN)/(TP+FP+FN+TN). Si el denominador es cero, la proporción no está definida; no se interpreta como un porcentaje observado.",
     "notebooks": [
       "laboratorio-ml.ipynb"
     ],
@@ -115,7 +115,7 @@ const LESSON_BASE=[
   {
     "id": "ml-umbral",
     "title": "La decisión tiene un umbral",
-    "concept": "En este ejemplo activamos alerta si la puntuación es mayor o igual al umbral. Bajar el umbral puede detectar más positivos y generar más falsas alertas. Se elige con validación y con las consecuencias de cada error; no ajustándolo con la prueba final.",
+    "concept": "El umbral debe ajustarse con validación, dentro del entrenamiento, según el uso propuesto. Después se evalúa la regla elegida en una prueba separada. Si se elige el umbral mirando la prueba final, esa prueba deja de ser una comprobación independiente. Cambiar el umbral conserva el modelo y sus puntuaciones.",
     "notebooks": [
       "laboratorio-ml.ipynb"
     ],
@@ -134,7 +134,7 @@ const LESSON_BASE=[
   {
     "id": "ml-clustering",
     "title": "Parecidos no son categorías de calidad",
-    "concept": "Clustering busca grupos sin etiquetas de grupo conocidas. K-Means solicita k centros; Mean-Shift busca zonas densas; DBSCAN depende de cercanía y densidad. Los identificadores de grupo no indican bueno o malo.",
+    "concept": "K-Means solicita el número k de grupos y ajusta centros; Mean-Shift busca concentraciones de puntos según una escala de vecindad; DBSCAN conecta puntos densos dentro de un radio. En DBSCAN, un núcleo cumple el mínimo de vecinos, un borde puede quedar unido a un núcleo y el resto queda sin asignar. Sus etiquetas son identificadores de grupo.",
     "notebooks": [
       "clustering.ipynb",
       "laboratorio-ml.ipynb"
@@ -154,7 +154,7 @@ const LESSON_BASE=[
   {
     "id": "ml-pca",
     "title": "Resumir sin inventar clases",
-    "concept": "PCA combina variables en nuevas direcciones: la primera conserva la máxima varianza; las siguientes son ortogonales entre sí y capturan la variación restante. Reducir dimensiones conserva parte de esa variación y descarta otra. Los ejes nuevos no son necesariamente las variables originales ni medidas de exactitud.",
+    "concept": "El centrado resta la media; el escalado cambia la unidad o dispersión de cada variable. Son pasos diferentes. Si una variable tiene una escala mucho mayor, puede dominar la proyección. La varianza explicada de los componentes elegidos se compara con la varianza total de las variables preparadas; no mide qué tan bien se conserva toda propiedad útil para una tarea.",
     "notebooks": [
       "pca.ipynb"
     ],
@@ -173,7 +173,7 @@ const LESSON_BASE=[
   {
     "id": "ml-ensambles",
     "title": "Varias respuestas, una comparación justa",
-    "concept": "Un ensamble combina modelos. Bagging ajusta modelos con muestras de filas tomadas con reemplazo y agrega sus predicciones. Boosting añade modelos en secuencia para reducir la pérdida del conjunto. Stacking aprende a combinar predicciones hechas fuera de la muestra usada para ajustar cada modelo base, dentro del entrenamiento. Combinar no garantiza mejorar: hay que evaluar.",
+    "concept": "Bagging ajusta modelos con muestras de entrenamiento tomadas con reemplazo y agrega sus predicciones. Boosting añade modelos en secuencia para reducir una pérdida conjunta. Stacking ajusta un combinador con predicciones de modelos base obtenidas sin usar para su ajuste la respuesta de esa misma fila. Elegir un modelo requiere validación y evaluar después la elección en una prueba final reservada.",
     "notebooks": [
       "laboratorio-ml.ipynb"
     ],
@@ -192,7 +192,7 @@ const LESSON_BASE=[
   {
     "id": "ml-series",
     "title": "El futuro va después",
-    "concept": "Una serie está ordenada por tiempo. Tendencia es cambio de largo plazo; estacionalidad es un patrón periódico; horizonte es cuánto adelante pronosticamos. Para evaluar el futuro, respetamos el orden temporal.",
+    "concept": "Tendencia es un cambio sostenido del nivel de una serie; estacionalidad es un patrón que se repite con un periodo. Al evaluar, la preparación también debe aprenderse solo con fechas anteriores al corte. Para comprobar estabilidad, se pueden usar varios cortes históricos, siempre entrenando antes de cada ventana de evaluación.",
     "notebooks": [
       "laboratorio-ml.ipynb"
     ],
@@ -211,26 +211,26 @@ const LESSON_BASE=[
   {
     "id": "ml-refuerzo",
     "title": "Aprender de las consecuencias",
-    "concept": "En refuerzo, un agente interactúa con un entorno. Estado es la situación actual; acción, una elección; recompensa, la señal recibida; política, la forma de elegir. Explorar reúne experiencia y aprovechar elige según lo aprendido.",
+    "concept": "Q-learning mantiene valores Q(estado, acción) que estiman recompensa futura descontada. La experiencia actualiza esos valores y permite elegir una acción según lo aprendido. Explorar consiste en probar alternativas; aprovechar consiste en elegir según los valores actuales. La recompensa acumulada de una ruta y el valor Q de una acción son cantidades diferentes.",
     "notebooks": [
       "refuerzo.ipynb"
     ],
     "quiz": {
-      "q": "¿El simulador manual de esta web entrena automáticamente Q-learning?",
+      "q": "¿Qué describe una política en aprendizaje por refuerzo?",
       "choices": [
-        "Sí.",
-        "No: permite entender el entorno y las recompensas.",
-        "Solo al llegar a meta."
+        "La regla para elegir una acción a partir del estado.",
+        "La suma de todas las medidas del conjunto.",
+        "El nombre de la casilla de meta."
       ],
-      "answer": 1,
-      "feedback": "El entrenamiento ocurre en el cuaderno. Aquí exploramos las decisiones que ese aprendizaje debe evaluar."
+      "answer": 0,
+      "feedback": "Una política indica cómo actuar en cada estado. Las recompensas obtenidas permiten evaluar y mejorar esa forma de elegir."
     },
     "source": "https://gymnasium.farama.org/introduction/basic_usage/"
   },
   {
     "id": "ml-integracion",
     "title": "Explicar el resultado antes de usarlo",
-    "concept": "Entender un modelo implica explicar qué pregunta responde, con qué datos aprendió, cómo se comprobó y qué queda fuera de la conclusión. Un número aislado o un gráfico atractivo no sustituye ese recorrido.",
+    "concept": "La referencia establece qué ofrece una regla sencilla; la propuesta se compara sobre los mismos casos. Si se prueban muchas configuraciones, se eligen con validación y se conserva una prueba para evaluar la elección. Para usar el resultado en otra temporada o proceso, se comprueba con datos representativos de ese uso.",
     "notebooks": [
       "laboratorio-ml.ipynb"
     ],
@@ -249,7 +249,7 @@ const LESSON_BASE=[
   {
     "id": "dl-redes",
     "title": "Una red transforma entradas",
-    "concept": "Una red combina entradas con pesos, aplica transformaciones y produce una salida. Los pesos son parámetros aprendidos; una capa oculta construye una representación intermedia. Más capas no equivalen automáticamente a más calidad.",
+    "concept": "Una capa transforma un conjunto de entradas; las capas ocultas producen representaciones intermedias y la capa de salida responde a la tarea. Pesos y sesgos son parámetros. El cálculo de salida usa sus valores actuales; el entrenamiento los modifica según una pérdida. Añadir capas aumenta posibilidades de representación, pero no garantiza menor error con casos nuevos.",
     "notebooks": [
       "laboratorio-dl.ipynb"
     ],
@@ -268,7 +268,7 @@ const LESSON_BASE=[
   {
     "id": "dl-activaciones",
     "title": "La activación cambia la respuesta",
-    "concept": "Una activación transforma la señal de una neurona. ReLU deja en cero las negativas; sigmoid produce valores entre 0 y 1; tanh entre −1 y 1. La interpretación depende del lugar de la función y de la tarea.",
+    "concept": "ReLU(z) = máximo(0,z); sigmoid(z) = 1/(1+exp(−z)); tanh(z) = (exp(z)−exp(−z))/(exp(z)+exp(−z)). exp(z) es la función exponencial. Para entradas finitas, sigmoid queda estrictamente entre 0 y 1 y tanh entre −1 y 1. El redondeo puede ocultar diferencias pequeñas.",
     "notebooks": [
       "laboratorio-dl.ipynb"
     ],
@@ -287,7 +287,7 @@ const LESSON_BASE=[
   {
     "id": "dl-entrenamiento",
     "title": "El error guía los ajustes",
-    "concept": "La pérdida mide desacuerdo según la tarea. Retropropagación calcula cómo afecta cada parámetro a esa pérdida; el optimizador aplica ajustes. La tasa de aprendizaje controla su tamaño. Bajar pérdida de entrenamiento no prueba generalización.",
+    "concept": "Una época recorre una vez los ejemplos de entrenamiento. En cada actualización se calcula la salida, se obtiene una pérdida, se calculan sus gradientes y se aplica el optimizador. La curva de entrenamiento describe ese proceso; las métricas en validación o prueba describen cómo funciona con ejemplos que no participaron en el ajuste de parámetros.",
     "notebooks": [
       "laboratorio-dl.ipynb"
     ],
@@ -306,7 +306,7 @@ const LESSON_BASE=[
   {
     "id": "dl-vision",
     "title": "Tres preguntas distintas para una imagen",
-    "concept": "Clasificar responde qué categoría corresponde a una imagen o recorte. Detectar añade dónde hay objetos mediante cajas. Segmentar asigna píxeles a objetos o categorías. La salida necesaria determina la tarea y las etiquetas.",
+    "concept": "La segmentación semántica asigna una categoría a cada píxel; la segmentación de instancias distingue además objetos individuales de una misma categoría. Una caja es un rectángulo e incluye normalmente parte del fondo; una máscara describe una región de píxeles. La escena de este tema dibuja las salidas para compararlas; el cuaderno ejecuta detección con cajas.",
     "notebooks": [
       "yolo-registro.ipynb"
     ],
@@ -325,7 +325,7 @@ const LESSON_BASE=[
   {
     "id": "dl-cnn",
     "title": "Aprender patrones locales de píxeles",
-    "concept": "Una convolución aplica un filtro a regiones locales y crea un mapa de respuestas. Una CNN aprende filtros durante entrenamiento; no recibe reglas escritas para cada borde. Los mapas posteriores pueden combinar patrones más complejos.",
+    "concept": "En una capa CNN, la operación habitual multiplica cada ventana por los pesos del filtro sin invertirlo, técnicamente una correlación cruzada. Reutiliza los mismos pesos en cada posición. El paso indica cuánto se desplaza la ventana y el relleno añade valores alrededor de la entrada; ambos cambian el tamaño del mapa. Aquí el paso es 1 y no hay relleno.",
     "notebooks": [
       "laboratorio-dl.ipynb"
     ],
@@ -344,7 +344,7 @@ const LESSON_BASE=[
   {
     "id": "dl-transferencia",
     "title": "Reutilizar lo aprendido",
-    "concept": "Un modelo preentrenado ya ajustó parámetros con otro conjunto de datos. Inferencia usa esos pesos para predecir; fine-tuning actualiza parte o todos con nuevos ejemplos. Reutilizar pesos no garantiza conocer una categoría nueva.",
+    "concept": "Se puede conservar un extractor preentrenado y aprender una nueva salida, o ajustar parte de sus parámetros con ejemplos nuevos. Traducir modelo.names cambia textos, no los parámetros. Antes de adaptar se definen categorías, ejemplos etiquetados y una prueba separada; el cuaderno YOLO de este tema solo carga pesos y ejecuta inferencia.",
     "notebooks": [
       "yolo-registro.ipynb"
     ],
@@ -363,64 +363,64 @@ const LESSON_BASE=[
   {
     "id": "dl-secuencias",
     "title": "El orden puede cambiar el significado",
-    "concept": "Una secuencia tiene elementos cuyo orden puede importar. Un token es una unidad de representación; una posición informa dónde está. Contar los mismos elementos puede perder relaciones importantes.",
+    "concept": "Una RNN actualiza su estado con los parámetros actuales en cada paso; durante el entrenamiento se ajustan esos parámetros con secuencias. LSTM añade mecanismos que controlan qué información se mantiene o actualiza. El promedio de una lista no cambia al reordenarla, pero una regla recurrente puede producir estados finales diferentes.",
     "notebooks": [
       "laboratorio-dl.ipynb"
     ],
     "quiz": {
-      "q": "¿Una bolsa de palabras siempre conserva el orden de una frase?",
+      "q": "Con la regla del ejemplo, ¿qué ocurre al invertir 10 → 20 → 30?",
       "choices": [
-        "No: suele resumir presencia o frecuencia.",
-        "Sí, por definición.",
-        "Solo si todas las palabras son distintas."
+        "Cambia el estado final, aunque el promedio sigue en 20.",
+        "El estado final siempre permanece igual.",
+        "El promedio pasa de 20 a 30."
       ],
       "answer": 0,
-      "feedback": "Para tareas dependientes del orden hay que representarlo de alguna forma."
+      "feedback": "La regla combina estado anterior y entrada actual: produce 21,25 en un orden y 13,75 en el inverso. El promedio de los mismos tres valores es 20."
     },
     "source": "https://arxiv.org/abs/1706.03762"
   },
   {
     "id": "dl-atencion",
     "title": "Relacionar elementos con contexto",
-    "concept": "Atención calcula cuánto contribuyen ciertas representaciones a otra. Sus pesos permiten combinar señales según el contexto del modelo. Una visualización de atención no prueba qué causó una decisión ni constituye comprensión humana.",
+    "concept": "En la atención escalada, las puntuaciones son Q·K divididas por la raíz cuadrada del número de componentes de cada clave. Softmax convierte esas puntuaciones en pesos y la salida es su suma ponderada de V. En una red, Q, K y V suelen obtenerse mediante transformaciones aprendidas. Un peso de atención describe una contribución interna, no una causa demostrada de la decisión final.",
     "notebooks": [
       "laboratorio-dl.ipynb"
     ],
     "quiz": {
-      "q": "¿Los pesos de atención demuestran causalidad?",
+      "q": "¿Qué se hace con los pesos obtenidos mediante softmax?",
       "choices": [
-        "Sí, siempre.",
-        "No: muestran una combinación interna, no una causa probada.",
-        "Solo si suman uno."
+        "Se suman a las etiquetas esperadas.",
+        "Se multiplican por los valores V y se suman sus contribuciones.",
+        "Se sustituyen por las posiciones de entrada."
       ],
       "answer": 1,
-      "feedback": "Una suma normalizada no convierte la relación en causal. La interpretación debe apoyarse en más evidencia."
+      "feedback": "La salida de atención es una suma ponderada de V. En el caso, 0,6698 × 10 + 0,3302 × 20 ≈ 13,302; se usan los pesos sin redondear."
     },
     "source": "https://arxiv.org/abs/1706.03762"
   },
   {
     "id": "dl-transformers",
     "title": "Atención más información de orden",
-    "concept": "Un transformer combina atención con otras transformaciones para construir representaciones. La información de posición permite distinguir órdenes. La arquitectura es una herramienta; su resultado depende de datos, entrenamiento y tarea.",
+    "concept": "El encoder es el bloque que transforma la secuencia mediante atención y otras capas. En este cuaderno se añade un vector de posición y después se conserva cada posición al aplanar la salida para clasificar. La regla de etiquetas y el formato de las entradas deben mantenerse al crear casos nuevos. La exactitud se calcula comparando las predicciones con esas etiquetas.",
     "notebooks": [
       "laboratorio-dl.ipynb"
     ],
     "quiz": {
-      "q": "¿Un transformer pequeño de secuencias sintéticas ya valida una aplicación real?",
+      "q": "Para la secuencia [3,1,7,2], ¿cuál es la etiqueta si la regla es primero > último?",
       "choices": [
-        "Sí, basta con usar atención.",
-        "No: habría que evaluar esa aplicación con sus datos.",
-        "Solo si la pérdida llega a cero."
+        "0, porque aparece un 1.",
+        "1, porque 3 es mayor que 2.",
+        "7, porque es el número máximo."
       ],
       "answer": 1,
-      "feedback": "La arquitectura no reemplaza datos representativos ni evaluación del uso final."
+      "feedback": "La regla compara posiciones: primero 3 y último 2. La etiqueta esperada es 1; después se comprueba si la red predijo esa etiqueta."
     },
     "source": "https://arxiv.org/abs/1706.03762"
   },
   {
     "id": "dl-yolo",
     "title": "De una foto a un registro",
-    "concept": "Un detector devuelve categoría, puntuación y caja por detección. Filtrar por puntuación cambia qué registros conservamos. Un conteo de detecciones no equivale automáticamente al número real de objetos presentes.",
+    "concept": "Una detección se conserva si cumple las reglas de salida del detector y del filtro aplicado. Coordenadas, categoría y puntuación permiten rastrear qué imagen produjo cada fila. Una misma escena puede producir omisiones o detecciones duplicadas, y un objeto de una categoría ausente del modelo puede no reconocerse. Por eso los conteos automáticos se revisan antes de usarse como inventario.",
     "notebooks": [
       "yolo-registro.ipynb"
     ],
@@ -439,61 +439,226 @@ const LESSON_BASE=[
   {
     "id": "dl-evaluacion",
     "title": "Una imagen marcada no prueba calidad",
-    "concept": "Para evaluar necesitamos respuestas conocidas y un criterio apropiado. En detección importan localización y categoría; una puntuación interna no es una medida directa de aciertos. Otra cámara, iluminación o finca puede cambiar resultados.",
+    "concept": "Primero se filtran propuestas por puntuación y después se relacionan con objetos de referencia de la misma categoría mediante IoU. Aquí hay un solo objeto y una sola propuesta. Para muchos objetos se necesita una regla de correspondencia que evite contar un objeto varias veces. mAP resume curvas de precision y recall en una evaluación con anotaciones; no es la puntuación de una caja.",
     "notebooks": [
       "yolo-registro.ipynb",
       "laboratorio-dl.ipynb"
     ],
     "quiz": {
-      "q": "¿Puntuación 0,90 garantiza 90 % de aciertos de esa detección?",
+      "q": "Con IoU mínima 0,50, puntuación 0,80 conservada e IoU 0,143, ¿qué cuenta el caso de un objeto?",
       "choices": [
-        "Sí.",
-        "No: hace falta evaluar y conocer su calibración.",
-        "Solo si supera el umbral."
+        "Un verdadero positivo.",
+        "Un falso positivo y un objeto omitido.",
+        "Ningún error, porque la puntuación es alta."
       ],
       "answer": 1,
-      "feedback": "El umbral filtra puntuaciones. Medir aciertos requiere comparar con la realidad etiquetada."
+      "feedback": "La propuesta se conserva por puntuación, pero no coincide suficientemente con la caja de referencia: suma FP = 1 y FN = 1."
     },
     "source": "https://docs.ultralytics.com/modes/val/"
   },
   {
     "id": "dl-integracion",
     "title": "Del modelo a una decisión responsable",
-    "concept": "Una salida del modelo y una acción operativa son pasos diferentes. La decisión considera los errores, sus consecuencias y la posibilidad de revisión humana. Un experimento didáctico no demuestra impacto económico real.",
+    "concept": "Para el caso se supone que una revisión detecta todo defecto y que revisar cuesta lo mismo para cada grano. Estos supuestos permiten comprobar la cuenta. Una operación real también necesita medir errores de revisión, capacidad por turno y consecuencias. Cambiar los costes conservando los casos permite estudiar cómo cambia la política preferida.",
     "notebooks": [
       "laboratorio-dl.ipynb"
     ],
     "quiz": {
-      "q": "¿Qué debemos conservar al presentar un resultado?",
+      "q": "¿Qué coste tiene revisar cuatro granos y aceptar un defecto si revisar cuesta 1 y aceptar un defecto cuesta 8?",
       "choices": [
-        "Solo la imagen más llamativa.",
-        "La pregunta, los datos, la comparación y sus límites.",
-        "Solo el nombre del modelo."
+        "4 unidades.",
+        "8 unidades.",
+        "12 unidades."
       ],
-      "answer": 1,
-      "feedback": "El recorrido permite valorar qué respalda la evidencia y qué aún requiere comprobación."
+      "answer": 2,
+      "feedback": "Coste = 4 × 1 + 1 × 8 = 12. La comparación de políticas conserva los casos y aplica la misma fórmula."
     },
     "source": "https://scikit-learn.org/stable/common_pitfalls.html"
   }
 ];
 export const LESSONS=LESSON_BASE.map(lesson=>{const guide=LESSON_GUIDES[lesson.id];return {...lesson,guide,summary:guide.objective,example:guide.case.context+' '+guide.case.conclusion,steps:guide.case.reasoning,sim:guide.explorer};});
-export const GLOSSARY=[['Observación','Un caso: por ejemplo, una finca en una temporada. Debemos mantener claro qué representa cada fila.'],['Variable','Una característica registrada, como lluvia en mm o temperatura en °C.'],['Entradas X','La información que recibe el modelo al hacer una predicción.'],['Respuesta y','La cantidad o categoría conocida con la que aprendemos y evaluamos.'],['Datos simulados','Valores inventados para aprender un procedimiento. Sus resultados no validan un uso real.'],['Entrenamiento','Datos con los que se aprenden parámetros y preparación.'],['Validación','Datos o particiones para elegir configuraciones dentro del proceso de desarrollo.'],['Prueba','Datos reservados para comprobar la solución elegida.'],['Imputación','Completar un dato ausente con una estimación; ausencia no equivale a cero.'],['Pipeline','Una secuencia que encadena preparación y modelo, aprendida con entrenamiento.'],['MAE','Promedio de los errores absolutos. Usa las unidades de la respuesta.'],['Umbral','Regla que convierte una puntuación en una decisión.'],['Precision','Proporción de alertas que corresponden a positivos reales.'],['Recall','Proporción de positivos reales que fueron detectados.'],['Componente PCA','Combinación de variables en una dirección de máxima varianza restante, ortogonal a las anteriores.'],['Peso','Parámetro que determina cuánto contribuye una entrada o representación.'],['Pérdida','Criterio numérico de desacuerdo que guía el aprendizaje.'],['Inferencia','Usar un modelo aprendido para producir predicciones.'],['Caja de detección','Rectángulo que localiza aproximadamente un objeto detectado.'],['Atención','Combinación de representaciones con pesos dependientes del contexto del modelo.']];
-GLOSSARY.push(
- ['Regresión','Una tarea que estima una cantidad, como toneladas por hectárea. Su resultado conserva las unidades de la respuesta.'],
- ['Clasificación','Una tarea que asigna categorías definidas usando ejemplos con categorías conocidas.'],
- ['Ensamble','Combinación de varios modelos para producir una salida; debe comprobarse con los mismos datos y criterio de comparación.'],
- ['Sesgo de una neurona','Número que se añade a la suma de entradas multiplicadas por sus pesos.'],
- ['Activación','Función que transforma la señal de una neurona. ReLU conserva valores positivos y devuelve cero para los negativos.'],
- ['Convolución','Aplicación de un mismo filtro a regiones locales de una entrada para producir un mapa de respuestas.'],
- ['Filtro','Conjunto de pesos aplicado a una región. Un filtro fijado para explicar una cuenta no equivale a filtros aprendidos mediante entrenamiento.'],
- ['Estado recurrente','Representación que se actualiza combinando el estado anterior con una nueva entrada; puede conservar información del orden.'],
- ['Token','Unidad de una secuencia representada mediante números. Puede corresponder a una palabra, parte de una palabra u otro elemento según la tarea.'],
- ['Información de posición','Representación de dónde está un elemento dentro de una secuencia, necesaria cuando la tarea depende del orden.'],
- ['Consulta, clave y valor','En atención, la consulta se compara con claves para calcular pesos; esos pesos combinan los valores asociados.'],
- ['Softmax','Transformación de puntuaciones en pesos no negativos que suman uno. Por sí sola no demuestra que estén calibrados como probabilidades.'],
- ['IoU','Área de intersección dividida por el área de unión de dos regiones. En cajas permite medir coincidencia de ubicación, no exactitud general.'],
- ['Modelo preentrenado','Modelo cuyos parámetros ya se ajustaron con otros datos. Usarlo para inferencia no los actualiza; adaptarlo requiere un procedimiento de ajuste.']
-);
+export const GLOSSARY=[
+  [
+    "Machine Learning",
+    "Aprendizaje automático: métodos que ajustan reglas con datos para tareas como predecir, clasificar o agrupar."
+  ],
+  [
+    "Deep Learning",
+    "Aprendizaje profundo: métodos que aprenden representaciones mediante redes neuronales con varias capas de transformaciones."
+  ],
+  [
+    "Observación",
+    "Un caso registrado, por ejemplo una finca en una temporada. En una tabla suele corresponder a una fila."
+  ],
+  [
+    "Variable",
+    "Una característica de los casos, como lluvia en mm o temperatura en °C. En una tabla suele corresponder a una columna."
+  ],
+  [
+    "Entradas X",
+    "Variables que el modelo recibe para calcular una salida. Deben estar disponibles al usarlo."
+  ],
+  [
+    "Respuesta y",
+    "Cantidad o categoría que se busca predecir. En aprendizaje supervisado se conoce para entrenar y comprobar ejemplos."
+  ],
+  [
+    "Predicción",
+    "Salida calculada por un modelo para unas entradas; se compara con una respuesta conocida para evaluar el error."
+  ],
+  [
+    "Datos simulados",
+    "Valores generados para practicar un procedimiento; se distinguen de mediciones de una operación real."
+  ],
+  [
+    "Entrenamiento",
+    "Proceso que ajusta parámetros o reglas con ejemplos de entrenamiento."
+  ],
+  [
+    "Conjunto de entrenamiento",
+    "Ejemplos utilizados para aprender la preparación y los parámetros del modelo."
+  ],
+  [
+    "Validación",
+    "Ejemplos o particiones usados para elegir configuraciones, como una tasa o un umbral, dentro del desarrollo."
+  ],
+  [
+    "Prueba",
+    "Ejemplos reservados para evaluar la solución elegida. Sus respuestas no se usan para ajustar parámetros ni elegir configuraciones."
+  ],
+  [
+    "Imputación",
+    "Completar un valor ausente con una estimación, conservando que la medición original falta."
+  ],
+  [
+    "Mediana",
+    "Valor central de una lista ordenada; si hay una cantidad par de valores, media de los dos centrales."
+  ],
+  [
+    "Pipeline",
+    "Secuencia que conecta preparación y modelo. Cada paso que aprende una regla se ajusta con entrenamiento y se reutiliza al predecir."
+  ],
+  [
+    "MAE",
+    "Error absoluto medio: promedio de |observado − predicho|. Se expresa en las unidades de la respuesta."
+  ],
+  [
+    "RMSE",
+    "Raíz del promedio de los errores al cuadrado. Se expresa en las unidades de la respuesta y penaliza más los errores grandes."
+  ],
+  [
+    "Umbral",
+    "Valor límite de una regla de decisión; en los ejercicios se activa alerta si puntuación ≥ umbral."
+  ],
+  [
+    "Precision",
+    "Detecciones positivas correctas divididas entre todas las alertas: TP/(TP+FP). Si no hay alertas, ese cociente no está definido."
+  ],
+  [
+    "Recall",
+    "Positivos reales detectados divididos entre todos los positivos reales: TP/(TP+FN)."
+  ],
+  [
+    "Accuracy",
+    "Aciertos totales divididos entre todos los casos: (TP+TN)/(TP+FP+FN+TN)."
+  ],
+  [
+    "Componente PCA",
+    "Nueva dirección, perpendicular a las anteriores, que conserva la máxima variación restante de las variables centradas."
+  ],
+  [
+    "Peso",
+    "Parámetro que multiplica una entrada o representación antes de combinarla con otras."
+  ],
+  [
+    "Pérdida",
+    "Función numérica que mide desacuerdo y sirve de objetivo al ajustar parámetros."
+  ],
+  [
+    "Gradiente",
+    "Conjunto de derivadas que indica cómo cambia una función al variar cada parámetro. Para un parámetro es su pendiente."
+  ],
+  [
+    "Tasa de aprendizaje",
+    "Factor que multiplica el gradiente en una actualización; con el mismo gradiente, una tasa mayor produce un cambio mayor."
+  ],
+  [
+    "Inferencia",
+    "Cálculo de predicciones con un modelo, manteniendo sus parámetros sin actualizar."
+  ],
+  [
+    "Caja de detección",
+    "Rectángulo que propone la ubicación de un objeto; sus coordenadas y categoría forman parte de una detección."
+  ],
+  [
+    "Atención",
+    "Cálculo que compara una consulta con claves, obtiene pesos y combina los valores asociados mediante esos pesos."
+  ],
+  [
+    "Regresión",
+    "Tarea que estima una cantidad, como toneladas por hectárea o minutos por solicitud."
+  ],
+  [
+    "Clasificación",
+    "Tarea que asigna categorías definidas, aprendiendo con ejemplos de categoría conocida."
+  ],
+  [
+    "Ensamble",
+    "Combinación de predicciones de varios modelos para producir una salida. Su mejora se comprueba con una comparación común."
+  ],
+  [
+    "Sesgo de una neurona",
+    "Parámetro que se añade a la suma de entradas multiplicadas por sus pesos."
+  ],
+  [
+    "Activación",
+    "Función aplicada a la señal de una neurona. ReLU devuelve cero para entradas negativas y conserva las no negativas."
+  ],
+  [
+    "Convolución",
+    "En una CNN, operación que desplaza un filtro por la entrada y obtiene una suma de productos en cada ventana."
+  ],
+  [
+    "Filtro",
+    "Tabla de pesos aplicada a cada ventana para calcular una respuesta local. Puede estar fijada para un ejercicio o aprendida en una red."
+  ],
+  [
+    "Estado recurrente",
+    "Resumen que se actualiza usando el estado del paso anterior y la entrada actual."
+  ],
+  [
+    "Token",
+    "Unidad de una secuencia representada mediante números. Puede ser una palabra, parte de una palabra u otro elemento según la tarea."
+  ],
+  [
+    "Información de posición",
+    "Representación del lugar de un elemento en la secuencia, usada para distinguir órdenes."
+  ],
+  [
+    "Consulta, clave y valor",
+    "Q se compara con K para calcular puntuaciones y pesos; los pesos se aplican a V para obtener la combinación."
+  ],
+  [
+    "Softmax",
+    "Función que divide la exponencial de cada puntuación por la suma de todas las exponenciales: obtiene pesos positivos que suman 1."
+  ],
+  [
+    "IoU",
+    "Área de intersección / área de unión de dos cajas. Sin solapamiento vale 0; si coinciden por completo vale 1. No tiene unidades."
+  ],
+  [
+    "Modelo preentrenado",
+    "Modelo cuyos parámetros se ajustaron previamente. Puede reutilizarse para inferencia o servir de punto de partida para otro entrenamiento."
+  ],
+  [
+    "Política",
+    "Regla para elegir acciones a partir de un estado o una puntuación. En refuerzo se aprende mediante experiencia; en las alertas puede fijarse con un umbral."
+  ],
+  [
+    "Calibración",
+    "Correspondencia entre probabilidades predichas y frecuencias observadas: entre casos con probabilidad 0,80 se espera alrededor de 80 % de positivos si están bien calibradas."
+  ]
+];
 export function findLesson(id){return LESSONS.find(l=>l.id===id)}
 export function classOf(id){const c=COURSES[id.split('-')[0]];return c?.classes.find(cl=>cl.topics.includes(id))}
 export const NOTEBOOKS={

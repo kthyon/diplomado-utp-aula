@@ -2,10 +2,10 @@ export const LESSON_GUIDES={
   "ml-problema": {
     "objective": "Diseñar una primera predicción útil para planear una operación.",
     "relevance": "Una cooperativa necesita anticipar producción para organizar transporte antes de cosechar.",
-    "concept": "En aprendizaje supervisado, ajustamos una regla usando ejemplos con entradas y una respuesta conocida. Para predecir un caso nuevo, usamos sus entradas sin mirar todavía su respuesta reservada. Cuando buscamos una cantidad, como toneladas por hectárea, llamamos regresión a esa tarea.",
+    "concept": "Machine Learning o aprendizaje automático obtiene reglas a partir de datos para tareas como predecir cantidades o asignar categorías. En aprendizaje supervisado, cada ejemplo de entrenamiento incluye entradas y una respuesta conocida. El modelo ajusta su regla con esos ejemplos y después calcula respuestas para otros casos usando solo sus entradas. Si la respuesta buscada es una cantidad, como rendimiento en toneladas por hectárea (t/ha), la tarea se llama regresión.",
     "case": {
       "title": "Anticipar un lote reservado",
-      "context": "Datos inventados del mismo periodo. Las primeras cuatro filas sirven para aprender; el rendimiento de B se reserva hasta comprobar la predicción.",
+      "context": "Caso resuelto con datos inventados del mismo periodo: lluvia en milímetros (mm) y rendimiento en toneladas por hectárea (t/ha). Las primeras cuatro filas sirven para ajustar la regla. B quedó fuera de ese ajuste; aquí mostramos su respuesta conocida para comprobar el resultado.",
       "columns": [
         "Uso",
         "Lluvia (mm)",
@@ -33,7 +33,7 @@ export const LESSON_GUIDES={
           "3,50"
         ],
         [
-          "Reservado B",
+          "Prueba B: respuesta revelada",
           "550",
           "3,10"
         ]
@@ -43,16 +43,21 @@ export const LESSON_GUIDES={
         "El patrón histórico suma 0,50 t/ha por cada 100 mm: para 550 mm predice 2,75 t/ha.",
         "Al revelar B, comparamos 3,10 con 2,75: el error absoluto es 0,35 t/ha. Predecir no es adivinar exactamente."
       ],
-      "conclusion": "Hicimos una predicción comprobable; la relación inventada no prueba que añadir lluvia cause ese aumento."
+      "conclusion": "Para B estimamos 2,75 t/ha y observamos 3,10 t/ha: el error es 0,35 t/ha. Si B tiene 10 ha, la estimación total sería 27,5 toneladas y la producción observada 31: una diferencia de 3,5 toneladas para revisar al planear transporte. Esta relación inventada no demuestra que aumentar lluvia cause ese aumento.",
+      "question": "¿Qué rendimiento estimamos para B si conocemos 550 mm de lluvia y qué error obtenemos al comprobarlo?"
     },
     "vocabulary": [
       {
         "term": "Entrada",
-        "meaning": "Información disponible al predecir."
+        "meaning": "Información disponible cuando calculas la predicción; aquí, lluvia en mm."
       },
       {
         "term": "Respuesta",
-        "meaning": "Cantidad o categoría que queremos conocer."
+        "meaning": "Cantidad o categoría buscada; aquí, rendimiento en t/ha."
+      },
+      {
+        "term": "Caso reservado",
+        "meaning": "Ejemplo que queda fuera del ajuste y se usa después para comprobar la predicción."
       }
     ],
     "lab": {
@@ -60,10 +65,10 @@ export const LESSON_GUIDES={
       "objective": "Construir: ficha de una predicción.",
       "instruction": "Avanza por datos, patrón, predicción y comparación. Selecciona el lote B antes de revelar su rendimiento.",
       "watch": "Separa el valor predicho del reservado; solo el último permite calcular el error.",
-      "expected": "B: 2,75 predicho, 3,10 observado y 0,35 t/ha de error. Este conjunto difiere del notebook.",
-      "notebookGuide": "En Laboratorio ML explicado, empieza en 1.1: identifica las tres entradas y la respuesta de cada fila. Es otro conjunto de 240 fincas; compara el papel de los datos, no los números de este mini-caso."
+      "expected": "Para B: predicción 2,75 t/ha, observado 3,10 t/ha y error absoluto 0,35 t/ha.",
+      "notebookGuide": "En Laboratorio ML explicado, sección 1.1, trabaja con la tabla de 240 fincas simuladas: lluvia, temperatura y fertilizante son las tres entradas; rendimiento es la respuesta. Las siguientes secciones separan las fincas de entrenamiento y de prueba."
     },
-    "takeaway": "Primero definimos pregunta, entradas y respuesta; después escogemos un modelo y comprobamos su predicción.",
+    "takeaway": "Define la unidad de cada fila, las entradas disponibles al decidir y la respuesta que quieres estimar. Comprueba las predicciones con casos que quedaron fuera del ajuste.",
     "next": "Antes de aprender, revisemos qué hacer cuando falta una entrada.",
     "explorer": "problem",
     "build": {
@@ -81,7 +86,7 @@ export const LESSON_GUIDES={
   "ml-preparacion": {
     "objective": "Preparar una tabla con datos ausentes sin contaminar la prueba.",
     "relevance": "Si falla una estación, escribir cero confundiría ausencia de medida con ausencia de lluvia.",
-    "concept": "Preparar datos significa revisar qué representa cada registro antes de aprender con él. Una ausencia puede completarse mediante una regla calculada con los datos de entrenamiento. La regla se conserva al aplicarla a otros casos; completar no recupera una medición perdida.",
+    "concept": "Preparar datos consiste en revisar registros, unidades y valores ausentes antes de ajustar un modelo. Imputar es completar una ausencia con una estimación; aquí usamos la mediana, el valor central de las medidas ordenadas. Calculamos esa regla con entrenamiento y la aplicamos a los demás casos sin volver a calcularla con la prueba. Conservamos una marca que permita distinguir valores medidos de estimados.",
     "case": {
       "title": "La estación B no registró lluvia",
       "context": "Cuatro fincas de entrenamiento y lluvia inventada del mismo periodo. B tiene una ausencia, no una medida de cero.",
@@ -117,7 +122,8 @@ export const LESSON_GUIDES={
         "El valor central es 600 mm. Usamos esa mediana para completar B y conservamos la marca de estimación.",
         "Si faltara lluvia en prueba, aplicaríamos esos 600 mm, sin recalcular usando la prueba."
       ],
-      "conclusion": "La fila queda utilizable mediante una regla explícita; seguimos sin saber cuánto llovió realmente en B."
+      "conclusion": "La fila queda utilizable mediante una regla explícita; seguimos sin saber cuánto llovió realmente en B.",
+      "question": "¿Con qué valor completamos la lluvia de B sin confundir ausencia de registro con cero lluvia?"
     },
     "vocabulary": [
       {
@@ -141,7 +147,7 @@ export const LESSON_GUIDES={
       "expected": "100, 600, 700 mantiene mediana 600. B no cambia; una media sí habría cambiado.",
       "notebookGuide": "En Laboratorio ML explicado, sigue 1.2 y 1.3: identifica las ausencias y separa entrenamiento/prueba antes de aprender la preparación. Explica de dónde sale la regla que después se aplica a la prueba."
     },
-    "takeaway": "Imputar no recupera una medición; la regla se aprende sin utilizar la prueba.",
+    "takeaway": "Aprende la regla de preparación con entrenamiento, aplícala a los otros conjuntos y conserva la diferencia entre una medición y una estimación.",
     "next": "Con entradas preparadas, calcularemos una predicción y su error.",
     "explorer": "impute",
     "build": {
@@ -159,10 +165,10 @@ export const LESSON_GUIDES={
   "ml-regresion": {
     "objective": "Construir una comparación de estimaciones con errores en unidades útiles.",
     "relevance": "Estimar cosechas ayuda a planificar; necesitamos saber cuánto puede equivocarse la estimación.",
-    "concept": "Una regresión produce una cantidad a partir de sus entradas. Una recta combina un valor inicial con un cambio por cada unidad de entrada. Para comprobarla, medimos la distancia entre cada predicción y su respuesta conocida, y promediamos esas distancias.",
+    "concept": "Regresión estima una cantidad a partir de una o varias entradas. En la recta de este ejemplo, predicción = intercepto + pendiente × fertilizante: el intercepto es el valor que daría la recta con entrada cero y la pendiente indica cuánto cambia la predicción por cada kg/ha añadido a la entrada. El error absoluto es la distancia entre observado y predicho, sin signo. El MAE es el promedio de esos errores y se expresa en t/ha.",
     "case": {
       "title": "La recta se equivoca en cada finca",
-      "context": "Seis fincas inventadas del explorador, distintas del ejemplo anterior. Regla inicial: predicción = 1 + 0,025 × fertilizante.",
+      "context": "Seis fincas con datos inventados. Entrada: fertilizante en kg/ha; respuesta: rendimiento en t/ha. La regla inicial es predicción = 1 + 0,025 × fertilizante. La tabla y el explorador usan las mismas seis fincas.",
       "columns": [
         "Finca",
         "Fertilizante (kg/ha)",
@@ -212,7 +218,8 @@ export const LESSON_GUIDES={
         "Los seis errores absolutos son 0,20; 0,30; 0,10; 0,20; 0,20 y 0,20. Suman 1,20 t/ha.",
         "Dividimos entre seis: MAE = 0,20 t/ha. Es un promedio, no el error idéntico de cada finca."
       ],
-      "conclusion": "Esta asociación no demuestra una dosis recomendable ni calidad en fincas nuevas."
+      "conclusion": "La recta inicial tiene un error absoluto medio de 0,20 t/ha sobre estas seis fincas. Para evaluar su uso con otras fincas se necesita una prueba reservada. La pendiente describe la recta, no una dosis de fertilizante recomendada.",
+      "question": "¿Cuánto se equivoca la recta inicial en estas seis fincas y qué cambia al ajustarla?"
     },
     "vocabulary": [
       {
@@ -231,12 +238,12 @@ export const LESSON_GUIDES={
     "lab": {
       "title": "Ajustar y comprobar son pasos distintos",
       "objective": "Construir: tabla de predicciones y referencia.",
-      "instruction": "Con pendiente 0,025 y valor inicial 1, lee el MAE; pulsa «Ajustar a estos puntos».",
+      "instruction": "Fija pendiente en 0,025 e intercepto en 1. Lee el MAE y pulsa «Ajustar a estos puntos».",
       "watch": "Cambian la recta y las distancias; los seis puntos permanecen fijos.",
       "expected": "El MAE pasa de 0,20 a aproximadamente 0,04 t/ha. Sigue siendo error sobre los puntos utilizados.",
-      "notebookGuide": "Empieza por la sección 1 de Regresión. Después, en Laboratorio ML explicado, sigue 1.4–1.6 para comparar referencia y regresión con respuestas reservadas. Son conjuntos distintos: el procedimiento continúa, las cifras pueden cambiar."
+      "notebookGuide": "En Regresión, sección 1, ajusta la recta. En Laboratorio ML explicado, secciones 1.4–1.6, compara referencia y regresión con las mismas 60 fincas de prueba; calcula allí sus errores. El primer cuaderno usa fertilizante; el segundo utiliza lluvia, temperatura y fertilizante."
     },
-    "takeaway": "Un buen ajuste requiere después una prueba reservada.",
+    "takeaway": "El MAE describe el tamaño medio del error en las unidades de la respuesta. Para evaluar casos nuevos, calcúlalo con datos reservados.",
     "next": "Cambiaremos la pregunta: de cuánto rendimiento a qué categoría asignar.",
     "explorer": "regression",
     "build": {
@@ -254,7 +261,7 @@ export const LESSON_GUIDES={
   "ml-clasificacion": {
     "objective": "Construir una lista de revisión a partir de puntuaciones y una regla explícita.",
     "relevance": "Una alerta puede priorizar plantas para revisión, sin reemplazar la comprobación de campo.",
-    "concept": "Clasificar significa asignar una categoría definida, aprendiendo de ejemplos con categorías conocidas. Algunos modelos producen una puntuación y luego aplican una regla para decidir la clase. Esa decisión puede acertar o equivocarse; una puntuación no es por sí sola una certeza.",
+    "concept": "Clasificación asigna una categoría definida, como «con plaga» o «sana». Para aprenderla se usan ejemplos cuya categoría ya se conoce. En este ejercicio, cada planta tiene una puntuación entre 0 y 1; damos alerta si su puntuación es mayor o igual al umbral elegido. La puntuación es un número, la alerta es una decisión y la realidad conocida permite comprobar si esa decisión acertó.",
     "case": {
       "title": "Decidir cuáles plantas revisar",
       "context": "Seis de las diez plantas inventadas del explorador. Las puntuaciones están fijadas; aquí no entrenamos un clasificador.",
@@ -307,7 +314,8 @@ export const LESSON_GUIDES={
         "Aplicamos una regla: puntuación mayor o igual a 0,50 produce alerta. Por eso P5 sí y P4 no.",
         "Contrastamos con la realidad: P5 es una falsa alerta y P4 es una plaga omitida. La regla puede equivocarse."
       ],
-      "conclusion": "Una puntuación de 0,75 no significa 75 % de daño ni asegura presencia de plaga."
+      "conclusion": "Una puntuación de 0,75 no significa 75 % de daño ni asegura presencia de plaga.",
+      "question": "¿Qué plantas reciben alerta con umbral 0,50 y cuáles de esas decisiones se equivocan?"
     },
     "vocabulary": [
       {
@@ -331,7 +339,7 @@ export const LESSON_GUIDES={
       "expected": "P4: plaga sin alerta; P5: sana con alerta. El explorador contiene las diez plantas.",
       "notebookGuide": "En Clasificación e Iris, empieza por la sección 1: puntuación y umbral. Las secciones 2–4 amplían bosque, SVM y KNN con otros datos; sus porcentajes no comparan modelos sobre una misma tarea."
     },
-    "takeaway": "La puntuación, la decisión y la realidad son tres cosas diferentes.",
+    "takeaway": "Define la categoría positiva y la regla de alerta. Conserva puntuación, decisión y realidad en columnas separadas.",
     "next": "Contaremos esos aciertos y errores para interpretar las métricas.",
     "explorer": "threshold",
     "build": {
@@ -349,7 +357,7 @@ export const LESSON_GUIDES={
   "ml-metricas": {
     "objective": "Construir un reporte que muestre qué detecta y qué omite una alerta.",
     "relevance": "«Acertamos bastante» oculta si omitimos plagas o revisamos demasiadas plantas sanas.",
-    "concept": "Una métrica resume resultados, pero cada una responde una pregunta distinta. Podemos preguntar cuántos positivos detectamos, cuántas alertas eran correctas o cuántos casos totales acertamos. Para entender cualquier porcentaje, necesitamos identificar qué contamos y entre cuántos casos lo dividimos.",
+    "concept": "Una matriz de confusión cuenta las combinaciones de realidad y predicción. Con plaga y alerta es un verdadero positivo; sana y alerta, un falso positivo; con plaga y sin alerta, un falso negativo; sana y sin alerta, un verdadero negativo. Recall divide detecciones correctas entre plantas con plaga; precision divide detecciones correctas entre todas las alertas. Accuracy divide todos los aciertos entre todas las plantas.",
     "case": {
       "title": "Las diez plantas, sin perder ninguna",
       "context": "Las diez plantas inventadas del explorador, agrupadas por resultado con umbral 0,50. Estas filas representan todos los casos.",
@@ -386,11 +394,12 @@ export const LESSON_GUIDES={
         ]
       ],
       "reasoning": [
-        "Había cuatro plagas y detectamos tres: recall = 3/4 = 75 %. Una quedó omitida.",
+        "Cuatro plantas tenían plaga y detectamos tres: recall = 3/4 = 75 %. La planta P4 quedó omitida.",
         "De cinco alertas, tres eran correctas: precision = 3/5 = 60 %. Dos serían falsas alertas.",
         "Acertamos tres positivos y cuatro negativos: accuracy = (3 + 4)/10 = 70 %. Cada métrica responde otra pregunta."
       ],
-      "conclusion": "70 % de aciertos no significa detectar 70 % de plagas: aquí detectamos 75 %."
+      "conclusion": "70 % de aciertos no significa detectar 70 % de plagas: aquí detectamos 75 %.",
+      "question": "¿Cuántas plagas detectamos, cuántas alertas son correctas y cuántas decisiones totales acertamos?"
     },
     "vocabulary": [
       {
@@ -411,10 +420,10 @@ export const LESSON_GUIDES={
       "objective": "Construir: reporte de calidad de las alertas.",
       "instruction": "Con umbral 0,50, cruza fila «Con plaga» con columna «Sin plaga».",
       "watch": "Fila: realidad; columna: predicción. Esa casilla cuenta omisiones.",
-      "expected": "Hay una omisión, tres detecciones y dos falsas alertas; las lecturas son 75 %, 60 % y 70 %.",
+      "expected": "Con umbral 0,50: TP = 3, FP = 2, FN = 1 y TN = 4. Recall = 3/4 = 75 %; precision = 3/5 = 60 %; accuracy = (3+4)/10 = 70 %.",
       "notebookGuide": "En Laboratorio ML explicado, abre la sección 2 y reconstruye los cuatro conteos de las diez plantas antes de leer los porcentajes. Identifica el denominador de cada métrica."
     },
-    "takeaway": "Escoge la métrica según el error que necesitas entender; conserva sus conteos.",
+    "takeaway": "Escribe el numerador y el denominador de cada métrica: detectar plagas, acertar alertas y acertar decisiones son preguntas diferentes.",
     "next": "Mover el umbral cambiará esos conteos sin cambiar las plantas.",
     "explorer": "threshold",
     "build": {
@@ -424,7 +433,7 @@ export const LESSON_GUIDES={
         "Calcula recall, precision y accuracy escribiendo numerador y denominador. Reproduce los conteos de la sección 2 de Laboratorio ML.",
         "Redacta una decisión operativa: qué error conviene investigar primero y qué casos concretos revisarías."
       ],
-      "check": "Los conteos son 3, 2, 1 y 4; suman diez. Recall = 3/4, precision = 3/5 y accuracy = 7/10. El reporte nombra el error que cada proporción ayuda a vigilar.",
+      "check": "TP (detecciones correctas) = 3; FP (falsas alertas) = 2; FN (omisiones) = 1; TN (descartes correctos) = 4. Suman diez. Recall = 3/4, precision = 3/5 y accuracy = 7/10.",
       "transfer": "En detección de solicitudes urgentes, una omisión retrasa atención y una falsa alerta consume capacidad: reporta ambos efectos.",
       "stretch": "Si ya programas: calcula las proporciones desde los conteos y contempla un denominador cero sin inventar un porcentaje."
     }
@@ -432,7 +441,7 @@ export const LESSON_GUIDES={
   "ml-umbral": {
     "objective": "Configurar una política de alertas según la capacidad de revisión.",
     "relevance": "Un equipo con pocas personas para revisar debe decidir cuánto riesgo de omisión aceptar.",
-    "concept": "El umbral es una regla que convierte puntuaciones en decisiones. Bajarlo acepta más casos como positivos; subirlo exige una puntuación mayor, sin modificar las puntuaciones originales. Elegimos esa regla considerando errores y consecuencias, y la comprobamos después con datos reservados.",
+    "concept": "Un umbral es el límite que transforma una puntuación en una decisión. Aquí damos alerta cuando puntuación ≥ umbral. Al subirlo, la lista de alertas puede reducirse; al bajarlo, puede ampliarse. Las puntuaciones permanecen iguales: cambian las decisiones y sus errores. Para elegir el límite se comparan consecuencias y capacidad de revisión con datos de validación; la prueba final se conserva para evaluar la regla elegida.",
     "case": {
       "title": "Cuatro decisiones cambian de regla",
       "context": "Cuatro plantas inventadas del explorador. Cambiamos el umbral conservando puntuaciones y realidades; no generamos otro modelo.",
@@ -473,7 +482,8 @@ export const LESSON_GUIDES={
         "P6 pierde la alerta al subir a 0,70: evitamos esa falsa alerta. P5 sigue por encima del nuevo límite.",
         "P4 continúa omitida. Subir el límite no resuelve toda equivocación; bajar a 0,40 sí activaría su alerta."
       ],
-      "conclusion": "El umbral decide qué revisar. Elegirlo requiere conocer consecuencias y usar validación, dejando intacta la prueba final."
+      "conclusion": "El umbral decide qué revisar. Elegirlo requiere conocer consecuencias y usar validación, dejando intacta la prueba final.",
+      "question": "¿Qué regla permite revisar como máximo cuatro plantas y qué plagas quedan sin alerta?"
     },
     "vocabulary": [
       {
@@ -490,10 +500,10 @@ export const LESSON_GUIDES={
       "objective": "Construir: política para un equipo de cuatro revisiones.",
       "instruction": "En las diez plantas, mueve el umbral de 0,50 a 0,70 y después a 0,30.",
       "watch": "Cuenta bordes y omisiones; las puntuaciones escritas permanecen iguales.",
-      "expected": "A 0,70 quedan cuatro alertas y una omisión; a 0,30 aparecen siete alertas y ninguna omisión.",
+      "expected": "A umbral 0,70: 4 alertas, 1 falsa alerta y 1 omisión. A 0,30: 7 alertas, 3 falsas alertas y 0 omisiones. Las diez puntuaciones permanecen iguales.",
       "notebookGuide": "En la sección 2 de Laboratorio ML explicado, cambia el umbral conservando puntuaciones y realidades. Comprueba qué conteos cambian y qué error tendría más consecuencias en el uso propuesto."
     },
-    "takeaway": "Cambiar decisiones no equivale a entrenar ni a mejorar toda métrica.",
+    "takeaway": "Elige la regla considerando revisiones necesarias, falsas alertas y omisiones; indica qué harás con los casos que no entren en la revisión.",
     "next": "Después buscaremos grupos cuando no tenemos categorías conocidas.",
     "explorer": "threshold",
     "build": {
@@ -501,7 +511,7 @@ export const LESSON_GUIDES={
       "steps": [
         "Supón que solo puedes revisar cuatro plantas en esta ronda. Compara umbrales 0,30, 0,50 y 0,70 conservando puntuaciones.",
         "Registra para cada umbral cuántas alertas, falsas alertas y omisiones produce. Selecciona una regla compatible con la capacidad y describe el riesgo restante.",
-        "En la sección 2 del cuaderno, reproduce la comparación. Deja claro que estos casos sirven para practicar; elegir para uso real requiere validación separada."
+        "En la sección 2 del cuaderno, reproduce la tabla de comparación y escribe qué harás con las plantas sin revisar. Para elegir una regla de uso real, emplea validación y conserva aparte la prueba final."
       ],
       "check": "A 0,70 hay cuatro alertas y una omisión; cabe en la capacidad propuesta, pero no resuelve todo el riesgo. La política indica qué hacer con los casos sin revisar.",
       "transfer": "En una mesa de ayuda, cambia plantas por solicitudes y fija capacidad por turno antes de elegir una regla de prioridad.",
@@ -511,10 +521,10 @@ export const LESSON_GUIDES={
   "ml-clustering": {
     "objective": "Construir una segmentación exploratoria para organizar una revisión.",
     "relevance": "Explorar lotes parecidos orienta una investigación cuando no existen etiquetas de grupo.",
-    "concept": "Agrupar significa buscar observaciones parecidas sin recibir previamente sus nombres de grupo. La semejanza depende de las variables, su escala y la regla de cercanía. DBSCAN conecta zonas con suficientes vecinos y puede dejar observaciones sin agrupar; ningún resultado asigna calidad automáticamente.",
+    "concept": "Clustering o agrupación busca registros parecidos sin recibir etiquetas de grupo. La cercanía se calcula con las variables elegidas y depende de su escala. DBSCAN usa un radio de vecindad y un mínimo de puntos: los puntos con suficientes vecinos forman núcleos que conectan grupos; otros pueden unirse como borde o quedar sin grupo. El mínimo cuenta también al propio punto.",
     "case": {
       "title": "Cercanía antes de poner nombres",
-      "context": "Seis lotes inventados con índices comparables, sin unidades físicas. Son distintos de los 29 puntos del explorador.",
+      "context": "Seis lotes con dos indicadores inventados, X e Y, medidos en una misma escala de puntos. La distancia se calcula en ese plano; los números no representan porcentajes ni medidas agronómicas. El caso tiene seis puntos; el laboratorio amplía la comparación a 29.",
       "columns": [
         "Lote",
         "Índice X",
@@ -557,20 +567,21 @@ export const LESSON_GUIDES={
         "A, B y C quedan conectados; D y E forman otro grupo. F no tiene vecinos cercanos.",
         "Obtenemos dos grupos y F sin agrupar. Sus nombres numéricos son identificadores, no calificaciones de calidad."
       ],
-      "conclusion": "F merece investigación; la configuración no demuestra un sensor averiado ni autoriza eliminar su registro."
+      "conclusion": "F merece investigación; la configuración no demuestra un sensor averiado ni autoriza eliminar su registro.",
+      "question": "¿Qué lotes quedan conectados con radio 3 y mínimo dos puntos, y cuál queda aislado?"
     },
     "vocabulary": [
       {
-        "term": "Clustering",
-        "meaning": "Buscar grupos sin etiquetas de grupo conocidas."
-      },
-      {
         "term": "Radio",
-        "meaning": "Distancia máxima para considerar vecinos."
+        "meaning": "Distancia máxima para considerar dos puntos vecinos."
       },
       {
-        "term": "Escala",
-        "meaning": "Tamaño numérico que afecta a las distancias."
+        "term": "Núcleo",
+        "meaning": "Punto que alcanza el mínimo requerido de vecinos dentro del radio, contándose a sí mismo."
+      },
+      {
+        "term": "Sin grupo",
+        "meaning": "Punto que no queda conectado a un grupo con esa configuración."
       }
     ],
     "lab": {
@@ -581,7 +592,7 @@ export const LESSON_GUIDES={
       "expected": "Radio 10: dos grupos y tres sin grupo. Radio 3: ningún grupo y 29 sin grupo.",
       "notebookGuide": "En Laboratorio ML explicado, la sección 4 desarrolla DBSCAN con otras observaciones. El cuaderno Agrupación añade K-Means y Mean-Shift: compara qué necesita cada método, sin interpretar los números de grupo como calidad."
     },
-    "takeaway": "Agrupar describe semejanza bajo una escala y configuración; no revela categorías verdaderas automáticamente.",
+    "takeaway": "Un grupo significa cercanía con las variables y parámetros elegidos. Antes de darle un significado operativo, revisa qué comparten sus registros.",
     "next": "PCA resumirá variables, sin formar grupos.",
     "explorer": "clusters",
     "build": {
@@ -599,10 +610,10 @@ export const LESSON_GUIDES={
   "ml-pca": {
     "objective": "Construir una vista resumida de registros y documentar la información que conserva.",
     "relevance": "Resumir medidas que cambian juntas facilita una gráfica; debemos saber qué información se pierde.",
-    "concept": "Una proyección representa cada punto sobre una dirección y descarta su separación respecto a ella. PCA busca primero la dirección de mayor dispersión; las siguientes son perpendiculares a las anteriores y conservan variación restante. Cambia la representación, sin crear clases ni medir aciertos.",
+    "concept": "PCA, análisis de componentes principales, resume variables mediante nuevas direcciones llamadas componentes. Trabaja con datos centrados: a cada variable se le resta su media. La primera dirección conserva la mayor varianza, es decir, la mayor dispersión medida con distancias al cuadrado; las siguientes conservan variación restante en direcciones perpendiculares. El porcentaje conservado describe variación de las entradas, no aciertos de un modelo.",
     "case": {
       "title": "Dos medidas que se mueven juntas",
-      "context": "Cuatro observaciones inventadas con índices centrados y escala comparable. Caen en una diagonal; difieren de los 22 puntos del explorador.",
+      "context": "Cuatro registros inventados con dos medidas X e Y en la misma escala. A cada medida ya se le restó su media: por eso aparecen valores negativos. Los cuatro puntos están sobre la diagonal Y = X. En el explorador se aplica el mismo procedimiento a 22 puntos.",
       "columns": [
         "Observación",
         "Índice X centrado",
@@ -635,7 +646,8 @@ export const LESSON_GUIDES={
         "Proyectar sobre el eje horizontal conserva solo X: 10/20 = 50 %. Se descarta la separación vertical.",
         "Proyectar sobre la diagonal de 45° deja cada punto sobre sí mismo: conserva 100 % en este caso especial."
       ],
-      "conclusion": "PCA busca primero máxima varianza. Conservar 100 % aquí no mide aciertos predictivos."
+      "conclusion": "PCA busca primero máxima varianza. Conservar 100 % aquí no mide aciertos predictivos.",
+      "question": "¿Qué variación conservamos al representar estos cuatro puntos sobre el eje X o sobre su diagonal?"
     },
     "vocabulary": [
       {
@@ -656,10 +668,10 @@ export const LESSON_GUIDES={
       "objective": "Construir: vista de dos componentes.",
       "instruction": "En el explorador de 22 puntos, compara direcciones 0°, 90° y 37°.",
       "watch": "Verde: dirección; naranja: proyecciones; líneas finas: parte descartada. Los puntos originales permanecen fijos.",
-      "expected": "Conserva aproximadamente 63,1 %, 36,9 % y 98,0 %, respectivamente. No son los porcentajes del mini-ejemplo.",
-      "notebookGuide": "En el cuaderno PCA, sigue el paso de tres variables escaladas a dos componentes. Relaciona cada punto con la misma observación y lee la variación conservada; no esperes el porcentaje del caso diagonal de esta página."
+      "expected": "Para los 22 puntos del explorador: 0° conserva aproximadamente 63,1 %; 90°, 36,9 %; 37°, 98,0 %. El caso resuelto usa cuatro puntos exactamente diagonales y por eso sus porcentajes son otros.",
+      "notebookGuide": "En PCA, transforma las tres variables escaladas en dos componentes. Identifica qué registro representa cada punto y lee la varianza explicada de cada componente y su suma. La tabla del cuaderno muestra el porcentaje correspondiente a sus datos."
     },
-    "takeaway": "Reducir dimensiones exige declarar qué variación conservamos y qué estamos descartando.",
+    "takeaway": "Al reducir variables, informa la variación conservada y mantén la relación de cada punto con su registro original.",
     "next": "Pasaremos de combinar variables a combinar predicciones de varios modelos.",
     "explorer": "pca",
     "build": {
@@ -677,7 +689,7 @@ export const LESSON_GUIDES={
   "ml-ensambles": {
     "objective": "Seleccionar un modelo candidato mediante una comparación reproducible.",
     "relevance": "Combinar estimaciones puede compensar errores; midamos el resultado antes de confiar.",
-    "concept": "Un ensamble combina respuestas de varios modelos para producir una salida. Algunas combinaciones promedian modelos aprendidos con muestras diferentes; otras agregan modelos en secuencia para reducir el error conjunto. Combinar aporta posibilidades, pero solo una comparación sobre los mismos datos permite juzgar una mejora.",
+    "concept": "Un ensamble combina predicciones de varios modelos para producir una salida. Por ejemplo, puede promediar dos estimaciones; si una queda por debajo y otra por encima, sus errores pueden compensarse. Bagging combina modelos ajustados con diferentes muestras; boosting añade modelos sucesivos para reducir la pérdida conjunta. Para saber si una combinación mejora, compara su error y el de una referencia sobre los mismos casos reservados.",
     "case": {
       "title": "Dos errores pueden compensarse",
       "context": "Tres fincas reservadas inventadas. Dos modelos imaginarios producen estas predicciones; promediarlas no usa los rendimientos conocidos para ajustarse.",
@@ -716,7 +728,8 @@ export const LESSON_GUIDES={
         "Cada modelo tiene errores 1, 1 y 0: MAE = 2/3 ≈ 0,67 t/ha. El promedio tiene MAE cero.",
         "Si ambos modelos se equivocaran igual, promediar no eliminaría ese error compartido."
       ],
-      "conclusion": "Este resultado perfecto no garantiza mejora con otros datos ni demuestra bagging por sí solo."
+      "conclusion": "En estas tres fincas, el promedio predice 3, 4 y 5 t/ha y su MAE es cero. A y B se compensan aquí; si compartieran el mismo error, el promedio también lo conservaría.",
+      "question": "¿Promediar A y B reduce el error en las tres fincas reservadas?"
     },
     "vocabulary": [
       {
@@ -740,7 +753,7 @@ export const LESSON_GUIDES={
       "expected": "Boosting tiene menor error aquí: MAE 0,301 y RMSE 0,411 t/ha. Las cuatro barras comparten prueba.",
       "notebookGuide": "En la sección 3 de Laboratorio ML explicado, localiza las mismas fincas reservadas para todos los modelos. Compara primero MAE y después explica qué error pesa más al usar RMSE."
     },
-    "takeaway": "Compara conservando casos reservados, objetivo y métrica.",
+    "takeaway": "Compara modelo y combinación con la misma respuesta, los mismos casos reservados y la misma métrica.",
     "next": "Cuando los casos son semanas, también importa el orden de la prueba.",
     "explorer": "ensembles",
     "build": {
@@ -750,7 +763,7 @@ export const LESSON_GUIDES={
         "En el explorador y la sección 3 de Laboratorio ML, compara referencia, árbol, bosque y boosting sobre su misma prueba. Registra MAE y RMSE con unidades.",
         "Elige un candidato para seguir probando y justifica la elección con error y necesidades de uso. Conserva la referencia en la tabla."
       ],
-      "check": "En el explorador, boosting obtiene MAE 0,301 y RMSE 0,411 t/ha. Los resultados del cuaderno se registran al ejecutar; el mejor de esta prueba no se declara ganador universal.",
+      "check": "En el explorador, boosting tiene el menor error entre los cuatro modelos: MAE 0,301 y RMSE 0,411 t/ha. Registra los resultados de tu ejecución del cuaderno y compáralos sobre sus mismas fincas de prueba.",
       "transfer": "Al comparar estimadores de duración de tareas, usa las mismas tareas reservadas y una referencia sencilla.",
       "stretch": "Si ya programas: repite la evaluación con otras particiones de entrenamiento sin reutilizar la prueba final para elegir ajustes."
     }
@@ -758,10 +771,10 @@ export const LESSON_GUIDES={
   "ml-series": {
     "objective": "Construir un pronóstico para planear compras y comprobarlo respetando el tiempo.",
     "relevance": "Planear compras exige anticipar ventas usando solo información disponible al decidir.",
-    "concept": "Una serie conserva el orden en que ocurrieron sus observaciones. Pronosticar usa la historia para anticipar un futuro todavía desconocido, que después reservamos para comprobar el error. Repetir el último valor, repetir un ciclo o prolongar una tendencia son reglas distintas que podemos comparar justamente.",
+    "concept": "Una serie temporal es una lista de observaciones con fecha, como ventas por semana. Pronosticar consiste en estimar valores de fechas posteriores usando solo lo conocido al emitir el pronóstico. Para evaluar con datos históricos, fijamos una fecha de corte, ajustamos con el pasado y reservamos las fechas posteriores para comparar predicción y observado. El horizonte indica cuántos periodos hacia adelante se pronostican.",
     "case": {
       "title": "Pronosticar dos semanas antes de verlas",
-      "context": "Ventas inventadas: semanas 1–4 conocidas y 5–6 reservadas. El ciclo de dos semanas difiere del ciclo de doce del explorador.",
+      "context": "Seis semanas con ventas inventadas en unidades de producto. Las semanas 1–4 son historia disponible; ocultamos 5–6 hasta comprobar los pronósticos. El caso usa un ciclo de dos semanas; el explorador compara reglas con 84 semanas y un ciclo de doce.",
       "columns": [
         "Semana",
         "Ventas (unidades)",
@@ -804,7 +817,8 @@ export const LESSON_GUIDES={
         "Repetir las dos últimas semanas conocidas pronostica 100 y 110. Ambas reglas usan únicamente historia disponible.",
         "Revelamos la reserva: el último valor tiene MAE = (10 + 0)/2 = 5 unidades; repetir ciclo da cero."
       ],
-      "conclusion": "El ciclo gana aquí; seis semanas inventadas no demuestran ese patrón en ventas reales."
+      "conclusion": "El ciclo gana aquí; seis semanas inventadas no demuestran ese patrón en ventas reales.",
+      "question": "Al cerrar la semana 4, ¿qué regla estima mejor las ventas de las semanas 5 y 6?"
     },
     "vocabulary": [
       {
@@ -821,10 +835,10 @@ export const LESSON_GUIDES={
       "objective": "Construir: pronóstico con fecha de corte.",
       "instruction": "En la serie de 84 semanas, cambia «Estrategia de pronóstico»: Último valor, Repetir ciclo de 12 semanas y Tendencia.",
       "watch": "Los datos permanecen fijos. Las tres estrategias usan las primeras 60 semanas y se evalúan sobre las últimas 24.",
-      "expected": "MAE aproximado: último valor 14,90; ciclo 11,35; tendencia 7,65 unidades. Son datos distintos del caso de seis semanas.",
-      "notebookGuide": "En la sección 5 de Laboratorio ML explicado, identifica el corte temporal y las 24 semanas reservadas. Compara las tres reglas con esa misma prueba; el conjunto simulado difiere del explorador y sus cifras pueden cambiar."
+      "expected": "Sobre las 24 semanas reservadas del explorador: MAE de último valor ≈ 14,90; ciclo de 12 semanas ≈ 11,35; tendencia ≈ 7,65 unidades de producto.",
+      "notebookGuide": "En Laboratorio ML explicado, sección 5, identifica las semanas de entrenamiento y las 24 de prueba. Genera los tres pronósticos sin usar las respuestas de prueba y compara sus MAE. Lee los resultados de esa tabla, calculados con la serie del cuaderno."
     },
-    "takeaway": "El futuro se reserva y cada pronóstico usa solo lo disponible en su fecha.",
+    "takeaway": "Registra fecha de corte, horizonte y error. Compara las reglas sobre las mismas fechas posteriores al corte.",
     "next": "Veremos decisiones donde una acción cambia la situación siguiente.",
     "explorer": "series",
     "build": {
@@ -842,7 +856,7 @@ export const LESSON_GUIDES={
   "ml-refuerzo": {
     "objective": "Construir y probar una secuencia de acciones con recompensas acumuladas.",
     "relevance": "Una acción afecta pasos posteriores; no basta con evaluar cada movimiento por separado.",
-    "concept": "En aprendizaje por refuerzo, un agente actúa, observa la situación siguiente y recibe una recompensa. Aprender consiste en usar esa experiencia para mejorar cómo elige acciones, considerando consecuencias posteriores. Mover un agente manualmente permite entender el entorno, pero no realiza por sí solo ese aprendizaje.",
+    "concept": "En aprendizaje por refuerzo, un agente elige una acción en un entorno, recibe una recompensa y pasa a otro estado. El estado describe la situación, como la casilla actual; la política indica qué acción elegir. El objetivo es aprender una política que obtenga mayor recompensa acumulada, considerando también las consecuencias futuras. Q-learning actualiza un valor para cada par estado–acción a partir de la experiencia.",
     "case": {
       "title": "Llegar a la meta sin tocar el pozo",
       "context": "GridWorld inventado de 5 × 5. Inicio: fila 0, columna 0. Meta: 1,4. Las coordenadas empiezan en cero.",
@@ -889,7 +903,8 @@ export const LESSON_GUIDES={
         "Entrar en la meta entrega +10 y termina el episodio. La suma sin descuento es −1 −1 −1 −1 +10 = 6.",
         "Una pared o borde impide avanzar, pero consume un paso y resta 1. Caer al pozo resta 10 y termina."
       ],
-      "conclusion": "Esta ruta manual no demuestra aprendizaje ni una política óptima para todos los estados."
+      "conclusion": "Esta ruta manual no demuestra aprendizaje ni una política óptima para todos los estados.",
+      "question": "¿A qué estado llega cada acción de la ruta y cuánto suman sus recompensas?"
     },
     "vocabulary": [
       {
@@ -913,7 +928,7 @@ export const LESSON_GUIDES={
       "expected": "Meta alcanzada en cinco pasos, recompensa acumulada 6. No se entrenó Q-learning al pulsar botones.",
       "notebookGuide": "En Q-learning en GridWorld, distingue el recorrido manual de la política aprendida al actualizar valores Q. Relaciona recompensas por episodio con las decisiones de la política; no interpretes una ruta aislada como prueba de optimalidad."
     },
-    "takeaway": "Aprender exige experiencia y actualización de una política; aquí exploramos el entorno.",
+    "takeaway": "Registra estados, acciones y recompensas para evaluar un recorrido. Aprender una política requiere actualizarla a partir de la experiencia.",
     "next": "Cerraremos distinguiendo una demostración correcta de evidencia suficiente para utilizarla.",
     "explorer": "grid",
     "build": {
@@ -931,7 +946,7 @@ export const LESSON_GUIDES={
   "ml-integracion": {
     "objective": "Construir un prototipo de predicción con una decisión de uso documentada.",
     "relevance": "Antes de cambiar una operación, expliquemos la evidencia y qué falta comprobar.",
-    "concept": "Integrar un proyecto significa conectar la pregunta con los datos, la preparación, una comparación y una decisión. Una referencia sencilla permite juzgar si el esfuerzo añadido mejora el resultado en casos reservados. Esa mejora tiene un alcance concreto y no sustituye evaluar el contexto donde se utilizaría.",
+    "concept": "Un prototipo ML conecta una pregunta operativa con datos, preparación, un modelo y una salida que se pueda comprobar. La referencia es una regla sencilla con la que comparas la propuesta, por ejemplo predecir siempre la media de entrenamiento. Evalúa ambas con las mismas respuestas reservadas y la misma métrica. Usa esa comparación para decidir qué seguir probando en el contexto de la operación.",
     "case": {
       "title": "Una mejora pequeña con alcance concreto",
       "context": "Tres fincas reservadas inventadas, distintas de las anteriores. Las reglas se eligieron con otros datos; estas filas sirven para compararlas.",
@@ -966,7 +981,8 @@ export const LESSON_GUIDES={
         "La candidata tiene errores 0,2; 0,2 y 0,1: MAE = 0,5/3 ≈ 0,17 t/ha. Comparamos idénticas fincas.",
         "La candidata mejora esta prueba. Faltan datos representativos de otras condiciones y evaluar consecuencias antes de cambiar decisiones reales."
       ],
-      "conclusion": "Podemos explicar esta mejora, sin afirmar una recomendación de fertilización ni beneficio económico real."
+      "conclusion": "Podemos explicar esta mejora, sin afirmar una recomendación de fertilización ni beneficio económico real.",
+      "question": "¿La regla candidata reduce el error frente a predecir siempre 4 t/ha en estas tres fincas?"
     },
     "vocabulary": [
       {
@@ -986,7 +1002,7 @@ export const LESSON_GUIDES={
       "expected": "Referencia: 2/3 ≈ 0,67 t/ha; candidata: 0,5/3 ≈ 0,17 t/ha. Respalda una mejora en esta prueba inventada, sin demostrar beneficio real ni causalidad.",
       "notebookGuide": "En Laboratorio ML explicado, vuelve a 1.4–1.6: referencia, candidata y prueba reservada. Explica qué respalda la comparación y qué evidencia faltaría antes de usarla en una cooperativa real."
     },
-    "takeaway": "Presenta pregunta, datos, referencia, resultado y límite antes de proponer una acción.",
+    "takeaway": "Reúne pregunta, datos, referencia, error y decisión de uso en un resultado que puedas volver a ejecutar.",
     "next": "En Deep Learning conservaremos este recorrido, con más capas y parámetros.",
     "explorer": null,
     "build": {
@@ -1003,11 +1019,11 @@ export const LESSON_GUIDES={
   },
   "dl-redes": {
     "objective": "Construir el cálculo de una neurona y rastrear cómo sus entradas producen una salida.",
-    "concept": "Una neurona artificial multiplica entradas por pesos, suma un sesgo y aplica una activación. Una red conecta muchas operaciones de este tipo; aprender significa ajustar sus parámetros con ejemplos.",
+    "concept": "Deep Learning o aprendizaje profundo utiliza redes neuronales con varias capas de transformaciones. Una neurona básica multiplica cada entrada por un peso, suma los productos y un sesgo, y aplica una función de activación. Las capas conectan estas operaciones para construir representaciones intermedias y una salida. Entrenar ajusta los pesos y otros parámetros; calcular una salida con parámetros fijados es un paso diferente.",
     "relevance": "Permite explicar el cálculo antes de confiar en una etiqueta o una puntuación.",
     "case": {
       "title": "Dos señales y un ajuste",
-      "context": "Usamos señales inventadas sin unidades: x₁ = 2 y x₂ = 1. Elegimos pesos 0,5 y −1, y sesgo 0,5. Son números fijados para comprobar una operación, no parámetros de un modelo entrenado.",
+      "context": "Comprobamos una neurona con números fijados: entradas x₁ = 2 y x₂ = 1; pesos w₁ = 0,5 y w₂ = −1; sesgo b = 0,5. Son valores sin unidades físicas y la activación es ReLU. Para esta cuenta los parámetros ya están dados: no los entrenamos.",
       "columns": [
         "Parte",
         "Entrada",
@@ -1039,7 +1055,8 @@ export const LESSON_GUIDES={
         "Suma los aportes y el sesgo: z = 1 − 1 + 0,5 = 0,5.",
         "ReLU conserva las sumas positivas: la salida es 0,5. Si el sesgo pasa a −0,5, z = −0,5 y la salida es 0."
       ],
-      "conclusion": "Una sola entrada o un sesgo pueden cambiar la salida sin que haya ocurrido aprendizaje."
+      "conclusion": "Una sola entrada o un sesgo pueden cambiar la salida sin que haya ocurrido aprendizaje.",
+      "question": "¿Cómo producen las entradas 2 y 1 una salida de 0,5 con los pesos y el sesgo indicados?"
     },
     "vocabulary": [
       {
@@ -1056,7 +1073,7 @@ export const LESSON_GUIDES={
       }
     ],
     "explorer": "neuron",
-    "takeaway": "La salida es un cálculo, no un porcentaje de aciertos.",
+    "takeaway": "Sigue entradas → productos por pesos → suma con sesgo → activación. Ese recorrido permite comprobar una neurona antes de interpretar una red.",
     "next": "Compararemos activaciones para la misma señal.",
     "lab": {
       "title": "Cambiar una pieza y seguir el cálculo",
@@ -1080,11 +1097,11 @@ export const LESSON_GUIDES={
   },
   "dl-activaciones": {
     "objective": "Configurar una transformación de señales y comprobar su rango de salida.",
-    "concept": "Una activación transforma la señal que recibe una neurona. Su forma y sus valores posibles cambian cómo continúa el cálculo; elegirla depende de la tarea y de su lugar en la red.",
+    "concept": "Una función de activación transforma el resultado de una suma en una neurona. ReLU devuelve cero si la entrada es negativa y conserva los valores no negativos; sigmoid devuelve valores entre 0 y 1; tanh, entre −1 y 1. Estas funciones añaden transformaciones no lineales, que permiten a una red representar relaciones más complejas que una sola recta. El significado de la salida depende de la tarea y de dónde se use la función.",
     "relevance": "Ayuda a evitar que un cero, un negativo o un valor entre cero y uno se confundan con una categoría o un acierto.",
     "case": {
       "title": "La misma señal sigue tres reglas",
-      "context": "Cuatro señales inventadas reciben tres funciones. Mantendremos la entrada y cambiaremos la función. Los resultados son matemáticos; no son probabilidades de enfermedad verificadas.",
+      "context": "Aplicamos ReLU, sigmoid y tanh a cuatro números de entrada. Cada fila conserva la misma entrada para comparar las tres funciones; las columnas contienen sus salidas, redondeadas a tres decimales.",
       "columns": [
         "Entrada",
         "ReLU",
@@ -1122,20 +1139,25 @@ export const LESSON_GUIDES={
         "Sigmoid comprime esa entrada a 0,119; tanh conserva el signo y devuelve aproximadamente −0,964.",
         "En la fila 2, ReLU devuelve 2. Una salida superior a 1 confirma que no todas las activaciones expresan probabilidades."
       ],
-      "conclusion": "Cambiar la función cambia el rango y la respuesta, aunque la entrada sea idéntica."
+      "conclusion": "Cambiar la función cambia el rango y la respuesta, aunque la entrada sea idéntica.",
+      "question": "¿Qué salida produce cada activación al recibir exactamente la misma señal?"
     },
     "vocabulary": [
       {
         "term": "Activación",
-        "meaning": "Regla que transforma una señal."
+        "meaning": "Función aplicada a la señal de una neurona."
       },
       {
-        "term": "Rango",
-        "meaning": "Valores que puede entregar la función."
+        "term": "No lineal",
+        "meaning": "Transformación que no puede representarse mediante una sola recta en todo su dominio."
+      },
+      {
+        "term": "Rango de salida",
+        "meaning": "Conjunto de valores que puede devolver una función."
       }
     ],
     "explorer": "activation",
-    "takeaway": "Estar entre 0 y 1 no garantiza una probabilidad bien calibrada.",
+    "takeaway": "Compara activaciones manteniendo la entrada fija. Verifica su rango antes de interpretar la salida como puntuación o conectarla a otra operación.",
     "next": "Veremos cómo se ajustan parámetros utilizando el error.",
     "lab": {
       "title": "Contrastar una fila",
@@ -1159,14 +1181,14 @@ export const LESSON_GUIDES={
   },
   "dl-entrenamiento": {
     "objective": "Ajustar un parámetro y diagnosticar un paso que empeora el resultado.",
-    "concept": "Una pérdida mide el desacuerdo entre lo esperado y la salida. Entrenar ajusta parámetros para reducirla; la tasa de aprendizaje controla el tamaño de cada actualización. Evaluar con datos nuevos es otro paso.",
+    "concept": "La pérdida es un número que mide el desacuerdo entre la salida y la respuesta esperada. El gradiente indica cómo cambia esa pérdida al variar los parámetros. En descenso por gradiente actualizamos cada parámetro restando tasa de aprendizaje × gradiente; una tasa mayor produce un cambio mayor para el mismo gradiente. En una red, retropropagación calcula los gradientes y el optimizador actualiza los parámetros.",
     "relevance": "Ayuda a interpretar una curva de entrenamiento: ajustar más fuerte puede empeorar.",
     "case": {
       "title": "Acercarse a un objetivo sin pasarse",
       "context": "Partimos de −2 y buscamos 3. La pérdida (parámetro − 3)² empieza en 25. Cada fila comienza otra vez en −2 y realiza un solo paso; no son pasos consecutivos.",
       "columns": [
         "Escenario",
-        "Tamaño del ajuste",
+        "Tasa de aprendizaje",
         "Parámetro después",
         "Pérdida"
       ],
@@ -1198,10 +1220,11 @@ export const LESSON_GUIDES={
       ],
       "reasoning": [
         "En −2, la pendiente de la pérdida es 2 × (−2 − 3) = −10.",
-        "Con tamaño 0,1: −2 − 0,1 × (−10) = −1; la pérdida baja a 16.",
-        "Con tamaño 1,1, llega a 9 y la pérdida sube a 36: sobrepasa el objetivo."
+        "Con tasa 0,1: parámetro nuevo = −2 − 0,1 × (−10) = −1. La pérdida nueva es (−1 − 3)² = 16.",
+        "Con tasa 1,1: parámetro nuevo = −2 − 1,1 × (−10) = 9. La pérdida es (9 − 3)² = 36, mayor que las 25 iniciales."
       ],
-      "conclusion": "Un paso mayor no garantiza una pérdida menor."
+      "conclusion": "Desde el mismo inicio, tasa 0,1 reduce la pérdida de 25 a 16 y tasa 1,1 la aumenta a 36. El segundo paso sobrepasa el objetivo.",
+      "question": "¿Qué tasa reduce la pérdida desde el mismo inicio y cuál sobrepasa el objetivo?"
     },
     "vocabulary": [
       {
@@ -1214,7 +1237,7 @@ export const LESSON_GUIDES={
       }
     ],
     "explorer": "training",
-    "takeaway": "Este ajuste de un número no evalúa una red con datos nuevos.",
+    "takeaway": "Comprueba parámetro anterior, gradiente, tasa, parámetro nuevo y pérdida. Evalúa por separado el funcionamiento con casos reservados.",
     "next": "Pasaremos a preguntas sobre imágenes.",
     "lab": {
       "title": "Comparar pasos desde el mismo inicio",
@@ -1238,7 +1261,7 @@ export const LESSON_GUIDES={
   },
   "dl-vision": {
     "objective": "Definir la salida visual que necesita una operación y probar una detección.",
-    "concept": "Clasificar asigna una etiqueta a la imagen; detectar añade ubicaciones mediante cajas. Segmentar indica qué píxeles corresponden a objetos o categorías. La necesidad del trabajo determina qué salida debemos pedir.",
+    "concept": "En clasificación de imágenes, la salida es una etiqueta para la imagen o un recorte. En detección, cada objeto propuesto tiene una categoría y una caja que indica su ubicación. En segmentación, una máscara indica los píxeles asignados a una categoría o a un objeto concreto. Para elegir la tarea, define si necesitas seleccionar imágenes, localizar objetos o delimitar sus regiones visibles.",
     "relevance": "Evita pedir posiciones o contornos a una herramienta que solamente clasifica.",
     "case": {
       "title": "Una foto de tres frutos, tres necesidades",
@@ -1270,7 +1293,8 @@ export const LESSON_GUIDES={
         "Para ubicar los tres frutos necesitamos cajas. Cada caja también contiene algo de fondo.",
         "Para delimitar la región visible necesitamos máscaras, que distinguen píxeles del objeto y del entorno."
       ],
-      "conclusion": "La salida que necesita el trabajo define la tarea; las tres no son intercambiables."
+      "conclusion": "La salida que necesita el trabajo define la tarea; las tres no son intercambiables.",
+      "question": "¿Qué salida necesitas para seleccionar una foto, localizar sus tres frutos o delimitar sus contornos?"
     },
     "vocabulary": [
       {
@@ -1283,7 +1307,7 @@ export const LESSON_GUIDES={
       }
     ],
     "explorer": "vision",
-    "takeaway": "La información que necesitas define la tarea.",
+    "takeaway": "Pide una salida acorde con el trabajo: etiqueta para clasificar, cajas para localizar y máscaras para delimitar píxeles.",
     "next": "Examinaremos una operación que ayuda a construir representaciones de píxeles.",
     "lab": {
       "title": "Cambiar la pregunta",
@@ -1307,7 +1331,7 @@ export const LESSON_GUIDES={
   },
   "dl-cnn": {
     "objective": "Construir un mapa de filtro y distinguir cambios de imagen de cambios de pesos.",
-    "concept": "Una convolución aplica los mismos pesos a regiones pequeñas de una imagen. El resultado es un mapa de respuestas; en una CNN los filtros se ajustan durante el entrenamiento.",
+    "concept": "Una CNN es una red neuronal convolucional que procesa regiones locales, como ventanas de píxeles de una imagen. Un filtro es una tabla pequeña de pesos: multiplicamos cada píxel de una ventana por su peso y sumamos los productos. Al desplazar el filtro construimos un mapa de respuestas. En el entrenamiento de una CNN se ajustan los pesos de sus filtros; en este ejemplo los fijamos para comprobar la operación.",
     "relevance": "Ayuda a distinguir píxeles, pesos y resultados, antes de interpretar lo que reconoce una red.",
     "case": {
       "title": "Encontrar un cambio entre filas",
@@ -1335,11 +1359,12 @@ export const LESSON_GUIDES={
         ]
       ],
       "reasoning": [
-        "Multiplica cada píxel por el peso de su misma posición.",
+        "Coloca el filtro sobre la primera ventana de 3 × 3. Multiplica cada píxel por el peso de la misma posición, sin invertir el filtro, como en una capa CNN.",
         "Suma los nueve productos: 0 + 0 + 3 = 3. Esa es una celda del mapa.",
         "Al bajar la ventana a la tercera fila, todos sus píxeles son 1: −3 + 0 + 3 = 0. Una región uniforme responde diferente."
       ],
-      "conclusion": "Desplazar el mismo filtro produce nueve respuestas, un mapa de 3 × 3."
+      "conclusion": "Desplazar el mismo filtro produce nueve respuestas, un mapa de 3 × 3.",
+      "question": "¿Qué respuesta da el filtro al pasar de una zona oscura a una clara y a una zona uniforme?"
     },
     "vocabulary": [
       {
@@ -1352,7 +1377,7 @@ export const LESSON_GUIDES={
       }
     ],
     "explorer": "convolution",
-    "takeaway": "Este filtro elegido muestra una operación; no aprende a clasificar.",
+    "takeaway": "Cada celda del mapa sale de una ventana, los mismos pesos y una suma de productos. Un filtro fijo permite verificar esa operación.",
     "next": "Veremos cómo reutilizar filtros y otros parámetros aprendidos previamente.",
     "lab": {
       "title": "Relacionar ventana y mapa",
@@ -1376,11 +1401,11 @@ export const LESSON_GUIDES={
   },
   "dl-transferencia": {
     "objective": "Probar si un modelo existente cubre una necesidad antes de adaptarlo.",
-    "concept": "Un modelo preentrenado tiene parámetros ajustados previamente con otros datos. Usarlos para predecir se llama inferencia; actualizarlos con nuevos ejemplos es una adaptación. Reutilizar parámetros no garantiza conocer una categoría nueva.",
+    "concept": "Un modelo preentrenado tiene parámetros ajustados previamente con otros datos. Aprendizaje por transferencia reutiliza parte de ese conocimiento para una tarea: puede conservar un extractor de características o ajustar parámetros mediante entrenamiento adicional, llamado ajuste fino. Inferencia es usar el modelo para obtener predicciones sin actualizar esos parámetros. Antes de reutilizarlo, comprueba qué entradas acepta, qué salidas produce y si sus categorías cubren tu necesidad.",
     "relevance": "Permite decidir si un modelo existente responde al problema o necesita adaptación.",
     "case": {
       "title": "Un detector de objetos no aprende café por renombrarlo",
-      "context": "Una cooperativa quiere identificar café defectuoso. El detector del cuaderno conoce categorías de COCO, como persona y bus, pero no café sano o defectuoso. Consideremos tres acciones.",
+      "context": "Una cooperativa quiere distinguir café sano de defectuoso. El detector del cuaderno produce categorías de COCO, un conjunto de imágenes de objetos comunes, como persona y bus. Sus categorías de salida no incluyen café sano o defectuoso. Comparamos tres acciones posibles.",
       "columns": [
         "Acción",
         "¿Actualiza pesos?",
@@ -1408,7 +1433,8 @@ export const LESSON_GUIDES={
         "Cambiar una etiqueta visible conserva parámetros y patrones: no enseña una categoría.",
         "Adaptar requiere ejemplos etiquetados, ajuste apropiado y evaluación reservada; el nombre del modelo no basta."
       ],
-      "conclusion": "Este cuaderno reutiliza pesos para predecir. No realiza la adaptación descrita en la tercera fila."
+      "conclusion": "Cargar los pesos permite predecir las categorías disponibles. Para abordar café defectuoso hacen falta una tarea, datos etiquetados y una evaluación propios; cambiar el texto de una categoría mantiene el mismo detector.",
+      "question": "¿Un detector con categorías persona y bus puede identificar café defectuoso solo al cambiar sus nombres?"
     },
     "vocabulary": [
       {
@@ -1425,7 +1451,7 @@ export const LESSON_GUIDES={
       }
     ],
     "explorer": null,
-    "takeaway": "Reutilizar un modelo ahorra trabajo previo, pero no demuestra que conozca nuestro caso.",
+    "takeaway": "Comprueba entradas y categorías del modelo. Reutilizar pesos, traducir nombres y ajustar parámetros son operaciones diferentes.",
     "next": "Examinaremos problemas donde también importa el orden de las entradas.",
     "lab": {
       "title": "Reconocer qué se está reutilizando",
@@ -1449,7 +1475,7 @@ export const LESSON_GUIDES={
   },
   "dl-secuencias": {
     "objective": "Construir un resumen de una secuencia que tenga en cuenta el orden.",
-    "concept": "Una secuencia conserva el orden de sus elementos. Una regla recurrente actualiza un estado usando el estado anterior y la nueva entrada; aquí fijaremos esa regla sin entrenarla.",
+    "concept": "Una secuencia es una lista ordenada, como lecturas consecutivas de un sensor. Una regla recurrente conserva un estado: un resumen que actualiza con la entrada actual y el estado anterior. Por eso dos listas con los mismos números pueden terminar con estados diferentes si cambia su orden. En una RNN, red neuronal recurrente, la regla contiene parámetros aprendidos; LSTM es un tipo de red recurrente que regula qué información conservar o actualizar.",
     "relevance": "Un resumen de sensores o ventas puede perder información si ignora qué ocurrió primero.",
     "case": {
       "title": "Los mismos valores, dos recorridos",
@@ -1489,7 +1515,8 @@ export const LESSON_GUIDES={
         "El segundo es 0,5 × 5 + 0,5 × 20 = 12,5; el tercero es 21,25.",
         "En orden inverso, los estados son 15, 17,5 y 13,75: los últimos valores influyen de manera diferente en este recorrido."
       ],
-      "conclusion": "El promedio coincide, pero el estado final cambia porque la regla conserva parte del pasado."
+      "conclusion": "El promedio coincide, pero el estado final cambia porque la regla conserva parte del pasado.",
+      "question": "¿Por qué 10 → 20 → 30 y 30 → 20 → 10 tienen igual promedio, pero distinto estado final?"
     },
     "vocabulary": [
       {
@@ -1502,7 +1529,7 @@ export const LESSON_GUIDES={
       }
     ],
     "explorer": "sequence",
-    "takeaway": "El estado final no es un pronóstico ni un resultado de una LSTM entrenada.",
+    "takeaway": "Conserva el orden y registra cada actualización del estado. El estado resume lo leído hasta ese paso.",
     "next": "Combinaremos información de varias fuentes usando pesos calculados.",
     "lab": {
       "title": "Comprobar ambos órdenes",
@@ -1526,11 +1553,11 @@ export const LESSON_GUIDES={
   },
   "dl-atencion": {
     "objective": "Construir una combinación ponderada de fuentes y rastrear su cálculo.",
-    "concept": "Atención combina información dando pesos diferentes a varias fuentes. Compara una consulta con las claves de las fuentes; softmax convierte sus puntuaciones en pesos positivos que suman 1.",
+    "concept": "La atención por producto escalar combina información mediante pesos que dependen de una consulta Q. Comparamos Q con la clave K de cada fuente; esa comparación produce puntuaciones. Tras escalarlas, softmax transforma las puntuaciones en pesos que suman 1; cada peso multiplica el valor V asociado a su fuente. La suma de esas contribuciones es la salida.",
     "relevance": "Permite explicar una combinación interna sin presentarla como comprensión humana o explicación causal.",
     "case": {
       "title": "Una consulta, dos fuentes",
-      "context": "Fijamos dos claves: A = [1,0] y B = [0,1], con valores 10 y 20. Cambiaremos solamente la consulta Q. Son vectores y valores ilustrativos, sin entrenamiento ni significado agrícola aprendido.",
+      "context": "Dos fuentes numéricas A y B tienen claves K_A = [1,0] y K_B = [0,1], y valores V_A = 10 y V_B = 20. Las claves sirven para compararlas con Q; los valores son los números que mezclaremos. Conservamos K y V y cambiamos solo Q. Todos estos números están fijados para el ejercicio.",
       "columns": [
         "Consulta Q",
         "Productos con A y B",
@@ -1558,28 +1585,29 @@ export const LESSON_GUIDES={
         ]
       ],
       "reasoning": [
-        "Con Q = [1,0], los productos son 1 y 0; al dividir por √2 quedan aproximadamente 0,7071 y 0.",
-        "Softmax transforma esas puntuaciones en pesos aproximados 0,6698 y 0,3302.",
+        "Con Q = [1,0], Q·K_A = 1×1 + 0×0 = 1 y Q·K_B = 1×0 + 0×1 = 0. Dividimos ambos por √2, porque las claves tienen dos componentes: obtenemos aproximadamente 0,7071 y 0.",
+        "Softmax calcula el peso de A como exp(0,7071) / [exp(0,7071) + exp(0)] ≈ 0,6698. El peso de B es ≈ 0,3302; ambos suman 1.",
         "Combina los valores: 0,6698 × 10 + 0,3302 × 20 ≈ 13,302, usando los pesos sin redondear."
       ],
-      "conclusion": "La consulta cambia el reparto y la salida, aunque claves y valores permanezcan iguales."
+      "conclusion": "La consulta cambia el reparto y la salida, aunque claves y valores permanezcan iguales.",
+      "question": "Si solo cambia la consulta Q, ¿cómo cambian los pesos de A y B y el valor combinado?"
     },
     "vocabulary": [
       {
-        "term": "Consulta",
-        "meaning": "Vector que se compara con las claves."
+        "term": "Consulta Q",
+        "meaning": "Vector que se compara con las claves para calcular el reparto."
       },
       {
-        "term": "Valor",
-        "meaning": "Información que cada fuente aporta a la mezcla."
+        "term": "Clave K y valor V",
+        "meaning": "K interviene en la comparación; V aporta la información que se combina."
       },
       {
-        "term": "Clave",
-        "meaning": "Vector de cada fuente que se compara con la consulta."
+        "term": "Softmax",
+        "meaning": "Convierte puntuaciones en pesos: divide la exponencial de cada puntuación por la suma de todas las exponenciales."
       }
     ],
     "explorer": "attention",
-    "takeaway": "Los pesos de atención no demuestran qué causa una decisión.",
+    "takeaway": "Sigue consulta y claves → puntuaciones → pesos → suma ponderada de valores. Los pesos indican cuánto aporta cada valor a esa combinación.",
     "next": "Ubicaremos esta operación dentro de una arquitectura para secuencias.",
     "lab": {
       "title": "Seguir la mezcla completa",
@@ -1603,7 +1631,7 @@ export const LESSON_GUIDES={
   },
   "dl-transformers": {
     "objective": "Construir una prueba de clasificación de secuencias con respuestas verificables.",
-    "concept": "Un Transformer construye una representación de cada elemento usando también información de otros elementos. Añade información de posición para conservar el orden, mezcla señales mediante atención y las transforma antes de producir una salida. Sus parámetros se aprenden con ejemplos; el nombre de la arquitectura no garantiza un resultado correcto.",
+    "concept": "Un Transformer es una arquitectura de red que combina atención con otras transformaciones para procesar secuencias. En el modelo de este laboratorio, cada número se representa con un vector y se añade información de su posición. La atención mezcla representaciones de diferentes posiciones; después, otras capas las transforman para calcular puntuaciones de salida. La etiqueta esperada se obtiene de la regla de la tarea y se compara con la predicción de la red.",
     "relevance": "Una arquitectura solo puede evaluarse después de definir qué debería responder.",
     "case": {
       "title": "¿El primero es mayor que el último?",
@@ -1657,13 +1685,14 @@ export const LESSON_GUIDES={
         },
         {
           "title": "Transformación",
-          "detail": "Una pequeña red transforma cada representación. El bloque combina información mediante conexiones residuales y normalización."
+          "detail": "Una pequeña red transforma cada representación. El bloque suma la representación anterior a la transformada y normaliza los valores para continuar el cálculo."
         },
         {
           "title": "Salida",
           "detail": "Conserva cuatro posiciones y calcula dos puntuaciones, una por clase."
         }
-      ]
+      ],
+      "question": "¿Qué etiqueta corresponde a cada secuencia si la regla es «primero mayor que último»?"
     },
     "vocabulary": [
       {
@@ -1676,14 +1705,14 @@ export const LESSON_GUIDES={
       }
     ],
     "explorer": null,
-    "takeaway": "El código conserva orden por más de una vía: no aísla el efecto de self.pos.",
+    "takeaway": "Define la regla de respuesta y conserva el orden de los elementos. Comprueba las predicciones con etiquetas conocidas de casos reservados.",
     "next": "Pasaremos a fotos que producen registros de objetos.",
     "lab": {
       "title": "Seguir el bloque 12",
       "objective": "Construir: banco de pruebas para una secuencia.",
-      "instruction": "Primero calcula las etiquetas de las cuatro secuencias de la tabla. Después, en el bloque 12, relaciona la entrada con self.pos, la mezcla con encoder y la salida por posiciones con flatten. Ejecuta y distingue tu etiqueta esperada de la predicción del modelo.",
+      "instruction": "Calcula las etiquetas de las cuatro secuencias de la tabla con la regla primero > último. En el bloque 12, sigue entrada, información de posición, atención y salida; ejecuta el modelo y compara sus predicciones con las etiquetas esperadas.",
       "watch": "Distingue etiquetas esperadas, pérdida de entrenamiento y evaluación en prueba.",
-      "expected": "Las etiquetas esperadas son 0, 1, 0 y 1. El código suma posiciones y conserva las cuatro al aplanar; no se ha aislado el efecto de una sola pieza. Los aciertos del modelo se comprueban al ejecutar, no se anticipan aquí.",
+      "expected": "Las etiquetas calculadas con la regla son 0, 1, 0 y 1. Al ejecutar el cuaderno, compara cada predicción de la red con su etiqueta esperada y registra sus aciertos en prueba.",
       "notebookGuide": "En el bloque 12, resuelve primero las etiquetas de las secuencias y después sigue entrada, posición, encoder y salida. Compara predicción y etiqueta reservada al ejecutar; no deduzcas la exactitud a partir de la arquitectura."
     },
     "build": {
@@ -1700,11 +1729,11 @@ export const LESSON_GUIDES={
   },
   "dl-yolo": {
     "objective": "Construir un registro de detecciones que pueda revisarse antes de contar objetos.",
-    "concept": "Un detector propone categoría, caja y puntuación por objeto. El umbral de puntuación decide qué propuestas se conservan; filtrar resultados no vuelve a entrenar el modelo.",
+    "concept": "YOLO es una familia de modelos de detección de objetos. En la tarea del cuaderno, cada detección contiene una categoría, una puntuación y las coordenadas de una caja. Una regla de puntuación filtra qué propuestas se conservan y pasan al registro. El conteo corresponde a detecciones conservadas: para tratarlo como inventario debes revisar objetos omitidos, categorías equivocadas y duplicados.",
     "relevance": "Ayuda a revisar un registro visual antes de tratarlo como inventario.",
     "case": {
       "title": "Una propuesta, distintos filtros",
-      "context": "Hay un objeto dibujado y una caja propuesta con puntuación fija 0,80. Conservamos la misma propuesta y cambiamos el umbral. Este cálculo ilustrativo no ejecuta YOLO ni produce resultados nuevos sobre una foto.",
+      "context": "En este ejercicio hay un objeto dibujado y una propuesta de caja con puntuación fija 0,80. Aplicamos la regla «conservar si puntuación ≥ umbral» sin mover la caja. La tabla muestra el filtro numérico; en el cuaderno YOLO ejecutarás detección sobre una foto.",
       "columns": [
         "Umbral",
         "¿0,80 supera o iguala el límite?",
@@ -1732,7 +1761,8 @@ export const LESSON_GUIDES={
         "Con 0,80 también se conserva, porque la regla incluye la igualdad.",
         "Con 0,90 se descarta la fila, pero el objeto conocido sigue presente. Cero registros no demuestra ausencia."
       ],
-      "conclusion": "El conteo cambia por una regla de selección, sin modificar la escena ni la puntuación."
+      "conclusion": "El conteo cambia por una regla de selección, sin modificar la escena ni la puntuación.",
+      "question": "¿Cuántas filas conserva la regla puntuación ≥ umbral si la propuesta tiene puntuación 0,80?"
     },
     "vocabulary": [
       {
@@ -1745,7 +1775,7 @@ export const LESSON_GUIDES={
       }
     ],
     "explorer": "detection",
-    "takeaway": "En una foto real también debemos revisar categorías, cajas y objetos omitidos.",
+    "takeaway": "Relaciona cada fila con su imagen, categoría, puntuación y caja. Revisa las detecciones antes de convertir su conteo en una decisión operativa.",
     "next": "Comprobaremos si la caja conservada coincide con la ubicación conocida.",
     "lab": {
       "title": "Filtrar sin mover la caja",
@@ -1769,11 +1799,11 @@ export const LESSON_GUIDES={
   },
   "dl-evaluacion": {
     "objective": "Construir una comprobación de localización que separe filtro y coincidencia.",
-    "concept": "Evaluar compara propuestas con referencias conocidas. En detección importan categoría y ubicación; aquí fijamos una misma categoría y revisamos la coincidencia entre dos cajas mediante IoU.",
+    "concept": "Evaluar detecciones consiste en comparar propuestas con objetos anotados como referencia. Una propuesta conservada se considera acierto si su categoría coincide y su caja cumple el criterio de localización. Aquí usamos IoU: área compartida por ambas cajas dividida por el área de su unión. Con una sola categoría, una propuesta conservada sin coincidencia cuenta como falso positivo y un objeto sin detección coincidente cuenta como falso negativo.",
     "relevance": "Una puntuación alta no garantiza una caja bien ubicada ni evita objetos omitidos.",
     "case": {
       "title": "Conservar una caja no basta",
-      "context": "La caja conocida va de [20,20] a [60,60]: mide 40 × 40 píxeles. La propuesta tiene igual tamaño y puntuación 0,80. Exigimos IoU mínima 0,50; cada fila es un escenario independiente.",
+      "context": "Un objeto de categoría Fruto tiene caja de referencia con esquina superior izquierda [20,20] e inferior derecha [60,60], en píxeles: ancho y alto de 40. La candidata tiene el mismo tamaño y categoría, y puntuación 0,80. Solo la desplazamos horizontalmente hacia la derecha. Aceptamos coincidencia si IoU ≥ 0,50; cada fila empieza un escenario independiente.",
       "columns": [
         "Desplazamiento",
         "Umbral de puntuación",
@@ -1805,20 +1835,25 @@ export const LESSON_GUIDES={
         "Con desplazamiento 30, IoU = 400/2800 = 1/7: la propuesta cuenta como falsa y el objeto queda omitido.",
         "Con umbral 0,90 se descarta la propuesta: no hay falso positivo, pero sigue habiendo un objeto omitido."
       ],
-      "conclusion": "Filtrar y comprobar localización son decisiones distintas; ambas cambian los conteos."
+      "conclusion": "Filtrar y comprobar localización son decisiones distintas; ambas cambian los conteos.",
+      "question": "¿La caja conservada coincide con el objeto y qué errores aparecen al desplazarla o descartarla?"
     },
     "vocabulary": [
       {
         "term": "IoU",
-        "meaning": "Área compartida dividida por el área de unión."
+        "meaning": "Intersección / unión de las áreas de dos cajas. Vale 0 sin solapamiento y 1 si coinciden por completo."
+      },
+      {
+        "term": "TP",
+        "meaning": "Verdadero positivo: propuesta conservada que coincide con el objeto según el criterio."
       },
       {
         "term": "FP y FN",
-        "meaning": "Propuesta sin coincidencia y objeto que quedó sin detectar."
+        "meaning": "FP: propuesta conservada sin coincidencia. FN: objeto de referencia que no tiene una propuesta coincidente."
       }
     ],
     "explorer": "detection",
-    "takeaway": "Este esquema de un objeto no calcula mAP ni evalúa un detector real.",
+    "takeaway": "Evalúa por separado la regla que conserva propuestas y el criterio que las compara con los objetos de referencia.",
     "next": "Consideraremos las consecuencias de convertir predicciones en acciones.",
     "lab": {
       "title": "Separar filtro y coincidencia",
@@ -1842,11 +1877,11 @@ export const LESSON_GUIDES={
   },
   "dl-integracion": {
     "objective": "Construir una política de revisión con costes y una salida verificable.",
-    "concept": "Una política convierte puntuaciones en acciones, como revisar o aceptar. Para compararlas debemos considerar las consecuencias de cada error y una alternativa de referencia, usando los mismos casos.",
+    "concept": "Una política de revisión convierte una puntuación en una acción: enviar el caso a revisión o aceptarlo sin revisar. Su coste depende de cuántos casos revisas y cuántos defectos aceptas por error. Para comparar políticas, conserva los mismos casos y calcula coste = revisiones × coste de revisar + defectos aceptados × coste de aceptar un defecto. Incluye una alternativa sencilla, como revisar todos, y declara los supuestos de la revisión.",
     "relevance": "La decisión depende de errores y consecuencias, además de las puntuaciones.",
     "case": {
       "title": "¿Qué granos conviene revisar?",
-      "context": "Usamos conteos ficticios del bloque 14 para diez granos. Revisar cuesta 1 unidad y aceptar un defectuoso, 8. Suponemos revisión manual perfecta; no son precios reales.",
+      "context": "Diez granos y sus conteos ficticios del bloque 14. Enviamos a revisión los que alcanzan el umbral y aceptamos el resto. Revisar cuesta 1 unidad de coste; aceptar un defectuoso cuesta 8. Para esta cuenta suponemos que toda revisión detecta correctamente el defecto. Son unidades ficticias de coste, no precios.",
       "columns": [
         "Política",
         "Revisiones",
@@ -1890,7 +1925,8 @@ export const LESSON_GUIDES={
         "Calcula coste = revisiones × 1 + defectos aceptados × 8. Por ejemplo, 4 × 1 + 1 × 8 = 12.",
         "Con estos supuestos, 0,30 tiene el menor coste: 6 frente a 12, 11, 25 y 10."
       ],
-      "conclusion": "Menos revisiones no implica menor coste cuando dejar pasar defectos resulta caro."
+      "conclusion": "Menos revisiones no implica menor coste cuando dejar pasar defectos resulta caro.",
+      "question": "¿Qué política tiene menor coste al pagar 1 por revisión y 8 por defecto aceptado, y qué cambia si este último coste baja a 1?"
     },
     "vocabulary": [
       {
@@ -1903,7 +1939,7 @@ export const LESSON_GUIDES={
       }
     ],
     "explorer": null,
-    "takeaway": "Antes de aplicarla, también debe evaluarse la revisión humana.",
+    "takeaway": "Compara políticas con los mismos casos, costes y supuestos. La opción elegida debe indicar qué se revisa, qué se acepta y cómo se seguirá el error.",
     "next": "Cierra explicando pregunta, datos, comparación, decisión y evidencia que falta.",
     "lab": {
       "title": "Cambiar el coste, conservar los casos",
