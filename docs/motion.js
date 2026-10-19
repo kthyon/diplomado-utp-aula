@@ -24,7 +24,10 @@ const observer = 'IntersectionObserver' in window ? new IntersectionObserver(ent
     if (revealed.has(entry.target)) continue;
     revealed.add(entry.target);
     const opacity = Number(getComputedStyle(entry.target).opacity);
-    animate(entry.target, [
+    // Keep the live 3D scene out of parent opacity/transform compositing on entry.
+    const entranceTarget = entry.target.matches('.hero') && entry.target.querySelector('canvas')
+      ? entry.target.firstElementChild : entry.target;
+    animate(entranceTarget, [
       {opacity: opacity * .25, transform: 'translateY(14px)'},
       {opacity, transform: 'translateY(0)'}
     ], {duration: 460, delay: Math.min(order++ * 45, 180)});

@@ -10,7 +10,7 @@ Web: https://kthyon.github.io/diplomado-utp-aula/
 
 ## Qué incluye
 
-8 clases, 24 temas, 12 exploradores (regresión, imputación, matriz y umbral, DBSCAN, proyección PCA, comparación de ensambles, activaciones, gradiente, atención, tareas de visión, series y GridWorld), comprobaciones voluntarias, notas personales, insignias, búsqueda y biblioteca. Los exploradores son didácticos; no sustituyen entrenamientos ni evalúan modelos reales.
+8 clases y 24 temas con una capacidad práctica, un concepto, un ejemplo resuelto y un laboratorio final. Cada laboratorio propone una construcción verificable: tablas de predicciones, reglas de alerta, mapas, pronósticos, pruebas o registros de detección. Incluye pasos para trabajar en una copia personal del cuaderno, comprobación, aplicación a otra operación y una ampliación opcional con código. La bitácora conserva resultados y decisiones con el mismo guardado de notas. Los exploradores son didácticos; los entrenamientos e inferencias se realizan en los cuadernos indicados.
 
 ## Entrada y apertura de clases
 
@@ -76,4 +76,4 @@ El catálogo de herramientas reúne 32 plataformas con el mismo formato, incluid
 
 ## Revisión de octubre de 2026
 
-La [auditoría](AUDITORIA.md) documenta cobertura, correcciones, fuentes y límites de verificación. El acabado usa superficies claras, formas suaves y movimiento inspirado en Material 3 Expressive. Se conserva el orbe original, con iconos coherentes y un fondo con profundidad; se respetan los logos y los colores explicativos de los gráficos. Importar progreso conserva la cuenta actual, y las notas privadas del docente se mantienen separadas de las notas del estudiante.
+La [auditoría](AUDITORIA.md) documenta cobertura, correcciones, fuentes y límites de verificación. Los 24 temas siguen el recorrido objetivo → concepto → ejemplo resuelto → laboratorio final, con una sección concreta del cuaderno para continuar. El acabado usa superficies claras, formas suaves y movimiento inspirado en Material 3 Expressive. El orbe conserva su red y movimiento, con volumen difuso y fondo independiente; se respetan los logos y los colores explicativos de los gráficos. Importar progreso conserva la cuenta actual, y las notas privadas del docente se mantienen separadas de las notas del estudiante.

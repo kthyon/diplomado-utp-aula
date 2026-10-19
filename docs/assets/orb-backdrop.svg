@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="planes" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#252c28"/>
+      <stop offset=".498" stop-color="#353e32"/>
+      <stop offset=".5" stop-color="#5d6750"/>
+      <stop offset="1" stop-color="#384234"/>
+    </linearGradient>
+    <radialGradient id="ambient" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="1" gradientTransform="translate(500 364.8) scale(580 456)">
+      <stop offset="0" stop-color="#c2ccac" stop-opacity=".188"/>
+      <stop offset=".46" stop-color="#9daa83" stop-opacity=".078"/>
+      <stop offset=".78" stop-color="#9daa83" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="floor" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="1" gradientTransform="translate(500 820.8) scale(700 364.8)">
+      <stop offset="0" stop-color="#a3af7c" stop-opacity=".22"/>
+      <stop offset=".75" stop-color="#a3af7c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#planes)" d="M28 0H972Q995 0 989 22L903 380L989 738Q995 760 972 760H28Q5 760 11 738L97 380L11 22Q5 0 28 0Z"/>
+  <path fill="url(#floor)" d="M28 0H972Q995 0 989 22L903 380L989 738Q995 760 972 760H28Q5 760 11 738L97 380L11 22Q5 0 28 0Z"/>
+  <path fill="url(#ambient)" d="M28 0H972Q995 0 989 22L903 380L989 738Q995 760 972 760H28Q5 760 11 738L97 380L11 22Q5 0 28 0Z"/>
+</svg>
