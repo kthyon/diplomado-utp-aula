@@ -1,4 +1,4 @@
-/* Aula: a simple leaf and a forest/teal palette. */
+/* Aula: a simple leaf and a forest/olive palette. */
 .sidebar .brand{gap:12px;align-items:center}
 .sidebar .brand .brand-mark{width:48px;height:48px;transform:rotate(-6deg);border-radius:15px;box-shadow:none}
 .sidebar .brand:hover .brand-mark{transform:rotate(-6deg)}
@@ -11,9 +11,9 @@
 .ll-footer .developer-credit{display:block;margin-top:12px}
 @media(max-width:560px){.site-footer{align-items:flex-start;flex-direction:column;gap:6px;font-size:11px}}
 .sidebar .brand-course{color:#173f35}
-.sidebar .brand-course b{color:#24796d;font-weight:700}
+.sidebar .brand-course b{color:#819916;font-weight:700}
 [data-theme=dark] .sidebar .brand-course{color:#e4f1e9}
-[data-theme=dark] .sidebar .brand-course b{color:#84d6c5}
+[data-theme=dark] .sidebar .brand-course b{color:#819916}
 
 /* Only the leaf moves; its square and wordmark remain still. */
 .sidebar .brand-leaf{transform-box:view-box;transform-origin:23px 57px}
