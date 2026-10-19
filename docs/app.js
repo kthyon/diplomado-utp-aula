@@ -1,4 +1,4 @@
-import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=3';
+import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=4';
 import {mountProblemExplorer} from './learning-explorers.js';
 import {mountDLExplorer} from './dl-explorers.js';
 import {icon} from './icons.js';
@@ -8,7 +8,7 @@ import {searchCatalog} from './search.js?v=3';
 import {STUDENT_RECORDS} from './database-config.js';
 import {toolSection,mountTools} from './tools.js?v=2';
 import {heroVisual} from './hero-space.js?v=7';
-import {COURSES,LESSONS,GLOSSARY,NOTEBOOKS,SOURCES,REPO,findLesson,classOf} from './content.js?v=6';
+import {COURSES,LESSONS,GLOSSARY,NOTEBOOKS,SOURCES,REPO,findLesson,classOf} from './content.js?v=7';
 import {canAccess} from './math.js';
 import {colombiaDay,scheduleReleases,validFullName,mayEnter} from './access-policy.js';
 import {mountSimulator} from './simulators.js?v=4';
@@ -63,7 +63,7 @@ function lesson(id){
   <div class="lesson-layout"><article class="reading learning-reading">${renderLearningGuide(l)}
     <div class="quiz"><small>COMPROBACIÓN VOLUNTARIA · SIN NOTA</small><h3 style="margin-top:10px">${l.quiz.q}</h3>${l.quiz.choices.map((a,i)=>`<button class="quiz-answer" data-answer="${i}">${a}</button>`).join('')}<div class="quiz-feedback" id="quiz-feedback" aria-live="polite"></div></div>
     ${renderLearningLab(l,books,`<section class="build-notes"><h3>Tu bitácora de construcción</h3><p>${studentConnected()?'Se guarda en tu registro y el docente puede consultarla.':'Se guarda en este navegador. Puedes descargarla desde tu perfil.'}</p><label class="field-note" for="study-note">Decisión, resultado y siguiente prueba</label><textarea class="study-note" maxlength="10000" id="study-note" placeholder="Construí… Usé estos datos… Obtuve… Lo comprobé con… Lo usaría para…">${esc(state.notes[id]||'')}</textarea><div class="source-line">Fuente de consulta: <a href="${l.source}" target="_blank" rel="noopener noreferrer">documentación primaria ↗</a></div></section>`)}
-  </article><aside class="lesson-aside sticky"><section class="panel learning-aside"><h3>El sentido de esta clase</h3><p>${esc(CLASS_PURPOSES[c.id][c.classes.indexOf(cl)])}</p><p><b>En este tema:</b> ${esc(g.objective)}</p></section><section class="panel checklist learning-aside"><h3>Para recordar</h3><p>${esc(g.takeaway)}</p><button class="button small" id="complete-lesson">${seen?'Ver siguiente tema →':'Marcar como visto ✓'}</button></section></aside></div>`;
+  </article><aside class="lesson-aside sticky"><section class="panel learning-aside"><h3>El sentido de esta clase</h3><p>${esc(CLASS_PURPOSES[c.id][c.classes.indexOf(cl)])}</p></section><section class="panel checklist learning-aside"><h3>Progreso del tema</h3><button class="button small" id="complete-lesson">${seen?'Ver siguiente tema →':'Marcar como visto ✓'}</button></section></aside></div>`;
 }
 function explore(){return `<div class="idea-page">${intro('EJEMPLOS INTERACTIVOS','Prueba cómo funciona la IA.','Elige un tema. Prueba sus tres casos y compara el resultado en el gráfico.')}<div id="visual-studio"></div></div>`}
 
