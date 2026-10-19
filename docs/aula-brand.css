@@ -11,9 +11,9 @@
 .ll-footer .developer-credit{display:block;margin-top:12px}
 @media(max-width:560px){.site-footer{align-items:flex-start;flex-direction:column;gap:6px;font-size:11px}}
 .sidebar .brand-course{color:#173f35}
-.sidebar .brand-course b{color:#819916;font-weight:700}
+.sidebar .brand-course b{color:#95B51B;font-weight:700}
 [data-theme=dark] .sidebar .brand-course{color:#e4f1e9}
-[data-theme=dark] .sidebar .brand-course b{color:#819916}
+[data-theme=dark] .sidebar .brand-course b{color:#95B51B}
 
 /* Only the leaf moves; its square and wordmark remain still. */
 .sidebar .brand-leaf{transform-box:view-box;transform-origin:23px 57px}
