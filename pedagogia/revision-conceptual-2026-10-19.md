@@ -37,3 +37,7 @@ Las comprobaciones son opcionales y sin calificación. La pregunta de comprensi�
 - https://scikit-learn.org/stable/common_pitfalls.html
 - https://www.tensorflow.org/tutorials/keras/overfit_and_underfit
 - https://www.tensorflow.org/text/tutorials/transformer
+
+## Segunda revisión: claridad y repeticiones
+
+Se reescribieron las 24 introducciones para que expresen propósito y relación con la tarea. El glosario explica las piezas y el ejemplo muestra su uso. Se retiró el bloque de profundización que volvía a explicar el mismo concepto; sus matices útiles se incorporaron en su lugar (Mean-Shift, stacking, denominadores cero, segmentación y configuración de convolución). Se quitaron diez definiciones compartidas repetidas en temas posteriores y la repetición de objetivo y recordatorio en la columna lateral. Las conexiones y las preguntas pueden retomar una idea para aplicarla, pero no agregan una segunda definición completa.
