@@ -1,3 +1,4 @@
+import {renderConceptConnections} from './concept-connections.js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const CLASS_PURPOSES={
   ml:[
@@ -21,7 +22,7 @@ export function renderLearningGuide(l){
     <section class="panel worked-case"><div class="eyebrow">02 · EJEMPLO RESUELTO</div><h2>${esc(c.title)}</h2><p class="case-question"><b>${esc(c.question)}</b></p><p>${esc(c.context)}</p>${table}
     <h3>Resolvamos el caso</h3><ol class="worked-steps">${c.reasoning.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>
     ${c.stages?.length?`<ol class="learning-stages">${c.stages.map(s=>`<li><b>${esc(s.title)}</b><span>${esc(s.detail)}</span></li>`).join('')}</ol>`:''}
-    <div class="learning-result"><b>Qué podemos concluir</b><p>${esc(c.conclusion)}</p></div><p class="learning-takeaway"><b>Para recordar:</b> ${esc(g.takeaway)}</p></section>`;
+    <div class="learning-result"><b>Qué podemos concluir</b><p>${esc(c.conclusion)}</p></div><p class="learning-takeaway"><b>Para recordar:</b> ${esc(g.takeaway)}</p></section>${renderConceptConnections(l.id)}`;
 }
 export function renderLearningLab(l,notebooks,notes=''){
   const g=l.guide,b=g.build;
