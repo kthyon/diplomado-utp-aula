@@ -1,4 +1,4 @@
-import {renderLearningGuide,renderLearningLab,CLASS_PURPOSES} from './learning-layout.js';
+import {renderLearningGuide,renderLearningLab,CLASS_PURPOSES} from './learning-layout.js?v=2';
 import {mountProblemExplorer} from './learning-explorers.js';
 import {mountDLExplorer} from './dl-explorers.js';
 import {icon} from './icons.js';
