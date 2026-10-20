@@ -4,11 +4,14 @@ const serviceOrigin=new URL(STUDENT_RECORDS.url).origin;
 export const isConnectedView=location.origin===serviceOrigin;
 let settings,registered=false,revision=0,timer=null,pending=false,failed=false,queue=Promise.resolve(),lastLabel='Avance en este navegador';
 export const studentConnected=()=>registered&&isConnectedView;
+export const studentSavePending=()=>studentConnected()&&pending;
+export function validReturnRoute(route){return typeof route==='string'&&/^#(?:inicio|explorar(?:\/[a-z-]+)?|biblioteca|progreso|docente|generalidades|curso\/(?:ml|dl)(?:\/[1-4])?|tema\/(?:ml|dl)-[a-z0-9-]+|buscar(?:\/[^#\s]*)?)$/.test(route);}
+function consumeReturnRoute(){const params=new URLSearchParams(location.search);if(!params.has('ruta'))return;const route=params.get('ruta');params.delete('ruta');const query=params.toString();history.replaceState(null,'',location.pathname+(query?'?'+query:'')+(validReturnRoute(route)?route:location.hash||''));}
 function label(s){lastLabel=s;for(const selector of ['#profile-status','[data-save-status]']){const b=document.querySelector(selector);if(b)b.textContent=s;}const retry=document.querySelector('[data-retry-save]');if(retry)retry.hidden=!failed;}
 export const refreshStudentSaveStatus=()=>label(lastLabel);
 export const retryStudentProgress=()=>saveStudentProgress();
 async function request(url,options={}){try{return await fetch(url,{...options,signal:AbortSignal.timeout(12000)})}catch(e){if(e.name==='TimeoutError'||e.name==='AbortError')throw Error('La conexión está tardando demasiado. Tu avance permanece en este navegador; vuelve a intentarlo.');throw Error('No pudimos conectar con tu registro. Tu avance permanece en este navegador.')}}
-async function api(method='GET',value){const r=await request('/api/me',{method,headers:value?{'content-type':'application/json'}:{},body:value?JSON.stringify(value):undefined});const v=await r.json();if(!r.ok)throw Error(v.error||'No pudimos guardar.');return v;}
+async function api(method='GET',value){const r=await request('/api/me',{method,headers:value?{'content-type':'application/json'}:{},body:value?JSON.stringify(value):undefined});let v;try{v=await r.json()}catch{throw Error('No pudimos leer la respuesta del registro. Tu avance permanece en este navegador; vuelve a intentarlo.')}if(!r.ok){if(r.status===409&&method==='POST')throw Error('Ese correo ya está asociado a un registro. Puedes dejar el correo vacío para continuar o pedir al docente que revise el registro anterior.');const message=typeof v.error==='string'?v.error:'';throw Error(r.status>=500||/SQLITE|UNIQUE|constraint|\bSQL\b/i.test(message)?'No pudimos guardar en el registro. Tu avance permanece en este navegador; vuelve a intentarlo.':message||'No pudimos guardar.');}return v;}
 async function useRemote(remote){
  if(!remote?.student)return;
  const local=settings.read();
@@ -19,7 +22,7 @@ async function useRemote(remote){
  registered=true;pending=false;failed=false;
  settings.apply(bringLocal?{...remote,completed:local.completed,notes:local.notes}:remote);
  if(bringLocal)saveStudentProgress();else label('Avance sincronizado');
- settings.notify('Registro conectado. Tu avance se guardará en la base del curso.');
+ settings.notify(bringLocal?'Registro conectado. Tu avance está pendiente de sincronizar; se conserva en este navegador.':'Registro conectado. Recuperamos el avance guardado en tu registro.');
 }
 export function openStudentRegistration(){
  if(!STUDENT_RECORDS.enabled)return;
@@ -35,7 +38,7 @@ export function saveStudentProgress(){
   const snapshot=structuredClone(settings.read()),version=revision;
   queue=queue.catch(()=>{}).then(async()=>{
    try{await api('PUT',snapshot);if(version===revision){pending=false;failed=false;try{localStorage.removeItem('utp-cloud-pending')}catch{}label('Avance sincronizado');}}
-   catch(e){pending=true;failed=true;label('Guardado pendiente');settings.notify('No pudimos guardar en la base. El avance permanece en este navegador. Puedes reintentar desde Mi progreso.');}
+   catch(e){if(version!==revision)return;pending=true;failed=true;label('Guardado pendiente');settings.notify('No pudimos guardar en la base. El avance permanece en este navegador. Puedes reintentar desde Mi progreso.');}
   });
  },800);
 }
@@ -45,7 +48,7 @@ export async function initStudentRegistration(options){
  label('Avance en este navegador');
  if(!isConnectedView)return {role:'student'};
  try{const response=await request('/api/session',{cache:'no-store'});if(!response.ok)throw Error('No pudimos verificar tu sesión. Recarga el aula para volver a intentarlo.');const session=await response.json();
- const route=new URLSearchParams(location.search).get('ruta');if(route&&/^#(?:inicio|curso\/|tema\/|explorar|biblioteca|progreso|docente|buscar)/.test(route))history.replaceState(null,'',location.pathname+location.search+route);
+ consumeReturnRoute();
  if(session.role==='teacher'){label('Docente · acceso completo');return session}
  const remote=await api();if(remote.student)await useRemote(remote);return session;
  }catch(e){settings.notify(e.message);return {role:'student'}}

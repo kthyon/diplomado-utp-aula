@@ -1,11 +1,17 @@
 import {networkFoundation,neuronPanel,workedNeuron,networkLearning,networkData,knnFoundation,distancePanel,workedDistance,neighborGraphic,thresholdFoundation,scorePlot,thresholdSelection,metricExplanation} from './lab-explanations.js?v=2';
-import {validFullName} from './access-policy.js';
+import {checkLabAccess} from './lab-access.js';
 import {STUDENT_RECORDS} from './database-config.js';
 import {initialNetwork,forward,loss,evaluate,EMAILS,meanLoss,trainEpoch,packageNeighbors,PACKAGES,outputUpdate,chooseThreshold} from './lab-clear-models.js';
-let identityReady=false;
-if(location.origin===new URL(STUDENT_RECORDS.url).origin){try{const session=await fetch('/api/session').then(r=>r.json());if(session.role==='teacher')identityReady=true;else{const record=await fetch('/api/me').then(r=>r.json());identityReady=validFullName(record.name)}}catch{}}
-else{try{identityReady=validFullName(JSON.parse(localStorage.getItem('utp-aula-v1')||'{}').name)}catch{}}
-if(!identityReady){location.replace('./?destino='+encodeURIComponent('laboratorio.html'+location.hash));await new Promise(()=>{});}
+const labAccess=await checkLabAccess({origin:location.origin,recordsURL:STUDENT_RECORDS.url,storage:localStorage});
+if(labAccess.status==='unavailable'){
+ document.querySelector('.ll-intro').hidden=true;document.querySelector('.ll-tabs').hidden=true;
+ document.getElementById('experimento').innerHTML='<section class="ll-card" role="alert"><h1>No pudimos verificar tu registro</h1><p>La conexión está tardando o no está disponible. Puedes volver a intentarlo sin registrar de nuevo tu nombre.</p><div class="ll-toolbar"><button class="ll-button" id="lab-retry">Reintentar conexión</button><a class="ll-button" href="./#inicio">Volver al aula</a></div></section>';
+ document.getElementById('lab-retry').onclick=()=>location.reload();await new Promise(()=>{});
+}
+if(labAccess.status!=='ready'){
+ const hash=['#red','#vecinos','#metricas','#riego'].includes(location.hash)?location.hash:'#red';
+ location.replace('./?destino='+encodeURIComponent('laboratorio.html'+hash));await new Promise(()=>{});
+}
 const $=id=>document.getElementById(id),f=(n,d=2)=>Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}),percent=n=>n===null?'No definida':f(n*100,1)+' %';
 let tab='',net=initialNetwork(),epoch=0,step=0,sample=0,baseline=forward(net,EMAILS[0].x).p,history=[meanLoss(net)],running=false,timer;
 let length=43,mass=4200,k=3,unit='g',threshold=1,selectedPiece=100,neuronIndex=0,lastUpdate=null,distanceId='C';

@@ -1,0 +1,17 @@
+.flow-guide,.flow-lesson{padding:clamp(24px,3vw,32px);border:1px solid var(--line,#dce3d4);border-radius:20px;background:var(--paper,#fff);color:var(--ink,#20362b);margin:24px 0;min-width:0}
+.flow-guide h2{font-size:clamp(1.3rem,2vw,1.7rem);margin:0 0 20px}
+.flow-steps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:20px}
+.flow-steps li{padding:0 0 0 14px;border-left:3px solid var(--accent,#507b3c);min-width:0}
+.flow-steps b,.flow-steps span{display:block}
+.flow-steps b{font-size:1rem;line-height:1.5;margin-bottom:7px}
+.flow-steps span,.flow-note,.flow-spaces,.flow-lesson p,.flow-lesson details{font-size:.95rem;line-height:1.65}
+.flow-note{margin:22px 0 0;padding-top:18px;border-top:1px solid var(--line,#dce3d4)}
+.flow-guide summary,.flow-lesson summary{cursor:pointer;font-weight:600;padding:12px 0;min-height:44px;box-sizing:border-box}
+.flow-guide summary:focus-visible,.flow-lesson summary:focus-visible,.flow-position a:focus-visible{outline:3px solid var(--accent,#507b3c);outline-offset:4px;border-radius:4px}
+.flow-spaces{margin-top:8px}
+.flow-spaces dl{margin:8px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:18px}
+.flow-spaces dt{font-weight:700;margin-bottom:6px}.flow-spaces dd{margin:0}.flow-spaces p{margin:14px 0 0}
+.flow-position{margin:0;font-weight:650}.flow-position a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.flow-study{margin:12px 0 0}.flow-lesson details{margin-top:8px}.flow-lesson details p{margin:8px 0 14px}
+@media(max-width:600px){.flow-steps{gap:17px}.flow-guide,.flow-lesson{border-radius:16px}.flow-position{line-height:1.8}}
+.next-class.journey-next{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px 28px;align-items:center}.journey-upcoming{grid-column:1/-1;border-top:1px solid var(--line);padding-top:18px;line-height:1.7}.journey-upcoming strong{font-size:14px;color:var(--ink)}.journey-upcoming p{margin:6px 0 10px}.flow-transfer{margin:20px 0;padding:28px}.flow-transfer-actions{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}.flow-transfer-actions button:disabled{opacity:.55;cursor:not-allowed}.flow-resume{margin:22px 0}.course-access-note{margin:18px 0;line-height:1.8}.class-block:focus-visible{outline:3px solid var(--accent);outline-offset:4px}.class-block{scroll-margin-top:100px}@media(max-width:700px){.next-class.journey-next{grid-template-columns:1fr}.next-class.journey-next>.button{justify-self:start}.flow-transfer{padding:24px}.flow-transfer-actions{flex-direction:column}.flow-transfer-actions .button{width:100%}}
