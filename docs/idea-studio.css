@@ -1,5 +1,20 @@
 .idea-studio{--idea-line:var(--line);--idea-surface:var(--paper);border:1px solid var(--line);background:var(--paper);border-radius:22px;overflow:hidden;margin:24px 0 36px;color:var(--ink)}
 .idea-mobile-switch{display:none}
+.idea-studio{--idea-green:#507b3c;--idea-orange:#ac602d;--idea-blue:#547d9f}
+[data-theme=dark] .idea-studio{--idea-green:#b4d29b;--idea-orange:#edb18c;--idea-blue:#a0c7e5}
+.idea-studio :is(button,input,select,summary,a,[tabindex]):focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+.idea-studio .idea-table-scroll:focus-visible{outline-offset:-3px}
+.idea-plot [fill="#507b3c"]{fill:var(--idea-green)}
+.idea-plot [fill="#ac602d"]{fill:var(--idea-orange)}
+.idea-plot [fill="#547d9f"]{fill:var(--idea-blue)}
+.idea-plot [stroke="#507b3c"]{stroke:var(--idea-green)}
+.idea-plot [stroke="#ac602d"]{stroke:var(--idea-orange)}
+.idea-plot [stroke="#547d9f"]{stroke:var(--idea-blue)}
+.idea-studio .idea-plot :is(.idea-residual,.idea-alert-ring,.idea-box){stroke:var(--idea-orange)}
+.idea-plot polyline[opacity]{opacity:1}
+.idea-graph-panel [data-graph],.idea-pair article{overflow-x:auto;overscroll-behavior-x:contain}
+.idea-graph-panel [data-graph]>.idea-plot,.idea-pair article>.idea-plot{min-width:560px}
+.idea-chart-hint{display:none;font-size:13px;line-height:1.7;color:var(--muted);margin:12px 0}
 .idea-simulation{font-size:11px;font-weight:550;letter-spacing:.04em;color:var(--muted)}
 .idea-pick.is-selected>rect,.idea-pick.is-selected>ellipse,.idea-pick:focus-visible>rect,.idea-pick:focus-visible>ellipse{stroke:var(--ink);stroke-width:3}
 .idea-pick>.idea-hit{fill:transparent!important;stroke:none!important;pointer-events:all}
@@ -29,3 +44,45 @@
 .idea-reading{margin:12px 0 0;border-top:1px solid var(--line);padding-top:8px}.idea-reading summary,.idea-data-section>summary,.idea-context>summary{cursor:pointer;color:var(--accent);font-size:14px;line-height:1.7;font-weight:550;padding:9px 0}.idea-reading p,.idea-context p{font-size:14px;line-height:1.85;color:var(--muted);margin:12px 0}.idea-data-section{padding:15px 26px;border-bottom:1px solid var(--line)}.idea-data-section[open]{padding-bottom:24px}.idea-data-section>summary{font-size:15px}.idea-context{margin:14px 26px;border-bottom:1px solid var(--line);padding-bottom:10px}.idea-three,.idea-sources{margin:14px 26px;padding-top:0;border-top:0}.idea-insight{padding:17px 26px;min-height:62px;font-size:15px;line-height:1.75}.idea-intro{padding-top:14px}.idea-intro h2{margin:10px 0}.idea-intro .idea-data-description{font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0}.idea-table-note{font-size:12px!important}.idea-controls{gap:16px}.idea-toolbar>span{font-size:12px}.idea-compare>p{font-size:13px}.idea-task{font-size:14px;line-height:1.6}.idea-page>.page-intro p{font-size:15px}.idea-controls>p{font-size:12px}
 @media(max-width:760px){.idea-data-section{padding:13px 20px}.idea-context,.idea-three,.idea-sources{margin:12px 20px}.idea-insight{padding:17px 20px}.idea-intro .idea-data-description{font-size:12px}.idea-cases{gap:7px}.idea-cases button{min-height:42px;padding:8px 12px}}
 @media(max-width:760px){.idea-nav{display:none}.idea-mobile-switch{display:block;padding:16px 20px 0;color:var(--muted);font-size:12px;line-height:1.7}.idea-mobile-switch select{display:block;width:100%;min-height:46px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font:inherit;font-size:14px;padding:10px;margin-top:6px}.idea-cases{flex-wrap:nowrap;overflow-x:auto}.idea-cases button{flex:0 0 auto;width:auto;white-space:nowrap}.idea-toolbar>span{max-width:130px}.idea-pixel-panels h4{font-size:13px}}
+
+/* Keep explanations readable when the workbench narrows or text is enlarged. */
+.idea-plot text{font-size:18px}
+.idea-learning{padding:28px 30px;background:var(--paper);color:var(--ink);border-top:1px solid var(--line)}
+.idea-learning h3{font-size:21px;line-height:1.5;margin:0 0 20px}
+.idea-learning h4{font-size:16px;line-height:1.6;margin:0 0 8px}
+.idea-learning>p+h4{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.idea-learning p{font-size:15px;line-height:1.85;margin:8px 0 0;overflow-wrap:anywhere}
+.idea-learning>section+section{border-top:1px solid var(--line);margin-top:20px;padding-top:20px}
+.idea-learning .idea-equation{padding:18px 20px;border-left:3px solid var(--accent);border-radius:0 10px 10px 0;background:var(--soft);font-variant-numeric:tabular-nums}
+.idea-studio .idea-pair article{padding:24px}
+.idea-studio .idea-metrics>div{padding:18px 20px}
+.idea-studio :is(.idea-task,.idea-intro p,.idea-controls p,.idea-insight,.idea-equation){overflow-wrap:anywhere}
+.idea-studio .idea-range>span{flex-wrap:wrap}
+.idea-studio .idea-cases button{min-height:44px}
+.idea-studio .idea-pixels button.pixel-selected{outline-color:var(--idea-orange)}
+.idea-studio .idea-reading summary,.idea-studio .idea-context>summary,.idea-studio .idea-data-section>summary{min-height:44px}
+.idea-studio .idea-table-note{font-size:13px!important;line-height:1.85}
+@media(max-width:1280px){
+ .idea-workbench{grid-template-columns:minmax(0,1fr)}
+ .idea-controls{border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:20px 28px;padding:24px}
+ .idea-controls>h3,.idea-controls>[data-metrics],.idea-controls>.idea-reading{grid-column:1/-1}
+ .idea-controls .idea-metrics{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+ .idea-chart-hint{display:block}
+}
+@media(max-width:760px){
+ .idea-learning{padding:24px 20px}
+ .idea-controls{display:flex;padding:24px;gap:20px}
+ .idea-graph-panel{padding:24px 20px}
+ .idea-studio .idea-intro .idea-data-description,.idea-studio .idea-controls>p{font-size:14px;line-height:1.8}
+ .idea-studio .idea-cases{flex-wrap:wrap;overflow:visible}
+ .idea-studio .idea-cases button{width:100%;white-space:normal;flex:1 1 100%}
+ .idea-studio .idea-ordered{flex-wrap:wrap}
+ .idea-studio .idea-pair article{padding:24px}
+ .idea-plot text{font-size:21px}
+ .idea-studio .idea-pixel-panels{padding:0;gap:28px}
+ .idea-pixels,.idea-kernel{min-width:0;gap:3px}
+ .idea-pixels button,.idea-kernel span{font-size:12px;min-width:0}
+}
+@media(prefers-reduced-motion:reduce){
+ .idea-studio *, .idea-studio *::before, .idea-studio *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}

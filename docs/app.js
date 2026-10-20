@@ -14,7 +14,7 @@ import {canAccess} from './math.js';
 import {colombiaDay,scheduleReleases,validFullName,mayEnter} from './access-policy.js';
 import {mountSimulator} from './simulators.js?v=4';
 import {showWelcome,maybeShowWelcome} from './welcome.js';
-import {mountIdeaStudio} from './idea-studio.js?v=3';
+import {mountIdeaStudio} from './idea-studio.js?v=4';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let state=normalizeProgress({});
 try{state=normalizeProgress(JSON.parse(localStorage.getItem('utp-aula-v1')||'{}'))}catch{}
