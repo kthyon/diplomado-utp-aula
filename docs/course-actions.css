@@ -1,0 +1,20 @@
+.course-banner .button[data-welcome]{
+  margin-inline-start:auto;
+  flex-shrink:0;
+  min-height:48px;
+  padding:12px 22px;
+  border:1px solid transparent;
+  border-radius:16px;
+  background:var(--accent);
+  color:#fff;
+  font-size:14px;
+  font-weight:650;
+  line-height:1.5;
+  box-shadow:0 3px 8px #35421c20;
+}
+.course-banner .button[data-welcome]:hover{background:var(--accent-hover);color:#fff;box-shadow:0 5px 12px #35421c2b}
+.course-banner .button[data-welcome]:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+[data-theme=dark] .course-banner .button[data-welcome]{color:#223015;box-shadow:0 3px 8px #0003}
+[data-theme=dark] .course-banner .button[data-welcome]:hover{color:#223015}
+@media(prefers-reduced-motion:no-preference){.course-banner .button[data-welcome]{transition:background-color .18s,box-shadow .18s,transform .18s}.course-banner .button[data-welcome]:hover{transform:translateY(-1px)}.course-banner .button[data-welcome]:active{transform:translateY(0)}}
+@media(max-width:600px){.course-banner .button[data-welcome]{margin-block-start:4px;max-width:100%}}
