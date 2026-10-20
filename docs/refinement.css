@@ -188,3 +188,13 @@ dialog::backdrop{background:#20212466}
 :focus-visible{outline-color:#596735!important}.import-progress-control:focus-within{outline-color:#596735}
 .topbar .search,.tool-controls{background:#f0f3e7}.topbar .search:focus-within{background:#edf2df;box-shadow:0 0 0 2px #a9b48a55}
 .tool-filter[aria-pressed=true],.sidebar nav a.active{background:#e2e9c9;color:#35421c}
+
+/* Calendar details stay together and wrap as a single label on small screens. */
+.course-schedule,.class-schedule{max-width:100%;white-space:normal;line-height:1.7;text-wrap:pretty}
+.course-banner .course-schedule{font-size:12px;padding:8px 13px}
+.course-card .course-meta .course-schedule{display:inline-flex;align-items:center;gap:7px;font-size:11px}
+.course-schedule .ui-icon{flex-shrink:0}
+.class-header>div{min-width:0}
+.class-header .class-schedule{margin-top:12px;font-size:11px;color:var(--ink);background:var(--paper)}
+.class-header>.pill{flex-shrink:0}
+@media(max-width:600px){.class-header{flex-wrap:wrap;gap:12px}.class-header>div{width:100%}.course-banner .course-schedule{width:100%}.class-header .class-schedule{border-radius:14px;padding:8px 11px}}
