@@ -1,5 +1,5 @@
 .theme-toggle{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:44px;height:44px;padding:10px;border:0;border-radius:50%;background:transparent;color:var(--ink);cursor:pointer}.theme-toggle svg{width:21px;height:21px;flex-shrink:0}.theme-toggle [data-theme-label],.theme-toggle .theme-sun{display:none}.theme-toggle:hover{background:var(--soft)}
-:root[data-theme=dark]{--bg:#171c18;--paper:#222923;--ink:#e4e9de;--muted:#b4bdae;--accent:#c1d59a;--accent-hover:#d3e5ad;--focus:#c1d59a;--selected:#3c4d30;--on-selected:#e0edc7;--green:var(--accent);--lime:#3c4d30;--line:#424c40;--orange:#e9ae87;--soft:#2d382a;--shadow:0 2px 8px #0003;background:var(--bg);color:var(--ink)}
+:root[data-theme=dark]{--bg:#191a1d;--paper:#232529;--ink:#e5e2dc;--muted:#b7b7bd;--accent:#b8c88c;--accent-hover:#c8d6a6;--focus:#b8c88c;--selected:#35383e;--on-selected:#e5e6de;--green:var(--accent);--lime:#35383e;--line:#454951;--orange:#dfb493;--soft:#2d3036;--shadow:0 2px 8px #0003;background:var(--bg);color:var(--ink)}
 [data-theme=dark] .theme-toggle .theme-sun{display:block}[data-theme=dark] .theme-toggle .theme-moon{display:none}
 [data-theme=dark] :is(body,.sidebar,.topbar){background:var(--bg);color:var(--ink)}
 [data-theme=dark] :is(.brand,.brand b,.breadcrumb b,h1,h2,h3,h4,.hero h1,.section-heading h2,.course-card h3,.topic-row h4,.stat strong,.reading .concept,.glossary summary,.badge h4,.next-class h2){color:var(--ink)}
@@ -9,15 +9,15 @@
 [data-theme=dark] :is(.sidebar nav a:hover,.profile-button:hover,.teacher-link:hover,.sidebar-bottom:hover,.topic-row:hover,.lesson-nav a,.iso-tabs button){background:var(--soft);color:var(--ink);border-color:var(--line)}
 [data-theme=dark] :is(.sidebar nav a.active,.profile-button>span:first-child,.button.lime,.tool-filter[aria-pressed=true],.iso-tabs button[aria-pressed=true]){background:var(--selected);color:var(--on-selected);border-color:var(--selected)}
 [data-theme=dark] .profile-button>.account-copy{background:transparent;color:var(--ink)}
-[data-theme=dark] :is(.button,.quiz button.correct){background:var(--accent);color:#223015}[data-theme=dark] .button:hover:not(:disabled){background:var(--accent-hover);color:#223015}
+[data-theme=dark] :is(.button,.quiz button.correct){background:var(--accent);color:#21251c}[data-theme=dark] .button:hover:not(:disabled){background:var(--accent-hover);color:#21251c}
 [data-theme=dark] :is(.button.secondary,.quiz button,.tool-filter){background:var(--paper);color:var(--accent);border-color:var(--line)}[data-theme=dark] .button.secondary:hover{background:var(--soft);color:var(--accent)}
-[data-theme=dark] :is(.topbar .search,.topbar .search:focus-within){background:#293429;border-color:var(--line)}
+[data-theme=dark] :is(.topbar .search,.topbar .search:focus-within){background:#292c32;border-color:var(--line)}
 [data-theme=dark] :is(input,textarea,select,.entry-card input,.registration-fields input,dialog input,.study-note,.teacher-select){background:var(--bg);color:var(--ink);border-color:var(--line)}
 [data-theme=dark] :is(.topbar .search input,.tool-search input){background:transparent;color:var(--ink)}[data-theme=dark] :is(.topbar .search input::placeholder,input::placeholder,textarea::placeholder){color:var(--muted)}
 [data-theme=dark] :is(.topbar .search>span,.tool-search>svg,.menu-button){color:var(--muted)}[data-theme=dark] :is(.topbar .search button,.topbar .search button:hover){background:var(--selected);color:var(--on-selected)}
 [data-theme=dark] :is(.inline-link,.teacher-link,.lesson-nav a,.tool-actions a,.tool-actions a.tool-primary,.tool-results-meta button){color:var(--accent)}
 [data-theme=dark] :is(.track,.tool-filter>span){background:var(--soft);color:var(--muted)}[data-theme=dark] .track>span{background:var(--accent)}
-[data-theme=dark] :is(.visual-home .hero,.hero){background:radial-gradient(ellipse at 75% 50%,#35482d,#242e22 65%,#222923)}[data-theme=dark] .hero h1 em{color:var(--accent)}
+[data-theme=dark] :is(.visual-home .hero,.hero){background:radial-gradient(ellipse at 75% 50%,#2a2d33,#22252a 65%,#232529)}[data-theme=dark] .hero h1 em{color:var(--accent)}
 [data-theme=dark] .tool-card .brand-icon{background:#fff;border-color:#fff}
 [data-theme=dark] :is(.tool-primary,.course-card .card-bottom,.site-footer,.stat,.topic-row){border-color:var(--line)}
 [data-theme=dark] :is(.iso-metric span,.iso-control-fields label,.iso-inspect,.iso-legend){color:var(--ink)}
@@ -30,7 +30,7 @@
 [data-theme=dark] :is(.brand-course,.brand-course b,.iso-metric strong,.metric strong,.controls label,.iso-controls label){color:var(--ink)}
 [data-theme=dark] :is(.empty-state,.iso-studio,.simulator,.iso-pair article,.visual-paths a,.quote,.skip){background:var(--paper);color:var(--ink);border-color:var(--line)}
 [data-theme=dark] :is(.iso-idea,.iso-discuss,.iso-comparison,.metric,.plant,.date-box){background:var(--soft);color:var(--ink);border-color:var(--line)}
-[data-theme=dark] :is(.iso-tabs button small,.iso-tabs button[aria-pressed=true] small,.tool-filter[aria-pressed=true]>span){background:#233020;color:#e0edc7}
+[data-theme=dark] :is(.iso-tabs button small,.iso-tabs button[aria-pressed=true] small,.tool-filter[aria-pressed=true]>span){background:#292c32;color:#e5e6de}
 [data-theme=dark] :is(.iso-slider output,.controls output,.visual-paths a b,.iso-preset,.iso-reset){color:var(--accent)}
 [data-theme=dark] .iso-preset{background:var(--paper);border-color:var(--line)}
 [data-theme=dark] .iso-preset.chosen{background:var(--selected);color:var(--on-selected);border-color:var(--accent)}
@@ -38,6 +38,48 @@
 [data-theme=dark] :is(.iso-stage-bar,.three-tools>span){color:#3d5138}
 [data-theme=dark] .quiz button.wrong{background:#4a2c26;color:#ffded3;border-color:#c98c79}
 [data-theme=dark] :is(.topic-row.locked,.badge.inactive){opacity:1}
-[data-theme=dark] :is(.tool-search input::placeholder,.topbar .search input::placeholder){color:#c2cbbb;opacity:1}
+[data-theme=dark] :is(.tool-search input::placeholder,.topbar .search input::placeholder){color:#b7b7bd;opacity:1}
 [data-theme=dark] :is(.iso-number,.topic-index){color:var(--accent)}
 [data-theme=dark] :is(.iso-explain,.iso-question,.iso-comparison){border-color:var(--line)}
+
+/* Reading theme: neutral surfaces; olive is an accent, never the page tint. */
+:root[data-theme=dark]{--control-line:#747d8a;--focus:#bac8e4;--on-accent:#21251c;--data-green:#b2bf8c;--data-orange:#dfb493;--data-blue:#a6bfd8}
+[data-theme=dark] :is(.sidebar,.topbar){background:#1d1f23}
+[data-theme=dark] .sidebar{border-color:var(--line)}
+[data-theme=dark] .sidebar nav a.active{background:var(--selected);color:var(--ink);box-shadow:inset 3px 0 var(--accent)}
+[data-theme=dark] :is(.sidebar nav a.active .nav-icon,.profile-button>span:first-child){color:var(--ink)}
+[data-theme=dark] :is(.visual-home .hero,.hero){background:none}
+[data-theme=dark] .hero h1 em{color:#cdd0c5}
+[data-theme=dark] .hero-art.nexo-space{background:radial-gradient(ellipse at 50% 45%,#30343a,#24272d 65%,#1c1f24);border-color:var(--line);box-shadow:0 18px 38px -24px #0008,inset 0 1px 0 #ffffff08}
+[data-theme=dark] .space-card{background:linear-gradient(135deg,#383d43,#272c32);border-color:#626b7266;box-shadow:0 12px 24px -16px #0008}
+[data-theme=dark] .space-card strong{color:var(--ink)}
+[data-theme=dark] .space-card small,[data-theme=dark] .space-card div>span{color:#bbc1c3}
+[data-theme=dark] .space-icon{color:var(--accent)}
+[data-theme=dark] .space-alert .space-icon{color:var(--orange)}
+[data-theme=dark] .space-detect .space-icon{color:var(--data-blue)}
+[data-theme=dark] .space-floor{background:radial-gradient(ellipse,#c2c6c413,transparent 68%),repeating-linear-gradient(0deg,transparent 0 25px,#d4d7dc08 26px 27px),repeating-linear-gradient(90deg,transparent 0 25px,#d4d7dc08 26px 27px)}
+[data-theme=dark] .nexo-space :is(header,figcaption){color:var(--muted);border-color:var(--line)}
+[data-theme=dark] .nexo-space header>span:last-child{color:var(--accent);border-color:var(--line)}
+[data-theme=dark] .nexo-space .space-label strong{color:var(--ink)}
+[data-theme=dark] .sidebar .brand-course{color:var(--ink)}
+[data-theme=dark] :is(.topbar .search,.topbar .search:focus-within){background:var(--soft);border-color:var(--control-line);box-shadow:none}
+[data-theme=dark] :is(input:not([type=range]),select,textarea,.registration-fields input,.entry-card input,dialog input,.study-note,.teacher-select){border-color:var(--control-line)}
+[data-theme=dark] .topbar .search input{border:0}
+[data-theme=dark] :is(.button.secondary,.tool-filter,.iso-tabs button,.three-tools button,.three-objects button){border-color:var(--control-line)}
+[data-theme=dark] :is(.course-banner .button[data-welcome],.course-banner .button[data-welcome]:hover,.ll-button.primary){color:var(--on-accent)}
+[data-theme=dark] .idea-studio{--idea-green:var(--data-green);--idea-orange:var(--data-orange);--idea-blue:var(--data-blue)}
+[data-theme=dark] :is(.learning-table th,.learning-table td,.ll-table th,.ll-table td){border-color:var(--line)}
+[data-theme=dark] :is(.learning-table caption,.learning-stages li,.worked-case,.learning-concepts,.learning-goal,.learning-result,.concept-process li){color:var(--ink)}
+[data-theme=dark] :is(.learning-reading p,.learning-reading dd,.learning-reading li){line-height:1.85}
+[data-theme=dark] :is(.iso-stage,.three-stage){background:var(--bg);border-color:var(--line)}
+[data-theme=dark] :is(.three-tag,.three-loss){background:#232529ee;color:var(--ink);box-shadow:none}
+[data-theme=dark] :is(.three-tools button,.three-objects button){background:var(--paper);color:var(--ink)}
+[data-theme=dark] .three-objects button[aria-pressed=true]{background:var(--selected);border-color:var(--accent)}
+[data-theme=dark] :is(.iso-stage-bar,.three-tools>span){color:var(--muted)}
+[data-theme=dark] .three-loss svg text{fill:var(--muted)}
+[data-theme=dark] .three-loss svg polyline{stroke:var(--accent)}
+[data-theme=dark] :is(.entry-error,.ll-error){color:#efb2a7}
+[data-theme=dark] :is(.ll-piece-note,.teach-goal,.teach-definitions,.ll-matrix>div,.ll-callout){border-color:var(--line)}
+[data-theme=dark] :focus-visible{outline-color:var(--focus)!important;box-shadow:none}
+[data-theme=dark] .topbar .search:focus-within{outline:2px solid var(--focus);outline-offset:2px}
+[data-theme=dark] ::selection{background:#4b5360;color:#f0eee8}
