@@ -8,10 +8,10 @@ const all=Object.values(COURSES).flatMap(course=>course.classes.flatMap(cl=>cl.t
 test('calendario conserva las ocho fechas, horarios y el orden de las asignaturas',()=>{
  const journey=getJourney(COURSES,[],'2026-10-20');
  assert.deepEqual(journey.calendar.map(cl=>[cl.iso,cl.time]),[
- ['2026-10-23','Viernes · 18:00–22:00'],['2026-10-24','Sábado · 08:00–12:00'],
- ['2026-10-30','Viernes · 18:00–22:00'],['2026-10-31','Sábado · 08:00–12:00'],
- ['2026-11-06','Viernes · 18:00–22:00'],['2026-11-07','Sábado · 08:00–12:00'],
- ['2026-11-13','Viernes · 18:00–22:00'],['2026-11-14','Sábado · 08:00–12:00']]);
+ ['2026-10-23','Viernes · 18:30–22:00'],['2026-10-24','Sábado · 08:00–12:00'],
+ ['2026-10-30','Viernes · 18:30–22:00'],['2026-10-31','Sábado · 08:00–12:00'],
+ ['2026-11-06','Viernes · 18:30–22:00'],['2026-11-07','Sábado · 08:00–12:00'],
+ ['2026-11-13','Viernes · 18:30–22:00'],['2026-11-14','Sábado · 08:00–12:00']]);
  assert.deepEqual(journey.calendar.map(cl=>cl.classId),['ml-1','ml-2','ml-3','ml-4','dl-1','dl-2','dl-3','dl-4']);
  assert.equal(journey.total,24);assert.equal(journey.seen,0);
  assert.equal(journey.resume,null);assert.equal(journey.hasAvailable,false);assert.equal(journey.href,'#curso/ml');
@@ -72,12 +72,12 @@ test('la salida del tema distingue continuidad, cambio de encuentro y cierre rea
  assert.equal(getTopicCompletion(COURSES,all,'desconocido'),null);
 });
 
-test('el viernes la clase de hoy sigue próxima antes de las 18, está en curso a las 18 y termina a las 22',()=>{
- const before=getCalendarMoment(COURSES,new Date('2026-10-23T17:59:59.999-05:00'));
+test('el viernes la clase de hoy sigue próxima antes de las 18:30, está en curso a las 18:30 y termina a las 22',()=>{
+ const before=getCalendarMoment(COURSES,new Date('2026-10-23T18:29:59.999-05:00'));
  assert.equal(before.current,null);assert.equal(before.upcoming.classId,'ml-1');
- const start=getCalendarMoment(COURSES,new Date('2026-10-23T18:00:00-05:00'));
+ const start=getCalendarMoment(COURSES,new Date('2026-10-23T18:30:00-05:00'));
  assert.equal(start.current.classId,'ml-1');assert.equal(start.upcoming.classId,'ml-2');
- assert.equal(start.current.start,'2026-10-23T23:00:00.000Z');
+ assert.equal(start.current.start,'2026-10-23T23:30:00.000Z');
  assert.equal(start.current.end,'2026-10-24T03:00:00.000Z');
  assert.equal(getCalendarMoment(COURSES,new Date('2026-10-23T21:59:59.999-05:00')).current.classId,'ml-1');
  const end=getCalendarMoment(COURSES,new Date('2026-10-23T22:00:00-05:00'));
@@ -105,7 +105,7 @@ test('abrir materiales a medianoche no significa sesión en curso ni desplaza la
 test('horarios ausentes o mal formados no producen una sesión inventada ni alteran los strings',()=>{
  const original=structuredClone(COURSES),courses=structuredClone(COURSES);
  for(const course of Object.values(courses))for(const cl of course.classes)cl.time='Por confirmar';
- const missing=getCalendarMoment(courses,new Date('2026-10-23T18:00:00-05:00'));
+ const missing=getCalendarMoment(courses,new Date('2026-10-23T18:30:00-05:00'));
  assert.equal(missing.current,null);assert.equal(missing.upcoming,null);
  assert.ok(missing.calendar.every(cl=>cl.start===null&&cl.end===null));
  assert.equal(getCalendarMoment(COURSES,new Date('inválida')).current,null);
