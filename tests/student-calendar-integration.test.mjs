@@ -62,7 +62,7 @@ test('saltar directamente al último tema no borra los pendientes ni exige orden
  for(const meeting of calendar)for(const id of meeting.topics)assert.equal(canAccess(id,scheduleReleases(COURSES,'2026-11-14'),LESSONS),true);
 });
 
-test('cada encuentro respeta medianoche de apertura y extremos exactos de sus cuatro horas',()=>{
+test('cada encuentro respeta medianoche de apertura y extremos exactos de 3,5 horas el viernes y 4 el sábado',()=>{
  let hours=0;
  for(const meeting of calendar){
   const opening=Date.parse(meeting.iso+'T00:00:00-05:00');
@@ -77,7 +77,7 @@ test('cada encuentro respeta medianoche de apertura y extremos exactos de sus cu
   assert.equal(getCalendarMoment(COURSES,new Date(end)).current,null);
   for(const boundary of [opening,start,end])assert.equal(nextScheduleDelay(COURSES,new Date(boundary-1)),51);
  }
- assert.equal(hours,32);
+ assert.equal(hours,30);
 });
 
 test('el reloj de referencia corrige un dispositivo adelantado antes de decidir la apertura',async()=>{
