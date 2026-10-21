@@ -24,7 +24,7 @@
 .welcome-symbol svg{width:27px;height:27px}
 .welcome-eyebrow{display:block;color:var(--muted);font-size:10px;font-weight:650;letter-spacing:.08em;line-height:1.6;margin-bottom:5px}
 .welcome-card h2{margin:0;font-size:clamp(24px,3vw,34px);line-height:1.25;letter-spacing:-.6px;overflow-wrap:anywhere}
-.welcome-message{max-width:760px;font-size:16px;line-height:1.8;color:var(--muted);margin:18px 0 14px}
+.welcome-message{max-width:none;font-size:16px;line-height:1.8;color:var(--muted);margin:18px 0 14px}
 .welcome-help{border-top:1px solid var(--line);margin-top:20px;padding-top:4px}
 .welcome-help>summary{font-size:13px;font-weight:550;color:var(--accent)}
 .welcome-help[open]>.flow-steps{margin-top:16px}
