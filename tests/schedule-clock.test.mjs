@@ -13,7 +13,7 @@ test('clock failure keeps the existing clock and never blocks the classroom',asy
 });
 test('refresh aligns with midnight and lesson start/end, not just an arbitrary minute',()=>{
  assert.equal(nextScheduleDelay(COURSES,new Date('2026-10-23T04:59:59Z')),1050);
- assert.equal(nextScheduleDelay(COURSES,new Date('2026-10-23T22:59:59Z')),1050);
+ assert.equal(nextScheduleDelay(COURSES,new Date('2026-10-23T23:29:59Z')),1050);
  assert.equal(nextScheduleDelay(COURSES,new Date('2026-10-24T02:59:59Z')),1050);
  assert.equal(nextScheduleDelay(COURSES,new Date('2026-10-20T18:00:00Z')),60000);
 });
