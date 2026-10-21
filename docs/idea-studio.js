@@ -1,6 +1,6 @@
 import {TOPICS,FARMS,PLANTS,SHIPMENTS,initialIdea,ideaCase,ideaResult,stepIdea} from './idea-models.js?v=3';
 import {activation} from './math.js';
-import {renderThreeScene} from './three-scenes.js?v=1';
+import {renderThreeScene} from './three-scenes.js?v=oscuro-neutro-20261020';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=(n,d=2)=>Number(n).toLocaleString('es-CO',{maximumFractionDigits:d,minimumFractionDigits:d});
 const colors=['#507b3c','#ac602d','#547d9f'];
