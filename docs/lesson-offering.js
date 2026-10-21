@@ -1,3 +1,4 @@
+import {renderSessionPlan} from './session-plans.js?v=1';
 // Orientación editorial: acompaña el contenido, sin cambiar acceso ni progreso.
 export const LESSON_OFFERING={
  'ml-problema':{focus:'Entrada, respuesta y caso reservado: identifica qué sabes antes de predecir y qué revelas después para comprobar.',bridge:'Conserva la separación entre aprender, predecir y comprobar. El caso pequeño deja ver una cuenta; el cuaderno permite repetir el proceso con más filas y entradas.'},
@@ -27,8 +28,8 @@ export const LESSON_OFFERING={
 };
 export const MEETING_OFFERING={
  ml:[
-  ['Seguir una predicción de principio a fin: pregunta, preparación, separación y error.','Detalles del pipeline y variaciones del ajuste, después de interpretar la primera comparación.'],
-  ['Reconstruir los cuatro resultados de una alerta y explicar el efecto del umbral.','Calibración y más indicadores, después de comprender los conteos.'],
+  ['Generalidades 2 en 45 minutos; después seguir una predicción de principio a fin: pregunta, preparación, separación y error.','Detalles del pipeline y variaciones del ajuste, después de interpretar la primera comparación.'],
+  ['Retomar dudas de la primera práctica y después reconstruir los cuatro resultados de una alerta y explicar el efecto del umbral.','Calibración y más indicadores, después de comprender los conteos.'],
   ['Distinguir tres propósitos: agrupar registros, resumir variables y combinar modelos.','Variantes de algoritmos y detalles de ensambles, a partir de esa distinción.'],
   ['Respetar el tiempo al pronosticar y distinguir predicción de aprendizaje por interacción.','La implementación completa de Q-learning, después de entender estado, acción y recompensa.']
  ],
@@ -40,9 +41,10 @@ export const MEETING_OFFERING={
  ]
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export function renderMeetingOffering(courseId,index){
+export function renderMeetingOffering(courseId,index,meeting){
  const row=MEETING_OFFERING[courseId]?.[index];if(!row)return '';
- return '<details class="concept-depth"><summary>En qué nos centraremos y qué puedes profundizar</summary><p><b>Durante la clase:</b> '+esc(row[0])+'</p><p><b>Para profundizar:</b> '+esc(row[1])+'</p><p>Puedes volver a estos apoyos cuando lo necesites; las comprobaciones son opcionales y sin nota.</p></details>';
+ const agenda=renderSessionPlan(courseId,index,meeting);
+ return '<details class="concept-depth"><summary>En qué nos centraremos y qué puedes profundizar</summary><p><b>Durante la clase:</b> '+esc(row[0])+'</p><p><b>Para profundizar:</b> '+esc(row[1])+'</p><p>Puedes volver a estos apoyos cuando lo necesites; las comprobaciones son opcionales y sin nota.</p>'+agenda+'</details>';
 }
 export function renderNotebookBridge(l){
  const o=LESSON_OFFERING[l.id],guide=l.guide.lab.notebookGuide;
