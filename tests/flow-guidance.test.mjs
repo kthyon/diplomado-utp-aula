@@ -27,10 +27,10 @@ test('los nombres de asignatura se escapan y las rutas se limitan a módulos con
 
 test('el saludo es cercano, usa el nombre de pila y no depende de la hora',()=>{
  for(const hour of [0,5,11,12,17,18,23]){
-  assert.equal(getWelcome({name:'Cristian Alvarado',now:new Date(2026,9,20,hour)}).heading,'¡Hola, Cristian! ¿Qué te gustaría explorar hoy?');
+  assert.equal(getWelcome({name:'Cristian Alvarado',now:new Date(2026,9,20,hour)}).heading,'¡Hola, Cristian!');
  }
- assert.equal(getWelcome({name:'Ing. Cristian Alvarado'}).heading,'¡Hola, Cristian! ¿Qué te gustaría explorar hoy?');
- assert.equal(getWelcome({name:''}).heading,'¡Hola! ¿Qué te gustaría explorar hoy?');
+ assert.equal(getWelcome({name:'Ing. Cristian Alvarado'}).heading,'¡Hola, Cristian!');
+ assert.equal(getWelcome({name:''}).heading,'¡Hola!');
  assert.notEqual(getWelcome({name:'Ana',variant:0}).heading,getWelcome({name:'Ana',variant:1}).heading);
 });
 
@@ -42,4 +42,6 @@ test('la bienvenida varía sin perder instrucciones opcionales y escapa el nombr
  assert.ok(!html.includes('<img'));assert.match(html,/&lt;img/);
  assert.match(html,/<details class="welcome-help"><summary>¿Necesitas una mano para empezar/);
  assert.ok(!html.includes('Cómo usar tu aula'));
+ assert.ok(!html.includes('¿Qué te gustaría explorar hoy?'));
+ assert.ok(!html.includes('¿Por dónde empezamos?'));
 });
