@@ -29,3 +29,5 @@
 .welcome-help>summary{font-size:13px;font-weight:550;color:var(--accent)}
 .welcome-help[open]>.flow-steps{margin-top:16px}
 @media(max-width:600px){.welcome-heading{gap:12px}.welcome-symbol{width:44px;height:44px;border-radius:14px}.welcome-message{font-size:15px}.welcome-eyebrow{font-size:9px;letter-spacing:.04em}}
+
+.welcome-symbol{font-size:27px;line-height:1}.welcome-card h2{font-size:clamp(23px,2.6vw,30px);max-width:800px}
