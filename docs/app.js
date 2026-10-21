@@ -1,6 +1,6 @@
 import {getJourney,getCalendarMoment,getTopicCompletion,hasNewTopics} from './journey-models.js';
 import {offerProgressDownload} from './progress-download.js';
-import {renderFlowGuide,renderLessonFlow} from './flow-guidance.js?v=bienvenida-20261020';
+import {renderFlowGuide,renderLessonFlow} from './flow-guidance.js?v=saludo-clases-20261020';
 import {laboratoryDestination} from './lab-access.js';
 import {readReferenceOffset,nextScheduleDelay} from './schedule-clock.js';
 import {summarizeProgress,renderProgressDashboard} from './progress-dashboard.js';
