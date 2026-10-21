@@ -1,16 +1,12 @@
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-const WELCOME_MESSAGES=[
- 'Aquí tienes los materiales de tus clases, ejemplos para entender cada idea y ejercicios para ponerla en práctica.',
- 'Los conceptos de clase también se entienden probando. Los ejemplos y las prácticas te ayudan a ver qué significa cada resultado.',
- 'Un espacio para acompañar tus clases: consulta los materiales, sigue los ejemplos y practica con los ejercicios a tu ritmo.'
-];
+const WELCOME_MESSAGE="Conceptos, ejemplos interactivos y prácticas en Colab para aplicar IA a los agronegocios.";
 export function getWelcome({name='',variant=0}={}){
  const firstName=String(name??'').trim().replace(/^(?:ing\.?|dr\.?|dra\.?|prof\.?)\s+/i,'').split(/\s+/)[0];
- const index=Number.isInteger(variant)?((variant%WELCOME_MESSAGES.length)+WELCOME_MESSAGES.length)%WELCOME_MESSAGES.length:0;
  const namePart=firstName?', '+firstName:'';
  const headings=['¡Hola'+namePart+'!','¡Qué gusto verte'+namePart+'!','¡Qué bueno tenerte aquí'+namePart+'!'];
- return {heading:headings[index],message:WELCOME_MESSAGES[index]};
+ const index=Number.isInteger(variant)?((variant%headings.length)+headings.length)%headings.length:0;
+ return {heading:headings[index],message:WELCOME_MESSAGE};
 }
 export function renderFlowGuide(options={}){
  const welcome=getWelcome(options);
