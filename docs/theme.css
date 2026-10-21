@@ -46,11 +46,11 @@
 :root[data-theme=dark]{--control-line:#747d8a;--focus:#bac8e4;--on-accent:#21251c;--data-green:#b2bf8c;--data-orange:#dfb493;--data-blue:#a6bfd8}
 [data-theme=dark] :is(.sidebar,.topbar){background:#1d1f23}
 [data-theme=dark] .sidebar{border-color:var(--line)}
-[data-theme=dark] .sidebar nav a.active{background:var(--selected);color:var(--ink);box-shadow:inset 3px 0 var(--accent)}
+[data-theme=dark] .sidebar nav a.active{background:var(--selected);color:var(--ink);box-shadow:none}
 [data-theme=dark] :is(.sidebar nav a.active .nav-icon,.profile-button>span:first-child){color:var(--ink)}
 [data-theme=dark] :is(.visual-home .hero,.hero){background:none}
 [data-theme=dark] .hero h1 em{color:#cdd0c5}
-[data-theme=dark] .hero-art.nexo-space{background:radial-gradient(ellipse at 50% 45%,#30343a,#24272d 65%,#1c1f24);border-color:var(--line);box-shadow:0 18px 38px -24px #0008,inset 0 1px 0 #ffffff08}
+[data-theme=dark] .hero-art.nexo-space{background:transparent;border:0;border-radius:0;box-shadow:none}
 [data-theme=dark] .space-card{background:linear-gradient(135deg,#383d43,#272c32);border-color:#626b7266;box-shadow:0 12px 24px -16px #0008}
 [data-theme=dark] .space-card strong{color:var(--ink)}
 [data-theme=dark] .space-card small,[data-theme=dark] .space-card div>span{color:#bbc1c3}
