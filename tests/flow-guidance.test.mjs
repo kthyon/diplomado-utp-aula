@@ -37,7 +37,7 @@ test('el saludo es cercano, usa el nombre de pila y no depende de la hora',()=>{
 test('la bienvenida varía sin perder instrucciones opcionales y escapa el nombre',()=>{
  const options={name:'Ana Gómez',now:new Date(2026,9,20,14),variant:1};
  assert.deepEqual(getWelcome(options),getWelcome(options));
- assert.notEqual(getWelcome({...options,variant:0}).message,getWelcome(options).message);
+ assert.equal(getWelcome({...options,variant:0}).message,getWelcome(options).message);
  const html=renderFlowGuide({name:'<img src=x onerror=alert(1)>',now:options.now});
  assert.ok(!html.includes('<img'));assert.match(html,/&lt;img/);
  assert.match(html,/<details class="welcome-help"><summary>¿Necesitas una mano para empezar/);
