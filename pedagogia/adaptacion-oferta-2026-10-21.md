@@ -5,7 +5,7 @@ Solicitud de Cristian: implementar la orientación del derrotero conservando la 
 - 24 orientaciones breves para reconocer las distinciones centrales antes de leer cada concepto.
 - 24 conexiones entre ejemplo y cuaderno, seguidas de las instrucciones originales de sección y ejecución.
 - Ocho orientaciones desplegables de foco de clase y profundización, dentro de las tarjetas existentes.
-- Diez enlaces complementarios al tema correcto del explorador; reutilizan las rutas existentes.
+- Nueve enlaces complementarios al tema correcto del explorador; reutilizan las rutas existentes.
 - La ampliación con código mantiene su contenido y explicita su propósito de profundización.
 
 Se conservaron diseño, estilos, orden de portada, fotografías, infografías, simuladores, fórmulas, vocabulario, casos, pasos, referencias, cuadernos, bitácoras y comprobaciones. El módulo nuevo añade orientación y no modifica datos ni cálculos.
