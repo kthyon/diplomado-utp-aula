@@ -3,15 +3,15 @@ export const REPO='kthyon/diplomado-utp-aula';
 export const SOURCES={ml:'https://docs.google.com/presentation/d/1UOnYu1aT7Sg58BUlmPL6_BNyoFlhFc4Zu456IZP93ns/edit',terms:'https://docs.google.com/document/d/1WfPiuA4LUkE3axpf3qb_-_cQu55OEpnwQohtTyN2zYo/edit',dl:'https://docs.google.com/document/d/1buuOnf-xMsWfpRQeyW2swHEt9I7JKsroikz0rKsG_G0/edit',activation:'https://docs.google.com/document/d/1qsi3HQwW0zRlLMyAplVuANgZzmuLhcIhvOAJaiUxU6c/edit'};
 export const COURSES={
  ml:{id:'ml',module:5,title:'Machine Learning',subtitle:'Construir predicciones, alertas y pronósticos para resolver tareas operativas.',color:'verde',dates:'23, 24, 30 y 31 de octubre',classes:[
-  {title:'Del problema a la primera predicción',date:'23 oct',iso:'2026-10-23',time:'Viernes · 18:00–22:00',topics:['ml-problema','ml-preparacion','ml-regresion']},
+  {title:'Del problema a la primera predicción',date:'23 oct',iso:'2026-10-23',time:'Viernes · 18:30–22:00',topics:['ml-problema','ml-preparacion','ml-regresion']},
   {title:'Clasificar y entender los errores',date:'24 oct',iso:'2026-10-24',time:'Sábado · 08:00–12:00',topics:['ml-clasificacion','ml-metricas','ml-umbral']},
-  {title:'Encontrar estructura y combinar modelos',date:'30 oct',iso:'2026-10-30',time:'Viernes · 18:00–22:00',topics:['ml-clustering','ml-pca','ml-ensambles']},
+  {title:'Encontrar estructura y combinar modelos',date:'30 oct',iso:'2026-10-30',time:'Viernes · 18:30–22:00',topics:['ml-clustering','ml-pca','ml-ensambles']},
   {title:'El tiempo, las decisiones y el cierre',date:'31 oct',iso:'2026-10-31',time:'Sábado · 08:00–12:00',topics:['ml-series','ml-refuerzo','ml-integracion']}
  ]},
  dl:{id:'dl',module:6,title:'Deep Learning',subtitle:'Construir cálculos, pruebas y registros con redes, imágenes y secuencias.',color:'naranja',dates:'6, 7, 13 y 14 de noviembre',classes:[
-  {title:'Cómo aprende una red neuronal',date:'6 nov',iso:'2026-11-06',time:'Viernes · 18:00–22:00',topics:['dl-redes','dl-activaciones','dl-entrenamiento']},
+  {title:'Cómo aprende una red neuronal',date:'6 nov',iso:'2026-11-06',time:'Viernes · 18:30–22:00',topics:['dl-redes','dl-activaciones','dl-entrenamiento']},
   {title:'De los píxeles a la representación',date:'7 nov',iso:'2026-11-07',time:'Sábado · 08:00–12:00',topics:['dl-vision','dl-cnn','dl-transferencia']},
-  {title:'Secuencias, atención y contexto',date:'13 nov',iso:'2026-11-13',time:'Viernes · 18:00–22:00',topics:['dl-secuencias','dl-atencion','dl-transformers']},
+  {title:'Secuencias, atención y contexto',date:'13 nov',iso:'2026-11-13',time:'Viernes · 18:30–22:00',topics:['dl-secuencias','dl-atencion','dl-transformers']},
   {title:'Detección y decisiones con evidencia',date:'14 nov',iso:'2026-11-14',time:'Sábado · 08:00–12:00',topics:['dl-yolo','dl-evaluacion','dl-integracion']}
  ]}
 };
