@@ -1,15 +1,15 @@
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 const WELCOME_MESSAGES=[
- 'Una pregunta puede ser un buen comienzo. Cambia un dato, mira qué ocurre y trae tus hallazgos a la próxima clase.',
- 'Este es tu espacio para probar ideas. Explora un ejemplo, compara dos escenarios y busca qué explica la diferencia.',
- 'Vamos de la curiosidad a la práctica. Elige algo que quieras entender y juega con sus datos: el gráfico puede darte una pista.'
+ 'Aquí tienes los materiales de tus clases, ejemplos para entender cada idea y ejercicios para ponerla en práctica.',
+ 'Los conceptos de clase también se entienden probando. Los ejemplos y las prácticas te ayudan a ver qué significa cada resultado.',
+ 'Un espacio para acompañar tus clases: consulta los materiales, sigue los ejemplos y practica con los ejercicios a tu ritmo.'
 ];
 export function getWelcome({name='',variant=0}={}){
  const firstName=String(name??'').trim().replace(/^(?:ing\.?|dr\.?|dra\.?|prof\.?)\s+/i,'').split(/\s+/)[0];
  const index=Number.isInteger(variant)?((variant%WELCOME_MESSAGES.length)+WELCOME_MESSAGES.length)%WELCOME_MESSAGES.length:0;
  const namePart=firstName?', '+firstName:'';
- const headings=['¡Hola'+namePart+'! ¿Qué te gustaría explorar hoy?','¡Hola'+namePart+'! ¿Por dónde empezamos?','¡Hola'+namePart+'! ¿Qué vamos a descubrir?'];
+ const headings=['¡Hola'+namePart+'!','¡Qué gusto verte'+namePart+'!','¡Qué bueno tenerte aquí'+namePart+'!'];
  return {heading:headings[index],message:WELCOME_MESSAGES[index]};
 }
 export function renderFlowGuide(options={}){
