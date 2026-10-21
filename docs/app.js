@@ -1,4 +1,5 @@
 import {getJourney,getCalendarMoment,getTopicCompletion,hasNewTopics} from './journey-models.js';
+import {offerProgressDownload} from './progress-download.js';
 import {renderFlowGuide,renderLessonFlow} from './flow-guidance.js';
 import {laboratoryDestination} from './lab-access.js';
 import {readReferenceOffset,nextScheduleDelay} from './schedule-clock.js';
@@ -61,12 +62,12 @@ function nextClass(){
  const schedule=session?'<div class="journey-upcoming"><strong>'+(moment.current?'Horario programado en curso':'Próximo encuentro del calendario')+'</strong><p>'+esc(session.course.title)+' · '+esc(session.title)+' · '+fullDate(session)+' · '+esc(session.time)+' · Colombia</p><a class="inline-link" href="#curso/'+session.course.id+'/'+(session.index+1)+'">Ver este encuentro →</a></div>':'<div class="journey-upcoming"><strong>Terminó el calendario de encuentros</strong><p>Los materiales que ya abrieron permanecen disponibles para repasar.</p></div>';
  return '<section class="next-class journey-next"><div><div class="eyebrow">'+kicker+'</div><h2>'+esc(title)+'</h2><p>'+esc(description)+'</p></div><a class="button" href="'+href+'">'+label+' →</a>'+schedule+'</section>';
 }
-function downloadProgressCopy(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mi-progreso-utp.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500);}
+function downloadProgressCopy(){return offerProgressDownload(state);}
 function connectRegistration(){
  const hasWork=state.completed.length||Object.values(state.notes).some(note=>note.trim());
  if(isConnectedView||!hasWork){openStudentRegistration();return;}
  modal('<h2>Lleva tu avance al registro del curso</h2><p>Tu avance y tus notas están en este navegador. El registro se abre en otro sitio y no puede leerlos automáticamente.</p><ol><li>Descarga una copia de tu avance.</li><li>Entra o completa tu nombre en el registro del curso.</li><li>En Mi progreso, usa «Importar progreso» y elige el archivo descargado. La importación conserva tu cuenta y reemplaza sus temas y notas con los del archivo.</li></ol><p class="field-note">La copia contiene tu nombre y tus notas personales; guárdala para ti.</p><div class="flow-transfer-actions"><button class="button" id="transfer-download">1 · Descargar mi avance</button><button class="button secondary" id="transfer-connect" disabled>2 · Continuar al registro</button><button class="button secondary" id="transfer-cancel">Quedarme en esta aula</button></div><p id="transfer-status" class="field-note" role="status"></p>');
- $('#transfer-download').onclick=()=>{downloadProgressCopy();$('#transfer-connect').disabled=false;$('#transfer-status').textContent='Comprueba que tienes el archivo mi-progreso-utp.json antes de continuar.';};
+ $('#transfer-download').onclick=()=>{$('#transfer-status').textContent='Comprueba que tienes el archivo mi-progreso-utp.json antes de continuar. Si no empezó la descarga, usa este enlace: ';downloadProgressCopy();$('#transfer-connect').disabled=false;};
  $('#transfer-connect').onclick=()=>location.assign(STUDENT_RECORDS.url+'/aula/?registro=1&traer=archivo&ruta='+encodeURIComponent('#progreso'));
  $('#transfer-cancel').onclick=()=>$('#modal').close();
 }
