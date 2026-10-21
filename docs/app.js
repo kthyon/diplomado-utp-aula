@@ -19,7 +19,7 @@ import {canAccess} from './math.js';
 import {colombiaDay,scheduleReleases,validFullName,mayEnter} from './access-policy.js';
 import {mountSimulator} from './simulators.js?v=4';
 import {showWelcome,maybeShowWelcome} from './welcome.js';
-import {mountIdeaStudio} from './idea-studio.js?v=4';
+import {mountIdeaStudio} from './idea-studio.js?v=oscuro-neutro-20261020';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const welcomeVariant=Math.floor(Math.random()*3);
 let state=normalizeProgress({});
