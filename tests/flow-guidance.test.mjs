@@ -25,12 +25,13 @@ test('los nombres de asignatura se escapan y las rutas se limitan a módulos con
  assert.ok(!renderLessonFlow().includes('undefined'));
 });
 
-test('el saludo sigue la hora local con cambios a las 5, 12 y 18 y usa el nombre de pila',()=>{
- for(const [hour,salutation] of [[0,'Buenas noches'],[4,'Buenas noches'],[5,'Buenos días'],[11,'Buenos días'],[12,'Buenas tardes'],[17,'Buenas tardes'],[18,'Buenas noches'],[23,'Buenas noches']]){
-  assert.equal(getWelcome({name:'Cristian Alvarado',now:new Date(2026,9,20,hour)}).heading,'¡'+salutation+', Cristian!');
+test('el saludo es cercano, usa el nombre de pila y no depende de la hora',()=>{
+ for(const hour of [0,5,11,12,17,18,23]){
+  assert.equal(getWelcome({name:'Cristian Alvarado',now:new Date(2026,9,20,hour)}).heading,'¡Hola, Cristian! ¿Qué te gustaría explorar hoy?');
  }
- assert.equal(getWelcome({name:'Ing. Cristian Alvarado',now:new Date(2026,9,20,8)}).heading,'¡Buenos días, Cristian!');
- assert.equal(getWelcome({name:'',now:new Date(2026,9,20,8)}).heading,'¡Buenos días!');
+ assert.equal(getWelcome({name:'Ing. Cristian Alvarado'}).heading,'¡Hola, Cristian! ¿Qué te gustaría explorar hoy?');
+ assert.equal(getWelcome({name:''}).heading,'¡Hola! ¿Qué te gustaría explorar hoy?');
+ assert.notEqual(getWelcome({name:'Ana',variant:0}).heading,getWelcome({name:'Ana',variant:1}).heading);
 });
 
 test('la bienvenida varía sin perder instrucciones opcionales y escapa el nombre',()=>{
