@@ -2,6 +2,7 @@ import {ROADMAP,GENERALIDADES_URL,roadmapMeetings,roadmapPosition} from './roadm
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const date=iso=>new Intl.DateTimeFormat('es-CO',{day:'numeric',month:'short',timeZone:'America/Bogota'}).format(new Date(iso+'T12:00:00-05:00'));
 export function mountRoadmap(root,{courses,now=new Date(),day,teacher=false,onGeneralidades,initial}){
+ if(!teacher){root.replaceChildren();return;}
  const meetings=roadmapMeetings(courses),moment=roadmapPosition(courses,now),current=meetings.find(m=>m.id===moment.id);
  let selected=ROADMAP[initial]?initial:moment.id;
  const position=moment.kind==='current'?`En clase · Encuentro ${current.number}`:moment.kind==='upcoming'?`Siguiente · Encuentro ${current.number} · ${date(current.iso)}`:'Los ocho encuentros ya finalizaron en el calendario';
