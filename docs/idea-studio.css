@@ -86,3 +86,41 @@
 @media(prefers-reduced-motion:reduce){
  .idea-studio *, .idea-studio *::before, .idea-studio *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+/* Keep the whole figure visible by default; enlargement belongs to the chart,
+   including the second loss plot and the two comparison panels. */
+.idea-studio :is(.idea-workbench,.idea-graph-panel,.idea-controls,.idea-compare,.idea-pair,.idea-pair article,[data-graph],[data-extra]){min-width:0;max-width:100%}
+.idea-studio .idea-chart-scroll{max-width:100%;min-width:0;overflow:auto;overscroll-behavior-x:contain;scrollbar-gutter:stable;touch-action:pan-x pan-y;border-radius:8px;padding:7px 3px}
+.idea-studio .idea-chart-scroll:focus-visible{outline-offset:-3px}
+.idea-studio .idea-chart-scroll>.idea-plot{min-width:0;width:100%;max-width:none;overflow:hidden}
+.idea-studio.charts-enlarged .idea-chart-scroll>.idea-plot{min-width:720px}
+.idea-studio .idea-pair article{overflow:visible}
+.idea-studio .idea-graph-actions{display:flex;justify-content:flex-end;gap:12px;margin:0 0 8px}
+.idea-studio .idea-graph-actions button{font-size:14px;max-width:100%;white-space:normal;text-align:right;padding:8px 4px}
+.idea-studio .idea-chart-hint{display:block;font-size:13px;line-height:1.8;overflow-wrap:anywhere}
+.idea-studio .idea-plot :is(.idea-next-line,.idea-next-dot,.idea-next-step circle){stroke:var(--idea-blue);stroke-width:2;stroke-dasharray:5 4;fill:none}
+.idea-studio .idea-plot .idea-next-step text{fill:var(--ink);font-size:15px}
+.idea-studio .idea-table-scroll{width:100%;min-width:0;overscroll-behavior-x:contain}
+.idea-studio .idea-pair :is(h4,.idea-metrics){overflow-wrap:anywhere}
+.idea-studio .idea-controls :is(label,select,button){min-width:0;max-width:100%}
+.idea-studio .idea-select select,.idea-mobile-switch select{padding-right:28px}
+.idea-studio .idea-pixel-panels>section{min-width:0;width:100%}
+@media(max-width:760px){
+ .idea-studio .idea-graph-panel{padding:20px 14px}
+ .idea-studio .idea-controls{padding:22px 20px}
+ .idea-studio .idea-pair article{padding:20px 16px}
+ .idea-studio .idea-chart-scroll{padding:6px 1px}
+ .idea-studio .idea-graph-actions{justify-content:flex-start}
+ .idea-studio .idea-graph-actions button{text-align:left}
+ .idea-studio .idea-plot{font-size:18px}
+ .idea-studio .idea-pixels button{min-height:44px}
+ .idea-studio .idea-pixel-panels{grid-template-columns:minmax(0,1fr)}
+ .idea-studio .idea-confusion{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .idea-studio .idea-confusion button{min-width:0;overflow-wrap:anywhere}
+}
+@media(max-width:360px){
+ .idea-studio .idea-toolbar{flex-wrap:wrap}
+ .idea-studio .idea-toolbar>span{max-width:none}
+ .idea-studio .idea-toolbar .button{max-width:100%;white-space:normal}
+ .idea-studio .idea-confusion{grid-template-columns:minmax(0,1fr)}
+}

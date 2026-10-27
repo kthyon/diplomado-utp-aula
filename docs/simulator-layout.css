@@ -1,0 +1,36 @@
+/* Keep plot labels readable. A narrow card scrolls its graph, never the whole page. */
+.simulator:not(.dl-explorer){min-width:0;max-width:100%;container-type:inline-size}
+.simulator:not(.dl-explorer) .sim-grid{grid-template-columns:minmax(0,1fr) minmax(190px,230px);align-items:start}
+.simulator:not(.dl-explorer) :is(.sim-header,.controls,.sim-grid>div){min-width:0;max-width:100%}
+.simulator:not(.dl-explorer) .sim-header{flex-wrap:wrap;align-items:flex-start;gap:12px}
+.simulator:not(.dl-explorer) .sim-header h3{line-height:1.5;overflow-wrap:anywhere}
+.simulator:not(.dl-explorer) .controls{display:block}
+.simulator:not(.dl-explorer) .controls label{display:grid;grid-template-columns:minmax(0,1fr);gap:5px;font-size:14px;line-height:1.6;margin:0 0 20px;overflow-wrap:anywhere}
+.simulator:not(.dl-explorer) .controls output{float:none;justify-self:start;font-size:15px;font-variant-numeric:tabular-nums;color:var(--accent)}
+.simulator:not(.dl-explorer) .controls :is(input,select){min-width:0;max-width:100%;width:100%;font:inherit}
+.simulator:not(.dl-explorer) .controls input[type=range]{margin:0;min-height:32px}
+.simulator:not(.dl-explorer) .controls select{font-size:14px;text-overflow:ellipsis;margin:4px 0 0}
+.simulator:not(.dl-explorer) .controls .button{white-space:normal;text-align:center;max-width:100%;min-height:44px;line-height:1.5;font-size:14px;margin:6px 0}
+.simulator:not(.dl-explorer) .controls [data-dir]{min-width:44px;font-size:20px;margin:3px 0}
+.simulator:not(.dl-explorer) .metric{min-width:0;max-width:100%;padding:14px;margin:10px 0}
+.simulator:not(.dl-explorer) .metric small{font-size:12px;line-height:1.6;display:block}
+.simulator:not(.dl-explorer) .metric strong{font-size:21px;line-height:1.5;overflow-wrap:anywhere;margin-top:5px}
+.simulator:not(.dl-explorer) :is(.training-update,.training-next,.grid-last){font-size:14px;line-height:1.75;overflow-wrap:anywhere}
+.simulator:not(.dl-explorer) .training-next{padding-top:12px;border-top:1px solid var(--line)}
+.simulator:not(.dl-explorer) .sim-caption{font-size:14px;line-height:1.8;overflow-wrap:anywhere}
+.sim-plot-scroll,.sim-matrix-scroll{max-width:100%;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-gutter:stable;scrollbar-width:thin;touch-action:pan-x pan-y;border-radius:12px}
+.sim-plot-scroll>.plot{display:block;width:100%;min-width:0;height:auto;min-height:0;max-height:none;aspect-ratio:5/3}
+.simulator:not(.dl-explorer)[data-plot-expanded=true] .sim-plot-scroll>.plot{min-width:500px}
+.sim-view-actions{display:flex;justify-content:flex-end;margin:0 0 10px}
+.simulator:not(.dl-explorer):not(:has(.plot)) .sim-view-actions{display:none}
+.sim-view-actions .button{min-height:44px;max-width:100%;font-size:13px;white-space:normal}
+.sim-plot-scroll:focus-visible,.sim-matrix-scroll:focus-visible{outline:3px solid var(--focus,var(--accent));outline-offset:3px}
+.simulator:not(.dl-explorer)[data-plot-expanded=true] .sim-plot-scroll:after{content:'Desliza el gráfico para ver todos los ejes y valores.';display:block;font-size:12px;line-height:1.7;color:var(--muted);padding:8px 0}
+.simulator:not(.dl-explorer) .plants{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:8px}
+.simulator:not(.dl-explorer) .plant{min-width:0;line-height:1.7;font-size:12px}
+.simulator:not(.dl-explorer) .plant .field-note{font-size:11px}
+.simulator:not(.dl-explorer) .matrix{min-width:350px;grid-template-columns:100px repeat(2,minmax(0,1fr))}
+.simulator:not(.dl-explorer) .matrix>div{font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.simulator:not(.dl-explorer) .cluster-reading{margin-top:12px;font-size:14px;line-height:1.8}
+@container(max-width:739px){.simulator:not(.dl-explorer) .sim-grid{grid-template-columns:minmax(0,1fr)}.simulator:not(.dl-explorer) .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px 20px}.simulator:not(.dl-explorer) .controls :is(.training-update,.training-next,.grid-last){grid-column:1/-1}}
+@media(max-width:560px){.simulator:not(.dl-explorer){padding:18px}.simulator:not(.dl-explorer) .controls{grid-template-columns:minmax(0,1fr)}.simulator:not(.dl-explorer) .sim-header .pill{white-space:normal;line-height:1.5}.first-prediction .case-actions{display:flex;flex-wrap:wrap;gap:10px}.first-prediction .case-actions .button{max-width:100%;white-space:normal;line-height:1.6}.first-prediction .case-select{display:block;min-width:0}.first-prediction .case-select select{width:100%;max-width:100%;min-width:0}}

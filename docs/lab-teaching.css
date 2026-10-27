@@ -5,3 +5,22 @@
 
 .teach-foundation{margin:18px 0 24px;padding:14px 18px;border:1px solid var(--line);border-radius:14px;background:var(--paper)}.teach-foundation>summary{font-weight:550;line-height:1.7;cursor:pointer;color:var(--accent);min-height:32px}.teach-foundation .teach-definitions{margin:20px 0 12px}.ll-worked-distance{margin:20px 0}.ll-worked-distance>summary{cursor:pointer;color:var(--accent);font-weight:550;padding:16px 0}.ll-card>summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:16px;line-height:1.65}.ll-card>label[for=nn-sample]{display:block;font-size:13px;line-height:1.7}.ll-card>label[for=nn-sample] select{margin-bottom:14px}.teach-goal{margin:16px 0;padding:16px 20px}.teach-goal p{font-size:15px;line-height:1.7}.ll-card details:not([open]){margin-bottom:0}.ll-project .teach-foundation{display:none}
 @media(max-width:850px){.teach-foundation{padding:12px 16px}.teach-goal{padding:15px 18px}.teach-goal p{font-size:14px}}
+
+.teach-goals,.teach-sigmoid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.teach-goals>*,.teach-sigmoid>*{min-width:0}
+.teach-neighbor-row{grid-template-columns:minmax(0,130px) minmax(0,1fr) 68px}
+.teach-neighbor-row :is(span,strong){overflow-wrap:anywhere}
+.teach-score-control output{float:none;display:block}
+.teach-sigmoid svg{height:auto;display:block}
+@media(max-width:850px){.teach-goals,.teach-sigmoid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:560px){
+ .teach-neighbor-row{grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:10px;font-size:12px}
+ .teach-neighbor-row>span{grid-column:1;grid-row:1}
+ .teach-neighbor-row>strong{grid-column:2;grid-row:1;text-align:right}
+ .teach-neighbor-row>div{grid-column:1/-1;grid-row:2}
+ .teach-definition,.teach-goals section,.teach-score-control{padding:16px}
+ .teach-equation-row{gap:8px}.teach-equation-row>span{min-width:0;flex-basis:100%;padding:14px}
+ .teach-equation-row>b{width:100%;text-align:center}
+ .teach-comparison{padding:14px;font-size:15px}
+ .teach-truth-matrix :is(th,td){padding:8px;font-size:11px}
+}
