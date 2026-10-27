@@ -52,5 +52,6 @@ Las 61 celdas de código, sus IDs, orden y contenido son idénticos a la base de
 - Búsqueda comprobada por MAE, Mean Absolute Error y error absoluto medio; también por R²/R2 y α/alpha.
 - Revisión en navegador del resultado de MAE, sus unidades, ejemplo y fuente; paneles presentes en los seis encuentros pendientes y ausentes en los primeros dos.
 - Revisión de claro/oscuro y de 320, 390, 768, 1024 y 1440 px sin desbordamiento de página en la vista comprobada.
+- Se ajusta la lista de temas relacionados del buscador para que sus títulos dispongan del ancho necesario y el botón no los comprima.
 
 Las fuentes primarias se enlazan desde cada referencia: scikit-learn, NumPy, PyTorch, publicaciones originales, Ultralytics, W3C, RFC y documentación técnica de los términos de apoyo. Se revisó exactitud y cobertura del vocabulario usado; el catálogo no pretende abarcar toda la disciplina ni añadir un programa nuevo.
