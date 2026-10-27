@@ -1,6 +1,7 @@
 import {renderTopicContext,renderTopicVocabulary,renderTopicOutcome,renderCaseEvidence} from './lesson-context.js';
-import {LESSON_OFFERING,renderNotebookBridge,renderExplorerLink} from './lesson-offering.js?v=contexto-20261026';
+import {LESSON_OFFERING,renderNotebookBridge,renderExplorerLink} from './lesson-offering.js?v=escenas-20261027';
 import {renderConceptConnections} from './concept-connections.js';
+import {LESSON_SCENES,renderCaseDetail} from './lesson-scenes.js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const CLASS_PURPOSES={
   "ml": [
@@ -20,9 +21,8 @@ export function renderLearningGuide(l){
   const g=l.guide,c=g.case;
   const table=c.columns?.length&&c.rows?.length?`<div class="learning-table-wrap"><table class="learning-table"><caption>${esc(c.title)}</caption><thead><tr>${c.columns.map(t=>`<th scope="col">${esc(t)}</th>`).join('')}</tr></thead><tbody>${c.rows.map(row=>`<tr>${row.map((v,i)=>i?`<td>${esc(v)}</td>`:`<th scope="row">${esc(v)}</th>`).join('')}</tr>`).join('')}</tbody></table></div>`:'';
   return `${renderTopicContext(l.id,g.objective)||`<section class="panel learning-goal"><span class="eyebrow">LO QUE VAS A PODER HACER</span><h2>${esc(g.objective)}</h2><p><b>De dónde venimos:</b> ${esc(g.prerequisite||g.relevance)}</p><p><b>Vas a construir:</b> ${esc(g.build.title)}.</p></section>`}
-    <section class="panel learning-concepts" id="idea-del-tema"><div class="eyebrow">01 · CONCEPTO</div><h2>Qué es, cómo funciona y para qué sirve</h2>${LESSON_OFFERING[l.id]?`<p><b>Empieza por distinguir:</b> ${esc(LESSON_OFFERING[l.id].focus)}</p>`:''}<p class="concept-intro">${esc(g.concept)}</p>${renderTopicVocabulary(l.id,g.vocabulary,g.essentialCount)}</section>
-    <section class="panel worked-case" id="ejemplo-del-tema"><div class="eyebrow">02 · EJEMPLO RESUELTO</div><h2>${esc(c.title)}</h2><p class="case-question"><b>${esc(c.question)}</b></p><p>${esc(c.context)}</p>${table}
-    <h3>Resolvamos el caso</h3><ol class="worked-steps">${c.reasoning.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>
+    <section class="panel learning-concepts" id="idea-del-tema"><div class="eyebrow">01 · CONCEPTO</div><h2>Qué es, cómo funciona y para qué sirve</h2>${!LESSON_SCENES[l.id]&&LESSON_OFFERING[l.id]?`<p><b>Empieza por distinguir:</b> ${esc(LESSON_OFFERING[l.id].focus)}</p>`:''}<p class="concept-intro">${esc(g.concept)}</p>${renderTopicVocabulary(l.id,g.vocabulary,g.essentialCount)}${LESSON_SCENES[l.id]&&LESSON_OFFERING[l.id]?`<p><b>La relación con la clase:</b> ${esc(LESSON_OFFERING[l.id].focus)}</p>`:''}</section>
+    <section class="panel worked-case" id="ejemplo-del-tema"><div class="eyebrow">02 · EJEMPLO RESUELTO</div><h2>${esc(c.title)}</h2><p class="case-question"><b>${esc(c.question)}</b></p>${renderCaseDetail(l.id,c,table)}
     ${c.stages?.length?`<ol class="learning-stages">${c.stages.map(s=>`<li><b>${esc(s.title)}</b><span>${esc(s.detail)}</span></li>`).join('')}</ol>`:''}
     <div class="learning-result"><b>Qué podemos concluir</b><p>${esc(c.conclusion)}</p></div>${renderTopicOutcome(g)}${renderCaseEvidence(l.id)}<p class="learning-takeaway"><b>Para recordar:</b> ${esc(g.takeaway)}</p>${g.understanding?`<details class="expected-result"><summary>Comprueba si lo entendiste: ${esc(g.understanding.question)}</summary><p>${esc(g.understanding.answer)}</p></details>`:''}</section>${renderConceptConnections(l.id)}`;
 }

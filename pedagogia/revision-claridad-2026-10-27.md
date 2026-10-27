@@ -29,10 +29,18 @@ Se contrastaron fuentes primarias de UCI Dry Bean, un estudio de pronóstico de 
 
 ## Verificación
 
-- 140 pruebas automáticas aprobadas, sin fallos: cálculos, navegación, fechas, progreso, protección de los primeros encuentros y agenda solo para el docente, entre otras.
+- 142 pruebas automáticas aprobadas, sin fallos: cálculos, navegación, fechas, progreso, protección de los primeros encuentros, agenda solo para el docente y ubicación de tablas dentro del detalle cerrado, entre otras.
 - Revisión en navegador de los 18 temas modificados: pregunta, contexto y resultado renderizados; seis contextos de encuentro presentes y primeros dos excluidos.
 - Vocabulario desplegable y fuente documentada comprobados; sin errores de consola en el recorrido revisado.
 - Lectura revisada en claro y oscuro. Entrenamiento comprobado a 320, 390, 768, 1024 y 1440 px sin desbordamiento horizontal; revisión visual adicional en móvil y escritorio.
 - Página temporal exclusivamente local con reloj de revisión para inspeccionar futuros materiales; se excluye de la publicación y no altera el calendario real.
 
 Esta evaluación comprueba consistencia conceptual, numérica y funcional. La comprensión del grupo deberá observarse durante la clase; no se infiere de las pruebas de software. Los cuadernos no se modificaron ni se volvieron a ejecutar. No se contrataron servicios ni recursos de pago.
+
+## Segunda revisión: empezar sin conocimientos previos
+
+Se reescribieron las 18 introducciones y más de cien definiciones con palabras comunes, ejemplos pequeños y significado explícito de símbolos. Una neurona se presenta antes que las capas; un píxel antes que un filtro; un reparto entre 10 y 20 antes que los vectores de atención. Se distingue significado cotidiano, nombre técnico y operación.
+
+Los 18 casos tienen ahora una escena visual y tres pasos ligados al problema: centros agrupados, comparación de toneladas, semanas conocidas y futuras, recorridos de una bodega, señales de una neurona, frutos con etiquetas/cajas/regiones, ventanas de píxeles, entregas ordenadas, repartos y decisiones de revisión. Las tablas y operaciones completas siguen disponibles en un detalle cerrado. No se exige leer una tabla para comenzar a entender el caso.
+
+Se recorrieron los 18 ejemplos en navegador a 390 px: escenas presentes, tablas de detalle cerradas y sin desbordamiento de la página. Se conservaron exactamente los seis primeros temas y los ocho cuadernos. Esta revisión tampoco incorpora nuevos temas.
