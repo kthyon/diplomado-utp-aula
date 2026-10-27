@@ -1,4 +1,4 @@
-import {renderMeetingContext} from './lesson-context.js';
+import {renderMeetingContext} from './lesson-context.js?v=organizacion-20261027';
 import {renderNotebookPath} from './notebook-paths.js';
 import {renderMeetingDefinitions} from './definitions.js';
 import {renderSessionPlan} from './session-plans.js?v=1';
@@ -47,11 +47,15 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 export function renderMeetingOffering(courseId,index,meeting,{teacher=false}={}){
  const row=MEETING_OFFERING[courseId]?.[index];if(!row)return '';
  const agenda=teacher?renderSessionPlan(courseId,index,meeting):'';
- return renderMeetingContext(courseId,index)+renderMeetingDefinitions(courseId,index)+'<details class="concept-depth"><summary>En qué nos centraremos y qué puedes profundizar</summary><p><b>Durante la clase:</b> '+esc(row[0])+'</p><p><b>Para profundizar:</b> '+esc(row[1])+'</p><p>Puedes volver a estos apoyos cuando lo necesites; las comprobaciones son opcionales y sin nota.</p>'+agenda+'</details>';
+ const focus='<details class="concept-depth"><summary>En qué nos centraremos y qué puedes profundizar</summary><p><b>Durante la clase:</b> '+esc(row[0])+'</p><p><b>Para profundizar:</b> '+esc(row[1])+'</p><p>Puedes volver a estos apoyos cuando lo necesites; las comprobaciones son opcionales y sin nota.</p>'+agenda+'</details>';
+ const context=renderMeetingContext(courseId,index);
+ if(!context)return focus;
+ return '<div class="meeting-supports"><details class="meeting-reference"><summary>Contexto, recorrido y alcance del encuentro</summary>'+context+focus+'</details>'+renderMeetingDefinitions(courseId,index)+'</div>';
 }
 export function renderNotebookBridge(l){
  const o=LESSON_OFFERING[l.id],guide=l.guide.lab.notebookGuide;
- return (o?'<p><b>La conexión con el ejemplo:</b> '+esc(o.bridge)+'</p>':'')+'<p><b>Dónde continuar en tu copia:</b> '+esc(guide)+'</p>'+renderNotebookPath(l.id);
+ const explanation=(o?'<p><b>La conexión con el ejemplo:</b> '+esc(o.bridge)+'</p>':'')+'<p><b>Dónde continuar en tu copia:</b> '+esc(guide)+'</p>',path=renderNotebookPath(l.id);
+ return path?path+'<details class="notebook-context"><summary>Cómo se conecta el cuaderno con este ejemplo</summary>'+explanation+'</details>':explanation;
 }
 export function renderExplorerLink(id){
  const topic=LESSON_OFFERING[id]?.explorer;

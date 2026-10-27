@@ -1,0 +1,133 @@
+/* Progressive reading for the six remaining meetings. Legacy meetings keep their styles. */
+.lesson-layout.organized-lesson{grid-template-columns:minmax(0,1fr);gap:28px;align-items:start;margin-top:28px}
+.organized-lesson>.organized-aside,.organized-lesson>.organized-reading{min-width:0;max-width:100%}
+.organized-aside{grid-column:1;grid-row:1}
+.organized-reading{grid-column:1;grid-row:2;font-size:16px;line-height:1.8}
+.organized-reading>section,.organized-reading>details{margin:0 0 30px;scroll-margin-top:28px}
+.organized-reading .panel{padding:clamp(22px,3vw,32px);border-radius:18px}
+.organized-reading :is(.learning-goal,.learning-concepts,.worked-case) h2{font-size:clamp(23px,2.1vw,28px);line-height:1.4;margin:12px 0 18px;max-width:30ch}
+.organized-reading :is(p,dd,.learning-stages span,.worked-steps li,.scene-story p,.context-brief dd){font-size:16px;line-height:1.85}
+.organized-reading :is(.concept-intro,.scene-hook){font-size:17px;line-height:1.85;color:var(--ink);max-width:70ch}
+.organized-reading :is(p,dd){max-width:70ch}
+.organized-reading .eyebrow{font-size:11px;letter-spacing:.1em;line-height:1.6}
+.organized-reading :is(.scene-story,.learning-stages,.worked-steps){padding-left:0}
+.organized-reading :is(.learning-result,.context-outcome){margin-top:26px;padding:22px;border-radius:14px}
+.organized-reading .context-outcome h3{font-size:19px;margin:0 0 12px}
+.organized-reading :is(.scene-picture,.context-outcome){margin-bottom:26px}
+.organized-reading .scene-story{gap:24px;margin:30px 0}
+.organized-reading :is(.exploration-prompt,.notebook-lab){min-width:0}
+.organized-reading .exploration-prompt{padding:8px 4px 0}
+.organized-reading .exploration-prompt h2{font-size:26px;line-height:1.4;margin-top:12px}
+.organized-reading .guided-exploration{margin-top:38px}
+.organized-reading .study-note{font-size:16px;line-height:1.7;padding:16px}
+
+/* A short destination and three direct ways into the same, uninterrupted lesson. */
+.topic-compass{padding:24px;border:1px solid var(--line);border-radius:18px;background:var(--paper);color:var(--ink)}
+.compass-eyebrow{font-size:11px;font-weight:600;line-height:1.7;color:var(--muted);margin-bottom:12px}
+.topic-compass h3{font-size:21px;line-height:1.4;margin:0 0 12px;letter-spacing:-.025em}
+.topic-compass .compass-goal{font-size:16px;line-height:1.8;margin:0;max-width:70ch;color:var(--ink)}
+.lesson-section-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:24px 0}
+.lesson-section-nav button{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;text-align:left;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font-size:14px;font-weight:600;line-height:1.5}
+.lesson-section-nav button>span{flex-shrink:0;font-size:12px;font-variant-numeric:tabular-nums;color:var(--accent)}
+.lesson-section-nav button:hover{background:var(--soft);border-color:var(--accent)}
+.organized-lesson :is(button,summary,a,textarea):focus-visible,.course-overview>summary:focus-visible,.organized-meeting summary:focus-visible{outline:3px solid var(--focus,var(--accent));outline-offset:4px;border-radius:6px}
+.organized-reading :is(h2,h3)[tabindex="-1"]:focus{outline:none}
+.topic-compass :is(.compass-context,.compass-location){border-top:1px solid var(--line);padding:4px 0;margin:0}
+.topic-compass :is(.compass-context,.compass-location)>summary{cursor:pointer;padding:12px 0;font-size:14px;line-height:1.65;color:var(--accent);font-weight:600}
+.topic-compass :is(.compass-context,.compass-location) p{font-size:15px;line-height:1.85;margin:10px 0 16px;color:var(--muted)}
+.compass-location .flow-lesson{margin:8px 0;padding:0;border:0;border-radius:0;background:transparent}
+.compass-location .flow-lesson :is(p,details){font-size:14px;line-height:1.8}
+.compass-location .flow-lesson summary{font-size:14px;line-height:1.65}
+.organized-finish{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:22px;padding:28px;border:1px solid var(--line);border-radius:18px;background:var(--soft)}
+.organized-finish>div{flex:1 1 300px;min-width:0}
+.organized-reading .organized-finish h3{font-size:21px;line-height:1.5;margin:0 0 10px}
+.organized-reading .organized-finish p{margin:0;font-size:15px;color:var(--muted)}
+.organized-finish .button{min-height:48px;white-space:normal;font-size:15px;line-height:1.5;text-align:center;max-width:100%}
+
+/* Full definitions, workings and sources stay one click away, without competing with the example. */
+.organized-reading :is(.context-detail,.topic-vocabulary,.concept-focus,.example-reflection,.concept-reference,.method-detail,.example-check,.notebook-context){margin:24px 0 0;border-top:1px solid var(--line);padding-top:4px;min-width:0}
+.organized-reading>:is(.concept-reference,.example-check){margin:0 0 30px;padding:8px 24px;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+.organized-reading :is(.context-detail,.topic-vocabulary,.concept-focus,.example-reflection,.concept-reference,.method-detail,.example-check,.notebook-context)>summary{font-size:16px;font-weight:600;line-height:1.65;color:var(--accent);cursor:pointer;padding:14px 0;min-height:48px;overflow-wrap:anywhere}
+.topic-vocabulary>summary>span{display:block;padding-left:19px;color:var(--muted);font-size:13px;line-height:1.7;font-weight:400;margin-top:4px}
+.organized-reading .term-dictionary{display:grid;gap:0;margin:6px 0 10px;padding:0}
+.organized-reading .term-definition{border-top:1px solid var(--line);margin:0;padding:0 0 0 16px;min-width:0}
+.organized-reading .term-definition>summary{padding:14px 0;color:var(--ink);cursor:pointer;font-size:16px;line-height:1.65;font-weight:600;overflow-wrap:anywhere}
+.organized-reading .term-definition p{margin:0 0 18px;color:var(--muted);overflow-wrap:anywhere}
+.organized-reading .context-vocabulary{margin:12px 0 0;padding-top:6px}
+.organized-reading .context-vocabulary>summary{font-size:15px;line-height:1.7}
+.organized-reading .context-brief{grid-template-columns:minmax(0,1fr);gap:24px;margin:22px 0 12px}
+.organized-reading .context-detail>p{margin-top:12px}
+.organized-reading .concept-reference .concept-connections{border:0;padding:6px 0 16px;margin:0;background:transparent}
+.organized-reading .concept-reference .concept-connections h2{font-size:23px;max-width:none}
+.organized-reading .concept-reference .concept-why{grid-template-columns:minmax(0,1fr);gap:16px}
+.organized-reading .concept-reference .concept-process{padding:0}
+.organized-reading .example-check .quiz{padding:18px 0 12px;margin:0;border:0;background:transparent}
+.organized-reading .quiz button{font-size:15px;line-height:1.7;padding:14px}
+.organized-reading .notebook-path{padding:22px;margin:22px 0;background:var(--soft)}
+.organized-reading .notebook-path h4{font-size:20px;line-height:1.5}
+.organized-reading .notebook-path :is(p,li){font-size:16px;line-height:1.85}
+.organized-reading .notebook-path ol{margin:16px 0;padding-left:22px}
+.organized-reading .notebook-path li{padding-left:6px;margin:14px 0}
+.organized-reading .notebook-tip{padding-left:16px;margin-top:20px}
+.organized-reading .notebook-lab .resource>small{font-size:13px;line-height:1.8}
+.organized-reading .build-notes{margin-top:30px;padding-top:24px}
+
+/* On a course page, reach the three themes before opening the supporting references. */
+.course-overview{margin:24px 0 30px;padding:8px 24px;border:1px solid var(--line);border-radius:14px;background:var(--paper);min-width:0}
+.course-overview>summary{font-size:16px;font-weight:600;line-height:1.7;padding:14px 0;color:var(--accent);cursor:pointer;overflow-wrap:anywhere}
+.course-overview>:is(.panel,.flow-guide){margin:16px 0;border:0;padding:12px 0;background:transparent}
+.course-overview :is(p,li,dd,.learning-stages span){font-size:16px;line-height:1.85}
+.class-block.organized-meeting{margin:28px 0;border-radius:18px}
+.organized-meeting .meeting-goal{margin:0;padding:24px 28px 18px;font-size:16px;line-height:1.85;color:var(--ink);max-width:80ch}
+.organized-meeting .meeting-goal b{color:var(--accent);font-weight:650}
+.organized-meeting .topics{padding:0 24px 14px}
+.organized-meeting .topic-row{padding:22px 4px;gap:14px}
+.organized-meeting .topic-row h4{font-size:18px;line-height:1.5;overflow-wrap:normal;word-break:normal}
+.organized-meeting .topic-row p{font-size:15px;line-height:1.8;max-width:70ch;margin:8px 0 0}
+.organized-meeting .topic-index{flex-shrink:0}
+.organized-meeting .meeting-reference-area{padding:0 28px 20px}
+.organized-meeting .meeting-supports{padding:0;min-width:0}
+.organized-meeting :is(.meeting-reference,.meeting-definitions){border-top:1px solid var(--line);padding:4px 0;margin:0}
+.organized-meeting :is(.meeting-reference,.meeting-definitions)>summary{font-size:15px;font-weight:600;line-height:1.7;padding:14px 0;color:var(--accent);cursor:pointer;overflow-wrap:anywhere}
+.organized-meeting .meeting-context{padding:8px 0 16px;margin:10px 0;border:0;border-radius:0;background:transparent}
+.organized-meeting .meeting-context h4{font-size:18px;line-height:1.5;margin:10px 0 16px}
+.organized-meeting :is(.meeting-context p,.meeting-context li,.meeting-definitions p,.concept-depth p){font-size:16px;line-height:1.85}
+.organized-meeting .meeting-context ol{padding-left:22px}
+.organized-meeting .meeting-context li{padding-left:4px;margin:14px 0}
+.organized-meeting .meeting-reference .concept-depth{margin:8px 0 14px;padding-top:8px}
+.organized-meeting .meeting-definitions .definition-cards{margin:12px 0 20px}
+
+@media(min-width:1250px){
+ .lesson-layout.organized-lesson{grid-template-columns:minmax(0,1fr) 280px;gap:30px}
+ .organized-lesson>.organized-reading{grid-column:1;grid-row:1}
+ .organized-lesson>.organized-aside{grid-column:2;grid-row:1;position:sticky;top:24px}
+ .organized-aside .topic-compass{padding:22px}
+ .organized-aside .lesson-section-nav{grid-template-columns:minmax(0,1fr);gap:8px;margin:22px 0}
+}
+@media(max-width:700px){
+ .organized-meeting .topic-row{grid-template-columns:28px minmax(0,1fr);gap:10px 14px}
+ .organized-meeting .topic-row>.button,.organized-meeting .topic-row>.topic-state{grid-column:2;justify-self:start}
+ .organized-meeting .topic-row h4{font-size:17px}
+ .organized-reading .concept-reference .concept-process{display:grid;grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:560px){
+ .lesson-layout.organized-lesson{gap:24px}
+ .topic-compass{padding:22px}
+ .lesson-section-nav{grid-template-columns:minmax(0,1fr);gap:8px;margin:20px 0}
+ .lesson-section-nav button{font-size:15px;padding:12px 14px}
+ .organized-reading .panel{padding:22px}
+ .organized-reading>section,.organized-reading>details{margin-bottom:24px}
+ .organized-reading :is(.scene-picture,.context-outcome,.learning-result,.notebook-path){padding:18px}
+ .organized-reading :is(.scene-picture,.context-outcome){margin-top:22px;margin-bottom:22px}
+ .organized-reading>:is(.concept-reference,.example-check){padding:6px 20px}
+ .organized-reading .term-definition{padding-left:8px}
+ .organized-reading .exploration-prompt h2{font-size:24px}
+ .organized-finish{padding:22px;gap:20px}
+ .organized-finish .button{width:100%}
+ .course-overview{padding:6px 20px}
+ .organized-meeting .meeting-goal{padding:22px 22px 16px}
+ .organized-meeting .topics{padding:0 18px 10px}
+ .organized-meeting .meeting-reference-area{padding:0 22px 16px}
+ .organized-meeting .topic-row{padding:20px 4px}
+ .organized-meeting .topic-row .button{font-size:14px;min-height:44px;white-space:normal;text-align:center}
+}
