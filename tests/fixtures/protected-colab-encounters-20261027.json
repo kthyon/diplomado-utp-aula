@@ -1,0 +1,102 @@
+{
+  "baselineCommit": "88500e72473b98bb70dbbac10a11291002451af2",
+  "scope": "Encuentros globales 1 y 2: archivos de regresión/clasificación completos y marco/celdas compartidas de laboratorio ML. Los otros cuadernos y las secciones posteriores quedan disponibles para mejoras autorizadas.",
+  "byteHashes": {
+    "regresion.ipynb": "b0aa75333d28a254bbe9e3435c1512f15c439008521d6614a53ebc38cd685d2d",
+    "clasificacion.ipynb": "c46cb199fe82cca097e840260b68619eee19b8800f067027b2441d95cc2eb6c6"
+  },
+  "mlPrefix": [
+    {
+      "id": "utp-f3017408d20f8be6",
+      "sha256": "ea6c2910754c7eaa8b674327928cd740e46fe4b52de20b81e558c0431e00632c"
+    },
+    {
+      "id": "utp-e3d13188f750931d",
+      "sha256": "e237a33cb2cd56e899089db480547cf090fc83b9eb1429fd409c635ab3339ef0"
+    },
+    {
+      "id": "utp-323b968a80c627d9",
+      "sha256": "030eb29f3f71b9f2140ba524d9519f1c9e405cff23f947bc5e14340ddd6d2cc7"
+    },
+    {
+      "id": "utp-e7aad815c50ce21e",
+      "sha256": "54fdefcbec193b2b43e05cf965eb39ae6eefae19d8c79c79c0251ee3f0af21c6"
+    },
+    {
+      "id": "utp-286fe2dace2b5bd3",
+      "sha256": "273564935bf94ba2be07d59f91f846dfa243968b26b737b4fee03e89a90eb54c"
+    },
+    {
+      "id": "utp-9881ac02a824930e",
+      "sha256": "1d1d51f7f9d101c6a489f331c9edf0f33cc25af50c6619fa5dd517da7161220c"
+    },
+    {
+      "id": "utp-385defc62fb85daa",
+      "sha256": "33045cc8bf7ab59ee43d9411b2ca32ab3b88d4c65336d224631088c3fbadd655"
+    },
+    {
+      "id": "utp-79f315a31130e737",
+      "sha256": "63570290ab6f75c8c3e6397dee7b981e2c4452ac68a1d1784779c7839ea57468"
+    },
+    {
+      "id": "utp-95bdbbfc11ccfd84",
+      "sha256": "9dcdef1c048d5d7ac5f45550553b1bb3c5e80983d8d574619a92b82e8afccca7"
+    },
+    {
+      "id": "utp-db686b8e32bcfcd1",
+      "sha256": "530dfafa31a05b4bb7f07361bd3967287e6fd3b4447fafcad71575b49d520dbc"
+    },
+    {
+      "id": "utp-c84e850e90119388",
+      "sha256": "a51b84aca248bf0055b66da8d5dca87afbe89700815ed6dc9a9dd345b0c22717"
+    },
+    {
+      "id": "utp-f0e68db240b2eca2",
+      "sha256": "ba169142da5749009b1f4549e4f60888cb44aacce9fec4c627d6f5a5d634d35f"
+    },
+    {
+      "id": "utp-d9c36f4ed5631af0",
+      "sha256": "2937f3136c8210116e7634597a7a8717946c647cab379f63407b6545ef4275a0"
+    },
+    {
+      "id": "utp-8a9b04c1b1cd2889",
+      "sha256": "e2f0a23f020972f80b2d70b5443ff4cc25d3966a9e7a488ad8ca94e98b48a475"
+    },
+    {
+      "id": "utp-78205812a8e86cd9",
+      "sha256": "0a81288ec5aeb24d5aa02b45748a2760aece63223b3ec7a4544589df0cc6e738"
+    },
+    {
+      "id": "utp-0707313d1b155efe",
+      "sha256": "5debdf76c624062a967fe635d37eddbbf68aadd92b5723618374f7a2f7a5b7f4"
+    },
+    {
+      "id": "utp-fa03b368062039cf",
+      "sha256": "2427ecfe5b58a35f31ce34f1cea81d0032faffea7f8725f72643533f8084d830"
+    },
+    {
+      "id": "utp-621237e3c45d024d",
+      "sha256": "662af9a3325605d3e14d8990c54cc0cdf6810210c28692e65b0da2b0b24ce319"
+    },
+    {
+      "id": "utp-22dfd835561d3b64",
+      "sha256": "6ec152fba157a782aaf4f8c944b0d4bbcd737c14a2ddcf3b189ec764fbc67c1b"
+    },
+    {
+      "id": "utp-237f57d43cab7247",
+      "sha256": "3d378c7d7ff1b5540d56948674b6916f03866294f7acc3639a985644055fa8e8"
+    },
+    {
+      "id": "utp-6b64e02fa40c87b6",
+      "sha256": "c93e49212d7f4dae25299196479de0493393f84893d2110397c2be9d7b34e410"
+    },
+    {
+      "id": "utp-7c14db9b9ee09762",
+      "sha256": "c5b5f5cd7c2ee2eb824ee59f7802d3b0ddd230b921a086194f47c3caba176f6c"
+    }
+  ],
+  "mlClosing": {
+    "id": "utp-c94463703bcd479b",
+    "sha256": "47a6f597696f57b4abeed881d6a941bd48bcb336c6985ce601bf57c2cff79e8d"
+  }
+}

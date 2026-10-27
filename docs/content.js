@@ -1,4 +1,4 @@
-import {LESSON_GUIDES} from './learning-guides.js?v=escenas-20261027';
+import {LESSON_GUIDES} from './learning-guides.js?v=colab-20261027';
 export const REPO='kthyon/diplomado-utp-aula';
 export const SOURCES={ml:'https://docs.google.com/presentation/d/1UOnYu1aT7Sg58BUlmPL6_BNyoFlhFc4Zu456IZP93ns/edit',terms:'https://docs.google.com/document/d/1WfPiuA4LUkE3axpf3qb_-_cQu55OEpnwQohtTyN2zYo/edit',dl:'https://docs.google.com/document/d/1buuOnf-xMsWfpRQeyW2swHEt9I7JKsroikz0rKsG_G0/edit',activation:'https://docs.google.com/document/d/1qsi3HQwW0zRlLMyAplVuANgZzmuLhcIhvOAJaiUxU6c/edit'};
 export const COURSES={
@@ -136,8 +136,8 @@ const LESSON_BASE=[
     "title": "Parecidos no son categorías de calidad",
     "concept": "K-Means solicita el número k de grupos y ajusta centros; Mean-Shift busca concentraciones de puntos según una escala de vecindad; DBSCAN conecta puntos densos dentro de un radio. En DBSCAN, un núcleo cumple el mínimo de vecinos, un borde puede quedar unido a un núcleo y el resto queda sin asignar. Sus etiquetas son identificadores de grupo.",
     "notebooks": [
-      "clustering.ipynb",
-      "laboratorio-ml.ipynb"
+      "laboratorio-ml.ipynb",
+      "clustering.ipynb"
     ],
     "quiz": {
       "q": "¿Qué significa un punto no agrupado por DBSCAN?",
@@ -308,6 +308,7 @@ const LESSON_BASE=[
     "title": "Tres preguntas distintas para una imagen",
     "concept": "La segmentación semántica asigna una categoría a cada píxel; la segmentación de instancias distingue además objetos individuales de una misma categoría. Una caja es un rectángulo e incluye normalmente parte del fondo; una máscara describe una región de píxeles. La escena de este tema dibuja las salidas para compararlas; el cuaderno ejecuta detección con cajas.",
     "notebooks": [
+      "laboratorio-dl.ipynb",
       "yolo-registro.ipynb"
     ],
     "quiz": {
@@ -441,8 +442,7 @@ const LESSON_BASE=[
     "title": "Una imagen marcada no prueba calidad",
     "concept": "Primero se filtran propuestas por puntuación y después se relacionan con objetos de referencia de la misma categoría mediante IoU. Aquí hay un solo objeto y una sola propuesta. Para muchos objetos se necesita una regla de correspondencia que evite contar un objeto varias veces. mAP resume curvas de precision y recall en una evaluación con anotaciones; no es la puntuación de una caja.",
     "notebooks": [
-      "yolo-registro.ipynb",
-      "laboratorio-dl.ipynb"
+      "yolo-registro.ipynb"
     ],
     "quiz": {
       "q": "Con IoU mínima 0,50, puntuación 0,80 conservada e IoU 0,143, ¿qué cuenta el caso de un objeto?",
@@ -668,6 +668,6 @@ export const NOTEBOOKS={
  'clustering.ipynb':{title:'Agrupación de fincas simuladas',hint:'K-Means y Mean-Shift. Lee escala, parámetros y colores.'},
  'pca.ipynb':{title:'PCA de tres variables a componentes',hint:'Gráficos 3D, 2D y 1D; varianza calculada con los datos.'},
  'refuerzo.ipynb':{title:'Q-learning en GridWorld',hint:'Simulación con paredes, pozo y meta; recompensa y política.'},
- 'laboratorio-dl.ipynb':{title:'Laboratorio DL ilustrado',hint:'Para DL: bloques 09 (redes), 10 (CNN), 11 (secuencias), 12 (atención/Transformer) y 14 (decisiones). Bloque 13: extensión.'},
- 'yolo-registro.ipynb':{title:'YOLO: foto → detecciones → registro',hint:'Inferencia sobre fotos de demostración, lectura de cajas y exportación de resultados.'}
+ 'laboratorio-dl.ipynb':{title:'Laboratorio DL ilustrado',hint:'Ruta por encuentro: preparación, 01/09 (redes), 10 (CNN), 11 LSTM, 12 (atención/Transformer) y 14 (decisiones). Repaso y extensiones separados.'},
+ 'yolo-registro.ipynb':{title:'YOLO: foto → detecciones → registro',hint:'Fotos de demostración, propuestas y registro; evaluación de cajas sintéticas con referencia conocida.'}
 };

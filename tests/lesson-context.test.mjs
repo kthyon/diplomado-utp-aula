@@ -9,6 +9,7 @@ import {SESSION_BLOCKS} from '../docs/session-plans.js';
 import {renderMeetingOffering} from '../docs/lesson-offering.js';
 import {TOPIC_CONTEXT,MEETING_CONTEXT,renderTopicContext,renderMeetingContext} from '../docs/lesson-context.js';
 const before=JSON.parse(fs.readFileSync(new URL('./fixtures/protected-encounters-20261026.json',import.meta.url),'utf8'));
+const protectedColab=JSON.parse(fs.readFileSync(new URL('./fixtures/protected-colab-encounters-20261027.json',import.meta.url),'utf8'));
 const hash=v=>crypto.createHash('sha256').update(typeof v==='string'?v:JSON.stringify(v)).digest('hex');
 
 test('los dos primeros encuentros conservan sus datos, explicación, práctica, vocabulario, agenda y cuadernos',()=>{
@@ -21,7 +22,15 @@ test('los dos primeros encuentros conservan sus datos, explicación, práctica, 
  }
  assert.deepEqual(SESSION_BLOCKS.ml.slice(0,2),before.firstAgendas);assert.deepEqual(CLASS_PURPOSES.ml.slice(0,2),before.firstPurposes);
  for(let i=0;i<2;i++)assert.equal(hash(renderMeetingOffering('ml',i,COURSES.ml.classes[i],{teacher:true})),before.firstMeetingHTML[i]);
- for(const [file,digest] of Object.entries(before.notebooks))assert.equal(hash(fs.readFileSync(new URL('../docs/notebooks/'+file,import.meta.url),'utf8')),digest,file);
+ for(const [file,digest] of Object.entries(protectedColab.byteHashes)){
+  assert.equal(digest,before.notebooks[file],file+' baseline original');
+  assert.equal(hash(fs.readFileSync(new URL('../docs/notebooks/'+file,import.meta.url),'utf8')),digest,file);
+ }
+ const shared=JSON.parse(fs.readFileSync(new URL('../docs/notebooks/laboratorio-ml.ipynb',import.meta.url),'utf8'));
+ assert.deepEqual(shared.cells.slice(0,protectedColab.mlPrefix.length).map(cell=>({id:cell.id,sha256:hash(cell)})),protectedColab.mlPrefix,'prefijo compartido de ML y encuentros 1 y 2');
+ const closing=shared.cells.filter(cell=>cell.id===protectedColab.mlClosing.id);
+ assert.equal(closing.length,1,'cierre compartido único');
+ assert.equal(hash(closing[0]),protectedColab.mlClosing.sha256,'cierre compartido sin cambios');
 });
 
 test('el alcance es exactamente seis encuentros y dieciocho temas existentes, sin tocar fechas ni horarios',()=>{

@@ -53,7 +53,8 @@ test('los puentes distinguen práctica ilustrativa de ejecución real en cuadern
  assert.match(LESSON_OFFERING['ml-umbral'].bridge,/no tiene ese selector/);
  assert.match(LESSON_OFFERING['dl-entrenamiento'].bridge,/bloque 01/);
  assert.match(LESSON_OFFERING['dl-entrenamiento'].bridge,/bloque 09/);
- assert.match(LESSON_OFFERING['dl-evaluacion'].bridge,/no incluye anotaciones ni calcula mAP/);
+ assert.match(LESSON_OFFERING['dl-evaluacion'].bridge,/cajas sintéticas con una referencia conocida/);
+ assert.match(LESSON_OFFERING['dl-evaluacion'].bridge,/no calcula mAP de esas fotos/);
  const rendered=renderNotebookBridge({id:'desconocido',guide:{lab:{notebookGuide:'<img onerror=x>'}}});
  assert.ok(!rendered.includes('<img'));assert.match(rendered,/&lt;img/);
 });

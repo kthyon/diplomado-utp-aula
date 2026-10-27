@@ -1844,7 +1844,7 @@ export const LESSON_GUIDES={
       "instruction": "En «Pregunta», recorre Clasificación, Detección y Segmentación. Para cada opción, anota qué información nueva aparece sobre la misma escena.",
       "watch": "Una etiqueta describe la imagen; las cajas localizan objetos; las máscaras delimitan regiones. La escena conserva los mismos tres frutos.",
       "expected": "Obtienes una etiqueta, tres cajas o tres regiones coloreadas. Son salidas dibujadas para comparar tareas, no predicciones de una red.",
-      "notebookGuide": "En tu copia de YOLO, ejecuta las secciones 2–6 en orden: preparación, pesos, foto, inferencia y tabla. Relaciona una caja de la foto con una fila; este cuaderno ejecuta detección, no segmentación."
+      "notebookGuide": "En Laboratorio DL, ejecuta Preparación 1–2 y 10B · Comparar etiqueta, cajas y regiones: dibuja dos objetos para comparar etiqueta, cajas y regiones. El aula usa tres frutos, pero la distinción entre tareas es la misma. Después puedes pasar a YOLO 2–6 para ver detección real con pesos existentes."
     },
     "build": {
       "title": "De una foto a una salida definida",
@@ -2292,16 +2292,16 @@ export const LESSON_GUIDES={
       "instruction": "En «Consulta Q», recorre [1,0], [0,1] y [0,0]. Para cada consulta, anota peso de A, peso de B y salida combinada.",
       "watch": "K y V permanecen fijos. Los productos se dividen por √2; softmax produce los pesos que multiplican 10 y 20.",
       "expected": "Los pesos suman 1 en cada caso. Las salidas son aproximadamente 13,302; 16,698 y 15; la consulta nula asigna 0,5 a cada fuente.",
-      "notebookGuide": "En la primera celda de código del bloque 12 de Laboratorio DL, sigue Q @ K.T / √2, softmax y atencion @ V. Allí hay tres fichas y valores vectoriales; los resultados no son los de las dos fuentes del explorador."
+      "notebookGuide": "En 12A · Mezclar dos registros con atención de Laboratorio DL se reconstruye la misma mezcla A=10 y B=20 del aula. Ejecuta Preparación 1–2 y esa celda. Sigue comparación → pesos → mezcla para las consultas [1,0], [0,1] y [0,0]."
     },
     "build": {
       "title": "Tabla de consulta, pesos y resultado",
       "steps": [
         "Empieza con Q = [0,0]: ambas puntuaciones son iguales, los pesos son 0,5 y 0,5, y la mezcla es 0,5×10 + 0,5×20 = 15.",
         "Cambia a [1,0] y [0,1]. Registra consulta, pesos y salida; comprueba que los pesos suman 1 y calcula la mezcla con los valores sin redondear.",
-        "En la primera celda del bloque 12 identifica las tres fichas, sus filas de pesos y los valores que se mezclan. Reproduce una fila de la salida, aclarando que allí los valores son vectores y no las dos cantidades del ejemplo web."
+        "En 12A · Mezclar dos registros con atención reconstruye las mismas tres consultas del aula. Relaciona A=10 y B=20 con cada barra de participación; compara tu mezcla con la salida calculada sin redondear los pesos."
       ],
-      "check": "La tabla web reproduce las tres salidas. En el cuaderno, atencion @ V coincide con resultado; los pesos numéricos elegidos no demuestran relaciones semánticas aprendidas ni causas.",
+      "check": "Las consultas producen aproximadamente 13,302; 16,698 y 15 tanto en el aula como en el cuaderno. Los pesos suman uno; son valores didácticos, no preferencias aprendidas ni causas.",
       "transfer": "Para inspeccionar un bloque de atención, identifica primero quién consulta, cuáles son las fuentes y qué valores se mezclan.",
       "stretch": "Calcula np.allclose(atencion.sum(axis=1), 1) y verifica la combinación de una fila sin usar los pesos redondeados del gráfico."
     },
@@ -2430,7 +2430,7 @@ export const LESSON_GUIDES={
     "lab": {
       "title": "Comprobar una tarea de orden",
       "objective": "Separar la etiqueta esperada de la salida de un Transformer entrenado.",
-      "instruction": "Resuelve las cuatro etiquetas del ejemplo con la regla «primero > último». En el bloque 12 de Laboratorio DL, ejecuta el Transformer y revisa las dos secuencias que imprime al final: [1,2,3,4] y [4,3,2,1].",
+      "instruction": "Resuelve las cuatro etiquetas del ejemplo con la regla «último menor que primero». En 12B · Comprobar el orden con un Transformer de Laboratorio DL compara las cuatro respuestas esperadas con las que realmente calcula la red.",
       "watch": "La regla da la respuesta esperada. El cuaderno calcula puntuaciones de clase, pérdida y exactitud sobre secuencias reservadas.",
       "expected": "Las cuatro etiquetas del ejemplo son 0, 1, 0 y 1; las dos secuencias impresas requieren 0 y 1. Sus salidas de red y la exactitud se conocen al ejecutar, no se garantizan.",
       "notebookGuide": "Bloque 12, segunda celda de código: seq genera secuencias, np.unique elimina duplicados, y calcula etiquetas y train_test_split las separa. OrdenTransformer combina embedding, posición, encoder y salida; la celda imprime exactitud y puntuación de clase 1 para dos ejemplos."
@@ -2639,16 +2639,16 @@ export const LESSON_GUIDES={
       "instruction": "Fija «IoU mínima para coincidencia» en 0,50. Con umbral de puntuación 0,50, prueba desplazamientos 10 y 30. Vuelve a 10 y sube el umbral a 0,90.",
       "watch": "Registra IoU, filas conservadas, verdaderos positivos, falsos positivos y objetos omitidos. La puntuación y la referencia permanecen fijas.",
       "expected": "Las tres pruebas dan IoU 0,60; 1/7 ≈ 0,143; 0,60 y TP/FP/FN 1/0/0; 0/1/1; 0/0/1. Descartar una mala propuesta no borra el objeto omitido.",
-      "notebookGuide": "En YOLO, las secciones 6–8 permiten inspeccionar propuestas y filtros. No hay anotaciones de referencia ni evaluación mAP en ese cuaderno; la evaluación numérica de esta práctica usa la caja conocida del explorador."
+      "notebookGuide": "En YOLO, ejecuta las celdas de preparación de la sección 2 y ve a 13 · Evaluación didáctica: comprobar cajas, sección de cajas sintéticas. Usa referencias sintéticas conocidas para reproducir IoU y TP/FP/FN del aula. No necesita evaluar las fotos bus.jpg ni zidane.jpg."
     },
     "build": {
       "title": "Prueba de aceptación de cajas",
       "steps": [
         "Calcula las áreas de la primera prueba: referencia y candidata de 40×40, intersección 30×40 = 1200, unión 1600+1600−1200 = 2000 e IoU 0,60.",
         "Registra las tres filas del explorador con umbral de puntuación, desplazamiento, IoU y TP/FP/FN. Comprueba 1/0/0, 0/1/1 y 0/0/1, distinguiendo conservar de coincidir.",
-        "En una imagen del cuaderno, especifica qué referencia anotada faltaría para evaluar sus propuestas. Explica cómo impedirías que dos cajas recibieran crédito por el mismo objeto; ese cuaderno no calcula mAP."
+        "En la sección 13 del cuaderno YOLO, relaciona cada dibujo con IoU y TP/FP/FN. Comprueba los tres resultados del aula y explica por qué una falsa propuesta puede dejar también un objeto omitido. Las fotos de demostración siguen sin anotaciones; no se les atribuye mAP."
       ],
-      "check": "Las tres filas reproducen los conteos esperados. Se separan umbral de puntuación e IoU; no se atribuyen métricas mAP al cuaderno de inferencia.",
+      "check": "Aula y cuaderno reproducen las tres pruebas: 1/0/0, 0/1/1 y 0/0/1. Se separan umbral de puntuación e IoU y se distingue evaluación sintética de inferencia sobre fotos sin anotar.",
       "transfer": "Antes de aceptar una automatización de conteo, comprueba objetos omitidos, duplicados y coincidencias espaciales con referencias anotadas.",
       "stretch": "Comprueba los extremos en el explorador: desplazamiento 0 produce IoU 1; desplazamiento 40 produce IoU 0. Mantén la propuesta conservada para interpretar FP y FN."
     },

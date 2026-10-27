@@ -1,14 +1,15 @@
+import {notebookResourceRole} from './notebook-paths.js';
 import {mountRoadmap} from './roadmap.js?v=1';
 import {renderLearningMap} from './learning-map.js?v=1';
 import {courseHours} from './session-plans.js?v=1';
-import {renderMeetingOffering} from './lesson-offering.js?v=escenas-20261027';
+import {renderMeetingOffering} from './lesson-offering.js?v=colab-20261027';
 import {getJourney,getCalendarMoment,getTopicCompletion,hasNewTopics} from './journey-models.js';
 import {offerProgressDownload} from './progress-download.js';
 import {renderFlowGuide,renderLessonFlow} from './flow-guidance.js?v=descripcion-breve-20261020';
 import {laboratoryDestination} from './lab-access.js';
 import {readReferenceOffset,nextScheduleDelay} from './schedule-clock.js';
 import {summarizeProgress,renderProgressDashboard} from './progress-dashboard.js';
-import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=escenas-20261027';
+import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=colab-20261027';
 import {mountProblemExplorer} from './learning-explorers.js';
 import {mountDLExplorer} from './dl-explorers.js';
 import {icon} from './icons.js';
@@ -18,10 +19,10 @@ import {searchCatalog} from './search.js?v=3';
 import {STUDENT_RECORDS} from './database-config.js';
 import {toolSection,mountTools} from './tools.js?v=2';
 import {heroVisual} from './hero-space.js?v=7';
-import {COURSES,LESSONS,GLOSSARY,NOTEBOOKS,SOURCES,REPO,findLesson,classOf} from './content.js?v=escenas-20261027';
+import {COURSES,LESSONS,GLOSSARY,NOTEBOOKS,SOURCES,REPO,findLesson,classOf} from './content.js?v=colab-20261027';
 import {canAccess} from './math.js';
 import {colombiaDay,scheduleReleases,validFullName,mayEnter} from './access-policy.js';
-import {mountSimulator} from './simulators.js?v=escenas-20261027';
+import {mountSimulator} from './simulators.js?v=colab-20261027';
 import {showWelcome,maybeShowWelcome} from './welcome.js';
 import {mountIdeaStudio} from './idea-studio.js?v=oscuro-neutro-20261020';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -106,7 +107,7 @@ function locked(id){const l=findLesson(id),c=COURSES[id.split('-')[0]],cl=classO
 function lesson(id){
   const l=findLesson(id);if(!l)return home();if(!access(id))return locked(id);
   const c=COURSES[id.split('-')[0]],cl=classOf(id),seen=state.completed.includes(id),g=l.guide;
-  const books=l.notebooks.map(n=>`<div class="resource"><b>${esc(NOTEBOOKS[n].title)}</b><small>${esc(NOTEBOOKS[n].hint)}</small><button class="button small copy-notebook" data-notebook="${n}">Crear mi copia en Colab ↗</button><a href="notebooks/${n}" download class="inline-link">Descargar .ipynb</a></div>`).join('');
+  const books=l.notebooks.map(n=>`<div class="resource"><b>${esc(notebookResourceRole(l.id,n))}${esc(NOTEBOOKS[n].title)}</b><small>${esc(NOTEBOOKS[n].hint)}</small><button class="button small copy-notebook" data-notebook="${n}">Crear mi copia en Colab ↗</button><a href="notebooks/${n}" download class="inline-link">Descargar .ipynb</a></div>`).join('');
   return `<div class="lesson-nav"><a href="#curso/${c.id}">← ${c.title}</a><a href="#biblioteca">Consultar un concepto</a></div>
   <div class="lesson-top"><div>${intro(c.title+' · '+cl.date,l.title,esc(g.relevance))}</div><span class="pill">${seen?'✓ Ya recorrido':'Concepto · Ejemplo · Laboratorio'}</span></div>
   ${renderLessonFlow({courseId:c.id,courseTitle:c.title,classIndex:c.classes.indexOf(cl),topicIndex:cl.topics.indexOf(id),topicCount:cl.topics.length})}<div class="lesson-layout"><article class="reading learning-reading">${renderLearningGuide(l)}

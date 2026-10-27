@@ -1,4 +1,5 @@
 import {renderMeetingContext} from './lesson-context.js';
+import {renderNotebookPath} from './notebook-paths.js';
 import {renderSessionPlan} from './session-plans.js?v=1';
 // Orientación editorial: acompaña el contenido, sin cambiar acceso ni progreso.
 export const LESSON_OFFERING={
@@ -21,10 +22,10 @@ export const LESSON_OFFERING={
  'dl-cnn':{focus:'Ventana → filtro → respuesta: selecciona una zona de la imagen y sigue cómo produce una celda del mapa.',bridge:'El filtro editable explica una operación. El bloque 10 incluye una CNN de dígitos y otro filtro fijo: identifica cuál se entrena y cuál se eligió para ilustrar; los mapas no serán iguales.',explorer:'convolution'},
  'dl-transferencia':{focus:'Pesos previos, reutilización y ajuste: cargar una red permite inferir; aprender una tarea nueva requiere entrenamiento.',bridge:'YOLO demuestra cargar pesos y ejecutar inferencia. Filtrar una categoría existente no enseña una nueva; usa esa distinción para explicar qué paso faltaría si quisieras ajustar el modelo.'},
  'dl-secuencias':{focus:'Orden y contexto: la salida depende de qué lecturas anteriores se usan y de cómo se organizan.',bridge:'La secuencia pequeña explica el papel del pasado. En la LSTM del cuaderno identifica la ventana de doce lecturas y compara modelo y referencia en los mismos instantes reservados.'},
- 'dl-atencion':{focus:'Consulta, fuentes y mezcla: atención asigna pesos a información disponible y combina sus valores.',bridge:'Empieza por la mezcla de dos fuentes del ejemplo. El cuaderno usa tres fichas y vectores: sigue qué se compara, qué pesos aparecen y qué se mezcla antes de abrir el detalle matricial.'},
+ 'dl-atencion':{focus:'Consulta, fuentes y mezcla: atención asigna pesos a información disponible y combina sus valores.',bridge:'El cuaderno reconstruye las mismas dos fuentes A=10 y B=20 del aula. Sigue consulta, reparto y mezcla con los valores sin redondear; después abre el detalle de las operaciones.'},
  'dl-transformers':{focus:'Representación, posición y atención: ubica cada pieza por lo que aporta al recorrido de una secuencia.',bridge:'El cuaderno clasifica secuencias numéricas. Relaciona sus piezas con el recorrido conceptual; no esperes generación de texto ni las capacidades de un chatbot.'},
  'dl-yolo':{focus:'Caja, categoría y puntuación: interpreta cada propuesta antes de aplicar filtros o contar objetos.',bridge:'Pasa del esquema a una foto y a su tabla. Sigue una detección entre ambas vistas y registra la configuración; una caja conservada aún no demuestra un acierto.'},
- 'dl-evaluacion':{focus:'Propuesta y referencia: comprobar una detección exige contrastarla con una anotación y contar aciertos y errores.',bridge:'La caja de referencia conocida permite hacer la evaluación del explorador. El cuaderno YOLO no incluye anotaciones ni calcula mAP: sus filtros y conteos no sustituyen esa evaluación.'},
+ 'dl-evaluacion':{focus:'Propuesta y referencia: comprobar una detección exige contrastarla con una anotación y contar aciertos y errores.',bridge:'La sección 13 de YOLO compara cajas sintéticas con una referencia conocida y reproduce IoU y TP/FP/FN del aula. Las fotos de demostración no incluyen anotaciones; el cuaderno no calcula mAP de esas fotos.'},
  'dl-integracion':{focus:'Salida, revisión y coste: explica la regla que convierte una puntuación en una acción y qué supuestos la sostienen.',bridge:'La tabla del bloque 14 usa granos y costes ficticios. Examina sus supuestos y compara con revisar todos; no la presentes como una política validada en campo.'}
 };
 export const MEETING_OFFERING={
@@ -49,7 +50,7 @@ export function renderMeetingOffering(courseId,index,meeting,{teacher=false}={})
 }
 export function renderNotebookBridge(l){
  const o=LESSON_OFFERING[l.id],guide=l.guide.lab.notebookGuide;
- return (o?'<p><b>La conexión con el ejemplo:</b> '+esc(o.bridge)+'</p>':'')+'<p><b>Dónde continuar en tu copia:</b> '+esc(guide)+'</p>';
+ return (o?'<p><b>La conexión con el ejemplo:</b> '+esc(o.bridge)+'</p>':'')+'<p><b>Dónde continuar en tu copia:</b> '+esc(guide)+'</p>'+renderNotebookPath(l.id);
 }
 export function renderExplorerLink(id){
  const topic=LESSON_OFFERING[id]?.explorer;
