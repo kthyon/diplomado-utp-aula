@@ -1,4 +1,5 @@
-import {LESSON_GUIDES} from './learning-guides.js?v=colab-20261027';
+import {reviewedGlossary} from './definitions.js';
+import {LESSON_GUIDES} from './learning-guides.js?v=definiciones-20261027';
 export const REPO='kthyon/diplomado-utp-aula';
 export const SOURCES={ml:'https://docs.google.com/presentation/d/1UOnYu1aT7Sg58BUlmPL6_BNyoFlhFc4Zu456IZP93ns/edit',terms:'https://docs.google.com/document/d/1WfPiuA4LUkE3axpf3qb_-_cQu55OEpnwQohtTyN2zYo/edit',dl:'https://docs.google.com/document/d/1buuOnf-xMsWfpRQeyW2swHEt9I7JKsroikz0rKsG_G0/edit',activation:'https://docs.google.com/document/d/1qsi3HQwW0zRlLMyAplVuANgZzmuLhcIhvOAJaiUxU6c/edit'};
 export const COURSES={
@@ -477,7 +478,7 @@ const LESSON_BASE=[
   }
 ];
 export const LESSONS=LESSON_BASE.map(lesson=>{const guide=LESSON_GUIDES[lesson.id];return {...lesson,guide,summary:guide.objective,example:guide.case.context+' '+guide.case.conclusion,steps:guide.case.reasoning,sim:guide.explorer};});
-export const GLOSSARY=[
+const BASE_GLOSSARY=[
   [
     "Machine Learning",
     "Aprendizaje automático: métodos que ajustan reglas con datos para tareas como predecir, clasificar o agrupar."
@@ -548,7 +549,7 @@ export const GLOSSARY=[
   ],
   [
     "Umbral",
-    "Valor límite de una regla de decisión; en los ejercicios se activa alerta si puntuación ≥ umbral."
+    "Valor límite elegido para aplicar una regla. Hay que declarar si acepta igualdad (≥) o exige superar el límite (>); las dos convenciones aparecen identificadas en las demostraciones."
   ],
   [
     "Precision",
@@ -659,6 +660,7 @@ export const GLOSSARY=[
     "Correspondencia entre probabilidades predichas y frecuencias observadas: entre casos con probabilidad 0,80 se espera alrededor de 80 % de positivos si están bien calibradas."
   ]
 ];
+export const GLOSSARY=reviewedGlossary(BASE_GLOSSARY);
 export function findLesson(id){return LESSONS.find(l=>l.id===id)}
 export function classOf(id){const c=COURSES[id.split('-')[0]];return c?.classes.find(cl=>cl.topics.includes(id))}
 export const NOTEBOOKS={

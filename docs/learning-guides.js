@@ -655,7 +655,7 @@ export const LESSON_GUIDES={
   "ml-clustering": {
     "objective": "Construir una segmentación exploratoria para organizar una revisión.",
     "relevance": "Comparar centros de acopio por sus indicadores ayuda a organizar una revisión cuando no existen etiquetas de grupo.",
-    "concept": "Agrupar significa reunir casos que se parecen en las medidas que elegimos. Aquí cada caso es un centro de acopio y miramos dos cosas: cuánto espacio usa y cuántos lotes tiene pendientes. No recibimos una respuesta que diga a qué grupo pertenece cada centro; la buscamos por semejanza. A esta tarea se la llama clustering o agrupación. DBSCAN es una forma de hacerlo: conecta centros cercanos cuando hay suficientes vecinos. Nosotros elegimos qué tan cerca deben estar y cuántos vecinos bastan. El grupo organiza una revisión; no es una etiqueta de calidad.",
+    "concept": "Agrupar significa reunir casos que se parecen en las medidas que elegimos. Aquí cada caso es un centro de acopio y miramos dos cosas: cuánto espacio usa y cuántos lotes tiene pendientes. No recibimos una respuesta que diga a qué grupo pertenece cada centro; la buscamos por semejanza. A esta tarea se la llama clustering o agrupación. DBSCAN (Density-Based Spatial Clustering of Applications with Noise; agrupación espacial basada en densidad con casos no agrupados) es una forma de hacerlo: conecta centros cercanos cuando hay suficientes vecinos. Nosotros elegimos qué tan cerca deben estar y cuántos vecinos bastan. El grupo organiza una revisión; no es una etiqueta de calidad.",
     "case": {
       "title": "Cercanía antes de poner nombres",
       "context": "Seis centros de acopio ficticios entregan dos porcentajes del mismo periodo. X es capacidad de almacenamiento utilizada: volumen ocupado / capacidad total × 100. Y es proporción de lotes pendientes de revisión: lotes pendientes / lotes recibidos × 100. Comparamos ambos indicadores con el mismo peso, una elección didáctica que habría que justificar en una operación. El radio 3 se mide en este plano de puntos porcentuales. Ninguna fila representa a una persona.",
@@ -711,11 +711,11 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Distancia",
-        "meaning": "Número que indica cuánto se separan dos casos en las medidas elegidas. Si A y B solo difieren en 2 puntos de ocupación, aquí su distancia es 2."
+        "meaning": "Distancia euclídea: Distancia en línea recta. Número que mide separación entre dos casos en las coordenadas elegidas: se resta cada medida, se elevan las diferencias al cuadrado, se suman y se toma raíz cuadrada. Depende de las variables y sus escalas; no demuestra parecido relevante para cualquier tarea. Si se mezclan unidades o se estandarizan, debe explicarse en qué espacio se calcula."
       },
       {
         "term": "DBSCAN",
-        "meaning": "Método de agrupación que une casos cercanos cuando tienen suficientes vecinos; puede dejar otros aparte. Nosotros elegimos la cercanía y el mínimo."
+        "meaning": "DBSCAN: Density-Based Spatial Clustering of Applications with Noise (Agrupación espacial basada en densidad con casos no agrupados). Método que forma grupos conectando zonas con suficientes vecinos. eps fija la distancia máxima entre vecinos y min_samples el mínimo para que un punto sea núcleo, contando al propio punto. No se elige de antemano el número de grupos; −1 identifica puntos sin grupo con esa configuración. El radio no limita la distancia entre todos los miembros de un grupo y quedar aparte no demuestra mala calidad."
       },
       {
         "term": "Radio y mínimo",
@@ -735,7 +735,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "K-Means",
-        "meaning": "Agrupa alrededor de K centros y asigna cada punto al centro más cercano. K se elige antes del ajuste y responde a un criterio distinto al de DBSCAN."
+        "meaning": "K-Means: K medias. Método que recibe un número k de grupos y alterna entre asignar cada caso al centro más cercano y recalcular cada centro como la media de los casos asignados. k es una cantidad elegida, no una sigla. Busca reducir distancias cuadradas a los centros; escala e inicialización importan y un grupo no equivale automáticamente a una categoría real."
       },
       {
         "term": "Hiperparámetro",
@@ -743,7 +743,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Mean-Shift",
-        "meaning": "Método que desplaza candidatos hacia zonas de mayor concentración de puntos. Su escala de vecindad influye en las agrupaciones."
+        "meaning": "Mean-Shift: Desplazamiento hacia medias locales. Método que desplaza centros candidatos hacia la media de los puntos de su vecindario y reúne los que convergen a zonas de concentración próximas. No pide k de entrada, pero sí una escala de vecindad llamada bandwidth, elegida o estimada. Los grupos dependen de esa escala y de la preparación, no son clases verdaderas demostradas."
       }
     ],
     "lab": {
@@ -783,7 +783,7 @@ export const LESSON_GUIDES={
   "ml-pca": {
     "objective": "Construir una vista resumida de registros y documentar la información que conserva.",
     "relevance": "Resumir medidas que cambian juntas facilita una gráfica; debemos saber qué información se pierde.",
-    "concept": "Imagina que anotas dos indicadores de cada centro y ambos suben casi al mismo tiempo. Quizá puedas resumir parte de esa información sin cargar con todos los números. PCA es un método que busca ese resumen combinando medidas. Una componente es una nueva medida calculada con las originales; no es un centro nuevo. Para entenderla dibujaremos cuatro centros y buscaremos una dirección que los represente. Después comprobaremos cuánto de sus diferencias se conserva y cuánto se pierde. Ese porcentaje no mide aciertos de una predicción.",
+    "concept": "Imagina que anotas dos indicadores de cada centro y ambos suben casi al mismo tiempo. Quizá puedas resumir parte de esa información sin cargar con todos los números. PCA (Principal Component Analysis; análisis de componentes principales) es un método que busca ese resumen combinando medidas. Una componente es una nueva medida calculada con las originales; no es un centro nuevo. Para entenderla dibujaremos cuatro centros y buscaremos una dirección que los represente. Después comprobaremos cuánto de sus diferencias se conserva y cuánto se pierde. Ese porcentaje no mide aciertos de una predicción.",
     "case": {
       "title": "Dos medidas que se mueven juntas",
       "context": "Otros cuatro centros ficticios, G–J, tienen estos porcentajes inventados de capacidad utilizada y lotes pendientes. En ambas columnas la media es 50 %. Restarla produce las columnas centradas: 48−50 = −2 puntos porcentuales. Los valores negativos describen diferencias respecto a la media, no porcentajes de ocupación negativos. Elegimos columnas que cambian juntas para ver la cuenta completa.",
@@ -839,7 +839,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Centrado",
-        "meaning": "Comparar cada medida con su promedio restándolo. Si el promedio es 50 % y un centro tiene 48 %, queda 2 puntos porcentuales por debajo: −2."
+        "meaning": "Centrado: Restar la media de cada medida. A cada valor se le resta la media de su columna. Así las nuevas coordenadas indican diferencias respecto a su centro, sin dividir todavía por una desviación estándar. Conserva la unidad original: 48 % menos 50 % son −2 puntos porcentuales. Centrar y estandarizar no son sinónimos; en un modelo predictivo se reutiliza la media aprendida en entrenamiento."
       },
       {
         "term": "Componente",
@@ -847,7 +847,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Variación conservada",
-        "meaning": "Cuánto de las diferencias numéricas entre casos permanece al resumirlos. Conservar 90 % no significa acertar 90 % de las respuestas."
+        "meaning": "Varianza explicada: Variación conservada por las componentes. En PCA, una componente conserva una cantidad de varianza. Su proporción explicada divide esa cantidad entre la varianza total de las variables preparadas; varias componentes conservan la suma de sus proporciones. 0,90 significa 90 % de esa varianza; no significa 90 % de aciertos ni garantiza conservar la información útil para predecir. Hay que declarar el centrado y escalado aplicados."
       },
       {
         "term": "Proyección",
@@ -855,19 +855,27 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Varianza",
-        "meaning": "Número que resume cuánto se separan los valores de su promedio: se restan del promedio, se elevan al cuadrado esas diferencias y se promedian con el denominador declarado."
+        "meaning": "Varianza: Dispersión cuadrática respecto a la media. Resume cuánto se separan los valores de su media: se elevan al cuadrado las diferencias y se suman. La varianza poblacional divide por n; la estimación muestral habitual divide por n−1, con n mayor que uno. Tiene las unidades originales al cuadrado y vale cero si todos los valores son iguales. Debe declararse el denominador: StandardScaler usa n y explained_variance_ de PCA usa n−1; las proporciones coinciden si el mismo denominador se cancela."
+      },
+      {
+        "term": "PCA",
+        "meaning": "PCA: Principal Component Analysis (Análisis de componentes principales). Método que combina medidas numéricas en nuevas direcciones perpendiculares entre sí, ordenadas para conservar tanta variación como sea posible. Trabaja con datos centrados; decidir si se estandarizan antes es otra operación. El porcentaje conservado describe variación de las entradas, no aciertos de clasificación ni utilidad garantizada para predecir."
+      },
+      {
+        "term": "PC1 y PC2",
+        "meaning": "PC1 y PC2: Principal Component 1 / Principal Component 2 (Primera y segunda componente principal). PC1 es la primera nueva dirección de PCA y PC2 la siguiente, perpendicular a la primera. La coordenada de un caso se obtiene al combinar sus medidas preparadas con los coeficientes de esa dirección. Son ejes calculados, no columnas físicas originales ni categorías. Los coeficientes pueden cambiar de signo junto con las coordenadas sin cambiar la representación geométrica; al hablar de «cargas» hay que declarar la convención."
       },
       {
         "term": "Varianza explicada",
-        "meaning": "Proporción de la dispersión total que conserva una componente; no es una métrica de clasificación."
+        "meaning": "Varianza explicada: Variación conservada por las componentes. En PCA, una componente conserva una cantidad de varianza. Su proporción explicada divide esa cantidad entre la varianza total de las variables preparadas; varias componentes conservan la suma de sus proporciones. 0,90 significa 90 % de esa varianza; no significa 90 % de aciertos ni garantiza conservar la información útil para predecir. Hay que declarar el centrado y escalado aplicados."
       },
       {
         "term": "Cargas de una componente",
-        "meaning": "Pesos con que las variables originales participan en una nueva dirección. Ayudan a interpretar el eje."
+        "meaning": "Aquí seguimos los coeficientes de la dirección: cuánto participa cada variable al calcular una coordenada. En scikit-learn aparecen en components_. Algunas fuentes llaman cargas a esos coeficientes multiplicados por la raíz de la varianza de la componente; hay que declarar qué convención se usa."
       },
       {
         "term": "Escala de variables",
-        "meaning": "Si una columna tiene números mucho mayores, puede dominar PCA. Decidir si se estandariza forma parte del análisis."
+        "meaning": "Escalado: Cambio de escala de las medidas. Transformar la forma numérica en que se expresan las medidas para que su magnitud no domine una comparación por accidente. Estandarizar es una opción; llevar a un intervalo es otra. No añade observaciones ni cambia por sí solo la pregunta del problema. Las reglas aprendidas con entrenamiento se reutilizan al predecir; no se recalculan usando la prueba reservada."
       }
     ],
     "lab": {
@@ -902,7 +910,7 @@ export const LESSON_GUIDES={
       "result": "Eje X: 50 %; diagonal: 100 % en cuatro registros elegidos",
       "reading": "Porcentaje de variación, no porcentaje de aciertos"
     },
-    "essentialCount": 6
+    "essentialCount": 8
   },
   "ml-ensambles": {
     "objective": "Seleccionar un modelo candidato mediante una comparación reproducible.",
@@ -978,7 +986,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "MAE",
-        "meaning": "Error absoluto medio. Se calcula la distancia entre cada predicción y lo observado, sin signo, y se promedian esas distancias. Errores de 10 y 0 cajas dan MAE 5 cajas."
+        "meaning": "MAE: Mean Absolute Error (Error absoluto medio). Promedio de las diferencias sin signo entre cada predicción y su respuesta observada: se resta, se elimina el signo y se promedian las distancias. Menor es mejor sobre los mismos casos y unidades; 0 indica coincidencia en todos esos casos. Conserva la unidad de la respuesta y no significa que cada caso tenga ese mismo error."
       },
       {
         "term": "Caso reservado",
@@ -986,11 +994,11 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Bagging",
-        "meaning": "Entrenar varios modelos usando sorteos de los ejemplos disponibles, que pueden repetir casos, y combinar sus respuestas."
+        "meaning": "Bagging: Agregación con remuestreo. Nombre contraído de bootstrap aggregating: entrena varios modelos sobre sorteos con reemplazo de los ejemplos de entrenamiento y combina sus predicciones. Con reemplazo significa que un ejemplo puede salir repetido. Los modelos pueden entrenarse por separado; su combinación suele buscar reducir variabilidad. No debe confundirse con añadir modelos sucesivos para corregir una combinación anterior."
       },
       {
         "term": "Boosting",
-        "meaning": "Construir una combinación por etapas: se añade un modelo para intentar reducir los errores que deja la combinación anterior."
+        "meaning": "Boosting: Combinación por etapas. Construye un ensamble de forma secuencial: cada nueva etapa usa información del error de la combinación existente para intentar mejorar su respuesta. Gradient boosting sigue el gradiente de una pérdida elegida. No equivale a promediar modelos independientes ni a que cada modelo repare todos los fallos. Número de etapas, complejidad y tamaño de sus aportes se eligen y comprueban con validación."
       },
       {
         "term": "Árbol de decisión",
@@ -998,11 +1006,11 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Bosque aleatorio",
-        "meaning": "Conjunto de árboles que aprenden con diferentes sorteos de casos y características. Sus predicciones se combinan, por ejemplo promediándolas."
+        "meaning": "Random Forest: Bosque aleatorio. Ensamble de árboles que introduce aleatoriedad al elegir muestras de casos y características candidatas para dividir. En la configuración del cuaderno, usa remuestreo con reemplazo y promedia las predicciones de regresión. Random Forest es el nombre inglés completo; RF reúne sus iniciales. Más árboles no corrigen datos inadecuados ni garantizan mejorar una referencia en otra temporada."
       },
       {
         "term": "RMSE",
-        "meaning": "Raíz del promedio de errores al cuadrado. Tiene las unidades de la respuesta y da mayor peso relativo a errores grandes que el MAE."
+        "meaning": "RMSE: Root Mean Squared Error (Raíz del error cuadrático medio). Raíz cuadrada del promedio de diferencias al cuadrado entre predicción y respuesta observada. Vuelve a las unidades de la respuesta, aunque conserva la mayor influencia de errores grandes del MSE. Menor es mejor sobre los mismos casos; no es el promedio de las distancias absolutas."
       },
       {
         "term": "Diversidad de errores",
@@ -1010,7 +1018,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Stacking",
-        "meaning": "Aprende un combinador a partir de predicciones de modelos base. Para entrenarlo se necesitan predicciones obtenidas sin ajustar cada modelo base con la respuesta de esa misma fila."
+        "meaning": "Stacking: Combinación aprendida de modelos. Entrena un modelo combinador usando como entradas las predicciones de otros modelos. Para entrenarlo correctamente, las predicciones de cada caso deben obtenerse sin ajustar el modelo base con la respuesta de ese mismo caso. El combinador aprende cómo usar las salidas; no es necesariamente su promedio. Usar predicciones del propio entrenamiento puede producir fuga de información y una evaluación demasiado favorable."
       }
     ],
     "lab": {
@@ -1125,6 +1133,10 @@ export const LESSON_GUIDES={
         "meaning": "Patrón que tiende a repetirse con una periodicidad, como semanas de un ciclo; debe comprobarse con historia suficiente."
       },
       {
+        "term": "MAE",
+        "meaning": "MAE: Mean Absolute Error (Error absoluto medio). Promedio de las diferencias sin signo entre cada predicción y su respuesta observada: se resta, se elimina el signo y se promedian las distancias. Menor es mejor sobre los mismos casos y unidades; 0 indica coincidencia en todos esos casos. Conserva la unidad de la respuesta y no significa que cada caso tenga ese mismo error."
+      },
+      {
         "term": "Referencia ingenua",
         "meaning": "Regla sencilla como repetir el último valor observado; permite juzgar si un modelo aporta mejora."
       },
@@ -1165,7 +1177,7 @@ export const LESSON_GUIDES={
       "result": "Emisión: cierre de semana 4; horizonte: semanas 5 y 6",
       "reading": "Referencia: 110/110 cajas, MAE 5; ciclo elegido: 100/110, MAE 0"
     },
-    "essentialCount": 6
+    "essentialCount": 7
   },
   "ml-refuerzo": {
     "objective": "Construir y probar una secuencia de acciones con recompensas acumuladas.",
@@ -1251,11 +1263,27 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Valor Q",
-        "meaning": "Estimación de los puntos futuros que podría conseguir una acción desde una situación. Q-learning corrige esa estimación con los resultados de intentos sucesivos."
+        "meaning": "Q-learning: Aprendizaje de valores de acción. Método de aprendizaje por refuerzo que actualiza una estimación Q(s,a) del retorno futuro de elegir la acción a en el estado s y continuar después según la política objetivo. Usa recompensa y una estimación del mejor valor siguiente. Q es un símbolo de función de valor, no una sigla que signifique «Quality». La tabla Q no es la suma ya observada de una ruta ni la consulta Q del ejemplo de atención."
+      },
+      {
+        "term": "RL",
+        "meaning": "RL: Reinforcement Learning (Aprendizaje por refuerzo). Aprender a elegir acciones mediante interacción: el agente recibe una situación, actúa y el entorno devuelve una nueva situación y una recompensa. Se busca una política, es decir, una regla de acción, que obtenga buen retorno esperado. La recompensa es el número definido por el entorno; el retorno combina recompensas de varios pasos, a veces descontando las lejanas. No es clasificación con una acción correcta dada para cada caso."
+      },
+      {
+        "term": "α (alpha)",
+        "meaning": "α (alpha): Tasa de corrección de Q. Regula cuánto se corrige una estimación Q tras una transición. Con alpha=0,1, el cuaderno incorpora el 10 % de la diferencia entre objetivo y valor anterior. No es recompensa ni probabilidad de explorar. Aumentarlo no garantiza mejor aprendizaje."
+      },
+      {
+        "term": "γ (gamma)",
+        "meaning": "γ (gamma): Factor de descuento del futuro. Pondera recompensas futuras respecto a la inmediata. El cuaderno usa gamma=0,95; al terminar el episodio no añade valor futuro. No cambia las recompensas del tablero. La ruta muestra una suma sin descuento; el aprendizaje sí descuenta."
+      },
+      {
+        "term": "ε (epsilon)",
+        "meaning": "ε (epsilon): Probabilidad de explorar. Probabilidad de elegir una acción al azar en una política ε-greedy. Aquí baja linealmente de 1 a 0,05 durante 800 episodios; después permanece en 0,05. Explorar puede escoger también la mejor acción por casualidad: epsilon no es probabilidad de equivocarse. Aquí no es el radio eps de DBSCAN."
       },
       {
         "term": "Exploración y aprovechamiento",
-        "meaning": "Explorar prueba alternativas para aprender; aprovechar elige lo que parece mejor con la información actual."
+        "meaning": "ε (epsilon): Probabilidad de explorar. Probabilidad de elegir una acción al azar en una política ε-greedy. Aquí baja linealmente de 1 a 0,05 durante 800 episodios; después permanece en 0,05. Explorar puede escoger también la mejor acción por casualidad: epsilon no es probabilidad de equivocarse. Aquí no es el radio eps de DBSCAN."
       }
     ],
     "lab": {
@@ -1290,7 +1318,7 @@ export const LESSON_GUIDES={
       "result": "Ruta manual: derecha, derecha, derecha, derecha, abajo",
       "reading": "Cinco pasos; meta alcanzada; retorno 6 puntos, sin entrenamiento manual"
     },
-    "essentialCount": 8
+    "essentialCount": 12
   },
   "ml-integracion": {
     "objective": "Construir un prototipo de predicción con una decisión de uso documentada.",
@@ -1351,6 +1379,10 @@ export const LESSON_GUIDES={
         "meaning": "Condición o tarea para la que todavía no se comprobó la propuesta."
       },
       {
+        "term": "MAE",
+        "meaning": "MAE: Mean Absolute Error (Error absoluto medio). Promedio de las diferencias sin signo entre cada predicción y su respuesta observada: se resta, se elimina el signo y se promedian las distancias. Menor es mejor sobre los mismos casos y unidades; 0 indica coincidencia en todos esos casos. Conserva la unidad de la respuesta y no significa que cada caso tenga ese mismo error."
+      },
+      {
         "term": "Generalización",
         "meaning": "Desempeño en casos nuevos del contexto de uso."
       },
@@ -1403,7 +1435,7 @@ export const LESSON_GUIDES={
       "result": "Referencia: MAE ≈ 0,67; candidata: MAE ≈ 0,17 t/ha",
       "reading": "Finca A, 10 ha: observado 30 t; referencia 40 t; candidata 32 t"
     },
-    "essentialCount": 4
+    "essentialCount": 5
   },
   "dl-redes": {
     "objective": "Construir el cálculo de una neurona y rastrear cómo sus entradas producen una salida.",
@@ -1453,15 +1485,19 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Peso",
-        "meaning": "Multiplicador que aumenta, reduce o invierte el aporte de una entrada. Un peso de 0,5 toma la mitad; uno de −1 cambia el signo."
+        "meaning": "Peso: Weight. Parámetro que multiplica una entrada para regular su aporte al cálculo de una unidad. Puede cambiar de valor durante el entrenamiento. Un peso negativo invierte el signo de la contribución; no representa por sí solo una relación causal."
       },
       {
         "term": "Sesgo",
-        "meaning": "Número adicional que se suma después de los productos. Aquí añadir 0,5 desplaza el total en esa cantidad, aunque las entradas no cambien."
+        "meaning": "Sesgo de una neurona: Bias. Parámetro que se añade a la suma de las contribuciones de entrada. Desplaza esa suma sin exigir que cambien las entradas. Este uso de sesgo no significa error de medición ni discriminación: es un ajuste numérico de la unidad."
       },
       {
         "term": "Activación",
         "meaning": "Regla que transforma la suma de la neurona en su salida. ReLU, por ejemplo, conserva los positivos y cambia los negativos a cero."
+      },
+      {
+        "term": "ReLU",
+        "meaning": "ReLU: Rectified Linear Unit (Unidad lineal rectificada). Función de activación que devuelve el mayor entre la entrada y cero. Conserva números positivos y convierte los negativos en cero. Su salida no tiene límite superior y no representa por sí sola una probabilidad."
       },
       {
         "term": "Representación",
@@ -1478,6 +1514,10 @@ export const LESSON_GUIDES={
       {
         "term": "Inferencia",
         "meaning": "Calcular una respuesta con los pesos disponibles, sin modificarlos. Es usar el modelo; no es enseñarle una tarea nueva."
+      },
+      {
+        "term": "DL",
+        "meaning": "DL: Deep Learning (Aprendizaje profundo). Parte del aprendizaje automático que usa redes neuronales con varias capas para transformar información y aprender representaciones. Una capa transforma números y entrega otros a la siguiente. Más capas no garantizan mejores resultados."
       }
     ],
     "explorer": "neuron",
@@ -1512,7 +1552,7 @@ export const LESSON_GUIDES={
       "result": "Productos: 1 y −1; suma con sesgo: 0,5; ReLU: 0,5",
       "reading": "Con sesgo −0,5: suma −0,5 y salida 0; ningún peso fue aprendido"
     },
-    "essentialCount": 4
+    "essentialCount": 5
   },
   "dl-activaciones": {
     "objective": "Configurar una transformación de señales y comprobar su rango de salida.",
@@ -1568,15 +1608,15 @@ export const LESSON_GUIDES={
       },
       {
         "term": "ReLU",
-        "meaning": "Regla: si el número es negativo, devuelve 0; si es positivo, devuelve ese mismo número. Con −2 da 0 y con 2 da 2."
+        "meaning": "ReLU: Rectified Linear Unit (Unidad lineal rectificada). Función de activación que devuelve el mayor entre la entrada y cero. Conserva números positivos y convierte los negativos en cero. Su salida no tiene límite superior y no representa por sí sola una probabilidad."
       },
       {
         "term": "Sigmoide",
-        "meaning": "Regla con curva suave que convierte entradas finitas en valores entre 0 y 1. Con 0 devuelve 0,5; con −2, aproximadamente 0,12."
+        "meaning": "Sigmoide: Función sigmoide logística. Transformación que calcula 1 dividido entre 1+exp(−z), donde z es la entrada. Para entradas finitas devuelve valores estrictamente entre cero y uno. Una salida dentro de ese intervalo no garantiza probabilidades bien calibradas en datos nuevos."
       },
       {
         "term": "tanh",
-        "meaning": "Regla con curva suave que devuelve valores entre −1 y 1. Con 0 da 0; con −2, aproximadamente −0,96."
+        "meaning": "tanh: Tangente hiperbólica. Función de activación suave cuyo nombre abrevia tangente hiperbólica. Para entradas finitas devuelve números estrictamente entre −1 y 1. Mantiene el signo de la entrada y pasa por cero; el redondeo de una pantalla puede mostrar −1 o 1."
       },
       {
         "term": "No lineal",
@@ -1631,7 +1671,7 @@ export const LESSON_GUIDES={
   },
   "dl-entrenamiento": {
     "objective": "Ajustar un parámetro y diagnosticar un paso que empeora el resultado.",
-    "concept": "Entrenar es corregir los valores ajustables de una red usando ejemplos con respuestas conocidas. Esos valores, como pesos y sesgos, se llaman parámetros. Primero calculamos una salida y medimos cuánto se aparta de la respuesta; el número que resume ese desacuerdo es la pérdida. Después calculamos cómo cambiaría la pérdida al mover cada parámetro: eso es el gradiente. El tamaño de la corrección depende de una tasa de aprendizaje elegida. En una red, la retropropagación calcula esas influencias a través de sus capas y el optimizador aplica la actualización. Entenderemos el ciclo con un solo ajuste antes de mirar una red completa.",
+    "concept": "Entrenar es corregir los valores ajustables de una red usando ejemplos con respuestas conocidas. Esos valores, como pesos y sesgos, se llaman parámetros. Primero calculamos una salida y medimos cuánto se aparta de la respuesta; el número que resume ese desacuerdo es la pérdida. Después calculamos cómo cambiaría la pérdida al mover cada parámetro: eso es el gradiente. El tamaño de la corrección depende de una tasa de aprendizaje elegida. En una red, la retropropagación calcula esas influencias a través de sus capas y el optimizador aplica la actualización. Entenderemos el ciclo con un solo ajuste antes de mirar una red completa. La regla de restar tasa por gradiente describe el descenso básico de nuestro ejemplo. Adam, utilizado en el cuaderno, también emplea el historial de los gradientes para ajustar cada parámetro.",
     "relevance": "Ayuda a interpretar una curva de entrenamiento: ajustar más fuerte puede empeorar.",
     "case": {
       "title": "Acercarse a un objetivo sin pasarse",
@@ -1683,23 +1723,23 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Pérdida",
-        "meaning": "Número elegido para medir el desacuerdo con una respuesta conocida. En nuestro ejemplo, separación 5 produce pérdida 25 porque usamos 5 × 5."
+        "meaning": "Pérdida: Loss. Número calculado con una regla elegida para medir desacuerdo entre la salida del modelo y la respuesta. Entrenar intenta reducir esa función sobre los ejemplos utilizados. Su escala y unidades dependen de la regla: una pérdida pequeña de entrenamiento no demuestra buen desempeño en datos nuevos."
       },
       {
         "term": "Gradiente",
-        "meaning": "Indica cómo aumentaría o disminuiría la pérdida al cambiar los ajustes. Con un solo ajuste es una pendiente; aquí vale −10 al empezar."
+        "meaning": "Gradiente: Sensibilidad de la pérdida respecto de los parámetros. Conjunto de derivadas que indica cómo cambiaría la pérdida al variar cada parámetro manteniendo los demás fijos. Con un solo parámetro es la pendiente de la curva. Un gradiente no es la pérdida ni la predicción; se usa para proponer una actualización."
       },
       {
         "term": "Tasa de aprendizaje",
-        "meaning": "Tamaño de paso elegido para la corrección. Multiplica el gradiente; en la cuenta, 0,1 produce un cambio menor que 1,1."
+        "meaning": "Tasa de aprendizaje: Learning rate. Configuración que regula el tamaño de las actualizaciones del optimizador. Se elige durante el desarrollo, no se interpreta como cantidad aprendida del problema. Un valor mayor no garantiza un aprendizaje más rápido ni mejor; el efecto depende también del optimizador y la escala de los datos."
       },
       {
         "term": "Retropropagación",
-        "meaning": "Procedimiento para calcular cómo contribuye cada ajuste al error, recorriendo hacia atrás las operaciones de las capas. Calcula gradientes; no cambia por sí sola los pesos."
+        "meaning": "Retropropagación: Backpropagation. Procedimiento que calcula los gradientes recorriendo hacia atrás las operaciones de una red y aplicando la regla de la cadena. Obtiene la influencia de cada parámetro sobre la pérdida. Calcula gradientes; el optimizador realiza después los cambios de parámetros."
       },
       {
         "term": "Optimizador",
-        "meaning": "Regla que usa esos gradientes para cambiar los ajustes. Descenso por gradiente resta al ajuste el gradiente multiplicado por la tasa."
+        "meaning": "Optimizador: Regla de actualización de parámetros. Procedimiento que utiliza gradientes para modificar los valores ajustables del modelo. Diferentes optimizadores pueden usar historial y escalas distintas. La fórmula ajuste nuevo = ajuste anterior − tasa × gradiente describe descenso básico; no es la actualización completa de Adam."
       },
       {
         "term": "Lote o batch",
@@ -1716,6 +1756,18 @@ export const LESSON_GUIDES={
       {
         "term": "Regularización y parada temprana",
         "meaning": "Formas de limitar que el modelo memorice detalles del entrenamiento: restringir cuánto se ajusta o detenerlo cuando la validación deja de mejorar."
+      },
+      {
+        "term": "MSE",
+        "meaning": "MSE: Mean Squared Error (Error cuadrático medio). Promedio de las diferencias al cuadrado entre predicción y respuesta observada: cada diferencia se multiplica por sí misma antes de promediar. Menor es mejor y 0 indica coincidencia; sus unidades están al cuadrado. Los errores grandes pesan más que en el MAE, por lo que ambas métricas pueden preferir modelos diferentes."
+      },
+      {
+        "term": "BCEWithLogitsLoss",
+        "meaning": "BCEWithLogitsLoss: Binary Cross Entropy with Logits Loss (Pérdida de entropía cruzada binaria a partir de logits). Función de PyTorch que recibe logits y combina internamente sigmoide con entropía cruzada binaria. Evita separar ambas operaciones para mejorar la estabilidad numérica. En el cuaderno no se añade una sigmoide antes de pasar la salida a esta pérdida."
+      },
+      {
+        "term": "Adam",
+        "meaning": "Adam: Adaptive Moment Estimation (Estimación adaptativa de momentos). Optimizador que ajusta los parámetros usando promedios de los gradientes y de sus cuadrados. El nombre procede de esas estimaciones adaptativas. Tiene una tasa global y un ajuste dependiente del historial para cada parámetro; no aplica simplemente el mismo paso del descenso básico."
       }
     ],
     "explorer": "training",
@@ -1750,7 +1802,7 @@ export const LESSON_GUIDES={
       "result": "Tasa 0,10: parámetro −1 y pérdida 16; tasa 1,10: parámetro 9 y pérdida 36",
       "reading": "Ambas desde −2 y pérdida 25; el paso grande empeora esta cuenta"
     },
-    "essentialCount": 10
+    "essentialCount": 13
   },
   "dl-vision": {
     "objective": "Definir la salida visual que necesita una operación y probar una detección.",
@@ -1807,6 +1859,10 @@ export const LESSON_GUIDES={
         "meaning": "Marcar qué cuadritos de la imagen pertenecen a una región o categoría. Puede seguir un contorno en lugar de rodearlo con un rectángulo."
       },
       {
+        "term": "RGB",
+        "meaning": "RGB: Red, Green, Blue (Rojo, verde y azul). Forma de representar un color mediante tres componentes o canales. Cada canal indica cuánto rojo, verde o azul participa en el color del píxel. La escala depende del formato: en imágenes de ocho bits suele ser 0–255 por canal; una preparación puede convertirla a 0–1."
+      },
+      {
         "term": "Caja",
         "meaning": "Rectángulo que indica dónde mirar una propuesta de objeto. Incluye espacio alrededor; no es su contorno exacto."
       },
@@ -1820,7 +1876,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Tensor",
-        "meaning": "Organización de números con varios tamaños o ejes. Una foto a color puede tener alto, ancho y tres canales. Es una forma de guardar la información, no otro objeto de la foto."
+        "meaning": "Tensor: Organización de números con varios ejes. Estructura numérica que permite representar datos de distintas formas. Una lista puede tener un eje y una imagen a color puede organizarse por alto, ancho y canales. Su forma indica cuántos valores hay en cada eje; no es otro objeto dentro de la foto."
       },
       {
         "term": "Anotación",
@@ -1833,6 +1889,10 @@ export const LESSON_GUIDES={
       {
         "term": "Segmentación semántica y de instancias",
         "meaning": "La semántica asigna categorías por píxel; la de instancias distingue además objetos individuales de una misma categoría."
+      },
+      {
+        "term": "YOLO",
+        "meaning": "YOLO: You Only Look Once (Solo se mira una vez). Nombre de una familia de modelos de detección que propone categorías y cajas a partir de imágenes. El nombre nació con un enfoque que calcula esas propuestas en una evaluación de la red. Las variantes tienen arquitecturas y procesamiento propios; una caja conservada no demuestra que la propuesta sea correcta."
       }
     ],
     "explorer": "vision",
@@ -1867,11 +1927,11 @@ export const LESSON_GUIDES={
       "result": "Seleccionar: una etiqueta; localizar: tres cajas; delimitar: tres regiones",
       "reading": "La escena es fija y sus marcas son ilustrativas, no inferencias de una red"
     },
-    "essentialCount": 4
+    "essentialCount": 5
   },
   "dl-cnn": {
     "objective": "Construir un mapa de filtro y distinguir cambios de imagen de cambios de pesos.",
-    "concept": "Para entender una CNN, empieza con un cuadrito de imagen: un píxel guarda un número. Una ventana reúne unos pocos píxeles vecinos. Un filtro es una pequeña lista de pesos que se coloca sobre esa ventana: multiplica cada píxel por el peso correspondiente y suma. Después se mueve y repite la misma operación. Los números obtenidos forman el mapa de respuestas. Una CNN es una red que usa este tipo de operaciones locales y aprende filtros con ejemplos. Nuestro primer filtro está elegido de antemano para ver de dónde sale cada número; una respuesta del filtro aún no identifica un producto.",
+    "concept": "Para entender una CNN (Convolutional Neural Network; red neuronal convolucional), empieza con un cuadrito de imagen: un píxel guarda un número. Una ventana reúne unos pocos píxeles vecinos. Un filtro es una pequeña lista de pesos que se coloca sobre esa ventana: multiplica cada píxel por el peso correspondiente y suma. Después se mueve y repite la misma operación. Los números obtenidos forman el mapa de respuestas. Una CNN es una red que usa este tipo de operaciones locales y aprende filtros con ejemplos. Nuestro primer filtro está elegido de antemano para ver de dónde sale cada número; una respuesta del filtro aún no identifica un producto.",
     "relevance": "Ayuda a distinguir píxeles, pesos y resultados, antes de interpretar lo que reconoce una red.",
     "case": {
       "title": "Encontrar un cambio entre filas",
@@ -1921,7 +1981,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "CNN",
-        "meaning": "Red neuronal convolucional: usa filtros que se repiten en zonas de la imagen y ajusta sus pesos con ejemplos para aprender patrones."
+        "meaning": "CNN: Convolutional Neural Network (Red neuronal convolucional). Red que usa filtros repetidos sobre pequeñas zonas de una entrada. Los filtros combinan números cercanos y producen mapas de respuestas. La CNN del cuaderno aprende con imágenes de dígitos y sus respuestas conocidas; CNN no significa por sí sola detector de objetos."
       },
       {
         "term": "Convolución en una CNN",
@@ -1933,15 +1993,19 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Stride o paso",
-        "meaning": "Cuántas posiciones se desplaza el filtro entre cálculos; influye en el tamaño del mapa."
+        "meaning": "Stride: Paso del filtro. Cantidad de posiciones que se desplaza un filtro entre dos cálculos. Determina qué ventanas se procesan. Un paso mayor puede reducir la cantidad de posiciones de salida; no significa que el filtro haya aprendido más."
       },
       {
         "term": "Padding o relleno",
-        "meaning": "Valores añadidos al borde para controlar el tamaño de salida y el tratamiento de los límites."
+        "meaning": "Padding: Relleno del borde. Valores añadidos alrededor de la entrada antes de aplicar el filtro. Permiten controlar el tratamiento de los bordes y el tamaño de salida. El tipo y la cantidad de relleno son configuraciones; esos valores no son observaciones nuevas del cultivo."
       },
       {
         "term": "Pooling",
-        "meaning": "Resumen de regiones del mapa, por ejemplo mediante su máximo o promedio. Reduce resolución; no es sinónimo de convolución."
+        "meaning": "Pooling: Resumen de regiones de un mapa. Operación que resume los valores de pequeñas regiones, por ejemplo mediante máximo o promedio. Puede reducir la resolución del mapa. No es sinónimo de convolución: elegir el máximo de una región no aplica un filtro aprendido."
+      },
+      {
+        "term": "ReLU",
+        "meaning": "ReLU: Rectified Linear Unit (Unidad lineal rectificada). Función de activación que devuelve el mayor entre la entrada y cero. Conserva números positivos y convierte los negativos en cero. Su salida no tiene límite superior y no representa por sí sola una probabilidad."
       }
     ],
     "explorer": "convolution",
@@ -2033,6 +2097,14 @@ export const LESSON_GUIDES={
         "meaning": "Continuar entrenando parte o todo un modelo previo con ejemplos de la nueva tarea. Después hay que comprobarlo con ejemplos separados."
       },
       {
+        "term": "YOLO",
+        "meaning": "YOLO: You Only Look Once (Solo se mira una vez). Nombre de una familia de modelos de detección que propone categorías y cajas a partir de imágenes. El nombre nació con un enfoque que calcula esas propuestas en una evaluación de la red. Las variantes tienen arquitecturas y procesamiento propios; una caja conservada no demuestra que la propuesta sea correcta."
+      },
+      {
+        "term": "COCO",
+        "meaning": "COCO: Common Objects in Context (Objetos comunes en contexto). Conjunto de imágenes con anotaciones de objetos en escenas cotidianas. Sirve para desarrollar y comparar modelos de visión; no es un detector por sí mismo. El modelo usado en este cuaderno ofrece 80 categorías de ese conjunto, no cualquier objeto ni cualquier defecto agrícola."
+      },
+      {
         "term": "Preentrenado",
         "meaning": "Con parámetros ajustados previamente con otros datos."
       },
@@ -2085,11 +2157,11 @@ export const LESSON_GUIDES={
       "result": "Necesidad: café defectuoso; categoría del modelo: no disponible",
       "reading": "Traducir una etiqueta no añade una categoría ni cambia pesos"
     },
-    "essentialCount": 4
+    "essentialCount": 6
   },
   "dl-secuencias": {
     "objective": "Construir un resumen de una secuencia que tenga en cuenta el orden.",
-    "concept": "Una secuencia es una lista en la que importa qué ocurrió primero y qué vino después. Recibir 10, luego 20 y luego 30 cajas cuenta una historia diferente de recibirlas en el orden inverso. Una regla recurrente conserva un pequeño resumen del pasado y lo actualiza con cada nueva lectura. A ese resumen lo llamamos estado. Primero veremos un estado calculado con una regla fija y sencilla. Una RNN es una red que aprende cómo actualizarlo. Una LSTM es un tipo de RNN con mecanismos para conservar o descartar información durante ese recorrido.",
+    "concept": "Una secuencia es una lista en la que importa qué ocurrió primero y qué vino después. Recibir 10, luego 20 y luego 30 cajas cuenta una historia diferente de recibirlas en el orden inverso. Una regla recurrente conserva un pequeño resumen del pasado y lo actualiza con cada nueva lectura. A ese resumen lo llamamos estado. Primero veremos un estado calculado con una regla fija y sencilla. Una RNN es una red que aprende cómo actualizarlo. Una LSTM (Long Short-Term Memory; memoria de largo y corto plazo) es un tipo de RNN con mecanismos para conservar o descartar información durante ese recorrido.",
     "relevance": "Un resumen de sensores o ventas puede perder información si ignora qué ocurrió primero.",
     "case": {
       "title": "Los mismos valores, dos recorridos",
@@ -2147,11 +2219,15 @@ export const LESSON_GUIDES={
       },
       {
         "term": "LSTM",
-        "meaning": "Tipo de red recurrente que aprende a guardar, dejar pasar o descartar partes del resumen del pasado mediante operaciones llamadas compuertas."
+        "meaning": "LSTM: Long Short-Term Memory (Memoria de largo y corto plazo). Tipo de red recurrente con un estado de celda y operaciones llamadas compuertas. Estas regulan qué información se conserva, se incorpora y se transmite al procesar la secuencia. En esta práctica usa doce lecturas reales previas para pronosticar un paso; no anticipa sesenta pasos sin recibir nuevas observaciones."
       },
       {
         "term": "Recurrente",
         "meaning": "Usa el resultado del paso anterior."
+      },
+      {
+        "term": "MAE",
+        "meaning": "MAE: Mean Absolute Error (Error absoluto medio). Promedio de las diferencias sin signo entre cada predicción y su respuesta observada: se resta, se elimina el signo y se promedian las distancias. Menor es mejor sobre los mismos casos y unidades; 0 indica coincidencia en todos esos casos. Conserva la unidad de la respuesta y no significa que cada caso tenga ese mismo error."
       },
       {
         "term": "Paso temporal",
@@ -2159,7 +2235,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "RNN",
-        "meaning": "Red neuronal recurrente: comparte una transformación aprendida que actualiza un estado paso a paso."
+        "meaning": "RNN: Recurrent Neural Network (Red neuronal recurrente). Red que procesa una secuencia manteniendo un resumen interno llamado estado. En cada paso combina la nueva entrada con ese estado usando los mismos parámetros aprendidos. El estado depende del orden; no es necesariamente el pronóstico de la próxima lectura."
       },
       {
         "term": "Compuerta",
@@ -2198,7 +2274,7 @@ export const LESSON_GUIDES={
       "result": "10→20→30: estado final 21,25; 30→20→10: 13,75",
       "reading": "Promedio común: 20; el estado fijo no es una predicción aprendida"
     },
-    "essentialCount": 5
+    "essentialCount": 6
   },
   "dl-atencion": {
     "objective": "Construir una combinación ponderada de fuentes y rastrear su cálculo.",
@@ -2244,11 +2320,11 @@ export const LESSON_GUIDES={
     "vocabulary": [
       {
         "term": "Vector",
-        "meaning": "Lista ordenada de números. [1,0] significa primer número 1 y segundo 0; no es una fracción ni una multiplicación."
+        "meaning": "Vector: Lista ordenada de números. Conjunto de componentes numéricos que se mantienen en un orden definido. El lugar de cada componente forma parte de cómo se interpreta la lista. [1,0] indica dos componentes; no es una división ni afirma que el vector sea una probabilidad."
       },
       {
         "term": "Consulta, clave y valor",
-        "meaning": "Consulta: información con la que buscamos (Q). Clave: descripción con la que la comparamos (K). Valor: información que termina mezclándose (V)."
+        "meaning": "Q, K y V: Consulta, clave y valor. Q identifica la consulta; K, las claves con las que se compara; V, la información que se mezcla. Son símbolos de cantidades, no tres siglas de algoritmos. La comparación Q–K determina pesos; la combinación de V produce la salida, sin demostrar causalidad."
       },
       {
         "term": "Peso de atención",
@@ -2256,15 +2332,15 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Softmax",
-        "meaning": "Procedimiento que convierte puntuaciones en participaciones positivas que suman 1. Una puntuación mayor obtiene más participación. La cuenta usa la exponencial de cada puntuación dividida por la suma de todas."
+        "meaning": "Softmax: Transformación de puntuaciones en participaciones. Para cada puntuación calcula su exponencial y la divide entre la suma de exponenciales del grupo. Así obtiene valores positivos que suman uno cuando las entradas son finitas. La normalización se hace sobre un eje elegido; en atención, por las fuentes de cada consulta."
       },
       {
         "term": "Consulta Q",
-        "meaning": "Vector que se compara con las claves para calcular el reparto."
+        "meaning": "Q identifica la consulta, llamada query en inglés: la información que se compara con las claves para calcular el reparto. Es un símbolo; no es el valor Q del aprendizaje por refuerzo."
       },
       {
         "term": "Clave K y valor V",
-        "meaning": "K interviene en la comparación; V aporta la información que se combina."
+        "meaning": "K identifica las claves (keys), usadas para comparar; V identifica los valores (values), que aportan la información mezclada. Comparar y mezclar son operaciones distintas."
       },
       {
         "term": "Producto escalar",
@@ -2280,7 +2356,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Autoatención",
-        "meaning": "Atención en la que consultas, claves y valores proceden de representaciones de la misma secuencia."
+        "meaning": "Autoatención: Atención dentro de una misma secuencia. Atención cuyas consultas, claves y valores se obtienen de la misma secuencia. Cada posición puede combinar información de otras posiciones permitidas por la máscara. Misma secuencia no significa que Q, K y V deban tener los mismos números: se transforman con parámetros propios."
       }
     ],
     "explorer": "attention",
@@ -2385,7 +2461,7 @@ export const LESSON_GUIDES={
     "vocabulary": [
       {
         "term": "Unidad de entrada o token",
-        "meaning": "Un elemento de la lista que recibe la red. Aquí cada cantidad de cajas es una unidad; no estamos usando palabras de un chat."
+        "meaning": "Token: Unidad de entrada de una secuencia. Elemento que se trata como una unidad al procesar una secuencia. Puede ser una palabra, una parte de palabra u otro elemento según la tarea. En esta práctica cada cantidad numérica es una unidad; no es una palabra ni una moneda digital."
       },
       {
         "term": "Posición",
@@ -2393,7 +2469,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Atención",
-        "meaning": "Operación que reparte participación entre fuentes y mezcla sus valores. El reparto depende de la comparación con una consulta."
+        "meaning": "Atención: Mezcla de información según una consulta. Operación que compara una consulta con claves y usa el resultado para repartir participación entre valores. En la atención del ejemplo, esos pesos se obtienen con softmax. Los pesos suman uno por consulta; no son pesos de entrenamiento que el estudiante deba interpretar como causas."
       },
       {
         "term": "Etiqueta y predicción",
@@ -2401,11 +2477,11 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Token",
-        "meaning": "Unidad de entrada; aquí, un número."
+        "meaning": "Token: Unidad de entrada de una secuencia. Elemento que se trata como una unidad al procesar una secuencia. Puede ser una palabra, una parte de palabra u otro elemento según la tarea. En esta práctica cada cantidad numérica es una unidad; no es una palabra ni una moneda digital."
       },
       {
         "term": "Embedding o representación vectorial",
-        "meaning": "Lista de números que representa una entrada para que la red trabaje con ella. Si es aprendida, esos números se ajustan con los ejemplos."
+        "meaning": "Embedding: Representación mediante una lista de números. Forma de expresar una unidad con un vector para que la red pueda transformarla y compararla. Un embedding aprendido ajusta esos números a partir de ejemplos. Sus componentes no tienen por qué ser medidas físicas ni significados humanos independientes."
       },
       {
         "term": "Codificación de posición",
@@ -2432,15 +2508,15 @@ export const LESSON_GUIDES={
       "objective": "Separar la etiqueta esperada de la salida de un Transformer entrenado.",
       "instruction": "Resuelve las cuatro etiquetas del ejemplo con la regla «último menor que primero». En 12B · Comprobar el orden con un Transformer de Laboratorio DL compara las cuatro respuestas esperadas con las que realmente calcula la red.",
       "watch": "La regla da la respuesta esperada. El cuaderno calcula puntuaciones de clase, pérdida y exactitud sobre secuencias reservadas.",
-      "expected": "Las cuatro etiquetas del ejemplo son 0, 1, 0 y 1; las dos secuencias impresas requieren 0 y 1. Sus salidas de red y la exactitud se conocen al ejecutar, no se garantizan.",
-      "notebookGuide": "Bloque 12, segunda celda de código: seq genera secuencias, np.unique elimina duplicados, y calcula etiquetas y train_test_split las separa. OrdenTransformer combina embedding, posición, encoder y salida; la celda imprime exactitud y puntuación de clase 1 para dos ejemplos."
+      "expected": "Las cuatro etiquetas del ejemplo son 0, 1, 0 y 1. El cuaderno imprime esos cuatro casos con sus respuestas esperadas y calculadas; la exactitud real se conoce al ejecutar y no se garantiza.",
+      "notebookGuide": "En 12B · Comprobar el orden con un Transformer, se crean secuencias distintas, se calcula su respuesta conocida y se separan entrenamiento y prueba. La red combina representación numérica, posición, bloques de atención y salida. Compara las cuatro respuestas esperadas con las realmente calculadas."
     },
     "build": {
       "title": "Banco de pruebas para una secuencia",
       "steps": [
         "Calcula las cuatro etiquetas antes de ejecutar código: 0, 1, 0 y 1. Explica el significado de 1 y por qué no basta conocer el promedio o la colección de valores.",
         "Ejecuta el bloque 12 y recorre entrada, representación, posición, atención y salida. Registra los tamaños de entrenamiento y prueba y la exactitud que realmente imprime.",
-        "Para las dos secuencias impresas, registra etiqueta esperada y puntuaciones de la red. Explica si coinciden y separa esos dos ejemplos de la prueba completa de 129 secuencias."
+        "Para las cuatro secuencias impresas, registra respuesta esperada y calculada. Explica si coinciden y separa estos cuatro casos ilustrativos de la prueba completa de 129 secuencias."
       ],
       "check": "Se conocen las etiquetas por la regla, pero no se inventan predicciones ni exactitud. Los ejemplos impresos son dos; la prueba completa contiene 129 secuencias con la semilla del cuaderno.",
       "transfer": "En una tarea con registros ordenados, define primero la respuesta comprobable y una reserva de secuencias distintas antes de elegir arquitectura.",
@@ -2460,7 +2536,7 @@ export const LESSON_GUIDES={
   },
   "dl-yolo": {
     "objective": "Construir un registro de detecciones que pueda revisarse antes de contar objetos.",
-    "concept": "Un detector analiza una foto y propone dónde puede haber objetos. Una propuesta incluye un nombre de categoría, un rectángulo que indica dónde mirar y una puntuación numérica. A ese rectángulo lo llamamos caja. YOLO es una familia de modelos que realiza detección. El umbral es el límite de puntuación que elegimos para mostrar o esconder propuestas. Superar ese límite no demuestra que el objeto esté bien identificado. Primero seguiremos una sola caja; después veremos cómo se obtienen varias propuestas de una foto en el cuaderno.",
+    "concept": "Un detector analiza una foto y propone dónde puede haber objetos. Una propuesta incluye un nombre de categoría, un rectángulo que indica dónde mirar y una puntuación numérica. A ese rectángulo lo llamamos caja. YOLO (You Only Look Once; solo se mira una vez) es una familia de modelos que realiza detección. El umbral es el límite de puntuación que elegimos para mostrar o esconder propuestas. Superar ese límite no demuestra que el objeto esté bien identificado. Primero seguiremos una sola caja; después veremos cómo se obtienen varias propuestas de una foto en el cuaderno.",
     "relevance": "Ayuda a revisar un registro visual antes de tratarlo como inventario.",
     "case": {
       "title": "Una propuesta, distintos filtros",
@@ -2513,6 +2589,10 @@ export const LESSON_GUIDES={
         "meaning": "Límite que elegimos para aplicar una regla. Aquí decide si una puntuación conserva o descarta una propuesta; no se calcula como promedio de la foto."
       },
       {
+        "term": "YOLO",
+        "meaning": "YOLO: You Only Look Once (Solo se mira una vez). Nombre de una familia de modelos de detección que propone categorías y cajas a partir de imágenes. El nombre nació con un enfoque que calcula esas propuestas en una evaluación de la red. Las variantes tienen arquitecturas y procesamiento propios; una caja conservada no demuestra que la propuesta sea correcta."
+      },
+      {
         "term": "Coordenadas de caja",
         "meaning": "Valores que ubican el rectángulo. En formato xyxy son x izquierda, y superior, x derecha e y inferior; otras herramientas usan centro, ancho y alto."
       },
@@ -2522,7 +2602,11 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Supresión de duplicados",
-        "meaning": "Procedimiento que reduce propuestas redundantes, como NMS en detectores que la emplean. No todas las variantes usan el mismo posprocesamiento."
+        "meaning": "NMS: Non-Maximum Suppression (Supresión de no máximos). Procedimiento que reduce propuestas redundantes comparando sus puntuaciones y el solapamiento de sus cajas. Conserva la propuesta de mayor puntuación y suprime otras que superan el límite de IoU elegido respecto a ella. Compara propuestas entre sí, no contra anotaciones para calcular aciertos; no todas las variantes de YOLO usan NMS."
+      },
+      {
+        "term": "COCO",
+        "meaning": "COCO: Common Objects in Context (Objetos comunes en contexto). Conjunto de imágenes con anotaciones de objetos en escenas cotidianas. Sirve para desarrollar y comparar modelos de visión; no es un detector por sí mismo. El modelo usado en este cuaderno ofrece 80 categorías de ese conjunto, no cualquier objeto ni cualquier defecto agrícola."
       }
     ],
     "explorer": "detection",
@@ -2557,7 +2641,7 @@ export const LESSON_GUIDES={
       "result": "Puntuación fija 0,80; umbrales 0,50/0,80/0,90 → filas 1/1/0 en el esquema",
       "reading": "Cambiar el filtro no mueve el objeto ni comprueba un acierto"
     },
-    "essentialCount": 4
+    "essentialCount": 5
   },
   "dl-evaluacion": {
     "objective": "Construir una comprobación de localización que separe filtro y coincidencia.",
@@ -2607,7 +2691,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "IoU",
-        "meaning": "Medida de cuánto se superponen dos cajas. Se divide el área común entre toda el área cubierta por ambas. 1 es coincidencia completa; 0 significa sin zona común."
+        "meaning": "IoU: Intersection over Union (Intersección sobre unión). Medida de superposición entre dos regiones o cajas: área compartida dividida entre el área cubierta por ambas. La unión cuenta la zona compartida una sola vez. No tiene unidades: 0 significa sin área común y 1, coincidencia completa; no es la puntuación del detector."
       },
       {
         "term": "Coincidencia",
@@ -2628,6 +2712,26 @@ export const LESSON_GUIDES={
       {
         "term": "AP y mAP",
         "meaning": "Al variar el filtro se comparan precisión (qué parte de las propuestas es correcta) y recall (qué parte de los objetos se encontró). AP resume esa comparación para una clase según reglas declaradas. mAP promedia AP entre clases o criterios del protocolo."
+      },
+      {
+        "term": "AP",
+        "meaning": "AP: Average Precision (Precisión promedio). Resumen de la relación entre precisión y recall al recorrer los resultados ordenados por puntuación. Su cálculo exacto depende del protocolo de evaluación. En detección se fija el criterio de categoría, emparejamiento e IoU; AP no es la precisión en un único umbral."
+      },
+      {
+        "term": "mAP",
+        "meaning": "mAP: mean Average Precision (Media de las precisiones promedio). Promedio de las AP de las categorías evaluadas según un protocolo. Algunas versiones también promedian resultados de varios criterios de IoU. Hay que indicar el protocolo: mAP50 usa IoU 0,50; mAP50–95 incluye IoU de 0,50 a 0,95 en pasos de 0,05."
+      },
+      {
+        "term": "TP",
+        "meaning": "TP: True Positive (Verdadero positivo). Caso positivo correctamente identificado como positivo. Primero se declara qué significa positivo. En detección requiere emparejar una propuesta válida con un objeto de referencia."
+      },
+      {
+        "term": "FP",
+        "meaning": "FP: False Positive (Falso positivo). Propuesta positiva que no corresponde a un positivo real. Es una falsa alerta. En detección cuenta una propuesta conservada sin coincidencia válida."
+      },
+      {
+        "term": "FN",
+        "meaning": "FN: False Negative (Falso negativo). Caso realmente positivo que no se identifica correctamente. Es una omisión. En detección cuenta un objeto de referencia sin propuesta válida emparejada."
       }
     ],
     "explorer": "detection",
@@ -2662,7 +2766,7 @@ export const LESSON_GUIDES={
       "result": "Desplazar 10 px: IoU 0,60, TP/FP/FN=1/0/0; desplazar 30 px: ≈0,143, 0/1/1",
       "reading": "Descartar la propuesta con umbral 0,90 deja un objeto omitido: 0/0/1"
     },
-    "essentialCount": 7
+    "essentialCount": 9
   },
   "dl-integracion": {
     "objective": "Construir una política de revisión con costes y una salida verificable.",

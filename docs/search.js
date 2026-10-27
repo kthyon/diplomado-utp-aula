@@ -1,4 +1,4 @@
-export const normalizeSearch=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('es').replace(/[^a-z0-9]+/g,' ').trim();
+export const normalizeSearch=value=>String(value??'').replace(/²/g,'2').replace(/α/g,' alpha ').replace(/γ/g,' gamma ').replace(/ε/g,' epsilon ').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('es').replace(/[^a-z0-9]+/g,' ').trim();
 export function searchCatalog(term,lessons,glossary,courses){
  const aliases={ml:'machine learning',dl:'deep learning',ia:'inteligencia artificial'};
  const query=normalizeSearch(term).split(/\s+/).map(t=>aliases[t]||t).join(' '),tokens=query.split(/\s+/).filter(Boolean);

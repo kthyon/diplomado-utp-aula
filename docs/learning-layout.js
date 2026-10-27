@@ -1,6 +1,6 @@
 import {renderTopicContext,renderTopicVocabulary,renderTopicOutcome,renderCaseEvidence} from './lesson-context.js';
-import {LESSON_OFFERING,renderNotebookBridge,renderExplorerLink} from './lesson-offering.js?v=colab-20261027';
-import {renderConceptConnections} from './concept-connections.js';
+import {LESSON_OFFERING,renderNotebookBridge,renderExplorerLink} from './lesson-offering.js?v=definiciones-20261027';
+import {renderConceptConnections} from './concept-connections.js?v=definiciones-20261027';
 import {LESSON_SCENES,renderCaseDetail} from './lesson-scenes.js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const CLASS_PURPOSES={

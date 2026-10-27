@@ -1,5 +1,6 @@
 import {renderMeetingContext} from './lesson-context.js';
 import {renderNotebookPath} from './notebook-paths.js';
+import {renderMeetingDefinitions} from './definitions.js';
 import {renderSessionPlan} from './session-plans.js?v=1';
 // Orientación editorial: acompaña el contenido, sin cambiar acceso ni progreso.
 export const LESSON_OFFERING={
@@ -46,7 +47,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 export function renderMeetingOffering(courseId,index,meeting,{teacher=false}={}){
  const row=MEETING_OFFERING[courseId]?.[index];if(!row)return '';
  const agenda=teacher?renderSessionPlan(courseId,index,meeting):'';
- return renderMeetingContext(courseId,index)+'<details class="concept-depth"><summary>En qué nos centraremos y qué puedes profundizar</summary><p><b>Durante la clase:</b> '+esc(row[0])+'</p><p><b>Para profundizar:</b> '+esc(row[1])+'</p><p>Puedes volver a estos apoyos cuando lo necesites; las comprobaciones son opcionales y sin nota.</p>'+agenda+'</details>';
+ return renderMeetingContext(courseId,index)+renderMeetingDefinitions(courseId,index)+'<details class="concept-depth"><summary>En qué nos centraremos y qué puedes profundizar</summary><p><b>Durante la clase:</b> '+esc(row[0])+'</p><p><b>Para profundizar:</b> '+esc(row[1])+'</p><p>Puedes volver a estos apoyos cuando lo necesites; las comprobaciones son opcionales y sin nota.</p>'+agenda+'</details>';
 }
 export function renderNotebookBridge(l){
  const o=LESSON_OFFERING[l.id],guide=l.guide.lab.notebookGuide;
