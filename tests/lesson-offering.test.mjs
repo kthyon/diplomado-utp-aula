@@ -6,6 +6,16 @@ import {TOPICS} from '../docs/idea-models.js';
 import {LESSON_OFFERING,MEETING_OFFERING,renderMeetingOffering,renderExplorerLink,renderNotebookBridge} from '../docs/lesson-offering.js';
 import {renderLearningGuide,renderLearningLab} from '../docs/learning-layout.js';
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+test('la distribución orientativa de los ocho encuentros solo se incluye para docentes',()=>{
+ for(const [id,c] of Object.entries(COURSES))c.classes.forEach((cl,i)=>{
+  for(const options of [undefined,{teacher:false}]){
+   const student=renderMeetingOffering(id,i,cl,options);
+   assert.doesNotMatch(student,/Distribución orientativa|<caption>|Los bloques orientan/);
+   assert.match(student,/Durante la clase:/);
+  }
+  assert.match(renderMeetingOffering(id,i,cl,{teacher:true}),/Distribución orientativa/);
+ });
+});
 test('los 24 recorridos conservan conceptos, vocabulario, casos, pasos y ampliaciones al añadir orientación',()=>{
  assert.deepEqual(Object.keys(LESSON_OFFERING).sort(),Object.keys(LESSON_GUIDES).sort());
  for(const [id,guide] of Object.entries(LESSON_GUIDES)){
@@ -47,3 +57,4 @@ test('los puentes distinguen práctica ilustrativa de ejecución real en cuadern
  const rendered=renderNotebookBridge({id:'desconocido',guide:{lab:{notebookGuide:'<img onerror=x>'}}});
  assert.ok(!rendered.includes('<img'));assert.match(rendered,/&lt;img/);
 });
+

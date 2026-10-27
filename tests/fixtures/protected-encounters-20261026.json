@@ -1,0 +1,244 @@
+{
+  "courses": {
+    "ml": {
+      "id": "ml",
+      "module": 5,
+      "title": "Machine Learning",
+      "subtitle": "Construir predicciones, alertas y pronósticos para resolver tareas operativas.",
+      "color": "verde",
+      "dates": "23, 24, 30 y 31 de octubre",
+      "classes": [
+        {
+          "title": "Del problema a la primera predicción",
+          "date": "23 oct",
+          "iso": "2026-10-23",
+          "time": "Viernes · 18:30–22:00",
+          "topics": [
+            "ml-problema",
+            "ml-preparacion",
+            "ml-regresion"
+          ]
+        },
+        {
+          "title": "Clasificar y entender los errores",
+          "date": "24 oct",
+          "iso": "2026-10-24",
+          "time": "Sábado · 08:00–12:00",
+          "topics": [
+            "ml-clasificacion",
+            "ml-metricas",
+            "ml-umbral"
+          ]
+        },
+        {
+          "title": "Encontrar estructura y combinar modelos",
+          "date": "30 oct",
+          "iso": "2026-10-30",
+          "time": "Viernes · 18:30–22:00",
+          "topics": [
+            "ml-clustering",
+            "ml-pca",
+            "ml-ensambles"
+          ]
+        },
+        {
+          "title": "El tiempo, las decisiones y el cierre",
+          "date": "31 oct",
+          "iso": "2026-10-31",
+          "time": "Sábado · 08:00–12:00",
+          "topics": [
+            "ml-series",
+            "ml-refuerzo",
+            "ml-integracion"
+          ]
+        }
+      ]
+    },
+    "dl": {
+      "id": "dl",
+      "module": 6,
+      "title": "Deep Learning",
+      "subtitle": "Construir cálculos, pruebas y registros con redes, imágenes y secuencias.",
+      "color": "naranja",
+      "dates": "6, 7, 13 y 14 de noviembre",
+      "classes": [
+        {
+          "title": "Cómo aprende una red neuronal",
+          "date": "6 nov",
+          "iso": "2026-11-06",
+          "time": "Viernes · 18:30–22:00",
+          "topics": [
+            "dl-redes",
+            "dl-activaciones",
+            "dl-entrenamiento"
+          ]
+        },
+        {
+          "title": "De los píxeles a la representación",
+          "date": "7 nov",
+          "iso": "2026-11-07",
+          "time": "Sábado · 08:00–12:00",
+          "topics": [
+            "dl-vision",
+            "dl-cnn",
+            "dl-transferencia"
+          ]
+        },
+        {
+          "title": "Secuencias, atención y contexto",
+          "date": "13 nov",
+          "iso": "2026-11-13",
+          "time": "Viernes · 18:30–22:00",
+          "topics": [
+            "dl-secuencias",
+            "dl-atencion",
+            "dl-transformers"
+          ]
+        },
+        {
+          "title": "Detección y decisiones con evidencia",
+          "date": "14 nov",
+          "iso": "2026-11-14",
+          "time": "Sábado · 08:00–12:00",
+          "topics": [
+            "dl-yolo",
+            "dl-evaluacion",
+            "dl-integracion"
+          ]
+        }
+      ]
+    }
+  },
+  "protectedTopics": {
+    "ml-problema": {
+      "guide": "b770b0307beaf1b1763f2a79660bff3b42e0819a2c2275948ac8461f3a7fcf54",
+      "lesson": "35d957a880487fa2889fc921de4c045879e31f8ee92e327b57074fcc87e0e524",
+      "reading": "583634794e65bfa254a45a19f020e5611ddac983ce88cad621b2ef0a6a980bf3",
+      "lab": "371b1cfd84316b9cfb68a5cf819285517b98b3c0e3c4dd12b9572742b363718d"
+    },
+    "ml-preparacion": {
+      "guide": "8b17b1dceedc739e800e954fdc0395ece54457234c0ee0d3d910a932264e67ff",
+      "lesson": "38f7a6de7154295ff14f248adaf5a2de76eaae28581ce0b56ee5fec9deeddbfb",
+      "reading": "051c16b6ec83b2997c02436121cb69785a34b95a4a658885a6cf0ce9c3d57844",
+      "lab": "f3af6ef19a3b8832c6bd5c0383a23213230d7c229513d50f224e4cda5869fe91"
+    },
+    "ml-regresion": {
+      "guide": "c7d7dab70f5904a04f24dee9d59ba164b63ed930b7490455a3118c85af50143f",
+      "lesson": "fb52335429469ad758810ca6a0ccae994bbf6b6293df23247479f5009a8fd5c9",
+      "reading": "7569ffdff8a49c4f9d09a88031736764e5f07af95f6a5d44cd75ed1d4dce046b",
+      "lab": "ec08ccecb4d4a8f37eceb6b114b5cbe394e87fbce53fea6f8d88b388644341b4"
+    },
+    "ml-clasificacion": {
+      "guide": "8d5be6eacd8994510d6386ce3e7c5e219db381d3a5f2d424ae5b11c12b8cbf3f",
+      "lesson": "76227d945c7511248a5e65270670550319dcb4126bd7c143f4e6ed5caac69143",
+      "reading": "7e564c6132d3f2783c1601675f274a62ef2fc14361efeaa3bf257f643a340063",
+      "lab": "d42ffd922dfbc5c5ecb5b0d9da9394204ba8458cee7360046fc97592d12ba283"
+    },
+    "ml-metricas": {
+      "guide": "a33689d0c0f591bda6787723feeb334613cca151139af13a7266df4238cc2dc5",
+      "lesson": "33dc8b08f5abaca6a4121b7579e7a4619aa6b144a9fcbe73f323932e6f70bdfe",
+      "reading": "72a729f2ea583eb84682c50ffd1b0dc16a4b806a8c46e8241e69e1eb2663e79a",
+      "lab": "13427ba89a047b869d58e9ac273e7538d0af2a5bfd29689839c2ab545ce3b1c7"
+    },
+    "ml-umbral": {
+      "guide": "8f8f1fd30b21e98471b96e8cd829fbd9c3e5d0599fd7149c0e2cccb2221c7f1c",
+      "lesson": "4f6858fa9adafc653ab73dc380101c6425286028120937a5425b18f1acf34570",
+      "reading": "e38808976c57e28a8e3eec60e107f2af0f5beb935655b040243833b74aae4a34",
+      "lab": "e5a92fe016dfefe31ea3b86a9c48779bdcee18f064a34793810bdcb97c7b2a13"
+    }
+  },
+  "firstAgendas": [
+    [
+      [
+        45,
+        "generalidades",
+        "Generalidades 2: conceptos clave y preguntas"
+      ],
+      [
+        30,
+        "contenido",
+        "Formular la pregunta: entradas, respuesta y caso reservado"
+      ],
+      [
+        30,
+        "contenido",
+        "Preparar los datos: ausencias y separación antes de ajustar"
+      ],
+      [
+        15,
+        "pausa",
+        "Pausa"
+      ],
+      [
+        35,
+        "contenido",
+        "Primera predicción y lectura del error"
+      ],
+      [
+        40,
+        "practica",
+        "Práctica guiada en la copia personal de Colab"
+      ],
+      [
+        15,
+        "cierre",
+        "Interpretación, dudas y conexión con clasificación"
+      ]
+    ],
+    [
+      [
+        10,
+        "retoma",
+        "Retomar la predicción y resolver dudas de la práctica"
+      ],
+      [
+        45,
+        "contenido",
+        "Clasificación: puntuación, categoría y clase positiva"
+      ],
+      [
+        15,
+        "pausa",
+        "Pausa"
+      ],
+      [
+        45,
+        "contenido",
+        "Reconstruir los cuatro resultados y leer las métricas"
+      ],
+      [
+        40,
+        "contenido",
+        "Umbral: errores y capacidad de revisión"
+      ],
+      [
+        65,
+        "practica",
+        "Práctica guiada de alertas y comparación de escenarios"
+      ],
+      [
+        20,
+        "cierre",
+        "Interpretación, dudas y cierre"
+      ]
+    ]
+  ],
+  "firstPurposes": [
+    "Entender cómo se aprende una regla desde ejemplos, distinguir entrenamiento de predicción y evaluar una cantidad en casos reservados.",
+    "Distinguir puntuación, categoría y realidad; explicar cada tipo de error y elegir una regla de alertas con validación."
+  ],
+  "notebooks": {
+    "clasificacion.ipynb": "c46cb199fe82cca097e840260b68619eee19b8800f067027b2441d95cc2eb6c6",
+    "clustering.ipynb": "b8ec4bcc3e3f5642552afd82059d0d7bb3cdaa71bd222bf9735196d46d0aa91d",
+    "laboratorio-dl.ipynb": "5e36e6e14cc3a58c41d5a3fb3dae19dd8d1aecd38de5f079014bee66210a6a2e",
+    "laboratorio-ml.ipynb": "b42284cb0c0918013bf22df3ef6a65a82b4ab46145fbff46f366126b8075351c",
+    "pca.ipynb": "7352292a2a1a5432cf51b3c4dd986bda13edd75f7aeb302b8c9e19160d1b9259",
+    "refuerzo.ipynb": "078e67dac15dff7106d71a79c59ac21774983434e12c17a2a62cf8e826404769",
+    "regresion.ipynb": "b0aa75333d28a254bbe9e3435c1512f15c439008521d6614a53ebc38cd685d2d",
+    "yolo-registro.ipynb": "bebad71081c7cba3cb24964613ae0b478869457126ec685f18e6f898b388aa15"
+  },
+  "firstMeetingHTML": [
+    "a9138750ea3e7a5c5492eaf9bde4530859cb2394dc6632eb1ab338612e1e474e",
+    "cf96197d18abe4e2251b92377d423f59fec5382fd8f54bbf481e4cd57f1f7597"
+  ]
+}

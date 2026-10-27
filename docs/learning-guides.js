@@ -654,15 +654,15 @@ export const LESSON_GUIDES={
   },
   "ml-clustering": {
     "objective": "Construir una segmentación exploratoria para organizar una revisión.",
-    "relevance": "Explorar lotes parecidos orienta una investigación cuando no existen etiquetas de grupo.",
-    "concept": "La agrupación explora qué registros se parecen cuando no conocemos etiquetas de grupo. Esa similitud depende de las variables y sus escalas. Aquí usamos DBSCAN para encontrar zonas de puntos cercanos: el resultado organiza una exploración, pero no establece categorías verdaderas ni recomendaciones agrícolas. Otros métodos, como K-Means y Mean-Shift, definen los grupos de otra manera.",
+    "relevance": "Comparar centros de acopio por sus indicadores ayuda a organizar una revisión cuando no existen etiquetas de grupo.",
+    "concept": "Clustering significa agrupar registros por parecido cuando no tenemos una etiqueta de grupo para aprender. Primero se define qué describe cada registro y cómo se medirá su cercanía. DBSCAN reúne puntos conectados por vecindades con suficientes registros y deja otros sin grupo. El radio y el mínimo de vecinos son decisiones de configuración: cambiar esas reglas puede cambiar los grupos aunque la tabla sea idéntica. El resultado sirve para organizar una revisión; para explicar por qué un centro pertenece a un grupo hay que volver a sus indicadores.",
     "case": {
       "title": "Cercanía antes de poner nombres",
-      "context": "Seis lotes con dos indicadores inventados, X e Y, medidos en una misma escala de puntos. La distancia se calcula en ese plano; los números no representan porcentajes ni medidas agronómicas. El caso tiene seis puntos; el laboratorio amplía la comparación a 29.",
+      "context": "Seis centros de acopio ficticios entregan dos porcentajes del mismo periodo. X es capacidad de almacenamiento utilizada: volumen ocupado / capacidad total × 100. Y es proporción de lotes pendientes de revisión: lotes pendientes / lotes recibidos × 100. Comparamos ambos indicadores con el mismo peso, una elección didáctica que habría que justificar en una operación. El radio 3 se mide en este plano de puntos porcentuales. Ninguna fila representa a una persona.",
       "columns": [
-        "Lote",
-        "Índice X",
-        "Índice Y"
+        "Centro",
+        "X · Capacidad utilizada (%)",
+        "Y · Lotes pendientes (%)"
       ],
       "rows": [
         [
@@ -697,14 +697,30 @@ export const LESSON_GUIDES={
         ]
       ],
       "reasoning": [
-        "Usamos radio 3 y mínimo dos puntos, contando el propio. A y B distan 2; D y E también.",
-        "A, B y C quedan conectados; D y E forman otro grupo. F no tiene vecinos cercanos.",
-        "Obtenemos dos grupos y F sin agrupar. Sus nombres numéricos son identificadores, no calificaciones de calidad."
+        "Con radio 3, A = (20,20) y B = (22,20) están a √[(22−20)² + (20−20)²] = 2. Son vecinos. A y C también distan 2. El mínimo elegido es 2, contando al propio punto.",
+        "A, B y C forman un grupo conectado. D = (70,60) y E = (72,60) distan 2 y forman otro. F = (5,90) no alcanza el mínimo de vecinos dentro del radio.",
+        "La lista de revisión queda: grupo 1, A–B–C; grupo 2, D–E; F, revisión individual. El número del grupo es un identificador: no significa mejor o peor calidad."
       ],
-      "conclusion": "F merece investigación; la configuración no demuestra un sensor averiado ni autoriza eliminar su registro.",
-      "question": "¿Qué lotes quedan conectados con radio 3 y mínimo dos puntos, y cuál queda aislado?"
+      "conclusion": "Podemos organizar la exploración en dos perfiles y una revisión individual. Antes de decidir una acción para F se consultarían sus registros: estar sin grupo no demuestra una falla ni autoriza borrar datos.",
+      "question": "¿Qué centros quedan conectados con radio 3 y mínimo dos puntos, y cuál queda aislado?"
     },
     "vocabulary": [
+      {
+        "term": "Aprendizaje no supervisado",
+        "meaning": "Explora estructura sin recibir etiquetas correctas de grupo."
+      },
+      {
+        "term": "Distancia",
+        "meaning": "Número que mide separación entre registros según columnas y escalas elegidas."
+      },
+      {
+        "term": "DBSCAN",
+        "meaning": "Agrupa zonas conectadas por suficientes vecinos y permite casos sin grupo."
+      },
+      {
+        "term": "Radio y mínimo",
+        "meaning": "Configuraciones elegidas: cercanía máxima y cantidad mínima de vecinos, contando al propio punto."
+      },
       {
         "term": "Radio",
         "meaning": "Distancia máxima para considerar dos puntos vecinos."
@@ -716,18 +732,6 @@ export const LESSON_GUIDES={
       {
         "term": "Sin grupo",
         "meaning": "Punto que no queda conectado a un grupo con esa configuración."
-      },
-      {
-        "term": "Aprendizaje no supervisado",
-        "meaning": "Busca estructura en las entradas sin recibir etiquetas de respuesta para esa tarea."
-      },
-      {
-        "term": "Distancia",
-        "meaning": "Medida de separación entre registros. Cambia con las variables, las unidades y el escalado."
-      },
-      {
-        "term": "DBSCAN",
-        "meaning": "Método que conecta zonas con suficientes puntos cercanos; permite formas irregulares y puntos sin grupo."
       },
       {
         "term": "K-Means",
@@ -756,63 +760,95 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Mapa de grupos y casos por investigar",
       "steps": [
-        "Registra radio, mínimo, grupos y puntos sin asignar para las dos configuraciones del explorador.",
-        "En la sección 4 del cuaderno, lee el conteo de cada etiqueta y ubícala en la leyenda. Verifica que todos los conteos sumen 123; usa sus propias cifras.",
-        "Describe qué observaciones revisarías juntas y cuáles individualmente. Mantén nombres neutrales: el grupo no indica calidad y −1 no demuestra una falla."
+        "Reconstruye la distancia A–B y registra la lista A–B–C / D–E / F con radio 3 y mínimo 2. Escribe qué representa cada porcentaje.",
+        "En el explorador compara sus 29 perfiles inventados con radio 10 y 3, manteniendo mínimo 4. Registra cuántos grupos y casos individuales aparecen; sus datos y configuración difieren de la tabla de seis centros.",
+        "En la sección 4 del cuaderno, lee los grupos del conjunto de 123 puntos. Registra una tabla con configuración, conteos y una frase sobre qué se revisaría. Esos puntos ilustran DBSCAN; no son registros reales de centros de acopio."
       ],
       "check": "El explorador produce 2 grupos y 3 sin asignar frente a 0 y 29. El cuaderno tiene 123 puntos distintos; sus conteos no se sustituyen por los del explorador.",
       "transfer": "Para agrupar incidencias de equipos, define primero medidas y escalas. Comprueba el significado de cada grupo antes de asignarle una acción.",
       "stretch": "En tu copia, cambia únicamente eps en DBSCAN de la sección 4 y ejecuta de nuevo desde el principio en un entorno reiniciado. Así la semilla reproduce los mismos puntos y puedes comparar conteos sin cambiar también los datos."
     },
-    "prerequisite": "Hasta aquí conocíamos la respuesta de cada ejemplo. Ahora exploramos similitudes sin etiquetas de grupo: la pregunta y la forma de comprobar resultados cambian.",
+    "prerequisite": "Partimos de tablas preparadas, pero esta vez nadie nos registra la respuesta «grupo correcto». La pregunta es qué registros se parecen según las variables elegidas.",
     "understanding": {
       "question": "¿Por qué un grupo de DBSCAN no equivale a una clase real ni a una recomendación agrícola?",
       "answer": "El grupo surge de las variables, su escala y los parámetros elegidos. Hay que investigar qué comparten sus miembros y comprobar si esa agrupación ayuda en la operación. Un punto sin grupo tampoco es automáticamente un dato erróneo."
-    }
+    },
+    "outcome": {
+      "title": "Lista de revisión",
+      "result": "A–B–C juntos; D–E juntos; F individual",
+      "reading": "Radio 3; mínimo 2; seis centros ficticios"
+    },
+    "essentialCount": 6
   },
   "ml-pca": {
     "objective": "Construir una vista resumida de registros y documentar la información que conserva.",
     "relevance": "Resumir medidas que cambian juntas facilita una gráfica; debemos saber qué información se pierde.",
-    "concept": "PCA busca una representación con menos dimensiones que conserve tanta variación de las entradas como sea posible. Transforma variables en componentes ordenadas por la varianza que explican; las direcciones sucesivas son perpendiculares. Es útil para resumir y explorar datos, pero su porcentaje conservado no mide exactitud predictiva. Centrar y decidir si escalar son decisiones previas distintas.",
+    "concept": "Una tabla puede tener columnas que cambian juntas. PCA construye nuevas direcciones, llamadas componentes, para representar los mismos registros con menos números. Primero se resta la media para estudiar diferencias respecto al centro; también se decide si hace falta escalar. La primera componente busca conservar la mayor variación posible. «Conservar variación» significa mantener separaciones entre los registros, no acertar una etiqueta. Empezaremos con dos columnas y una dirección para ver qué se guarda y qué se pierde.",
     "case": {
       "title": "Dos medidas que se mueven juntas",
-      "context": "Cuatro registros inventados con dos medidas X e Y en la misma escala. A cada medida ya se le restó su media: por eso aparecen valores negativos. Los cuatro puntos están sobre la diagonal Y = X. En el explorador se aplica el mismo procedimiento a 22 puntos.",
+      "context": "Otros cuatro centros ficticios, G–J, tienen estos porcentajes inventados de capacidad utilizada y lotes pendientes. En ambas columnas la media es 50 %. Restarla produce las columnas centradas: 48−50 = −2 puntos porcentuales. Los valores negativos describen diferencias respecto a la media, no porcentajes de ocupación negativos. Elegimos columnas que cambian juntas para ver la cuenta completa.",
       "columns": [
-        "Observación",
-        "Índice X centrado",
-        "Índice Y centrado"
+        "Centro",
+        "Ocupación (%)",
+        "Pendientes (%)",
+        "X centrado (puntos porcentuales)",
+        "Y centrado (puntos porcentuales)"
       ],
       "rows": [
         [
-          "A",
+          "G",
+          "48",
+          "48",
           "−2",
           "−2"
         ],
         [
-          "B",
+          "H",
+          "49",
+          "49",
           "−1",
           "−1"
         ],
         [
-          "C",
+          "I",
+          "51",
+          "51",
           "1",
           "1"
         ],
         [
-          "D",
+          "J",
+          "52",
+          "52",
           "2",
           "2"
         ]
       ],
       "reasoning": [
-        "La variación total es proporcional a la suma de cuadrados: X aporta 10 e Y aporta 10; total 20.",
-        "Proyectar sobre el eje horizontal conserva solo X: 10/20 = 50 %. Se descarta la separación vertical.",
-        "Proyectar sobre la diagonal de 45° deja cada punto sobre sí mismo: conserva 100 % en este caso especial."
+        "Calcula el centro: (48+49+51+52)/4 = 50 en cada columna. Las diferencias son −2, −1, 1 y 2. Su suma de cuadrados es 4+1+1+4 = 10 por columna; entre ambas, 20. Para comparar proporciones no necesitamos dividir por el mismo denominador de varianza.",
+        "Si conservamos solo la coordenada X, retenemos 10 de los 20 puntos porcentuales al cuadrado de la suma total: 10/20 = 50 %. Se descarta la coordenada Y; en esta tabla se puede reconstruir porque Y = X, pero esa coincidencia no ocurre en general.",
+        "La dirección diagonal de 45° contiene todos estos puntos. Proyectarlos sobre ella no cambia su posición: conserva el 100 % de la variación en este ejemplo especialmente construido."
       ],
-      "conclusion": "PCA busca primero máxima varianza. Conservar 100 % aquí no mide aciertos predictivos.",
+      "conclusion": "Una sola dirección resume estas dos columnas sin perder variación en los cuatro registros elegidos. Eso no demuestra que siempre baste una componente ni que podamos predecir calidad con 100 % de exactitud.",
       "question": "¿Qué variación conservamos al representar estos cuatro puntos sobre el eje X o sobre su diagonal?"
     },
     "vocabulary": [
+      {
+        "term": "Variable",
+        "meaning": "Columna que describe un aspecto del registro."
+      },
+      {
+        "term": "Centrado",
+        "meaning": "Restar la media a una columna; un valor negativo queda por debajo de esa media."
+      },
+      {
+        "term": "Componente",
+        "meaning": "Nueva dirección que combina las columnas originales."
+      },
+      {
+        "term": "Variación conservada",
+        "meaning": "Parte de la dispersión original que mantiene la nueva representación; no es exactitud predictiva."
+      },
       {
         "term": "Proyección",
         "meaning": "Representar cada punto sobre una dirección."
@@ -820,14 +856,6 @@ export const LESSON_GUIDES={
       {
         "term": "Varianza",
         "meaning": "Medida de dispersión de los datos."
-      },
-      {
-        "term": "Componente",
-        "meaning": "Nueva dirección que combina variables."
-      },
-      {
-        "term": "Centrado",
-        "meaning": "Restar la media de entrenamiento a cada variable para estudiar variaciones respecto a ella."
       },
       {
         "term": "Varianza explicada",
@@ -856,27 +884,33 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Vista de dos componentes",
       "steps": [
-        "Registra los porcentajes de 0°, 90° y 37° en el explorador y señala qué dirección conserva más de las tres.",
-        "En el cuaderno, localiza la varianza explicada por componente y su acumulado. Anota cuánto conservan PC1 sola y PC1 más PC2.",
-        "Acompaña la vista PC1–PC2 con una lectura: cada punto es un registro; los ejes son combinaciones de las tres variables escaladas; indica porcentaje conservado y descartado."
+        "Completa a mano la resta de la media para G y comprueba las sumas 10, 10 y 20. Registra qué significan 50 % y 100 % en la tabla.",
+        "En el explorador compara sus 22 puntos a 0°, 90° y 37°. Señala observación, proyección y parte descartada; no esperes los porcentajes de la tabla perfectamente diagonal.",
+        "En el cuaderno PCA, lee los porcentajes de PC1 y de PC1+PC2. Registra una vista con su porcentaje conservado, su complemento hasta 100 % y una explicación de que los ejes combinan variables."
       ],
       "check": "El explorador da aproximadamente 63,1 %, 36,9 % y 98,0 %. La vista del cuaderno informa su propio porcentaje y su complemento hasta 100 %; no se interpreta como exactitud de clasificación.",
       "transfer": "Para explorar muchas medidas operativas, usa la vista resumida para encontrar patrones y vuelve a las columnas originales para explicarlos.",
       "stretch": "En una celda nueva de tu copia, crea pd.DataFrame(X_pca[:, :2], index=df.index, columns=['PC1', 'PC2']) y comprueba la correspondencia de una fila con su registro original."
     },
-    "prerequisite": "Agrupar asignaba registros a conjuntos. PCA cambia la representación de sus variables: resumir columnas y formar grupos son tareas distintas.",
+    "prerequisite": "Agrupar organiza filas. Ahora queremos resumir columnas de los mismos tipos de registros; esa es otra pregunta y exige otra forma de leer el resultado.",
     "understanding": {
       "question": "¿Conservar 90 % de varianza significa lograr 90 % de exactitud?",
       "answer": "No. El porcentaje describe dispersión de las entradas conservada por la proyección; no compara predicciones con respuestas reales. Incluso una dirección con poca variación podría ser útil para una tarea predictiva."
-    }
+    },
+    "outcome": {
+      "title": "Lectura de representación",
+      "result": "Eje X: 50 %; diagonal: 100 % en cuatro registros elegidos",
+      "reading": "Porcentaje de variación, no porcentaje de aciertos"
+    },
+    "essentialCount": 6
   },
   "ml-ensambles": {
     "objective": "Seleccionar un modelo candidato mediante una comparación reproducible.",
     "relevance": "Combinar estimaciones puede compensar errores; midamos el resultado antes de confiar.",
-    "concept": "Un ensamble produce una salida combinando las predicciones de varios modelos. Puede ayudar cuando sus errores se compensan, aunque también pueden equivocarse juntos. En el ejemplo aislamos el efecto de promediar; en el laboratorio se entrenan modelos. Bagging, boosting y stacking son formas distintas de construir la combinación y deben compararse con una referencia en los mismos casos.",
+    "concept": "Un modelo puede quedarse corto en un lote y excederse en otro. Un ensamble combina predicciones de varios modelos para intentar reducir esos errores. Empezaremos por un promedio que se puede calcular a mano. Después compararemos un árbol, un bosque y boosting con una referencia, siempre sobre los mismos casos reservados. Combinar ayuda si los errores se compensan; si todos se equivocan igual, el promedio conserva esa equivocación. La ventaja se comprueba con resultados, no con el nombre del algoritmo.",
     "case": {
       "title": "Dos errores pueden compensarse",
-      "context": "Tres fincas reservadas inventadas. Dos modelos imaginarios producen estas predicciones; promediarlas no usa los rendimientos conocidos para ajustarse.",
+      "context": "Una cooperativa necesita estimar cuánto recogerá para preparar transporte. La tabla contiene tres fincas ficticias reservadas, su rendimiento observado y predicciones dadas de dos modelos imaginarios. Las cantidades están en toneladas por hectárea. Para hacer tangible la salida, supongamos además que cada finca tiene 10 ha: una estimación de 3 t/ha correspondería a 30 toneladas. Las predicciones no se reajustan usando estas respuestas.",
       "columns": [
         "Finca",
         "Observado (t/ha)",
@@ -908,17 +942,47 @@ export const LESSON_GUIDES={
         ]
       ],
       "reasoning": [
-        "En la finca 1 promediamos (2 + 4)/2 = 3 t/ha: una predicción baja y otra alta se compensan.",
-        "Cada modelo tiene errores 1, 1 y 0: MAE = 2/3 ≈ 0,67 t/ha. El promedio tiene MAE cero.",
-        "Si ambos modelos se equivocaran igual, promediar no eliminaría ese error compartido."
+        "En la finca 1, A estima 2 y B estima 4 t/ha. Su promedio es (2+4)/2 = 3 t/ha, igual a lo observado. Para 10 ha, A daría 20 t, B 40 t y la combinación 30 t.",
+        "En las tres fincas, los errores absolutos de A son 1, 1 y 0; los de B también. Cada MAE es (1+1+0)/3 = 0,67 t/ha aproximadamente. La combinación tiene errores 0, 0 y 0.",
+        "En este ejemplo construido los errores se compensan exactamente. Con dos predicciones de 2 t/ha para una finca observada de 3, el promedio seguiría en 2: combinar no eliminaría el error compartido."
       ],
       "conclusion": "En estas tres fincas, el promedio predice 3, 4 y 5 t/ha y su MAE es cero. A y B se compensan aquí; si compartieran el mismo error, el promedio también lo conservaría.",
-      "question": "¿Promediar A y B reduce el error en las tres fincas reservadas?"
+      "question": "¿Promediar A y B reduce el error en las tres fincas reservadas?",
+      "stages": [
+        {
+          "title": "Un árbol",
+          "detail": "Aprende preguntas sucesivas sobre las entradas y llega a una predicción. Puede cambiar mucho si cambian sus ejemplos."
+        },
+        {
+          "title": "Bagging y bosque",
+          "detail": "Entrena modelos con muestras de filas obtenidas con reemplazo y agrega salidas. El bosque añade selección aleatoria de características para diversificar sus árboles."
+        },
+        {
+          "title": "Boosting",
+          "detail": "Añade modelos en secuencia para reducir la pérdida conjunta. Cada nuevo modelo depende del estado de la combinación que ya se ha construido."
+        },
+        {
+          "title": "Misma comprobación",
+          "detail": "Las alternativas se eligen mediante validación y se comprueban con la misma reserva. El ejemplo perfecto de dos promedios no determina qué método ganará en el cuaderno."
+        }
+      ]
     },
     "vocabulary": [
       {
         "term": "Ensamble",
-        "meaning": "Combinación de varios modelos."
+        "meaning": "Modelo que combina predicciones de otros modelos."
+      },
+      {
+        "term": "Referencia",
+        "meaning": "Regla sencilla contra la cual comprobamos si una candidata aporta una mejora."
+      },
+      {
+        "term": "MAE",
+        "meaning": "Promedio de errores absolutos: diferencias sin signo entre predicción y observado. Conserva las unidades de la respuesta."
+      },
+      {
+        "term": "Caso reservado",
+        "meaning": "Registro cuya respuesta no se usó para ajustar el modelo y que permite comprobarlo."
       },
       {
         "term": "Bagging",
@@ -963,30 +1027,36 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Tabla comparativa de modelos",
       "steps": [
-        "Compara las cuatro barras en MAE y RMSE. Registra los valores con unidades y conserva la referencia como punto de comparación.",
-        "En la sección 3 del cuaderno, localiza fit(X_tr, y_tr) y predict(X_te). Comprueba que todos usan las mismas filas reservadas y copia los MAE y RMSE de tabla.",
-        "Elige un candidato para seguir probando y justifica la elección con sus dos errores. Anota que cambiar de conjunto o de condiciones exige otra comprobación."
+        "Calcula el promedio y el error de cada fila. Añade la estimación en toneladas para la finca 1 con las 10 ha supuestas; diferencia rendimiento de producción total.",
+        "En el explorador registra MAE y RMSE de los cuatro modelos. Una barra representa un error de la misma prueba; cambiar el selector no vuelve a entrenarlos.",
+        "Ejecuta la sección 3 de Laboratorio ML explicado. Registra su tabla de referencia y candidatas con unidades y justifica cuál seguirías evaluando. Conserva las cifras de esa ejecución, sin sustituirlas por el promedio perfecto del caso pequeño."
       ],
       "check": "La tabla tiene cuatro modelos, una única prueba y dos errores en t/ha. En los resultados guardados, boosting da 0,301 de MAE y 0,411 de RMSE; tu ejecución se documenta con sus propias cifras.",
       "transfer": "Para comparar estimadores de duración, usa las mismas tareas reservadas. MAE conserva unidades; RMSE da más peso a errores grandes.",
       "stretch": "En tu copia, inspecciona tabla[['modelo', 'MAE_t_ha', 'RMSE_t_ha']].sort_values('MAE_t_ha') y compara con ordenar por RMSE."
     },
-    "prerequisite": "Ya sabemos evaluar una predicción y representar datos. Ahora combinamos modelos, conservando la misma pregunta, los mismos casos y la misma métrica.",
+    "prerequisite": "La pregunta sigue siendo estimar una cantidad y comprobar el error. La novedad es cómo obtener una sola predicción a partir de varios modelos.",
     "understanding": {
       "question": "¿Un bosque de muchos árboles garantiza superar a un árbol?",
       "answer": "No. La combinación puede reducir algunos errores, pero depende de los datos y de cuánto se parezcan las equivocaciones. Se decide mediante validación; la prueba final mide el resultado elegido."
-    }
+    },
+    "outcome": {
+      "title": "Comparación de candidatas",
+      "result": "A: MAE 0,67; B: MAE 0,67; promedio: MAE 0 t/ha, en esta tabla ficticia",
+      "reading": "Para 10 ha de la finca 1: predicción combinada de 30 t"
+    },
+    "essentialCount": 8
   },
   "ml-series": {
     "objective": "Construir un pronóstico para planear compras y comprobarlo respetando el tiempo.",
     "relevance": "Planear compras exige anticipar ventas usando solo información disponible al decidir.",
-    "concept": "Una serie temporal conserva el orden de observaciones fechadas. Pronosticar usa la historia disponible para estimar periodos posteriores. Por eso la separación de datos debe reproducir la situación de decisión: entrenamiento y preparación se hacen con el pasado; las fechas siguientes quedan reservadas. Evaluamos reglas sencillas y modelos sobre el mismo horizonte.",
+    "concept": "Para planear compras de un producto perecedero necesitamos estimar ventas que aún no conocemos. Una serie temporal es una lista de observaciones con fecha y orden. Pronosticar usa únicamente la historia disponible al decidir. Primero fijamos una fecha de corte y un horizonte; después comparamos reglas sencillas y modelos sobre el mismo futuro reservado. Mostrar las respuestas futuras para evaluar no permite usarlas al construir el pronóstico.",
     "case": {
       "title": "Pronosticar dos semanas antes de verlas",
-      "context": "Seis semanas con ventas inventadas en unidades de producto. Las semanas 1–4 son historia disponible; ocultamos 5–6 hasta comprobar los pronósticos. El caso usa un ciclo de dos semanas; el explorador compara reglas con 84 semanas y un ciclo de doce.",
+      "context": "Una comercializadora decide su planificación al cierre de la semana 4. Las cantidades inventadas son cajas de tomate vendidas por semana; cada caja tiene el mismo formato comercial en el ejercicio. Las semanas 5–6 están reservadas y se revelan después. Repetir dos semanas es una regla elegida para este caso, no una estacionalidad observada del mercado.",
       "columns": [
         "Semana",
-        "Ventas (unidades)",
+        "Ventas (cajas)",
         "Uso"
       ],
       "rows": [
@@ -1026,17 +1096,25 @@ export const LESSON_GUIDES={
         "Repetir las dos últimas semanas conocidas pronostica 100 y 110. Ambas reglas usan únicamente historia disponible.",
         "Revelamos la reserva: el último valor tiene MAE = (10 + 0)/2 = 5 unidades; repetir ciclo da cero."
       ],
-      "conclusion": "El ciclo gana aquí; seis semanas inventadas no demuestran ese patrón en ventas reales.",
+      "conclusion": "Para las semanas 5–6, repetir el ciclo de esta tabla da 100 y 110 cajas y MAE 0; repetir el último valor da 110 y 110, con MAE 5 cajas. Para convertir un pronóstico en compra aún harían falta existencias, plazos y consecuencias; el ejemplo no los calcula.",
       "question": "Al cerrar la semana 4, ¿qué regla estima mejor las ventas de las semanas 5 y 6?"
     },
     "vocabulary": [
       {
+        "term": "Serie temporal",
+        "meaning": "Observaciones ordenadas y fechadas de una misma variable."
+      },
+      {
         "term": "Corte",
-        "meaning": "Momento que separa historia y futuro reservado."
+        "meaning": "Fecha que separa lo conocido al decidir de lo reservado para comprobar."
       },
       {
         "term": "Horizonte",
-        "meaning": "Cuánto adelante queremos pronosticar."
+        "meaning": "Periodo futuro al que se refiere un pronóstico."
+      },
+      {
+        "term": "Referencia temporal",
+        "meaning": "Regla sencilla, como repetir el último valor, que usa solo pasado disponible."
       },
       {
         "term": "Tendencia",
@@ -1069,27 +1147,33 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Pronóstico con fecha de corte",
       "steps": [
-        "Registra las tres estrategias y sus MAE visuales. Anota que el pronóstico se emite al cierre de la semana 60 para las 24 siguientes.",
-        "Ejecuta la sección 5 del cuaderno y copia su tabla de métodos y MAE. Localiza pasado, futuro y pronosticos para verificar qué valores usa cada regla.",
-        "Elige una regla para un ensayo de compras. Registra momento de emisión, horizonte de 24 semanas, error observado y cuándo volverías a evaluarla."
+        "Escribe los dos pronósticos antes de mirar las semanas 5 y 6: último valor [110,110] y repetición [100,110]. Después revela las ventas y calcula ambos MAE en cajas.",
+        "En el explorador identifica corte tras semana 60 y reserva de 24 semanas. Compara las tres reglas y anota sus MAE sobre exactamente esas 24 observaciones.",
+        "En la sección 5 del cuaderno, registra la tabla de métodos y errores de su propia serie, con fecha de corte y horizonte. Explica por qué no se mezcla ni se reordena el futuro para ajustar el método."
       ],
       "check": "Las tres reglas usan las mismas 60 semanas pasadas y se comparan sobre las mismas 24 futuras. Los MAE del cuaderno corresponden a su propia serie, sin mezclar datos futuros al pronosticar.",
       "transfer": "Para anticipar carga semanal de soporte, conserva el orden temporal y expresa el error en cantidad de solicitudes.",
       "stretch": "En una celda nueva de tu copia, crea pd.DataFrame({'semana': t[corte:], 'observado': futuro, **pronosticos}) y comprueba que tiene 24 filas."
     },
-    "prerequisite": "La evaluación anterior reservaba casos. Si queremos anticipar semanas futuras, también debemos respetar cuándo estuvo disponible cada dato.",
+    "prerequisite": "Ya comparamos predicciones con respuestas observadas. Ahora la pregunta añade una condición: qué información existía en la fecha en que había que decidir.",
     "understanding": {
       "question": "¿Por qué una buena predicción del pasado podría fallar como pronóstico?",
       "answer": "Podría haberse construido usando información que llegó después de la fecha de decisión. Un pronóstico válido usa solo historia disponible y se comprueba en un horizonte posterior al corte."
-    }
+    },
+    "outcome": {
+      "title": "Ficha de pronóstico",
+      "result": "Emisión: cierre de semana 4; horizonte: semanas 5 y 6",
+      "reading": "Referencia: 110/110 cajas, MAE 5; ciclo elegido: 100/110, MAE 0"
+    },
+    "essentialCount": 6
   },
   "ml-refuerzo": {
     "objective": "Construir y probar una secuencia de acciones con recompensas acumuladas.",
     "relevance": "Una acción afecta pasos posteriores; no basta con evaluar cada movimiento por separado.",
-    "concept": "El aprendizaje por refuerzo estudia cómo elegir acciones cuando sus consecuencias afectan situaciones posteriores. El agente interactúa con un entorno y usa experiencias para mejorar su política. La demostración permite recorrer casillas y observar recompensas; el cuaderno usa Q-learning para aprender valores. Elegir un recorrido manualmente ayuda a entender las reglas, pero no entrena al agente.",
+    "concept": "Pronosticar responde qué podría ocurrir. Aprender por refuerzo responde qué acción elegir cuando actuar cambia la situación siguiente. Un agente recibe un estado, elige una acción y observa una consecuencia y una recompensa. Una política es la regla que propone acciones según el estado. Primero seguiremos un recorrido manual para entender el entorno; después veremos cómo Q-learning actualiza estimaciones con muchos recorridos. Mover la ficha manualmente no entrena al agente.",
     "case": {
       "title": "Llegar a la meta sin tocar el pozo",
-      "context": "GridWorld inventado de 5 × 5. Inicio: fila 0, columna 0. Meta: 1,4. Las coordenadas empiezan en cero.",
+      "context": "Representamos un recorrido de preparación de pedidos en una bodega mediante un tablero inventado de 5 × 5 casillas. Inicio: fila 0, columna 0; meta: 1,4. Es una representación didáctica, no un plano de una bodega real. Los puntos −1 por paso, +10 al llegar y −10 al caer al pozo son recompensas elegidas para el ejercicio: no dinero ni minutos. Las coordenadas empiezan en cero.",
       "columns": [
         "Paso",
         "Acción",
@@ -1130,32 +1214,32 @@ export const LESSON_GUIDES={
       ],
       "reasoning": [
         "Los cuatro movimientos iniciales cambian casilla y cuestan una unidad de recompensa cada uno.",
-        "Entrar en la meta entrega +10 y termina el episodio. La suma sin descuento es −1 −1 −1 −1 +10 = 6.",
+        "Entrar en la meta registra +10 y termina el episodio. La suma sin descuento es −1 −1 −1 −1 +10 = 6.",
         "Una pared o borde impide avanzar, pero consume un paso y resta 1. Caer al pozo resta 10 y termina."
       ],
-      "conclusion": "Esta ruta manual no demuestra aprendizaje ni una política óptima para todos los estados.",
+      "conclusion": "La ficha de esta ruta contiene cinco acciones, llegada a la meta y retorno 6 puntos. Una ruta manual permite comprobar las reglas; no demuestra que se haya aprendido una política ni que sea óptima para cualquier bodega.",
       "question": "¿A qué estado llega cada acción de la ruta y cuánto suman sus recompensas?"
     },
     "vocabulary": [
       {
         "term": "Estado",
-        "meaning": "Situación actual del agente."
+        "meaning": "Situación que recibe el agente antes de elegir."
+      },
+      {
+        "term": "Acción",
+        "meaning": "Elección disponible; el entorno determina qué consecuencia produce."
       },
       {
         "term": "Recompensa",
-        "meaning": "Señal numérica recibida después de actuar."
+        "meaning": "Número que el ejercicio registra después de actuar."
       },
       {
         "term": "Política",
-        "meaning": "Regla para elegir acciones según el estado."
+        "meaning": "Regla para elegir acciones a partir del estado."
       },
       {
         "term": "Agente y entorno",
         "meaning": "El agente elige acciones; el entorno define qué sucede y qué recompensa recibe."
-      },
-      {
-        "term": "Acción",
-        "meaning": "Elección disponible en un estado; aquí, intentar moverse a una casilla vecina."
       },
       {
         "term": "Episodio",
@@ -1188,27 +1272,33 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Registro de recorrido y política aprendida",
       "steps": [
-        "Registra los cinco movimientos hacia la meta con casilla, acción y recompensa. Comprueba la suma 6 y el final del episodio.",
-        "Ejecuta el cuaderno y localiza la actualización de Q, el gráfico de recompensas y las flechas de la política. Cada salida muestra una parte distinta del aprendizaje.",
-        "Lee la trayectoria y recompensa impresas de la demostración final. Cuenta sus movimientos y compara con tu ruta manual, sin confundir la curva de entrenamiento con esa única demostración."
+        "Completa cinco filas: estado anterior, acción, estado siguiente y recompensa. Sigue derecha × 4 y abajo × 1, y suma −1−1−1−1+10 = 6.",
+        "Reinicia y prueba subir desde el inicio. Registra que no se mueve, consume un paso y resta un punto; así separas acción intentada de cambio de estado.",
+        "En Q-learning en GridWorld, ejecuta el entrenamiento y lee la demostración final. Registra su ruta y retorno, distinguiéndolos de la curva de muchos episodios y de tu ruta manual."
       ],
       "check": "La ruta manual tiene cinco pasos y recompensa 6; el borde añade un paso de −1 sin movimiento. La ruta aprendida se comprueba con su salida ejecutada; una sola ruta exitosa no prueba optimalidad.",
       "transfer": "Para estudiar rutas de una bodega simulada, define estados, acciones, obstáculos y recompensas antes de aprender una política.",
       "stretch": "En tu copia, repite la demostración con Q fija, sin ejecutar el bloque de entrenamiento otra vez, y compara llegada a meta, pasos y recompensa de varios episodios."
     },
-    "prerequisite": "Pronosticar estima lo que ocurrirá. En refuerzo una acción puede cambiar lo que ocurrirá después: necesitamos representar esa interacción.",
+    "prerequisite": "Una compra o un movimiento tiene consecuencias posteriores. Aquí aislamos esa idea en un entorno pequeño donde podemos ver y comprobar cada consecuencia.",
     "understanding": {
       "question": "¿Qué falta para que una ruta elegida manualmente sea aprendizaje por refuerzo?",
       "answer": "Que un agente use experiencias de estados, acciones y recompensas para actualizar su política o valores. Moverlo manualmente solo permite explorar el entorno y sus reglas."
-    }
+    },
+    "outcome": {
+      "title": "Registro de interacción",
+      "result": "Ruta manual: derecha, derecha, derecha, derecha, abajo",
+      "reading": "Cinco pasos; meta alcanzada; retorno 6 puntos, sin entrenamiento manual"
+    },
+    "essentialCount": 8
   },
   "ml-integracion": {
     "objective": "Construir un prototipo de predicción con una decisión de uso documentada.",
     "relevance": "Antes de cambiar una operación, expliquemos la evidencia y qué falta comprobar.",
-    "concept": "Integrar ML significa justificar una cadena completa: pregunta, datos disponibles, preparación, método, comparación y decisión. La calidad de una solución depende de esa cadena, no de la complejidad del algoritmo. Una mejora en la prueba respalda una comparación concreta; para usarla en otra temporada o proceso necesitamos datos representativos y un plan de seguimiento.",
+    "concept": "Una propuesta de ML debe poder explicarse de principio a fin: quién necesita decidir, qué información existe al hacerlo, qué predice el modelo y cómo se comprobó. Para cerrar la asignatura no añadimos un algoritmo: unimos esas piezas en una ficha de prototipo. Compararemos una candidata con una regla sencilla en los mismos registros y diremos qué respalda la diferencia. Un error menor en tres casos no demuestra por sí solo una mejora económica ni desempeño en otra temporada.",
     "case": {
       "title": "Una mejora pequeña con alcance concreto",
-      "context": "Tres fincas reservadas inventadas, distintas de las anteriores. Las reglas se eligieron con otros datos; estas filas sirven para compararlas.",
+      "context": "La cooperativa revisa una candidata para planear recogida. En tres fincas reservadas y ficticias ya conocemos el rendimiento en t/ha. La referencia predice siempre 4 t/ha y las predicciones candidatas están dadas. Las reglas se eligieron antes de mirar esta prueba. Con una superficie supuesta de 10 ha por finca, podemos traducir cada estimación a toneladas sin cambiar la comparación de rendimiento.",
       "columns": [
         "Finca",
         "Observado (t/ha)",
@@ -1236,17 +1326,29 @@ export const LESSON_GUIDES={
         ]
       ],
       "reasoning": [
-        "La referencia tiene errores absolutos 1, 0 y 1: MAE = 2/3 ≈ 0,67 t/ha.",
-        "La candidata tiene errores 0,2; 0,2 y 0,1: MAE = 0,5/3 ≈ 0,17 t/ha. Comparamos idénticas fincas.",
-        "La candidata mejora esta prueba. Faltan datos representativos de otras condiciones y evaluar consecuencias antes de cambiar decisiones reales."
+        "Referencia: |4−3| = 1, |4−4| = 0 y |4−5| = 1 t/ha. Su MAE es (1+0+1)/3 = 0,67 t/ha aproximadamente.",
+        "Candidata: |3,2−3| = 0,2; |3,8−4| = 0,2; |5,1−5| = 0,1. Su MAE es 0,5/3 = 0,17 t/ha aproximadamente.",
+        "En la finca A de 10 ha, la referencia estimaría 40 t y la candidata 32 t; se observaron 30 t. Esa comparación concreta ayuda a planear una prueba de recogida, pero no calcula costes ni decide capacidad de vehículos."
       ],
       "conclusion": "Podemos explicar esta mejora, sin afirmar una recomendación de fertilización ni beneficio económico real.",
       "question": "¿La regla candidata reduce el error frente a predecir siempre 4 t/ha en estas tres fincas?"
     },
     "vocabulary": [
       {
+        "term": "Pregunta operativa",
+        "meaning": "Decisión concreta que se quiere apoyar y momento en que debe tomarse."
+      },
+      {
         "term": "Referencia",
-        "meaning": "Regla sencilla con la cual comparar."
+        "meaning": "Solución sencilla que permite juzgar si una candidata mejora algo."
+      },
+      {
+        "term": "Evidencia",
+        "meaning": "Datos y resultados que permiten comprobar una afirmación concreta."
+      },
+      {
+        "term": "Límite de uso",
+        "meaning": "Condición o tarea para la que todavía no se comprobó la propuesta."
       },
       {
         "term": "Generalización",
@@ -1283,27 +1385,33 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Prototipo ML: de la tabla a una decisión",
       "steps": [
-        "Ejecuta 1.1–1.6 desde el comienzo. Registra fila, entradas, respuesta, unidades y separación 180/60; identifica dónde se aprende la preparación.",
-        "Conserva la tabla de MAE de referencia y candidata y las primeras filas de comparacion. Recalcula el error absoluto de una fila.",
-        "Escribe cómo usarías la predicción para planear transporte: para un lote de área conocida, toneladas estimadas = t/ha predichas × hectáreas. Indica que falta evaluar errores en toneladas y comprobar otro periodo antes de usarla en operación."
+        "Registra una ficha con pregunta, entradas disponibles, respuesta buscada y uso propuesto: estimar rendimiento para planear recogida, no recomendar una dosis.",
+        "Completa la comparación de la tabla: errores por finca, MAE de referencia y candidata y lectura en t/ha. Traduce A a toneladas usando las 10 ha declaradas.",
+        "Repite la ficha con resultados y comparacion de tu cuaderno. Indica de dónde salen los datos, qué filas quedaron fuera del ajuste y qué periodo o condición falta comprobar antes del uso."
       ],
       "check": "El caso pequeño da MAE 0,67 frente a 0,17 t/ha. Tu prototipo conserva sus propias cifras, usa una prueba reservada y puede repetirse desde la copia personal sin sustituir la respuesta por la predicción.",
       "transfer": "Para estimar duración de solicitudes, redefine fila, entradas y respuesta. Mantén preparación aprendida en entrenamiento, referencia y evaluación reservada.",
       "stretch": "En una celda nueva de tu copia, usa X_te.head(1), lineal.predict(X_te.head(1)) y y_te.loc[X_te.head(1).index] para inspeccionar entrada, predicción y observado de la misma fila reservada."
     },
-    "prerequisite": "Los métodos resolvían preguntas distintas. Para integrarlos, vuelve a la pregunta original y reúne la evidencia de preparación, comparación y uso.",
+    "prerequisite": "Recuperamos la pregunta operativa y las comparaciones ya estudiadas. Lo que cierra el trabajo es una explicación verificable, no otro algoritmo.",
     "understanding": {
       "question": "¿Qué evidencia necesitamos además de una métrica favorable?",
       "answer": "Casos representativos del uso esperado, separación correcta de datos, comparación justa con una referencia, revisión de errores y condiciones para supervisar o detener el uso. Tres casos ilustrativos no bastan."
-    }
+    },
+    "outcome": {
+      "title": "Ficha de prototipo",
+      "result": "Referencia: MAE ≈ 0,67; candidata: MAE ≈ 0,17 t/ha",
+      "reading": "Finca A, 10 ha: observado 30 t; referencia 40 t; candidata 32 t"
+    },
+    "essentialCount": 4
   },
   "dl-redes": {
     "objective": "Construir el cálculo de una neurona y rastrear cómo sus entradas producen una salida.",
-    "concept": "Deep Learning pertenece al aprendizaje automático y construye reglas mediante redes de varias capas. Cada capa transforma una representación numérica para que la siguiente continúe el cálculo. La salida debe corresponder a la tarea. Empezaremos por una sola neurona: multiplicar entradas por pesos, sumar un sesgo y aplicar una activación. Seguir esta cuenta con parámetros fijados explica el funcionamiento; aprenderlos requiere el entrenamiento de los temas siguientes.",
+    "concept": "Una red recibe números, los transforma y produce una salida. Para entender ese recorrido empezaremos por una neurona, una unidad de cálculo, antes de hablar de muchas capas. Cada entrada se multiplica por un peso; los productos se suman junto con un sesgo; una función de activación transforma la suma. En el ejemplo todos esos valores están dados para que podamos comprobarlos. Una red aprende cuando un procedimiento ajusta sus parámetros usando ejemplos; esta primera cuenta solo muestra cómo se calcula una salida.",
     "relevance": "Permite explicar el cálculo antes de confiar en una etiqueta o una puntuación.",
     "case": {
       "title": "Dos señales y un ajuste",
-      "context": "Comprobamos una neurona con números fijados: entradas x₁ = 2 y x₂ = 1; pesos w₁ = 0,5 y w₂ = −1; sesgo b = 0,5. Son valores sin unidades físicas y la activación es ReLU. Para esta cuenta los parámetros ya están dados: no los entrenamos.",
+      "context": "Desarmamos una unidad de cálculo que podría formar parte de una red para imágenes. Sus entradas x₁ = 2 y x₂ = 1 son dos señales numéricas abstractas, no cantidades de frutos ni porcentajes de enfermedad. Los pesos w₁ = 0,5 y w₂ = −1 y el sesgo b = 0,5 se fijan para seguir la operación. Aplicamos ReLU, que conserva la suma si es positiva y da 0 si es negativa.",
       "columns": [
         "Parte",
         "Entrada",
@@ -1340,16 +1448,20 @@ export const LESSON_GUIDES={
     },
     "vocabulary": [
       {
+        "term": "Entrada",
+        "meaning": "Número recibido por la unidad; puede ser un dato preparado o la salida de una capa anterior."
+      },
+      {
         "term": "Peso",
-        "meaning": "Número que multiplica una entrada."
+        "meaning": "Factor que multiplica una entrada y regula su aporte."
       },
       {
         "term": "Sesgo",
-        "meaning": "Ajuste añadido a la suma."
+        "meaning": "Valor que se suma a los productos antes de la activación."
       },
       {
         "term": "Activación",
-        "meaning": "Regla aplicada a esa suma."
+        "meaning": "Función que transforma la suma y produce la salida de la unidad."
       },
       {
         "term": "Representación",
@@ -1382,23 +1494,29 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Calculadora de una neurona",
       "steps": [
-        "Crea dos filas: sesgo, producto 2 × 0,5, producto 1 × (−1), suma z y salida ReLU. Usa sesgos 0,5 y −0,5; comprueba ambas filas en el explorador.",
-        "Ejecuta la neurona explícita del bloque 09. Registra 0,6 × 2 − 0,2 − 0,5 = 0,5 y la salida sigmoide que imprime, aproximadamente 0,622.",
-        "En esa celda cambia solo el sesgo de −0,5 a −1 y ejecútala de nuevo. Comprueba z = 0 y sigmoide = 0,5; conserva ambas cuentas."
+        "Dibuja dos entradas y anota debajo sus productos: 2 × 0,5 = 1 y 1 × (−1) = −1. Suma el sesgo 0,5 y aplica ReLU; registra entrada, suma y salida.",
+        "En el explorador cambia solo el sesgo a −0,5. Explica por qué los productos siguen iguales, la suma cambia y la salida pasa a 0.",
+        "En el bloque 09 de Laboratorio DL, sigue la neurona con sus propios valores y sigmoide. Registra su cuenta separada: usar otra función y otras entradas produce otra salida; no es una contradicción del ejemplo web."
       ],
       "check": "Cada salida se reproduce con sus entradas, pesos, sesgo y activación. Mover el sesgo a mano no se presenta como entrenamiento.",
       "transfer": "Usa el mismo registro para inspeccionar una neurona de una red pequeña: entrada, productos, sesgo, suma y transformación.",
       "stretch": "Crea una función con esos cinco elementos y verifica los dos casos de la web y los dos del cuaderno."
     },
-    "prerequisite": "Conservamos de ML las entradas, la respuesta, el entrenamiento y la prueba. Lo nuevo es cómo varias capas construyen la regla y sus representaciones intermedias.",
+    "prerequisite": "Retomamos la idea de modelo como regla que transforma entradas. Ahora vamos a abrir esa regla y seguir una unidad de cálculo paso a paso.",
     "understanding": {
       "question": "¿Qué diferencia una neurona, una capa y una red?",
       "answer": "Una neurona calcula una transformación; una capa reúne transformaciones que producen una representación; una red conecta capas. El entrenamiento cambia pesos y sesgos, mientras la inferencia usa los valores ya fijados."
-    }
+    },
+    "outcome": {
+      "title": "Rastro de una neurona",
+      "result": "Productos: 1 y −1; suma con sesgo: 0,5; ReLU: 0,5",
+      "reading": "Con sesgo −0,5: suma −0,5 y salida 0; ningún peso fue aprendido"
+    },
+    "essentialCount": 4
   },
   "dl-activaciones": {
     "objective": "Configurar una transformación de señales y comprobar su rango de salida.",
-    "concept": "La activación transforma la suma producida por una neurona antes de pasarla a otra capa o a la salida. Su forma cambia qué patrones puede representar la red. Aquí comparamos ReLU, sigmoide y tanh con las mismas entradas para observar sus diferencias, sin entrenar parámetros. El significado de una salida depende también de la tarea: estar entre 0 y 1 no basta para ser una probabilidad calibrada.",
+    "concept": "La activación recibe un número, normalmente la suma calculada por una neurona, y devuelve otro. ReLU deja pasar lo positivo y convierte lo negativo en 0. La sigmoide comprime valores entre 0 y 1; tanh entre −1 y 1. Sus curvas ayudan a leer qué señal continúa hacia la siguiente capa. Compararemos la misma entrada para aislar la diferencia entre funciones. Esta transformación no aprende pesos por sí sola, y el rango de una salida no basta para declarar una probabilidad fiable.",
     "relevance": "Ayuda a evitar que un cero, un negativo o un valor entre cero y uno se confundan con una categoría o un acierto.",
     "case": {
       "title": "La misma señal sigue tres reglas",
@@ -1445,6 +1563,22 @@ export const LESSON_GUIDES={
     },
     "vocabulary": [
       {
+        "term": "Señal",
+        "meaning": "Número que recibe una función de activación."
+      },
+      {
+        "term": "ReLU",
+        "meaning": "Devuelve el mayor entre cero y la entrada."
+      },
+      {
+        "term": "Sigmoide",
+        "meaning": "Comprime la entrada a un número entre 0 y 1."
+      },
+      {
+        "term": "tanh",
+        "meaning": "Comprime la entrada a un número entre −1 y 1, conservando su signo."
+      },
+      {
         "term": "No lineal",
         "meaning": "Transformación que no puede representarse mediante una sola recta en todo su dominio."
       },
@@ -1455,18 +1589,6 @@ export const LESSON_GUIDES={
       {
         "term": "Entrada z",
         "meaning": "Suma ponderada más sesgo antes de la activación; no es necesariamente una medida original ni una probabilidad."
-      },
-      {
-        "term": "ReLU",
-        "meaning": "Función que devuelve el mayor entre cero y su entrada. Se usa habitualmente en capas intermedias."
-      },
-      {
-        "term": "Sigmoide",
-        "meaning": "Función que transforma un número en un valor entre 0 y 1. En una salida binaria puede representar una probabilidad estimada si la tarea y el entrenamiento lo justifican."
-      },
-      {
-        "term": "tanh",
-        "meaning": "Función que transforma su entrada en un valor entre −1 y 1."
       },
       {
         "term": "Capa de salida",
@@ -1487,23 +1609,29 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Tabla de pruebas de activación",
       "steps": [
-        "Completa una tabla con tres entradas (−2, 0 y 2) y tres columnas de salida (ReLU, sigmoid y tanh) usando los controles.",
-        "Marca qué función devuelve negativos, cuál convierte las entradas negativas en cero y cuál produce valores entre 0 y 1. Comprueba las curvas del bloque 09.",
-        "Localiza nn.ReLU() y torch.sigmoid en el entrenamiento del bloque 09. Anota que BCEWithLogitsLoss recibe la salida sin sigmoide: no añadas otra antes de esa pérdida."
+        "Para entrada −2, calcula ReLU como el mayor entre −2 y 0. Después lee las otras dos salidas en la tabla, conservando la entrada.",
+        "En el explorador repite con 0 y 2. Registra tres filas con entrada y salidas de las tres funciones; marca cuáles pueden ser negativas o superar 1.",
+        "En el bloque 09 del cuaderno, localiza una activación dentro de la red y la transformación de la salida al evaluar. Explica para qué lugar del recorrido se está usando cada una, sin interpretar cualquier número entre 0 y 1 como probabilidad calibrada."
       ],
       "check": "Las nueve salidas coinciden con el explorador al redondear. ReLU(2) = 2, no 200 %; sigmoide(0) = 0,5, sin demostrar una probabilidad calibrada.",
       "transfer": "Antes de usar una salida en una regla de alerta, verifica su rango y significado; una activación no es una métrica de aciertos.",
       "stretch": "Reproduce las nueve salidas con las funciones de PyTorch y compara con tu tabla usando los valores sin redondear."
     },
-    "prerequisite": "La neurona ya produjo una suma. La activación determina cómo se transforma antes de pasar a otra capa o a la salida.",
+    "prerequisite": "La neurona ya produjo una suma. Falta comprender la regla que transforma esa suma antes de continuar el recorrido.",
     "understanding": {
       "question": "¿Por qué apilar capas sin activaciones no lineales puede aportar menos de lo esperado?",
       "answer": "Una sucesión de transformaciones afines sigue siendo una transformación afín. Las activaciones no lineales permiten representar otros patrones. Eso aumenta capacidad, pero no garantiza buen desempeño sin datos y entrenamiento adecuados."
-    }
+    },
+    "outcome": {
+      "title": "Tabla de transformaciones",
+      "result": "Con entrada −2: ReLU 0; sigmoide ≈ 0,119; tanh ≈ −0,964",
+      "reading": "Misma entrada, tres funciones; sin entrenamiento de parámetros"
+    },
+    "essentialCount": 4
   },
   "dl-entrenamiento": {
     "objective": "Ajustar un parámetro y diagnosticar un paso que empeora el resultado.",
-    "concept": "Entrenar una red repite un ciclo: calcular salidas, medir pérdida, obtener gradientes y actualizar parámetros. La retropropagación y el optimizador cumplen funciones diferentes dentro de ese ciclo. El ejemplo reduce todo a un parámetro para ver cómo influye el tamaño del paso. En una red se actualizan muchos parámetros; reducir la pérdida de entrenamiento todavía no demuestra que funcione con casos nuevos.",
+    "concept": "Entrenar repite cuatro acciones: producir una salida, compararla con una respuesta conocida, calcular cómo cambia la pérdida y actualizar parámetros. La pérdida es un número que mide el desacuerdo según una regla elegida. El gradiente indica la dirección y sensibilidad de ese número; la tasa de aprendizaje regula el tamaño del ajuste. Usaremos un solo parámetro para comprobar la operación completa. En una red hay muchos parámetros y se aplica el mismo ciclo, con una comprobación posterior sobre ejemplos que no participaron en el ajuste. En una red, la retropropagación calcula gradientes a través de las capas; el optimizador utiliza esos gradientes para actualizar. Son funciones distintas del ciclo.",
     "relevance": "Ayuda a interpretar una curva de entrenamiento: ajustar más fuerte puede empeorar.",
     "case": {
       "title": "Acercarse a un objetivo sin pasarse",
@@ -1550,16 +1678,20 @@ export const LESSON_GUIDES={
     },
     "vocabulary": [
       {
+        "term": "Parámetro",
+        "meaning": "Valor ajustable del modelo; en la cuenta seguimos solo uno."
+      },
+      {
         "term": "Pérdida",
-        "meaning": "Medida que buscamos reducir durante el ajuste."
+        "meaning": "Número que mide el desacuerdo según una regla elegida."
       },
       {
         "term": "Gradiente",
-        "meaning": "Indica cómo cambia la pérdida al variar parámetros."
+        "meaning": "Indica cómo cambia la pérdida al cambiar el parámetro; aquí es una pendiente."
       },
       {
         "term": "Tasa de aprendizaje",
-        "meaning": "Tamaño elegido para los pasos de actualización. Es un hiperparámetro, no un peso aprendido."
+        "meaning": "Factor elegido que multiplica el gradiente al realizar el ajuste."
       },
       {
         "term": "Retropropagación",
@@ -1600,27 +1732,33 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Registro de ajustes y pérdidas",
       "steps": [
-        "Guarda una fila por tasa con parámetro inicial, gradiente, tasa, parámetro nuevo y pérdida después de un paso. Reinicia antes de cambiar la tasa.",
-        "En la celda de descenso del bloque 01, ejecuta 12 pasos con TASA = 0.10; registra peso y pérdida finales. Repite con 1.10 desde el mismo inicio y compara las trayectorias.",
-        "Ejecuta el entrenamiento del bloque 09 con su configuración original. Registra pérdida inicial/final de la curva y la exactitud de prueba impresa; distingue los datos de cada resultado."
+        "Escribe el estado inicial: parámetro −2, objetivo 3 y pérdida 25. Calcula el gradiente inicial 2 × (−2−3) = −10.",
+        "Con tasa 0,10, reproduce −2−0,10×(−10) = −1 y pérdida 16. Reinicia; con 1,10 obtén 9 y pérdida 36. Registra dos filas que partan del mismo inicio.",
+        "Ejecuta la pérdida sencilla del bloque 01 del cuaderno y después observa el entrenamiento de la red en el bloque 09. Distingue qué datos usa el ajuste de cuáles sirven para comprobarla; sus pérdidas no se comparan numéricamente con 25, 16 y 36."
       ],
       "check": "La comparación de un paso reproduce −1/16 y 9/36. En la red, una curva descendente describe entrenamiento; la exactitud impresa usa los 80 casos reservados, sin prometer un porcentaje.",
       "transfer": "Al probar configuraciones de una red, conserva el inicio y registra pérdida y evaluación por separado. Si eliges mirando una reserva, úsala como validación y conserva otra prueba final.",
       "stretch": "En una copia, compara dos tasas del bloque 09 conservando semilla, separación y épocas; registra los resultados sin garantizar qué tasa ganará."
     },
-    "prerequisite": "Ya podemos calcular una salida con pesos fijos. Aprender exige compararla con una respuesta y decidir cómo modificar los parámetros.",
+    "prerequisite": "Ya sabemos calcular una salida. Ahora necesitamos explicar de dónde podría salir un cambio de pesos, en lugar de ajustarlos manualmente.",
     "understanding": {
       "question": "Si baja la pérdida de entrenamiento, ¿ya sabemos que la red generaliza?",
       "answer": "No. Hay que observar datos separados. Si la pérdida de entrenamiento baja y la de validación empieza a subir, puede haber sobreajuste. La prueba final permanece aparte de las decisiones de desarrollo."
-    }
+    },
+    "outcome": {
+      "title": "Comparación de un paso",
+      "result": "Tasa 0,10: parámetro −1 y pérdida 16; tasa 1,10: parámetro 9 y pérdida 36",
+      "reading": "Ambas desde −2 y pérdida 25; el paso grande empeora esta cuenta"
+    },
+    "essentialCount": 10
   },
   "dl-vision": {
     "objective": "Definir la salida visual que necesita una operación y probar una detección.",
-    "concept": "En visión por computador elegimos una salida según la pregunta: una categoría por imagen, categorías y ubicaciones de objetos, o regiones de píxeles. Esa elección determina las anotaciones que necesitamos y la forma de evaluar. La escena conserva tres frutos para comparar tareas; sus cajas y máscaras son ilustrativas. El cuaderno ejecuta detección sobre una foto.",
+    "concept": "Antes de elegir una red para una imagen hay que precisar qué necesita recibir quien toma la decisión. Clasificar registra una etiqueta de toda la imagen. Detectar registra propuestas de objetos con categoría y ubicación, a menudo mediante cajas. Segmentar delimita regiones de píxeles. Son preguntas diferentes, no tres grados de exactitud. En la misma foto de tres frutos compararemos esas salidas y las referencias que harían falta para comprobar cada una.",
     "relevance": "Evita pedir posiciones o contornos a una herramienta que solamente clasifica.",
     "case": {
       "title": "Una foto de tres frutos, tres necesidades",
-      "context": "Una escena dibujada contiene tres frutos. Un equipo quiere seleccionar fotos, localizar objetos o delimitar regiones visibles. Conservamos la escena y cambiamos la pregunta; las salidas son ilustrativas.",
+      "context": "Un centro de recepción recibe una foto ilustrada con tres frutos. El responsable puede querer seleccionar la foto para revisión, localizar cada fruto o examinar su región visible. Conservamos exactamente la misma escena y cambiamos la pregunta. Las salidas dibujadas permiten entender la tarea; no provienen de una red entrenada.",
       "columns": [
         "Pregunta del equipo",
         "Salida necesaria",
@@ -1653,16 +1791,28 @@ export const LESSON_GUIDES={
     },
     "vocabulary": [
       {
+        "term": "Píxel",
+        "meaning": "Una celda de la imagen representada con números."
+      },
+      {
+        "term": "Clasificación de imagen",
+        "meaning": "Una etiqueta para la imagen completa."
+      },
+      {
+        "term": "Detección",
+        "meaning": "Propuestas de objetos con categoría y ubicación."
+      },
+      {
+        "term": "Segmentación",
+        "meaning": "Asignación de regiones o categorías a píxeles."
+      },
+      {
         "term": "Caja",
         "meaning": "Rectángulo que aproxima la ubicación de un objeto."
       },
       {
         "term": "Máscara",
         "meaning": "Píxeles asignados a un objeto o categoría."
-      },
-      {
-        "term": "Píxel",
-        "meaning": "Celda de una imagen digital. Su valor describe intensidad o color, no un objeto completo."
       },
       {
         "term": "Canal",
@@ -1699,23 +1849,29 @@ export const LESSON_GUIDES={
     "build": {
       "title": "De una foto a una salida definida",
       "steps": [
-        "Escribe la necesidad «localizar objetos visibles para revisarlos» y especifica la salida: categoría, puntuación y cuatro coordenadas por caja. Compárala con etiqueta y máscara en el explorador.",
-        "Ejecuta YOLO hasta la sección 6. Elige una fila, localiza su caja en la foto y registra categoría, puntuación, ancho y alto en píxeles.",
-        "Comprueba ancho = x2 − x1 y alto = y2 − y1 con esa fila. Si la tabla está vacía, registra cero detecciones conservadas y revisa foto, categorías y umbral."
+        "Completa una ficha con necesidad y salida: seleccionar foto → etiqueta; localizar tres frutos → cajas; delimitar regiones visibles → máscaras.",
+        "Recorre las tres opciones del explorador y relaciona cada marca con esa ficha. Explica por qué una etiqueta no localiza frutos y una caja incluye algo de fondo.",
+        "En YOLO, secciones 2–6, ejecuta la detección y vincula una caja con su fila de registro. Registra categoría, puntuación y ubicación, indicando que este cuaderno no ejecuta segmentación."
       ],
       "check": "Una fila se puede rastrear a su caja y sus dimensiones. No se atribuyen máscaras al detector ni se interpreta una tabla vacía como ausencia confirmada de objetos.",
       "transfer": "Para revisar equipos en una foto de bodega, define las categorías requeridas y la salida antes de decidir si necesitas clasificación, detección o segmentación.",
       "stretch": "Usa el recorte de la sección 9 de YOLO para comprobar las coordenadas de una caja sin añadir un segundo clasificador."
     },
-    "prerequisite": "Una red recibe números. Antes de elegir un modelo para fotos, aclaremos cómo se representa una imagen y qué salida necesita la operación.",
+    "prerequisite": "Una red transforma datos, pero su salida debe corresponder a una tarea. Empezaremos por especificar qué información necesita la inspección.",
     "understanding": {
       "question": "¿Qué etiquetas hay que preparar para clasificar, detectar y segmentar?",
       "answer": "Para clasificación, una categoría por imagen en la tarea descrita; para detección, categoría y caja por objeto; para segmentación, categorías o identidades por píxel. Son anotaciones diferentes y requieren evaluaciones acordes."
-    }
+    },
+    "outcome": {
+      "title": "Especificación de salida",
+      "result": "Seleccionar: una etiqueta; localizar: tres cajas; delimitar: tres regiones",
+      "reading": "La escena es fija y sus marcas son ilustrativas, no inferencias de una red"
+    },
+    "essentialCount": 4
   },
   "dl-cnn": {
     "objective": "Construir un mapa de filtro y distinguir cambios de imagen de cambios de pesos.",
-    "concept": "Una red neuronal convolucional (CNN) construye representaciones usando operaciones locales que comparten pesos en distintas posiciones. Un filtro recorre la imagen y produce un mapa de respuestas; capas posteriores combinan esos mapas. En una CNN entrenada se aprenden los filtros. Aquí dejamos uno fijo para entender qué aporta cada ventana y cómo cambia la respuesta al cambiar los píxeles.",
+    "concept": "Una imagen es una tabla de números. Una CNN aplica pequeñas tablas de pesos, llamadas filtros, sobre zonas de la imagen. En cada posición multiplica píxeles por pesos y suma; las respuestas forman otra tabla, el mapa. Usar el mismo filtro en todas las posiciones permite reconocer una señal local en lugares distintos. Primero resolveremos una ventana de nueve píxeles. En una red entrenada los filtros se aprenden; el filtro de este ejercicio está dado para entender la operación.",
     "relevance": "Ayuda a distinguir píxeles, pesos y resultados, antes de interpretar lo que reconoce una red.",
     "case": {
       "title": "Encontrar un cambio entre filas",
@@ -1753,11 +1909,19 @@ export const LESSON_GUIDES={
     "vocabulary": [
       {
         "term": "Ventana",
-        "meaning": "Región de píxeles que participa en un cálculo."
+        "meaning": "Zona pequeña de la imagen que se procesa en una posición."
       },
       {
         "term": "Filtro",
-        "meaning": "Pesos que se aplican en cada posición."
+        "meaning": "Tabla de pesos que se aplica sobre cada ventana."
+      },
+      {
+        "term": "Mapa de respuestas",
+        "meaning": "Tabla producida al recorrer la imagen con el filtro."
+      },
+      {
+        "term": "CNN",
+        "meaning": "Red que usa operaciones locales con pesos compartidos y aprende representaciones durante entrenamiento."
       },
       {
         "term": "Convolución en una CNN",
@@ -1794,23 +1958,29 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Mapa de respuestas locales",
       "steps": [
-        "Calcula la primera ventana: multiplica cada píxel por su coeficiente y suma los nueve productos. Registra 3 con Horizontal y 1/3 con Promedio.",
-        "Con Horizontal, recorre las nueve posiciones y construye el mapa [3,3,3], [3,3,3], [0,0,0]. Verifica cada celda con el explorador.",
-        "Ejecuta el bloque 10 y registra la exactitud impresa de la CNN y una pareja «Real → pred.». Separa esos resultados del mapa del filtro fijo, que no es aprendido."
+        "Escribe la primera ventana y su filtro. Reconstruye los nueve productos y la suma 3; explica qué celda del mapa produce esa ventana.",
+        "En el explorador mueve la ventana por las filas 1, 2 y 3 y registra 3, 3 y 0 con el filtro horizontal. Cambia a Promedio y comprueba 1/3 en la primera posición.",
+        "En el bloque 10 distingue la CNN que aprende a clasificar dígitos del filtro fijado para ilustrar una operación. Registra esa distinción y la lectura de una celda; entrenar con dígitos no demuestra reconocer defectos agrícolas."
       ],
       "check": "El mapa manual 3 × 3 coincide celda a celda. El cuaderno clasifica dígitos; ni el filtro fijo ni su mapa localizan objetos por sí solos.",
       "transfer": "Para inspeccionar cambios de intensidad, un mapa de filtro puede ser una transformación intermedia; la aceptación del producto necesita una tarea y una evaluación propias.",
       "stretch": "Implementa el recorrido sin relleno y comprueba la dimensión 5 − 3 + 1 = 3 en ambos ejes."
     },
-    "prerequisite": "Ya vimos píxeles y canales. Ahora una CNN transforma ventanas locales en mapas que otras capas pueden combinar.",
+    "prerequisite": "Ya distinguimos las salidas de visión. Ahora abrimos una de sus operaciones para entender de dónde sale un mapa numérico.",
     "understanding": {
       "question": "¿Un filtro que responde a un borde ya reconoce un fruto?",
       "answer": "No. Produce un mapa de respuestas locales. Una CNN combina muchos filtros, activaciones y capas hasta obtener una salida de la tarea; sus pesos se aprenden con datos. El filtro fijo permite entender una sola operación."
-    }
+    },
+    "outcome": {
+      "title": "Una celda explicada",
+      "result": "Primera ventana: suma 3; tercera fila de ventana: suma 0",
+      "reading": "El mapa contiene respuestas del filtro, no un conteo de frutos"
+    },
+    "essentialCount": 6
   },
   "dl-transferencia": {
     "objective": "Probar si un modelo existente cubre una necesidad antes de adaptarlo.",
-    "concept": "El aprendizaje por transferencia reutiliza representaciones aprendidas con otros datos para una nueva tarea. Podemos conservar un extractor y aprender una salida nueva, o actualizar parte de sus parámetros. Antes debemos comprobar qué categorías y entradas admite el modelo y si sirve en las condiciones de uso. El cuaderno carga pesos y ejecuta inferencia; no realiza ajuste fino.",
+    "concept": "Un modelo preentrenado contiene parámetros aprendidos antes con otros ejemplos. Reutilizarlos puede evitar empezar desde cero, pero primero debemos comprobar qué entradas y categorías admite. Inferir es calcular una salida con esos pesos. Ajustar fino es cambiar parte de ellos usando ejemplos de una tarea nueva. Traducir una etiqueta o filtrar una clase existente no realiza ese aprendizaje. Aquí construiremos una ficha de compatibilidad antes de atribuirle al detector una capacidad que no tiene.",
     "relevance": "Permite decidir si un modelo existente responde al problema o necesita adaptación.",
     "case": {
       "title": "Reutilizar un detector para una tarea nueva",
@@ -1847,12 +2017,24 @@ export const LESSON_GUIDES={
     },
     "vocabulary": [
       {
-        "term": "Preentrenado",
-        "meaning": "Con parámetros ajustados previamente con otros datos."
+        "term": "Peso preentrenado",
+        "meaning": "Parámetro aprendido antes con otros ejemplos."
+      },
+      {
+        "term": "Inferencia",
+        "meaning": "Cálculo de una salida usando parámetros ya disponibles."
+      },
+      {
+        "term": "Categoría disponible",
+        "meaning": "Clase que el modelo reconoce según su entrenamiento; un nombre nuevo no crea otra."
       },
       {
         "term": "Ajuste fino",
-        "meaning": "Actualizar parámetros previos con nuevos ejemplos."
+        "meaning": "Actualización de parámetros preentrenados con ejemplos de la nueva tarea."
+      },
+      {
+        "term": "Preentrenado",
+        "meaning": "Con parámetros ajustados previamente con otros datos."
       },
       {
         "term": "Extractor de características",
@@ -1885,27 +2067,33 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Ficha de compatibilidad del modelo",
       "steps": [
-        "Crea una ficha con categoría requerida, categoría original en modelo.names y decisión. Contrasta dos necesidades: localizar personas y detectar café defectuoso.",
-        "Ejecuta la inferencia y el filtro de personas de la sección 9. Registra una detección si aparece; si no, deja constancia del resultado con ese umbral y esa foto.",
-        "Completa la ficha: para personas se reutiliza una clase existente; para café defectuoso hacen falta datos etiquetados y adaptación fuera de este cuaderno. No cambies la traducción para simular una clase aprendida."
+        "Escribe la necesidad de la cooperativa: identificar café defectuoso. Revisa el catálogo de categorías del detector antes de ejecutar una foto propia.",
+        "En modelo.names busca person y busca café defectuoso. Registra una ficha con necesidad, categoría encontrada y conclusión de compatibilidad.",
+        "Relaciona cargar pesos, inferir y traducir etiquetas con la tabla de acciones. Indica qué requeriría un ajuste real y una prueba independiente; el cuaderno de inferencia no realiza esos pasos."
       ],
       "check": "La ficha distingue clase conocida, nombre traducido y clase ausente. Los resultados corresponden a inferencia con pesos previos, no a un entrenamiento realizado aquí.",
       "transfer": "Antes de reutilizar un detector en inventario, contrasta sus categorías con cada objeto requerido y revisa imágenes del entorno de uso.",
       "stretch": "Añade una comprobación que avise cuando una categoría solicitada no esté entre los valores de modelo.names."
     },
-    "prerequisite": "Entrenar todos los filtros desde cero puede exigir muchos ejemplos. La transferencia reutiliza representaciones aprendidas y comprueba si sirven para la nueva tarea.",
+    "prerequisite": "Hemos visto qué calcula una CNN. Ahora preguntamos qué parte de una red ya aprendida puede servir para la tarea que tenemos.",
     "understanding": {
       "question": "¿Cargar un detector y traducir sus categorías constituye ajuste fino?",
       "answer": "No. Cargarlo e inferir conserva los parámetros; traducir cambia el texto visible. El ajuste fino requiere entrenamiento adicional con datos y una pérdida. Evaluar el dominio local sigue siendo necesario."
-    }
+    },
+    "outcome": {
+      "title": "Ficha de compatibilidad",
+      "result": "Necesidad: café defectuoso; categoría del modelo: no disponible",
+      "reading": "Traducir una etiqueta no añade una categoría ni cambia pesos"
+    },
+    "essentialCount": 4
   },
   "dl-secuencias": {
     "objective": "Construir un resumen de una secuencia que tenga en cuenta el orden.",
-    "concept": "Una secuencia conserva el orden de sus elementos: lecturas de un sensor, palabras o pasos de un proceso. La recurrencia incorpora la entrada actual a un estado que viene del paso anterior. Esa memoria permite que cambiar el orden cambie la salida, incluso con los mismos números. La regla fija de esta página explica el mecanismo; RNN y LSTM aprenden sus transformaciones durante el entrenamiento.",
+    "concept": "Una secuencia es una lista donde el lugar de cada valor importa. Por ejemplo, recibir 10, 20 y 30 cajas en horas sucesivas no describe el mismo recorrido que recibir 30, 20 y 10. Una regla recurrente guarda un estado y lo combina con la entrada siguiente. Seguiremos una regla fija de mitades para ver esa memoria. RNN y LSTM aprenden transformaciones más completas; no hace falta derivarlas para entender qué información conservan y cómo se comprueba una predicción.",
     "relevance": "Un resumen de sensores o ventas puede perder información si ignora qué ocurrió primero.",
     "case": {
       "title": "Los mismos valores, dos recorridos",
-      "context": "Usamos 10, 20 y 30, sin unidades físicas. Empezamos con estado 0. En cada paso calculamos mitad del estado anterior más mitad de la nueva entrada. Ambas secuencias tienen promedio 20.",
+      "context": "Una operación registra cajas recibidas en tres horas: 10, 20 y 30. Comparamos ese orden con 30, 20 y 10. Para ilustrar memoria empezamos con estado 0 y calculamos estado nuevo = 0,5 × estado anterior + 0,5 × entrada. Los coeficientes son elegidos, no entrenados. El estado es un resumen ponderado de las cantidades, no el pronóstico de la siguiente hora.",
       "columns": [
         "Paso",
         "Entrada ascendente",
@@ -1946,6 +2134,22 @@ export const LESSON_GUIDES={
     },
     "vocabulary": [
       {
+        "term": "Secuencia",
+        "meaning": "Lista cuyos valores se interpretan según su orden."
+      },
+      {
+        "term": "Estado recurrente",
+        "meaning": "Resumen numérico que pasa de un paso al siguiente."
+      },
+      {
+        "term": "Ventana temporal",
+        "meaning": "Conjunto de lecturas anteriores usado como entrada para un instante."
+      },
+      {
+        "term": "LSTM",
+        "meaning": "Tipo de red recurrente que aprende a conservar y actualizar información a lo largo de una secuencia."
+      },
+      {
         "term": "Recurrente",
         "meaning": "Usa el resultado del paso anterior."
       },
@@ -1956,10 +2160,6 @@ export const LESSON_GUIDES={
       {
         "term": "RNN",
         "meaning": "Red neuronal recurrente: comparte una transformación aprendida que actualiza un estado paso a paso."
-      },
-      {
-        "term": "LSTM",
-        "meaning": "Tipo de red recurrente con un estado de memoria y compuertas aprendidas que regulan conservar, actualizar y usar información."
       },
       {
         "term": "Compuerta",
@@ -1980,27 +2180,33 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Registro de estados y pronóstico",
       "steps": [
-        "Guarda tres filas por orden con entrada actual, estado anterior y estado nuevo. Comprueba los seis pasos en el explorador.",
-        "Ejecuta la LSTM del bloque 11. Registra VENTANA = 12, CORTE = 180 y los MAE de LSTM y «último valor» impresos; no presupongas qué método gana.",
-        "En el gráfico, compara ambas predicciones con la lectura simulada. Anota que cada predicción usa una ventana disponible y anticipa un solo instante, no toda la serie de una vez."
+        "Completa las tres filas del recorrido ascendente: estados 5, 12,5 y 21,25. Conserva las operaciones para que otra persona pueda repetirlas.",
+        "Reinicia e invierte el orden. Comprueba 15, 17,5 y 13,75; compara ambos estados finales con el promedio común de 20 cajas.",
+        "En el bloque 11, identifica la ventana de doce lecturas y el instante que se predice. Registra los MAE de referencia y LSTM sobre los mismos 60 instantes reservados, usando las unidades de la serie simulada del cuaderno."
       ],
       "check": "Los estados finales son 21,25 y 13,75 pese a la misma media. La comparación del cuaderno usa futuro reservado y conserva el orden; su MAE no procede de la regla manual.",
       "transfer": "Para pronosticar una lectura de equipo, define cuándo estará disponible cada entrada y compara con una referencia simple como repetir la última lectura.",
       "stretch": "Inspecciona entradas[test, −1] y verifica que es la última lectura anterior al instante que se pronostica."
     },
-    "prerequisite": "Una imagen conserva relaciones espaciales. Una secuencia conserva un orden temporal o de posiciones: no basta tratar sus elementos como una bolsa sin orden.",
+    "prerequisite": "Una imagen se interpreta espacialmente. Aquí importa otra estructura: qué ocurrió antes y qué ocurrió después.",
     "understanding": {
       "question": "¿El estado recurrente guarda una copia exacta de todo lo anterior?",
       "answer": "No. Es un resumen que depende de la regla y de sus parámetros. En la demostración es una mezcla numérica fija; una RNN aprende su transformación y una LSTM usa mecanismos adicionales para regular la memoria."
-    }
+    },
+    "outcome": {
+      "title": "Rastro de memoria",
+      "result": "10→20→30: estado final 21,25; 30→20→10: 13,75",
+      "reading": "Promedio común: 20; el estado fijo no es una predicción aprendida"
+    },
+    "essentialCount": 5
   },
   "dl-atencion": {
     "objective": "Construir una combinación ponderada de fuentes y rastrear su cálculo.",
-    "concept": "La atención permite combinar información de varias posiciones según una consulta. Empecemos por una mezcla: dar pesos 0,75 y 0,25 a los valores 10 y 20 produce 12,5. En atención por producto escalar, los pesos se calculan comparando Q con cada K y aplicando escalado y softmax; después se combinan los V. En una red esas representaciones se obtienen con transformaciones aprendidas. Aquí sus valores están fijados para seguir el cálculo.",
+    "concept": "Atención combina información con pesos que dependen de una consulta. En el ejemplo, A aporta 10 y B aporta 20. Si ambas pesan 0,5, la mezcla vale 15; si A pesa más, se acerca a 10. Para calcular el reparto comparamos una consulta Q con claves K, transformamos las puntuaciones en pesos que suman 1 y combinamos valores V. Empezaremos por interpretar esa mezcla; después seguiremos la operación numérica. Un peso alto no demuestra causalidad ni una importancia universal de la fuente.",
     "relevance": "Permite explicar una combinación interna sin presentarla como comprensión humana o explicación causal.",
     "case": {
       "title": "Una consulta, dos fuentes",
-      "context": "Dos fuentes numéricas A y B tienen claves K_A = [1,0] y K_B = [0,1], y valores V_A = 10 y V_B = 20. Las claves sirven para compararlas con Q; los valores son los números que mezclaremos. Conservamos K y V y cambiamos solo Q. Todos estos números están fijados para el ejercicio.",
+      "context": "Dos registros ficticios de una operación aportan cantidades de 10 y 20 cajas. Para estudiar cómo se combinan, les damos claves K_A = [1,0] y K_B = [0,1]. La consulta Q y esas claves son vectores elegidos para el cálculo, no características aprendidas de pedidos reales. V_A = 10 y V_B = 20 son los valores que mezclaremos. El resultado es una representación ponderada, no una orden de compra ni un pronóstico validado.",
       "columns": [
         "Consulta Q",
         "Productos con A y B",
@@ -2037,20 +2243,28 @@ export const LESSON_GUIDES={
     },
     "vocabulary": [
       {
+        "term": "Vector",
+        "meaning": "Lista ordenada de números; en Q y K hay dos componentes."
+      },
+      {
+        "term": "Consulta, clave y valor",
+        "meaning": "Q se compara con K para repartir pesos; V aporta la información que se combina."
+      },
+      {
+        "term": "Peso de atención",
+        "meaning": "Fracción de la mezcla asignada a una fuente; aquí todos los pesos son positivos y suman 1."
+      },
+      {
+        "term": "Softmax",
+        "meaning": "Transforma puntuaciones en pesos: exponencial de cada puntuación dividida por la suma de exponenciales."
+      },
+      {
         "term": "Consulta Q",
         "meaning": "Vector que se compara con las claves para calcular el reparto."
       },
       {
         "term": "Clave K y valor V",
         "meaning": "K interviene en la comparación; V aporta la información que se combina."
-      },
-      {
-        "term": "Softmax",
-        "meaning": "Convierte puntuaciones en pesos: divide la exponencial de cada puntuación por la suma de todas las exponenciales."
-      },
-      {
-        "term": "Vector",
-        "meaning": "Lista ordenada de números que representa un elemento. Sus componentes no necesitan tener un significado físico individual."
       },
       {
         "term": "Producto escalar",
@@ -2083,27 +2297,33 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Tabla de consulta, pesos y resultado",
       "steps": [
-        "Crea tres filas con consulta, dos productos Q·K, dos pesos y salida. Usa el explorador y comprueba salida = peso A × 10 + peso B × 20.",
-        "Ejecuta la atención del bloque 12. Comprueba que las tres filas de pesos suman 1 y relaciona cada fila del mapa con la ficha que consulta.",
-        "Selecciona una fila de la matriz atencion y verifica su combinación con V usando los valores sin redondear. Registra sus dos componentes de salida y compáralas con resultado."
+        "Empieza con Q = [0,0]: ambas puntuaciones son iguales, los pesos son 0,5 y 0,5, y la mezcla es 0,5×10 + 0,5×20 = 15.",
+        "Cambia a [1,0] y [0,1]. Registra consulta, pesos y salida; comprueba que los pesos suman 1 y calcula la mezcla con los valores sin redondear.",
+        "En la primera celda del bloque 12 identifica las tres fichas, sus filas de pesos y los valores que se mezclan. Reproduce una fila de la salida, aclarando que allí los valores son vectores y no las dos cantidades del ejemplo web."
       ],
       "check": "La tabla web reproduce las tres salidas. En el cuaderno, atencion @ V coincide con resultado; los pesos numéricos elegidos no demuestran relaciones semánticas aprendidas ni causas.",
       "transfer": "Para inspeccionar un bloque de atención, identifica primero quién consulta, cuáles son las fuentes y qué valores se mezclan.",
       "stretch": "Calcula np.allclose(atencion.sum(axis=1), 1) y verifica la combinación de una fila sin usar los pesos redondeados del gráfico."
     },
-    "prerequisite": "La recurrencia resume el pasado paso a paso. La atención permite combinar directamente representaciones de varias posiciones; empezaremos por entender una mezcla ponderada.",
+    "prerequisite": "Una regla recurrente acumula pasado paso a paso. Ahora veremos otra operación: consultar y combinar varias representaciones directamente.",
     "understanding": {
       "question": "¿Qué papel cumplen Q, K, V y los pesos de atención?",
       "answer": "Q plantea la comparación; K describe cada fuente para compararla; V contiene lo que se combinará. Las comparaciones producen pesos, y estos ponderan V. Un peso alto no demuestra una causa ni que la fuente sea correcta."
-    }
+    },
+    "outcome": {
+      "title": "Una mezcla reconstruida",
+      "result": "Q=[1,0]: pesos ≈ 0,6698 y 0,3302; salida ≈ 13,302",
+      "reading": "Q=[0,0]: pesos iguales y salida 15; los pesos del ejemplo no fueron entrenados"
+    },
+    "essentialCount": 4
   },
   "dl-transformers": {
     "objective": "Construir una prueba de clasificación de secuencias con respuestas verificables.",
-    "concept": "Un Transformer es una arquitectura que usa atención junto con otras transformaciones para procesar secuencias. Representa cada unidad con números, incorpora posición y construye representaciones que dependen del contexto. Después una salida responde a la tarea. Nuestro laboratorio clasifica secuencias numéricas: la regla crea las etiquetas y el entrenamiento busca predecirlas. La arquitectura por sí sola no demuestra que esa regla se haya aprendido.",
+    "concept": "Un Transformer es una arquitectura para transformar secuencias usando atención y otras operaciones. Cada unidad se representa con números y se incorpora su posición, de modo que «primero» y «último» puedan distinguirse. Aquí no construiremos un asistente: comprobaremos una tarea pequeña de cuatro cantidades. La etiqueta la fija una regla conocida; la red intenta aprenderla. Separar esa etiqueta de las puntuaciones de la red permite verificar el resultado sin suponer que una arquitectura compleja siempre acierta.",
     "relevance": "Una arquitectura solo puede evaluarse después de definir qué debería responder.",
     "case": {
       "title": "¿El primero es mayor que el último?",
-      "context": "Para cuatro números inventados, la etiqueta es 1 si el primero supera al último; en caso contrario, 0. Calculamos las etiquetas a mano.",
+      "context": "Cada fila contiene cajas recibidas en cuatro horas ficticias. La etiqueta 1 significa que la última cantidad es menor que la primera; en caso contrario, 0. Es una comparación de extremos, no una afirmación de que todas las horas hayan bajado ni un pronóstico de demanda. Las cantidades entre 1 y 7 se eligieron para poder calcular las etiquetas a mano.",
       "columns": [
         "Secuencia",
         "Primero",
@@ -2141,7 +2361,7 @@ export const LESSON_GUIDES={
         "Cambiar el orden de los mismos números puede cambiar la etiqueta.",
         "La red debe aprender esta regla. La etiqueta calculada no es su predicción."
       ],
-      "conclusion": "La tarea requiere posiciones, no solamente reconocer los números presentes.",
+      "conclusion": "La posición es necesaria para esta regla: [1,2,3,4] requiere 0 y [4,3,2,1] requiere 1. La tabla da respuestas esperadas; para saber qué predice el Transformer hay que ejecutar la red y leer su evaluación.",
       "stages": [
         {
           "title": "Entrada y posición",
@@ -2164,12 +2384,24 @@ export const LESSON_GUIDES={
     },
     "vocabulary": [
       {
-        "term": "Token",
-        "meaning": "Unidad de entrada; aquí, un número."
+        "term": "Unidad de entrada o token",
+        "meaning": "Elemento de la secuencia; aquí, una cantidad numérica."
       },
       {
         "term": "Posición",
-        "meaning": "Lugar de esa unidad en la secuencia."
+        "meaning": "Lugar de la unidad que permite distinguir primero de último."
+      },
+      {
+        "term": "Atención",
+        "meaning": "Operación que combina representaciones según una consulta."
+      },
+      {
+        "term": "Etiqueta y predicción",
+        "meaning": "La etiqueta es la respuesta conocida por la regla; la predicción es la salida calculada por la red."
+      },
+      {
+        "term": "Token",
+        "meaning": "Unidad de entrada; aquí, un número."
       },
       {
         "term": "Embedding o representación vectorial",
@@ -2206,23 +2438,29 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Banco de pruebas para una secuencia",
       "steps": [
-        "Calcula a mano las cuatro etiquetas del ejemplo. Anota que invertir [1,2,3,4] cambia su etiqueta de 0 a 1 aunque conserve los mismos números.",
-        "Ejecuta el Transformer del bloque 12. Registra los conteos de entrenamiento/prueba y la exactitud impresa; comprueba que no hay secuencias idénticas compartidas.",
-        "Para los dos ejemplos que imprime la celda, guarda secuencia, etiqueta esperada y puntuación de clase 1. Revisa si cada salida favorece la clase esperada y distingue estos dos casos de la evaluación completa."
+        "Calcula las cuatro etiquetas antes de ejecutar código: 0, 1, 0 y 1. Explica el significado de 1 y por qué no basta conocer el promedio o la colección de valores.",
+        "Ejecuta el bloque 12 y recorre entrada, representación, posición, atención y salida. Registra los tamaños de entrenamiento y prueba y la exactitud que realmente imprime.",
+        "Para las dos secuencias impresas, registra etiqueta esperada y puntuaciones de la red. Explica si coinciden y separa esos dos ejemplos de la prueba completa de 129 secuencias."
       ],
       "check": "Se conocen las etiquetas por la regla, pero no se inventan predicciones ni exactitud. Los ejemplos impresos son dos; la prueba completa contiene 129 secuencias con la semilla del cuaderno.",
       "transfer": "En una tarea con registros ordenados, define primero la respuesta comprobable y una reserva de secuencias distintas antes de elegir arquitectura.",
       "stretch": "En una copia, cambia ejemplos por nuevas secuencias de cuatro enteros de 1 a 7, calcula sus etiquetas y contrasta las clases con argmax. No las presentes como una prueba independiente sin revisar su presencia en entrenamiento."
     },
-    "prerequisite": "Ya entendimos cómo atención mezcla valores. Ahora la ubicamos en una red completa que también necesita representar las unidades, su posición y la salida de la tarea.",
+    "prerequisite": "Ya sabemos qué combina la atención. La ubicaremos dentro de una arquitectura que además necesita entrada, posición y una salida para la tarea.",
     "understanding": {
       "question": "¿Un Transformer es lo mismo que atención o que un chatbot?",
       "answer": "No. Atención es una operación dentro de la arquitectura. Un Transformer añade representación de entrada, posición y otras transformaciones. Puede resolver distintas tareas; el ejercicio clasifica secuencias numéricas y no genera conversación."
-    }
+    },
+    "outcome": {
+      "title": "Prueba de orden",
+      "result": "Etiquetas esperadas: 0, 1, 0, 1",
+      "reading": "La clase describe extremos de cuatro cantidades; la exactitud se conoce al ejecutar"
+    },
+    "essentialCount": 7
   },
   "dl-yolo": {
     "objective": "Construir un registro de detecciones que pueda revisarse antes de contar objetos.",
-    "concept": "YOLO es una familia de modelos para detectar objetos. En este cuaderno convierte una foto en propuestas con categoría, puntuación y caja. Filtrarlas produce un registro que podemos inspeccionar. Todavía hay que comprobar omisiones, clases equivocadas y duplicados antes de usar el conteo: una fila es una propuesta conservada, no una garantía de que exista un objeto distinto.",
+    "concept": "Un detector recibe una foto y propone objetos. Cada propuesta incluye una categoría, una puntuación y una ubicación. YOLO es una familia de modelos para esa tarea. Convertir sus salidas en una tabla permite revisar qué produjo, pero no convierte cada fila en un objeto confirmado. Primero seguiremos una propuesta y el filtro que la conserva o descarta; después haremos inferencia con pesos preentrenados y volveremos de una fila a su caja.",
     "relevance": "Ayuda a revisar un registro visual antes de tratarlo como inventario.",
     "case": {
       "title": "Una propuesta, distintos filtros",
@@ -2260,7 +2498,19 @@ export const LESSON_GUIDES={
     "vocabulary": [
       {
         "term": "Detección",
-        "meaning": "Propuesta de categoría, puntuación y ubicación."
+        "meaning": "Propuesta que incluye categoría, puntuación y ubicación."
+      },
+      {
+        "term": "Caja",
+        "meaning": "Rectángulo que localiza una propuesta mediante coordenadas."
+      },
+      {
+        "term": "Puntuación",
+        "meaning": "Salida numérica del detector que se utiliza para filtrar."
+      },
+      {
+        "term": "Umbral",
+        "meaning": "Límite elegido para conservar o descartar propuestas."
       },
       {
         "term": "Coordenadas de caja",
@@ -2289,23 +2539,29 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Registro visual: de la foto a las filas",
       "steps": [
-        "Ejecuta YOLO hasta la sección 7. Elige una detección y registra su categoría, puntuación y coordenadas; comprueba que corresponde a una caja de la foto.",
-        "Ejecuta la comparación de la sección 8 con 0,15; 0,50 y 0,85. Guarda los conteos que devuelve tu ejecución y revisa qué propuestas desaparecen; no son métricas de exactitud.",
-        "Ejecuta la sección 11 para crear detecciones.csv, conteo.csv y configuracion.json. Comprueba que el total por categorías coincide con las filas de la tabla guardada, que usa UMBRAL = 0,25."
+        "Completa el registro de la propuesta fija 0,80 para umbrales 0,50, 0,80 y 0,90: se conservan 1, 1 y 0 filas. La regla del esquema incluye igualdad.",
+        "En YOLO hasta la sección 7, elige una detección y registra categoría, puntuación y coordenadas, vinculándolas a una caja de la foto. Explica qué categorías reconoce ese modelo, antes de atribuirle una categoría agrícola nueva.",
+        "Compara los tres umbrales de la sección 8 y registra los conteos ejecutados. En la sección 11 guarda los archivos de la inferencia inicial con umbral 0,25: no los presentes como los archivos de cada panel comparado ni como inventario confirmado."
       ],
       "check": "Cada conteo puede rastrearse a filas y cajas. Los archivos finales pertenecen a la inferencia inicial de 0,25, no a cada panel de comparación; ningún conteo se presenta como inventario confirmado.",
       "transfer": "Para registrar objetos visibles en una bodega, conserva imagen y configuración, y revisa duplicados y omisiones antes de actualizar existencias.",
       "stretch": "Genera un identificador de imagen para cada fila al combinar varias fotos; no confundas detecciones repetidas entre fotos con objetos únicos."
     },
-    "prerequisite": "Volvemos a detección: una arquitectura debe producir ubicaciones y categorías. YOLO es una familia concreta para esa tarea, con parámetros entrenados previamente en el cuaderno.",
+    "prerequisite": "Ya sabemos qué salida corresponde a detección y qué puede reutilizarse de un modelo. Ahora construiremos un registro que se pueda inspeccionar.",
     "understanding": {
       "question": "¿Qué información necesita una fila de detección para poder interpretarla?",
       "answer": "La imagen de origen, categoría, puntuación, coordenadas y convención de la caja. Después hay que revisar omisiones y duplicados; la cantidad de filas no es automáticamente la cantidad real de objetos."
-    }
+    },
+    "outcome": {
+      "title": "Registro de una propuesta",
+      "result": "Puntuación fija 0,80; umbrales 0,50/0,80/0,90 → filas 1/1/0 en el esquema",
+      "reading": "Cambiar el filtro no mueve el objeto ni comprueba un acierto"
+    },
+    "essentialCount": 4
   },
   "dl-evaluacion": {
     "objective": "Construir una comprobación de localización que separe filtro y coincidencia.",
-    "concept": "Evaluar un detector significa comprobar propuestas frente a objetos anotados. Una coincidencia requiere categoría correcta y suficiente acuerdo espacial, medido aquí con IoU. Primero filtramos por puntuación y después emparejamos propuestas con referencias: son decisiones diferentes. Con muchos objetos necesitamos correspondencias uno a uno para evitar contar varias veces el mismo acierto.",
+    "concept": "Para evaluar un detector no basta contar sus propuestas. Necesitamos objetos de referencia anotados con categoría y ubicación. Una coincidencia exige clase correcta y suficiente solapamiento de cajas. IoU mide ese solapamiento como área compartida dividida por área de unión. Separaremos dos decisiones: qué propuesta conserva el filtro de puntuación y cuál coincide después con una referencia. Una propuesta mal situada puede contar como falsa y dejar al mismo tiempo un objeto sin detectar. Al repetir la comparación para varias puntuaciones se obtiene una relación precisión–recall. AP resume esa relación con un protocolo declarado; mAP promedia AP según clases o umbrales del protocolo. Un conteo aislado no es mAP.",
     "relevance": "Una puntuación alta no garantiza una caja bien ubicada ni evita objetos omitidos.",
     "case": {
       "title": "Conservar una caja no basta",
@@ -2346,12 +2602,20 @@ export const LESSON_GUIDES={
     },
     "vocabulary": [
       {
-        "term": "IoU",
-        "meaning": "Intersección / unión de las áreas de dos cajas. Vale 0 sin solapamiento y 1 si coinciden por completo."
+        "term": "Referencia anotada",
+        "meaning": "Categoría y caja usadas para comprobar una propuesta."
       },
       {
-        "term": "Referencia anotada",
-        "meaning": "Categoría y ubicación que se usan como verdad de comparación, sujetas a la calidad de la anotación."
+        "term": "IoU",
+        "meaning": "Área compartida por dos cajas dividida por su área de unión."
+      },
+      {
+        "term": "Coincidencia",
+        "meaning": "Propuesta conservada que cumple clase y solapamiento exigidos con una referencia."
+      },
+      {
+        "term": "TP, FP y FN",
+        "meaning": "Objeto correctamente detectado, propuesta sin coincidencia y objeto de referencia omitido."
       },
       {
         "term": "Emparejamiento uno a uno",
@@ -2380,23 +2644,29 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Prueba de aceptación de cajas",
       "steps": [
-        "Crea tres filas con desplazamiento, umbral de puntuación, IoU mínima, IoU obtenida, TP, FP y FN. Reproduce las tres pruebas del explorador.",
-        "Comprueba la primera IoU: intersección 30 × 40 = 1200; unión 1600 + 1600 − 1200 = 2000; cociente 0,60. Con desplazamiento 30, verifica 400/2800.",
-        "En una foto del cuaderno YOLO, identifica qué falta para repetir la prueba: categoría y caja de referencia por objeto. Especifica también cómo evitarías emparejar dos propuestas con el mismo objeto."
+        "Calcula las áreas de la primera prueba: referencia y candidata de 40×40, intersección 30×40 = 1200, unión 1600+1600−1200 = 2000 e IoU 0,60.",
+        "Registra las tres filas del explorador con umbral de puntuación, desplazamiento, IoU y TP/FP/FN. Comprueba 1/0/0, 0/1/1 y 0/0/1, distinguiendo conservar de coincidir.",
+        "En una imagen del cuaderno, especifica qué referencia anotada faltaría para evaluar sus propuestas. Explica cómo impedirías que dos cajas recibieran crédito por el mismo objeto; ese cuaderno no calcula mAP."
       ],
       "check": "Las tres filas reproducen los conteos esperados. Se separan umbral de puntuación e IoU; no se atribuyen métricas mAP al cuaderno de inferencia.",
       "transfer": "Antes de aceptar una automatización de conteo, comprueba objetos omitidos, duplicados y coincidencias espaciales con referencias anotadas.",
       "stretch": "Comprueba los extremos en el explorador: desplazamiento 0 produce IoU 1; desplazamiento 40 produce IoU 0. Mantén la propuesta conservada para interpretar FP y FN."
     },
-    "prerequisite": "Conservar una propuesta por puntuación solo decide qué sale del detector. Evaluarla exige compararla con objetos anotados y verificar clase y ubicación.",
+    "prerequisite": "El registro del detector muestra lo que propuso. La evaluación añade una referencia para comprobar qué corresponde a un objeto y qué falta.",
     "understanding": {
       "question": "¿Por qué dos cajas para un solo objeto no deben contarse como dos aciertos?",
       "answer": "El emparejamiento de evaluación asigna como máximo una detección al objeto de referencia. Una propuesta adicional sin otro objeto coincidente es un falso positivo; tampoco se borra una omisión por descartar una caja."
-    }
+    },
+    "outcome": {
+      "title": "Tabla de aceptación",
+      "result": "Desplazar 10 px: IoU 0,60, TP/FP/FN=1/0/0; desplazar 30 px: ≈0,143, 0/1/1",
+      "reading": "Descartar la propuesta con umbral 0,90 deja un objeto omitido: 0/0/1"
+    },
+    "essentialCount": 7
   },
   "dl-integracion": {
     "objective": "Construir una política de revisión con costes y una salida verificable.",
-    "concept": "La última decisión consiste en convertir las salidas del modelo en acciones útiles. Aquí una política decide qué granos revisar y cuáles aceptar sin revisión. Comparamos políticas con los mismos casos y costes declarados, incluida revisar todos. La preferida puede cambiar al variar esos supuestos; elegirla con validación y evaluarla después conserva una comprobación independiente.",
+    "concept": "El modelo registra puntuaciones; una política decide qué hacer con ellas. En una inspección podemos revisar unos granos y aceptar otros sin revisión. Para comparar políticas debemos declarar qué cuesta revisar y qué consecuencia se asigna a dejar pasar un defecto. Usaremos los mismos diez casos y añadiremos revisar todos como referencia. El mínimo depende de esos supuestos. Cerramos DL con una regla explicable y comprobable, distinguiendo una comparación didáctica de una política validada para una operación real.",
     "relevance": "La decisión depende de errores y consecuencias, además de las puntuaciones.",
     "case": {
       "title": "¿Qué granos conviene revisar?",
@@ -2449,8 +2719,20 @@ export const LESSON_GUIDES={
     },
     "vocabulary": [
       {
+        "term": "Política de revisión",
+        "meaning": "Regla que decide qué casos revisar y cuáles aceptar sin revisión."
+      },
+      {
         "term": "Coste supuesto",
-        "meaning": "Valor elegido para comparar consecuencias en el ejemplo; no es un precio observado ni un parámetro aprendido."
+        "meaning": "Valor fijado para comparar consecuencias, sin presentarlo como un precio observado."
+      },
+      {
+        "term": "Defecto aceptado",
+        "meaning": "Caso defectuoso que la regla deja pasar sin revisión."
+      },
+      {
+        "term": "Referencia de decisión",
+        "meaning": "Alternativa sencilla, como revisar todos, que se compara con las demás políticas."
       },
       {
         "term": "Revisión humana",
@@ -2479,18 +2761,24 @@ export const LESSON_GUIDES={
     "build": {
       "title": "Tabla de decisión para revisión asistida",
       "steps": [
-        "Guarda las cuatro políticas de la tabla con coste 8 y añade la alternativa «revisar todos»: diez revisiones, cero defectos aceptados, coste 10.",
-        "Repite con coste 1 sin modificar casos ni puntuaciones. Marca el mínimo y todos los empates: 0,30 es mínimo en el primer escenario; 0,70 y 0,90 empatan en el segundo.",
-        "Escribe una regla para cada escenario: qué casos se revisan, cuáles se aceptan y qué coste supone. Declara que la revisión perfecta es una simplificación que habría que medir antes del uso."
+        "Con coste de revisión 1 y de defecto aceptado 8, completa coste = revisiones×1 + defectos aceptados×8. Comprueba, por ejemplo, 4 revisiones y 1 defecto: coste 12.",
+        "Registra la tabla de cuatro umbrales y revisar todos. Con estos supuestos el mínimo es 0,30, coste 6; revisar todos cuesta 10. Escribe qué se revisa y qué se acepta.",
+        "Cambia únicamente el coste del defecto a 1 y repite. Registra el empate de 0,70 y 0,90 con coste 4, y declara la suposición de revisión perfecta y la capacidad que faltaría comprobar."
       ],
       "check": "Cada coste se reproduce como revisiones × 1 + defectos aceptados × coste elegido. El mínimo cambia por el supuesto de coste, sin que el modelo haya aprendido de nuevo.",
       "transfer": "Para priorizar inspecciones, añade costes observados, capacidad de revisión y errores humanos; vuelve a comparar políticas con datos separados.",
       "stretch": "Genera una tabla para varios costes de defecto e incluye siempre revisar todos. Si agregas un límite de capacidad, declara qué políticas dejan de ser viables."
     },
-    "prerequisite": "Una detección evaluada todavía debe convertirse en una acción útil. Ahora conectamos las salidas con revisión, capacidad y costes declarados.",
+    "prerequisite": "Ya contrastamos propuestas con referencias. Falta explicar cómo convertir una salida en una decisión con consecuencias explícitas.",
     "understanding": {
       "question": "¿La arquitectura más compleja produce necesariamente la mejor decisión operativa?",
       "answer": "No. La elección depende de datos representativos, errores, coste, capacidad y tiempo de respuesta. La política elegida con validación debe comprobarse en una prueba separada y supervisarse cuando cambien las condiciones."
-    }
+    },
+    "outcome": {
+      "title": "Regla de revisión justificada",
+      "result": "Con costes 1 y 8: umbral 0,30, coste 6; revisar todos, coste 10",
+      "reading": "Con coste de defecto 1: empate entre 0,70 y 0,90, coste 4; casos y puntuaciones fijos"
+    },
+    "essentialCount": 4
   }
 };
