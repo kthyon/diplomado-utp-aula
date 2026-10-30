@@ -1148,8 +1148,8 @@ export const LESSON_GUIDES={
     "lab": {
       "title": "Pronosticar desde una fecha de corte",
       "objective": "Comparar tres pronósticos hechos con el mismo pasado.",
-      "instruction": "Selecciona Último valor, Repetir ciclo de 12 semanas y Tendencia. Anota el MAE de cada estrategia sobre las 24 semanas reservadas.",
-      "watch": "El corte está después de la semana 60. Los pronósticos usan solo el pasado; las ventas negras del tramo futuro permiten comprobarlos.",
+      "instruction": "Ahora usa otra serie: 84 semanas simuladas, distintas de las seis del ejemplo. Las primeras 60 son el pasado disponible; las últimas 24 permiten comprobar. Selecciona las tres estrategias y anota sus MAE sobre esas mismas 24 semanas.",
+      "watch": "Último valor repite la venta de la semana 60. Ciclo de 12 semanas repite las últimas doce ventas conocidas. Tendencia ajusta una recta con las 60 semanas pasadas y la prolonga. Después del corte, compara cada pronóstico con las ventas observadas de la línea negra.",
       "expected": "MAE aproximado: último valor 14,90; ciclo de 12 semanas 11,35; tendencia 7,65 unidades. Son 84 semanas simuladas fijas del explorador.",
       "notebookGuide": "En la sección 5 de Laboratorio ML explicado, conserva corte = 60 y periodo = 12. Su serie tiene otra variación simulada; lee sus MAE de la tabla, sin esperar las cifras del explorador."
     },
@@ -1283,7 +1283,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "Exploración y aprovechamiento",
-        "meaning": "ε (epsilon): Probabilidad de explorar. Probabilidad de elegir una acción al azar en una política ε-greedy. Aquí baja linealmente de 1 a 0,05 durante 800 episodios; después permanece en 0,05. Explorar puede escoger también la mejor acción por casualidad: epsilon no es probabilidad de equivocarse. Aquí no es el radio eps de DBSCAN."
+        "meaning": "Explorar es probar una acción al azar. Aprovechar es elegir una de las acciones con mayor valor Q estimado para el estado actual. ε indica con qué probabilidad se explora; una acción al azar también puede coincidir con la mejor estimada. En el cuaderno, los empates entre mejores acciones se resuelven al azar."
       }
     ],
     "lab": {
@@ -1316,7 +1316,7 @@ export const LESSON_GUIDES={
     "outcome": {
       "title": "Registro de interacción",
       "result": "Ruta manual: derecha, derecha, derecha, derecha, abajo",
-      "reading": "Cinco pasos; meta alcanzada; retorno 6 puntos, sin entrenamiento manual"
+      "reading": "Cinco pasos; meta alcanzada; retorno 6 puntos. Es un recorrido manual: todavía no se aprende una política."
     },
     "essentialCount": 12
   },
@@ -1406,7 +1406,7 @@ export const LESSON_GUIDES={
     "lab": {
       "title": "Unir datos, predicción y evidencia",
       "objective": "Construir una salida reproducible para apoyar una decisión operativa.",
-      "instruction": "En la tabla del ejemplo resuelto, calcula el error absoluto de cada predicción y promedia las tres filas para cada regla.",
+      "instruction": "En «Mira un ejemplo», abre «Ver los datos completos y la cuenta paso a paso». Usa la tabla de las tres fincas A, B y C: calcula la diferencia sin signo entre observado y predicción, y promedia los tres errores para cada regla.",
       "watch": "Referencia y candidata se comparan con los mismos tres observados. El error mide la diferencia de rendimiento, no un beneficio económico demostrado.",
       "expected": "Referencia: 2/3 ≈ 0,67 t/ha; candidata: 0,5/3 ≈ 0,17 t/ha. La candidata mejora en esos tres casos inventados; falta comprobar otros periodos y condiciones.",
       "notebookGuide": "En tu copia de Laboratorio ML explicado, ejecuta 1.1–1.6 en orden. Usa resultados para comparar los dos MAE y comparacion para inspeccionar predicciones y errores de fincas reservadas."
@@ -1660,7 +1660,7 @@ export const LESSON_GUIDES={
     "prerequisite": "La neurona ya produjo una suma. Falta comprender la regla que transforma esa suma antes de continuar el recorrido.",
     "understanding": {
       "question": "¿Por qué apilar capas sin activaciones no lineales puede aportar menos de lo esperado?",
-      "answer": "Una sucesión de transformaciones afines sigue siendo una transformación afín. Las activaciones no lineales permiten representar otros patrones. Eso aumenta capacidad, pero no garantiza buen desempeño sin datos y entrenamiento adecuados."
+      "answer": "Si cada capa solo multiplica y suma, podemos juntar todas esas cuentas en una sola regla del mismo tipo. Las activaciones no lineales permiten representar otros patrones. Los datos, el entrenamiento y la evaluación determinan si esa capacidad resulta útil."
     },
     "outcome": {
       "title": "Tabla de transformaciones",
@@ -2219,7 +2219,7 @@ export const LESSON_GUIDES={
       },
       {
         "term": "LSTM",
-        "meaning": "LSTM: Long Short-Term Memory (Memoria de largo y corto plazo). Tipo de red recurrente con un estado de celda y operaciones llamadas compuertas. Estas regulan qué información se conserva, se incorpora y se transmite al procesar la secuencia. En esta práctica usa doce lecturas reales previas para pronosticar un paso; no anticipa sesenta pasos sin recibir nuevas observaciones."
+        "meaning": "LSTM: Long Short-Term Memory (Memoria de largo y corto plazo). Tipo de red recurrente con un estado de celda y operaciones llamadas compuertas. Estas regulan qué información se conserva, se incorpora y se transmite al procesar la secuencia. En esta práctica usa doce lecturas observadas de la serie simulada para pronosticar un paso; no anticipa sesenta pasos sin recibir nuevas observaciones."
       },
       {
         "term": "Recurrente",
@@ -2518,7 +2518,7 @@ export const LESSON_GUIDES={
         "Ejecuta el bloque 12 y recorre entrada, representación, posición, atención y salida. Registra los tamaños de entrenamiento y prueba y la exactitud que realmente imprime.",
         "Para las cuatro secuencias impresas, registra respuesta esperada y calculada. Explica si coinciden y separa estos cuatro casos ilustrativos de la prueba completa de 129 secuencias."
       ],
-      "check": "Se conocen las etiquetas por la regla, pero no se inventan predicciones ni exactitud. Los ejemplos impresos son dos; la prueba completa contiene 129 secuencias con la semilla del cuaderno.",
+      "check": "Las cuatro respuestas esperadas son 0, 1, 0 y 1. Compáralas con las cuatro respuestas calculadas por la red: conocer la regla no garantiza que haya aprendido a aplicarla. La prueba reservada contiene 129 secuencias con la semilla del cuaderno; su exactitud se conoce al ejecutar.",
       "transfer": "En una tarea con registros ordenados, define primero la respuesta comprobable y una reserva de secuencias distintas antes de elegir arquitectura.",
       "stretch": "En una copia, cambia ejemplos por nuevas secuencias de cuatro enteros de 1 a 7, calcula sus etiquetas y contrasta las clases con argmax. No las presentes como una prueba independiente sin revisar su presencia en entrenamiento."
     },
@@ -2615,8 +2615,8 @@ export const LESSON_GUIDES={
     "lab": {
       "title": "Filtrar propuestas sin moverlas",
       "objective": "Construir un registro que conecte foto, caja, puntuación y conteo.",
-      "instruction": "Fija «Desplazamiento horizontal de la caja» en 10. Cambia «Umbral de puntuación» a 0,50; 0,80 y 0,90; registra cuántas filas se conservan.",
-      "watch": "La puntuación permanece en 0,80 y la caja no se mueve. Cambia solo la regla para conservarla.",
+      "instruction": "Cambia «Umbral de puntuación» a 0,50, 0,80 y 0,90. Registra cuántas filas se conservan y observa cuándo desaparece la caja propuesta. La puntuación permanece en 0,80.",
+      "watch": "La misma propuesta tiene categoría Fruto, puntuación 0,80 y una caja fija. Cambia el corte para conservarla o descartarla; el objeto dibujado permanece en la imagen.",
       "expected": "Se conserva una fila a 0,50 y 0,80, y ninguna a 0,90. La igualdad cuenta como conservar; el objeto conocido sigue presente aunque descartes la propuesta.",
       "notebookGuide": "En tu copia de YOLO, ejecuta en orden hasta la sección 8. Obtendrás foto marcada, tabla por detección, conteos y comparación de umbrales. La sección 11 permite guardar CSV y configuración."
     },

@@ -1,5 +1,5 @@
-import {reviewedGlossary} from './definitions.js';
-import {LESSON_GUIDES} from './learning-guides.js?v=definiciones-20261027';
+import {reviewedGlossary} from './definitions.js?v=claridad-20261030';
+import {LESSON_GUIDES} from './learning-guides.js?v=claridad-20261030';
 export const REPO='kthyon/diplomado-utp-aula';
 export const SOURCES={ml:'https://docs.google.com/presentation/d/1UOnYu1aT7Sg58BUlmPL6_BNyoFlhFc4Zu456IZP93ns/edit',terms:'https://docs.google.com/document/d/1WfPiuA4LUkE3axpf3qb_-_cQu55OEpnwQohtTyN2zYo/edit',dl:'https://docs.google.com/document/d/1buuOnf-xMsWfpRQeyW2swHEt9I7JKsroikz0rKsG_G0/edit',activation:'https://docs.google.com/document/d/1qsi3HQwW0zRlLMyAplVuANgZzmuLhcIhvOAJaiUxU6c/edit'};
 export const COURSES={

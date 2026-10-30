@@ -94,7 +94,7 @@ function sequence(el) {
   const shell = createShell(el, 'sequence', 'El mismo conjunto, otro orden', ({ select }) =>
     select('order', 'Orden de la secuencia', [['ascending', 'Ascendente · 10 → 20 → 30'], ['descending', 'Descendente · 30 → 20 → 10']], 'ascending') +
     '<button type="button" class="button" data-step>Ver el siguiente paso</button><button type="button" class="button secondary small" data-reset>Reiniciar pasos</button>',
-  'Valores inventados y sin unidades físicas. La regla fija sₜ = 0,5 × sₜ₋₁ + 0,5 × xₜ empieza en s₀ = 0. Combina el estado anterior con la entrada actual. No es una RNN o LSTM entrenada: permite comprobar cómo una regla con estado puede depender del orden.');
+  'Tres cantidades ficticias de cajas recibidas. El estado es un resumen ponderado en la misma unidad, no el pronóstico de la siguiente hora. La regla fija sₜ = 0,5 × sₜ₋₁ + 0,5 × xₜ empieza en s₀ = 0. Combina el estado anterior con la entrada actual. Esta regla permite estudiar el orden; sus coeficientes están dados, sin entrenar una RNN o LSTM.');
   const { q, field, visual } = shell;
   const draw = () => {
     const result = sequenceState(field('order').value === 'ascending' ? [10, 20, 30] : [30, 20, 10]);
@@ -130,7 +130,25 @@ function detectionPicture(result) {
   return `<svg class="dl-box-picture" viewBox="-12 -12 130 130" role="img" aria-label="Imagen didáctica de 100 por 100 píxeles. Caja conocida 20,20 a 60,60. Caja candidata ${x1},${y1} a ${x2},${y2}. IoU ${fmt(result.iou)}. ${result.kept ? 'Predicción conservada.' : 'Predicción descartada por puntuación.'}"><rect x="0" y="0" width="100" height="100" rx="1" fill="#f2f4ed" stroke="#a9b2a3" stroke-width=".5"/><text x="0" y="-4" font-size="4">0</text><text x="92" y="-4" font-size="4">100 px</text><text x="-11" y="101" font-size="4">100 px</text><rect x="${overlapX}" y="${overlapY}" width="${width}" height="${height}" fill="#a7bdce" fill-opacity=".45"/><rect x="20" y="20" width="40" height="40" fill="none" stroke="#42744e" stroke-width="1.3"/><rect x="${x1}" y="${y1}" width="${x2 - x1}" height="${y2 - y1}" fill="none" stroke="${result.kept ? '#b9652a' : '#71776b'}" stroke-width="1.3" stroke-dasharray="2 1"/></svg>`;
 }
 
-function detection(el) {
+function detectionFilter(el) {
+  const defaults = { threshold: .5 };
+  const shell = createShell(el, 'detection-filter', 'La misma propuesta, distintos límites', ({ range }) =>
+    range('threshold', 'Umbral de puntuación', 0, 1, .05, defaults.threshold) + reset,
+  'Una imagen didáctica con un objeto dibujado y una propuesta de categoría Fruto, caja fija y puntuación 0,80. Conservamos la propuesta si puntuación ≥ umbral. Cambiar el límite decide si aparece su fila y su caja; el dibujo y la puntuación permanecen iguales. Estos valores están dados para aprender la regla, sin ejecutar un detector.');
+  const { q, number, visual } = shell;
+  const draw = () => {
+    const result = detectionExample({ threshold: number('threshold') });
+    const [x1, y1, x2, y2] = result.prediction;
+    const picture = `<svg class="dl-box-picture" viewBox="-12 -12 130 130" role="img" aria-label="Imagen didáctica de 100 por 100 píxeles con un objeto dibujado. ${result.kept ? 'Propuesta Fruto conservada, caja 30,20 a 70,60 y puntuación 0,80.' : 'La propuesta se oculta; el objeto dibujado permanece.'}"><rect x="0" y="0" width="100" height="100" rx="1" fill="#f2f4ed" stroke="#a9b2a3" stroke-width=".5"/><text x="0" y="-4" font-size="4">0</text><text x="92" y="-4" font-size="4">100 px</text><text x="-11" y="101" font-size="4">100 px</text><ellipse cx="40" cy="40" rx="14" ry="18" fill="#9fae85"/>${result.kept ? `<rect data-filter-box x="${x1}" y="${y1}" width="${x2 - x1}" height="${y2 - y1}" fill="none" stroke="#b9652a" stroke-width="1.3" stroke-dasharray="2 1"/><text x="${x1}" y="${y1 - 3}" font-size="4">Fruto · 0,80</text>` : ''}</svg>`;
+    visual(`${picture}<p class="dl-note">Propuesta dada: categoría Fruto · puntuación fija 0,80 · caja ${tuple(result.prediction)} en píxeles.</p><div class="dl-operation"><span class="eyebrow">COMPARAR LA PUNTUACIÓN CON EL LÍMITE</span><p class="dl-equation">0,80 ${result.kept ? '≥' : '<'} ${fmt(result.confidenceThreshold, 2)} → <b>${result.kept ? '1 fila conservada' : '0 filas conservadas'}</b></p></div><table class="dl-table"><caption>Registro conservado · ${result.kept ? '1 fila' : '0 filas'}</caption><thead><tr><th scope="col">Categoría</th><th scope="col">Caja [x₁, y₁, x₂, y₂] · píxeles</th><th scope="col">Puntuación</th></tr></thead><tbody>${result.kept ? `<tr><td>Fruto</td><td>${tuple(result.prediction)}</td><td>0,80</td></tr>` : ''}</tbody></table><div class="dl-metrics">${metric('Filas conservadas', Number(result.kept))}</div><p class="dl-note">${result.kept ? 'La regla incluye la igualdad: una puntuación de 0,80 se conserva con límite 0,80. Conservar la propuesta permite revisarla; todavía no confirma que sea correcta.' : 'El límite supera 0,80 y la propuesta queda fuera del registro. El objeto dibujado sigue presente: cero filas no demuestra que no haya objetos.'}</p>`);
+    q('[data-status]').textContent = `Puntuación fija 0,80; umbral ${fmt(result.confidenceThreshold, 2)}. ${result.kept ? 'Una fila conservada y una caja visible.' : 'Ninguna fila conservada. El objeto dibujado permanece.'}`;
+  };
+  shell.bind(draw);
+  q('[data-reset]').onclick = () => shell.restore(defaults, draw);
+}
+
+function detection(el, { mode } = {}) {
+  if (mode === 'filter') return detectionFilter(el);
   const defaults = { offset: 10, threshold: .5, iou: .5 };
   const shell = createShell(el, 'detection', 'Una caja conservada no garantiza una buena detección', ({ range }) =>
     range('offset', 'Desplazamiento horizontal de la caja (píxeles)', 0, 40, 1, defaults.offset, 'px') +
@@ -150,8 +168,8 @@ function detection(el) {
 }
 
 const EXPLORERS = { neuron, convolution, sequence, attention, detection };
-export function mountDLExplorer(el, type) {
+export function mountDLExplorer(el, type, options = {}) {
   if (!el) return;
   if (!Object.hasOwn(EXPLORERS, type)) throw new RangeError('Explorador DL desconocido.');
-  EXPLORERS[type](el);
+  EXPLORERS[type](el, options);
 }

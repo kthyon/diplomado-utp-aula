@@ -1,5 +1,5 @@
-import {ML_DEFINITIONS} from './definition-catalog-ml.js';
-import {DL_DEFINITIONS} from './definition-catalog-dl.js';
+import {ML_DEFINITIONS} from './definition-catalog-ml.js?v=claridad-20261030';
+import {DL_DEFINITIONS} from './definition-catalog-dl.js?v=claridad-20261030';
 import {SUPPORT_DEFINITIONS} from './definition-catalog-support.js';
 
 export const DEFINITIONS=[...ML_DEFINITIONS,...DL_DEFINITIONS,...SUPPORT_DEFINITIONS];

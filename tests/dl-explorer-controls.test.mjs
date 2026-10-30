@@ -8,11 +8,11 @@ class Control extends EventTarget {
  setAttribute(key,value){this.attrs[key]=String(value);}
 }
 const attributes=html=>Object.fromEntries([...html.matchAll(/([\w-]+)="([^"]*)"/g)].map(m=>[m[1],m[2]]));
-function explorer(type){
- const controls=new Map(),outputs=new Map(),visual={innerHTML:''},status={textContent:''},reset={},step={};let mounts=0,renders=0,visualHTML='';
+function explorer(type,options={}){
+ const controls=new Map(),outputs=new Map(),visual={innerHTML:''},status={textContent:''},reset={},step={};let mounts=0,renders=0,visualHTML='',shellHTML='';
  Object.defineProperty(visual,'innerHTML',{get:()=>visualHTML,set:html=>{visualHTML=html;renders++;}});
  const el={set innerHTML(html){
-  mounts++;
+  mounts++;shellHTML=html;
   for(const match of html.matchAll(/<input\b[^>]+>/g)){const attrs=attributes(match[0]);controls.set(attrs['data-field'],new Control(attrs.value,attrs));}
   for(const match of html.matchAll(/<select\b([^>]+)>([\s\S]*?)<\/select>/g)){
    const attrs=attributes(match[1]),options=[...match[2].matchAll(/<option\b([^>]+)>/g)];
@@ -29,8 +29,8 @@ function explorer(type){
   if(selector==='input[type="range"][data-field]')return [...controls.values()].filter(input=>input.type==='range');
   throw new Error('Unexpected selector '+selector);
  }};
- mountDLExplorer(el,type);
- return {controls,outputs,visual,status,reset,step,get mounts(){return mounts;},get renders(){return renders;},
+ mountDLExplorer(el,type,options);
+ return {controls,outputs,visual,status,reset,step,get shellHTML(){return shellHTML;},get mounts(){return mounts;},get renders(){return renders;},
   set(key,value,event='input'){const input=controls.get(key);input.value=String(value);input.dispatchEvent(new Event(event));},
   event(key,event){controls.get(key).dispatchEvent(new Event(event));}};
 }
@@ -64,6 +64,7 @@ test('cada ventana y filtro actualiza la celda seleccionada y mantiene las tabla
 
 test('invertir una secuencia mediante change reinicia pasos, barras y estado sin perder el control',()=>{
  const e=explorer('sequence'),order=e.controls.get('order');
+ assert.match(e.shellHTML,/cantidades ficticias de cajas recibidas/);assert.match(e.shellHTML,/resumen ponderado en la misma unidad, no el pronóstico/);assert.doesNotMatch(e.shellHTML,/sin unidades físicas/);
  for(let i=0;i<3;i++)e.step.onclick();
  assert.match(e.status.textContent,/estado nuevo 21,25/);assert.equal(e.step.disabled,true);assert.match(e.visual.innerHTML,/s3/);
  e.set('order','descending','change');assert.match(e.status.textContent,/reiniciado a cero/);assert.equal(e.step.disabled,false);assert.doesNotMatch(e.visual.innerHTML,/<span>s3<\/span>/);
@@ -89,4 +90,21 @@ test('puntuación, coincidencia y leyenda de detección responden a sus límites
  e.set('threshold',.5);e.set('offset',40);assert.match(e.status.textContent,/IoU 0\. TP 0, FP 1, FN 1/);
  e.set('offset',0);e.set('iou',.9);assert.match(e.status.textContent,/IoU 1\. TP 1, FP 0, FN 0/);
  e.reset.onclick();assert.match(e.status.textContent,/IoU 0,6\. TP 1, FP 0, FN 0/);assert.equal(e.outputs.get('offset').textContent,'10 px');assert.equal(e.mounts,1);
+});
+
+test('el modo inicial de detección filtra una propuesta fija sin adelantar evaluación',()=>{
+ const e=explorer('detection',{mode:'filter'}),threshold=e.controls.get('threshold');
+ assert.deepEqual([...e.controls.keys()],['threshold']);
+ for(const [cut,kept] of [[.5,true],[.8,true],[.9,false]]){
+  e.set('threshold',cut);
+  assert.match(e.status.textContent,/Puntuación fija 0,80/);
+  assert.equal(e.visual.innerHTML.includes('data-filter-box'),kept);
+  assert.match(e.visual.innerHTML,kept?/Registro conservado · 1 fila/:/Registro conservado · 0 filas/);
+  assert.match(e.visual.innerHTML,kept?/<tbody><tr><td>Fruto<\/td>/:/<tbody><\/tbody>/);
+  assert.match(e.visual.innerHTML,/caja \[30, 20, 70, 60\] en píxeles/);
+  assert.match(e.visual.innerHTML,/<ellipse cx="40" cy="40"/,'el objeto permanece aunque desaparezca la propuesta');
+  assert.doesNotMatch(e.shellHTML+e.visual.innerHTML+e.status.textContent,/IoU|\bTP\b|\bFP\b|\bFN\b|Caja conocida|Intersección|Desplazamiento/);
+ }
+ const before=e.renders;e.set('threshold',.8);e.event('threshold','change');assert.equal(e.renders,before+1);
+ e.reset.onclick();assert.equal(e.controls.get('threshold'),threshold);assert.equal(Number(threshold.value),.5);assert.match(e.status.textContent,/Una fila conservada/);assert.equal(e.mounts,1);
 });

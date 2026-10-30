@@ -1,6 +1,6 @@
 import {renderMeetingContext} from './lesson-context.js?v=organizacion-20261027';
 import {renderNotebookPath} from './notebook-paths.js';
-import {renderMeetingDefinitions} from './definitions.js';
+import {renderMeetingDefinitions} from './definitions.js?v=claridad-20261030';
 import {renderSessionPlan} from './session-plans.js?v=1';
 // Orientación editorial: acompaña el contenido, sin cambiar acceso ni progreso.
 export const LESSON_OFFERING={

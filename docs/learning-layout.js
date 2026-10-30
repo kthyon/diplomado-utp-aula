@@ -1,5 +1,5 @@
 import {renderTopicContext,renderTopicVocabulary,renderTopicOutcome,renderCaseEvidence} from './lesson-context.js?v=organizacion-20261027';
-import {LESSON_OFFERING,renderNotebookBridge,renderExplorerLink} from './lesson-offering.js?v=organizacion-20261027';
+import {LESSON_OFFERING,renderNotebookBridge,renderExplorerLink} from './lesson-offering.js?v=claridad-20261030';
 import {renderConceptConnections} from './concept-connections.js?v=definiciones-20261027';
 import {LESSON_SCENES,renderCaseDetail} from './lesson-scenes.js';
 import {isOrganizedTopic} from './learning-organization.js?v=organizacion-20261027';
