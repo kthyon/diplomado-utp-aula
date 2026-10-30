@@ -24,7 +24,7 @@ import {heroVisual} from './hero-space.js?v=7';
 import {COURSES,LESSONS,GLOSSARY,NOTEBOOKS,SOURCES,REPO,findLesson,classOf} from './content.js?v=definiciones-20261027b';
 import {canAccess} from './math.js';
 import {colombiaDay,scheduleReleases,validFullName,mayEnter} from './access-policy.js';
-import {mountSimulator} from './simulators.js?v=graficos-20261027b';
+import {mountSimulator} from './simulators.js?v=cercania-20261030';
 import {showWelcome,maybeShowWelcome} from './welcome.js';
 import {mountIdeaStudio} from './idea-studio.js?v=graficos-20261027b';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

@@ -42,7 +42,7 @@ function finiteDrawing(s){assert.doesNotMatch(s.html(),/NaN|Infinity|undefined/)
 
 test('every simulator mounts, expands labels locally, and accepts real input/change events',()=>{
  for(const type of ['regression','ensembles','impute','threshold','clusters','pca','activation','training','attention','vision','series','grid']){
-  const s=simulator(type);assert.equal(s.root.dataset.simulator,type);assert.ok(s.q('#visual').innerHTML.length>200);finiteDrawing(s);
+  const s=simulator(type);assert.equal(s.root.dataset.simulator,type);if(type==='clusters')assert.equal(s.all('[data-cl-point]').length,29);else assert.ok(s.q('#visual').innerHTML.length>200);finiteDrawing(s);
   s.click('[data-plot-expand]');assert.equal(s.q('.simulator').dataset.plotExpanded,'true');assert.equal(s.q('[data-plot-expand]').getAttribute('aria-pressed'),'true');s.click('[data-plot-expand]');assert.equal(s.q('.simulator').dataset.plotExpanded,'false');
  }
 });
@@ -73,20 +73,21 @@ test('threshold recomputes every outcome and leaves precision undefined when no 
  s.change('threshold',.9,'change');assert.equal(s.all('.alert').length,1,'score equal to the threshold counts as an alert');assert.deepEqual(matrix(),[6,0,3,1]);finiteDrawing(s);
 });
 
-test('DBSCAN selector, radius and minimum agree with the geometry and preserve equal axis scale',()=>{
- const s=simulator('clusters');
- const circle=()=>s.all('circle').find(n=>n.getAttribute('fill')==='none');
- const scale=()=>{const texts=s.all('text'),x=v=>Number(texts.find(n=>n.textContent===String(v)&&n.getAttribute('y')==='270').getAttribute('x')),y=v=>Number(texts.find(n=>n.textContent===String(v)&&n.getAttribute('text-anchor')==='end').getAttribute('y'));return {x:(x(100)-x(0))/100,y:(y(0)-y(100))/100};};
- for(const radius of [3,25])for(const minimum of [2,9])for(const selected of [0,26,28]){
-  s.change('eps',radius);s.change('minpts',minimum,'change');s.change('cluster-point',selected,'change');
-  const k=scale(),c=circle();near(k.x,k.y,'both axes have the same pixels per point');near(k.x,1.5,'the padded domain keeps the full circle visible');near(Number(c.getAttribute('r')),radius*k.x,'radius is scaled with the coordinates');
-  const cx=Number(c.getAttribute('cx')),cy=Number(c.getAttribute('cy')),r=Number(c.getAttribute('r'));
-  assert.ok(cx-r>=0&&cx+r<=500&&cy-r>=0&&cy+r<=300,'neighborhood circle stays inside the SVG even for center29/radius25');
-  assert.match(s.text('cluster-reading'),new RegExp('Centro '+(selected+1)+':'));
-  assert.equal(s.text('cluster-count'),radius===25?'2 · 3 sin grupo':minimum===2?'8 · 13 sin grupo':'0 · 29 sin grupo','changing radius/minimum recomputes groups and noise');
-  assert.equal(s.text('minpts-out'),String(minimum));assert.equal(s.text('eps-out'),radius+' puntos porcentuales');finiteDrawing(s);
+test('DBSCAN preserves data, controls, equal scales and the selected center across presets',()=>{
+ const s=simulator('clusters'),radius=()=>s.q('#cluster-radius');
+ const positions=()=>s.all('circle').filter(n=>n.getAttribute('id')?.startsWith('cluster-dot-')).map(n=>[n.getAttribute('cx'),n.getAttribute('cy')]);
+ const before=positions(),input=s.q('#eps');assert.equal(before.length,29);
+ assert.equal(s.text('cluster-count'),'2 · 3 sin grupo');
+ for(const r of [3,25,50,65])for(const minimum of [2,9,15])for(const selected of [0,26,28]){
+  s.change('eps',r);s.change('minpts',minimum,'change');s.change('cluster-point',selected,'change');
+  near(Number(radius().getAttribute('r')),r*4.4,'radius uses the same scale as both axes');
+  assert.deepEqual(positions(),before,'centers never move when parameters change');assert.equal(s.q('#eps'),input,'the dragged input is never rebuilt');
+  assert.match(s.text('cluster-reading'),new RegExp('Centro '+(selected+1)+':'));assert.equal(s.text('minpts-out'),String(minimum));finiteDrawing(s);
  }
- s.change('cluster-point',28,'change');s.change('eps',3);assert.match(s.text('cluster-reading'),/1 vecinos.*Queda sin grupo/);
+ s.change('eps',10);s.change('minpts',4);s.change('cluster-point',28);s.click('[data-cl-radius="3"]');assert.equal(s.text('cluster-count'),'0 · 29 sin grupo');assert.equal(s.q('#cluster-point').value,'28');
+ s.click('[data-cl-radius="10"]');assert.equal(s.text('cluster-count'),'2 · 3 sin grupo');
+ s.click('[data-cl-radius="50"]');assert.equal(s.text('cluster-count'),'1 · 1 sin grupo');
+ s.click('cluster-reset');assert.equal(s.q('#eps').value,'10');assert.equal(s.q('#minpts').value,'4');assert.equal(s.q('#cluster-point').value,'0');assert.equal(s.text('cluster-count'),'2 · 3 sin grupo');
 });
 
 test('PCA redraws the current projection with the correct retained variance at 0°, 90° and 37°',()=>{
