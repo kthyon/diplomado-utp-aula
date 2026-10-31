@@ -70,16 +70,32 @@ const table=(columns,rows)=>'| '+columns.join(' | ')+' |\n| '+columns.map(()=>'-
 function topicCells(id){
  const lesson=LESSONS.find(l=>l.id===id),g=lesson.guide,p=SOURCE_NOTEBOOK_PATHS[id],route=NOTEBOOK_PATHS[id];
  const cells=[md('tema-'+id,`## ${route.section}\n\n**Lo que vas a poder hacer:** ${g.objective}\n\n${g.relevance}\n\n### Entiende la idea\n\n${g.concept}\n\n### Un caso pequeño antes del programa\n\n**${g.case.title}**\n\n${g.case.context}\n\n${g.case.columns?.length?table(g.case.columns,g.case.rows):''}\n\n${g.case.reasoning.map((s,i)=>(i+1)+'. '+s).join('\n')}\n\n**Qué demuestra:** ${g.case.conclusion}\n\n### Ahora identifica los datos de esta práctica\n\n${p.observe}\n\nEl caso pequeño y la ejecución pueden usar conjuntos diferentes: interpreta las cifras con las unidades y filas declaradas en cada uno.\n\n**Antes de ejecutar:** este tema incluye su preparación. Ejecuta sus celdas en orden; no requiere ejecutar los temas anteriores. Si repites un tema, comienza desde su primera celda.\n\n**Qué cambiar y qué conservar:** ${p.tip}`)];
+ const explained=new Set();
+ const isReading=text=>/^###\s+(?:Lectura|Después de ejecutar|Lee las figuras)/i.test(text.trim());
+ const addExplanation=(notebook,index,cellId)=>{
+  const originalCell=notebook.cells[index],key=p.file+':'+originalCell.id;
+  if(explained.has(key))return;
+  explained.add(key);cells.push(md(cellId+'-lectura-'+index,source(originalCell)));
+ };
  for(const identifier of [...p.prepareIds,...p.codeIds]){
   const notebook=original(p.file),index=notebook.cells.findIndex(c=>c.id===identifier);
   const c=notebook.cells[index];
   if(!c&&!custom[identifier])throw new Error(id+': celda ausente '+identifier);
   const fullId=id+'--'+identifier;
+  // Introductions belong BEFORE their own code, not after the previous cell.
+  if(c){let first=index;while(first>0&&notebook.cells[first-1].cell_type==='markdown')first--;
+   for(let n=first;n<index;n++){
+    const text=source(notebook.cells[n]).trim();
+    if(text.startsWith('### ')&&!isReading(text))addExplanation(notebook,n,fullId);
+   }
+  }
   cells.push(code(fullId,custom[identifier]||source(c),{notebook:p.file,cell:identifier,kind:c?'canonical':'encounter-practice'}));
-  // Keep detailed explanations immediately following a copied cell; do not pull in another chapter.
+  // Only genuine result readings follow code. A new numbered section is for the next code cell.
   if(c){let n=index+1;while(n<notebook.cells.length&&notebook.cells[n].cell_type==='markdown'){
-   const text=source(notebook.cells[n]);if(/^#{1,2}\s/m.test(text))break;
-   cells.push(md(fullId+'-lectura-'+n,text));n++;
+   const text=source(notebook.cells[n]).trim();
+   if(/^#{1,2}\s/m.test(text)||(/^###\s/m.test(text)&&!isReading(text)))break;
+   if(!isReading(text)&&n===index+1)break;
+   addExplanation(notebook,n,fullId);n++;
   }}
  }
  cells.push(md('comprueba-'+id,`### Lee, comprueba y explica\n\n${p.observe}\n\n**Prueba pequeña:** ${p.tip}\n\n**Vuelve al caso:** ${g.takeaway}\n\n${g.understanding?'**Pregunta:** '+g.understanding.question+'\n\n**Respuesta razonada:** '+g.understanding.answer:''}\n\n**Registra en tu copia:** qué representan las filas, qué valores cambiaste, qué observaste y qué límite tiene la conclusión. No es una entrega ni una calificación.\n\n[Volver al tema del aula](https://kthyon.github.io/diplomado-utp-aula/#tema/${id})`));

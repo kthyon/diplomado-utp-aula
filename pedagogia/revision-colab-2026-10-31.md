@@ -25,16 +25,17 @@ Los ocho encuentros tienen un cuaderno principal propio. Cada uno contiene sus t
 - El principal de detección incluye exportación de detecciones, conteos y configuración, además de las propuestas y su evaluación didáctica.
 - Se corrige la referencia antigua a seis centros: el explorador de agrupación tiene 29; el bloque DBSCAN de Colab usa otros 123 puntos.
 - Se identifica que la logística de apoyo trata alto rendimiento con un índice hídrico simulado, mientras que la matriz y los umbrales usan plantas con plaga. No se mezclan sus categorías.
+- Las explicaciones de cada operación se sitúan antes de su propia celda; las lecturas de resultados quedan después. Se evita adelantar una sección cuyo código no se incluye en ese tema.
 - Las instrucciones de capítulos de las fuentes anteriores se identifican como apoyo. El principal se organiza por los tres temas del encuentro y repite preparación para que una sesión limpia no dependa de capítulos ocultos.
 
 No se encontraron errores de ejecución en las ocho fuentes con las rutas actuales y bibliotecas del entorno verificado. Los cambios resuelven orientación, cobertura y contextualización; no se atribuyen fallos inexistentes a los algoritmos.
 
 ## Comprobaciones
 
-- 40 ejecuciones distintas: ocho principales completos, 24 temas independientes y ocho fuentes completas. Todas sin errores. Cuatro recorridos afectados por los últimos añadidos se repitieron: 44 ejecuciones y 283 ejecuciones de celdas en total.
+- 40 ejecuciones distintas: ocho principales completos, 24 temas independientes y ocho fuentes completas. Todas sin errores. Se volvió a ejecutar la versión final tras ordenar las explicaciones; los registros incluyen las comprobaciones anteriores y las repeticiones de los cambios.
 - Se verificaron resultados numéricos y separación de datos: imputación solo en entrenamiento; matriz TP3/FP2/FN1/TN4; umbrales; coordenada manual PCA; 60/24 semanas; llegada de Q-learning; pérdida de entrenamiento; patrones Transformer separados; pesos de atención; IoU/conteos; costes y archivos exportados.
 - 154 celdas de código publicadas en 16 archivos: sintaxis válida, IDs únicos, sin outputs ni contadores de ejecución.
-- 202 pruebas de sitio y backend aprobadas. La comprobación HTTP/SQLite usa identidades sintéticas y conexión local; no escribe en cuentas reales.
+- 203 pruebas de sitio y backend aprobadas. La comprobación HTTP/SQLite usa identidades sintéticas y conexión local; no escribe en cuentas reales.
 - Ejecución CPU con cero instalaciones y cero intentos de red durante la verificación. Se usaron dependencias y pesos de YOLO ya disponibles. En una sesión nueva de Colab puede ser necesaria su descarga inicial.
 - Figuras de los principales guardadas y revisadas, con ejes, unidades y leyendas. Los ejemplos diferencian datos simulados, tareas ilustradas e inferencia de un detector.
 

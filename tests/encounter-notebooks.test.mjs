@@ -42,3 +42,14 @@ test('los cuadernos publicados reproducen las fuentes, contienen contexto y no g
   }
  }
 });
+
+test('las explicaciones de preparación acompañan su código y no se adelantan en otro tema',()=>{
+ const nb=JSON.parse(fs.readFileSync(new URL('../docs/notebooks/ml-encuentro-1.ipynb',import.meta.url)));
+ const topic1=nb.cells.slice(1,nb.cells.findIndex(c=>c.id==='tema-ml-preparacion'));
+ assert.ok(!topic1.some(c=>c.cell_type==='markdown'&&c.source.includes('### 1.2.')));
+ const topic2=nb.cells.slice(nb.cells.findIndex(c=>c.id==='tema-ml-preparacion'),nb.cells.findIndex(c=>c.id==='tema-ml-regresion'));
+ assert.ok(!topic2.some(c=>c.cell_type==='markdown'&&c.source.includes('### 1.5.')));
+ const intro=topic2.findIndex(c=>c.cell_type==='markdown'&&c.source.includes('### 1.2.'));
+ const code=topic2.findIndex(c=>c.id==='ml-preparacion--utp-95bdbbfc11ccfd84');
+ assert.ok(intro>=0&&intro<code);
+});
