@@ -1,20 +1,20 @@
 import {isOrganizedTopic,renderTopicCompass,renderOrganizedFinish,mountLessonSections} from './learning-organization.js?v=organizacion-20261027';
-import {renderGlossary} from './definitions.js?v=colab-20261031';
-import {notebookResourceRole} from './notebook-paths.js';
+import {renderGlossary} from './definitions.js?v=colab-20261031b';
+import {notebookResourceRole} from './notebook-paths.js?v=colab-20261031b';
 import {colabNotebookUrl} from './encounter-notebooks.js';
 import {mountRoadmap} from './roadmap.js?v=1';
 import {renderLearningMap} from './learning-map.js?v=1';
 import {courseHours} from './session-plans.js?v=1';
-import {renderMeetingOffering} from './lesson-offering.js?v=colab-20261031';
+import {renderMeetingOffering} from './lesson-offering.js?v=colab-20261031b';
 import {getJourney,getCalendarMoment,getTopicCompletion,hasNewTopics} from './journey-models.js';
 import {offerProgressDownload} from './progress-download.js';
 import {renderFlowGuide,renderLessonFlow} from './flow-guidance.js?v=descripcion-breve-20261020';
 import {laboratoryDestination} from './lab-access.js';
 import {readReferenceOffset,nextScheduleDelay} from './schedule-clock.js';
 import {summarizeProgress,renderProgressDashboard} from './progress-dashboard.js';
-import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=colab-20261031';
+import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=colab-20261031b';
 import {mountProblemExplorer} from './learning-explorers.js';
-import {mountDLExplorer} from './dl-explorers.js?v=colab-20261031';
+import {mountDLExplorer} from './dl-explorers.js?v=colab-20261031b';
 import {icon} from './icons.js';
 import {initStudentRegistration,saveStudentProgress,studentConnected,openStudentRegistration,registerStudent,isConnectedView,retryStudentProgress,refreshStudentSaveStatus,studentSavePending} from './student-registration.js?v=7';
 import {normalizeProgress,importProgress,decodeSearch} from './progress-state.js';
@@ -22,7 +22,7 @@ import {searchCatalog} from './search.js?v=definiciones-20261027b';
 import {STUDENT_RECORDS} from './database-config.js';
 import {toolSection,mountTools} from './tools.js?v=2';
 import {heroVisual} from './hero-space.js?v=7';
-import {COURSES,LESSONS,GLOSSARY,NOTEBOOKS,SOURCES,REPO,findLesson,classOf} from './content.js?v=colab-20261031';
+import {COURSES,LESSONS,GLOSSARY,NOTEBOOKS,SOURCES,REPO,findLesson,classOf} from './content.js?v=colab-20261031b';
 import {canAccess} from './math.js';
 import {colombiaDay,scheduleReleases,validFullName,mayEnter} from './access-policy.js';
 import {mountSimulator} from './simulators.js?v=cercania-20261030';
@@ -141,7 +141,7 @@ function teacher(){if(!teacherView)return intro('ESPACIO DOCENTE','Tu aula compl
 function search(term){const query=term.trim();if(!query)return intro('ENCUENTRA UNA IDEA','Busca un concepto de ML o DL.','Escribe, por ejemplo, clasificación, redes o regresión.')+searchSuggestions();const results=searchCatalog(query,LESSONS,GLOSSARY,COURSES),found=results.lessons,g=results.glossary;return intro('ENCUENTRA UNA IDEA','Resultados para «'+esc(query)+'»','Busca en los conceptos y temas de Machine Learning y Deep Learning. Cada tema indica su fecha de apertura.')+`<p class="search-count" role="status">${g.length} conceptos · ${found.length} temas relacionados</p>`+(g.length||found.length?`${g.length?'<div class="section-heading"><h2>Conceptos</h2></div>'+renderGlossary(g,{open:true}):''}${found.length?'<div class="section-heading"><h2>Temas relacionados</h2></div>':''}${found.map(l=>`<div class="topic-row search-topic-row"><div><small>${COURSES[l.id.split('-')[0]].title}</small><h4>${esc(l.title)}</h4><p>${esc(l.summary)}</p></div><a class="button small secondary" href="#tema/${l.id}">${access(l.id)?'Entrar':'Disponible el '+classOf(l.id).date} →</a></div>`).join('')}`:'<section class="search-empty"><h2>No encontramos coincidencias.</h2><p>Prueba una palabra más general o el nombre de una asignatura. Puedes escribir con o sin tildes.</p>'+searchSuggestions()+'</section>')}
 function searchSuggestions(){return '<nav class="search-suggestions" aria-label="Sugerencias de búsqueda">'+['Machine Learning','Deep Learning','Clasificación','Regresión','Redes'].map(t=>'<a class="button secondary small" href="#buscar/'+encodeURIComponent(t)+'">'+esc(t)+'</a>').join('')+'</nav>'}
 async function loadReleases(){releases=scheduleReleases(COURSES,colombiaDay(new Date(Date.now()+serverClockOffset)),teacherView)}
-function copyNotebook(name,topic){if(!NOTEBOOKS[name])return;const url=colabNotebookUrl(name,topic);modal(`<div class="eyebrow">TU CUADERNO PERSONAL</div><h2 style="margin-top:12px">${NOTEBOOKS[name].title}</h2><p>¿Ya guardaste una copia personal de este cuaderno? Continúa en esa misma copia de Drive y ve al bloque indicado por el tema: no necesitas otro archivo por cada clase.</p><p>Si es la primera vez:</p><ol><li>Abre el cuaderno publicado con el botón de abajo.</li><li>En Colab, elige <b>Archivo → Guardar una copia en Drive</b>.</li><li>Renómbrala y ejecuta la preparación y el bloque indicado.</li><li>Vuelve a esta pestaña para registrar lo observado y marcar el tema como visto.</li></ol><p>Colab no envía resultados ni marca tu progreso en el aula automáticamente. Usa CPU; estos ejemplos no requieren contratar un entorno de pago.</p>${link(url,'Abrir versión publicada en Colab','button')}<p class="field-note">Colab puede pedir iniciar sesión con Google. Tu copia es independiente del archivo del aula.</p>`)}
+function copyNotebook(name,topic){if(!NOTEBOOKS[name])return;const url=colabNotebookUrl(name,topic);modal(`<div class="eyebrow">TU CUADERNO PERSONAL</div><h2 style="margin-top:12px">${NOTEBOOKS[name].title}</h2><p>Si ya guardaste una copia personal de este cuaderno, continúa en ella y ve al apartado indicado. El cuaderno principal reúne los tres temas de su encuentro.</p><p>Si es la primera vez:</p><ol><li>Abre el cuaderno publicado con el botón de abajo.</li><li>En Colab, elige <b>Archivo → Guardar una copia en Drive</b>.</li><li>Renómbrala y ejecuta la preparación y el apartado indicado.</li><li>Vuelve a esta pestaña para registrar lo observado y marcar el tema como visto.</li></ol><p>Colab no envía resultados ni marca tu progreso en el aula automáticamente. Usa CPU; estos ejemplos no requieren contratar un entorno de pago.</p>${link(url,'Abrir versión publicada en Colab','button')}<p class="field-note">Colab puede pedir iniciar sesión con Google. Tu copia es independiente del archivo del aula.</p>`)}
 
 function bind(route,id){mountLessonSections();mountTools($('.tool-section'));document.querySelectorAll('[data-connect-registration]').forEach(b=>b.onclick=connectRegistration);document.querySelectorAll('[data-welcome]').forEach(b=>b.onclick=openWelcome);document.querySelectorAll('.copy-notebook').forEach(b=>b.onclick=()=>copyNotebook(b.dataset.notebook,b.dataset.topic));if(route==='tema'&&access(id)){const l=findLesson(id);if(l.sim){const target=$('#lesson-sim');if(l.sim==='problem')mountProblemExplorer(target);else if(l.id.startsWith('dl-')&&['neuron','convolution','sequence','attention','detection'].includes(l.sim))mountDLExplorer(target,l.sim,{mode:l.id==='dl-yolo'?'filter':'evaluation'});else mountSimulator(target,l.sim);}$('.quiz').querySelectorAll('.quiz-answer').forEach(b=>b.onclick=()=>{const correct=Number(b.dataset.answer)===l.quiz.answer;$('.quiz').querySelectorAll('button').forEach(x=>x.classList.remove('correct','wrong'));b.classList.add(correct?'correct':'wrong');$('#quiz-feedback').textContent=(correct?'Bien razonado. ':'Revisa esta distinción. ')+l.quiz.feedback;state.quiz[id]=correct;save()});$('#study-note').oninput=e=>{state.notes[id]=e.target.value;save()};$('#complete-lesson').onclick=()=>completeTopic(id)}
 

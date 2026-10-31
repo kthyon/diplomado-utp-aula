@@ -31,9 +31,28 @@ export const SOURCE_NOTEBOOK_PATHS={
  'dl-evaluacion':{file:'yolo-registro.ipynb',section:'Evaluación didáctica: comprobar cajas',prepare:'Ejecuta las dos celdas de la sección 2; después ve a «13 · Evaluación didáctica: comprobar cajas». No necesitas obtener anotaciones de las fotos de demostración.',observe:'La referencia sintética permite comprobar IoU y contar propuestas correctas, incorrectas y objetos omitidos. Separa el filtro de puntuación del criterio de ubicación.',tip:'Una caja mal ubicada puede producir una falsa propuesta y un objeto omitido al mismo tiempo. Este ejemplo no calcula mAP de bus.jpg.',prepareIds:['instalar','preparar'],codeIds:['evaluar-cajas']},
  'dl-integracion':{file:'laboratorio-dl.ipynb',section:'14 · Costes de una regla de revisión',prepare:'Ejecuta Preparación 1 y 2 y «14A · Comparar reglas de revisión». Las puntuaciones y etiquetas de este bloque ya están dadas.',observe:'Compara revisar algunos granos con revisar todos. El coste combina cantidad de revisiones y defectos que se dejaron pasar.',tip:'Cambia solo el coste de un defecto aceptado de 8 a 1. La puntuación de la red no cambia; puede cambiar la decisión que prefieres.',prepareIds:dlSetup,codeIds:['lab14-costos']}
 };
+const PRIMARY_SECTIONS={
+ 'ml-pca':'Representar los mismos casos con componentes',
+ 'ml-ensambles':'Comparar modelos sobre la misma prueba',
+ 'ml-series':'Pronosticar con pasado y futuro separados',
+ 'ml-refuerzo':'Aprender una ruta en una simulación',
+ 'ml-integracion':'Comparar referencia y candidata',
+ 'dl-redes':'Calcular una neurona con valores dados',
+ 'dl-activaciones':'Comparar funciones con la misma señal',
+ 'dl-entrenamiento':'Corregir un ajuste y entrenar una red',
+ 'dl-vision':'Distinguir etiqueta, cajas y regiones',
+ 'dl-cnn':'Reconocer dígitos y leer un filtro',
+ 'dl-transferencia':'Reutilizar pesos y revisar categorías',
+ 'dl-secuencias':'Pronosticar una lectura con LSTM',
+ 'dl-atencion':'Mezclar dos registros con atención',
+ 'dl-transformers':'Comprobar el orden con un Transformer',
+ 'dl-yolo':'De una foto a propuestas y registros',
+ 'dl-evaluacion':'Comprobar cajas con una referencia conocida',
+ 'dl-integracion':'Comparar costes de revisión'
+};
 export const NOTEBOOK_PATHS=Object.fromEntries(Object.entries(SOURCE_NOTEBOOK_PATHS).map(([id,path])=>{
  const meeting=encounterForTopic(id),number=meeting.topics.indexOf(id)+1;
- return [id,{...path,file:meeting.file,sourceFile:path.file,section:'Tema '+number+' · '+path.section,
+ return [id,{...path,file:meeting.file,sourceFile:path.file,section:'Tema '+number+' · '+(PRIMARY_SECTIONS[id]||path.section),
   prepare:'Ve al Tema '+number+' de este cuaderno. Ejecuta sus celdas de arriba abajo: incluye toda su preparación y puede ejecutarse sin pasar por otros temas.',
   prepareIds:path.prepareIds.map(cell=>id+'--'+cell),codeIds:path.codeIds.map(cell=>id+'--'+cell)}];
 }));

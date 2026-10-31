@@ -19,6 +19,7 @@ test('cada uno de los ocho encuentros tiene un principal con sus tres temas y en
    assert.ok(nb.cells.some(c=>c.id==='tema-'+id&&c.cell_type==='markdown'));
    assert.ok(colabNotebookUrl(m.file,id).endsWith('#scrollTo=tema-'+id));
    const route=NOTEBOOK_PATHS[id];
+   assert.doesNotMatch(route.section,/^Tema \d+ · \d/,'el principal usa los temas del encuentro, no números de capítulos del apoyo');
    assert.deepEqual(nb.metadata.utp.routes[id],[...route.prepareIds,...route.codeIds]);
    for(const cell of nb.cells.filter(c=>nb.metadata.utp.routes[id].includes(c.id)))assert.equal(cell.cell_type,'code');
   }
