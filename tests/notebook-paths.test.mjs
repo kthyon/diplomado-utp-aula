@@ -2,11 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {NOTEBOOK_PATHS,renderNotebookPath,notebookResourceRole} from '../docs/notebook-paths.js';
-import {TOPIC_CONTEXT} from '../docs/lesson-context.js';
 import {LESSONS} from '../docs/content.js';
 
-test('cada tema pendiente dirige primero al cuaderno que realmente contiene su práctica',()=>{
- assert.deepEqual(Object.keys(NOTEBOOK_PATHS).sort(),Object.keys(TOPIC_CONTEXT).sort());
+test('los veinticuatro temas dirigen al cuaderno que realmente contiene su práctica',()=>{
+ assert.deepEqual(Object.keys(NOTEBOOK_PATHS).sort(),LESSONS.map(l=>l.id).sort());
  for(const [id,path] of Object.entries(NOTEBOOK_PATHS)){
   const l=LESSONS.find(l=>l.id===id);
   assert.equal(l.notebooks[0],path.file,id);
@@ -18,10 +17,9 @@ test('cada tema pendiente dirige primero al cuaderno que realmente contiene su p
  }
 });
 
-test('los primeros seis temas conservan su orientación y el resto explica preparación, lectura y tip',()=>{
+test('todos los temas explican preparación, lectura y tip',()=>{
  for(const l of LESSONS){const html=renderNotebookPath(l.id);
-  if(!TOPIC_CONTEXT[l.id]){assert.equal(html,'');for(const file of l.notebooks)assert.equal(notebookResourceRole(l.id,file),'');}
-  else{assert.match(html,/Tu recorrido en Colab/);assert.match(html,/Empieza aquí:/);assert.match(html,/Tip:/);}
+  assert.match(html,/Tu recorrido en Colab/);assert.match(html,/Empieza aquí:/);assert.match(html,/Tip:/);
  }
  assert.equal(renderNotebookPath('desconocido'),'');
 });

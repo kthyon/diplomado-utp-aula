@@ -112,39 +112,39 @@
   "protectedTopics": {
     "ml-problema": {
       "guide": "b770b0307beaf1b1763f2a79660bff3b42e0819a2c2275948ac8461f3a7fcf54",
-      "lesson": "35d957a880487fa2889fc921de4c045879e31f8ee92e327b57074fcc87e0e524",
+      "lesson": "7227371dabebd0c9c7fd98b1da7a8996e384183721714acfd26cefbead788fa9",
       "reading": "583634794e65bfa254a45a19f020e5611ddac983ce88cad621b2ef0a6a980bf3",
-      "lab": "371b1cfd84316b9cfb68a5cf819285517b98b3c0e3c4dd12b9572742b363718d"
+      "lab": "8dc6b1d55fe2fa3f759349001bef4a054d66e329d78cc8dad6ebc826730755f0"
     },
     "ml-preparacion": {
       "guide": "8b17b1dceedc739e800e954fdc0395ece54457234c0ee0d3d910a932264e67ff",
-      "lesson": "38f7a6de7154295ff14f248adaf5a2de76eaae28581ce0b56ee5fec9deeddbfb",
+      "lesson": "cc61771d3daed7d5c6f83fe53e822955513589bf5ec5c9f6f47333efb2bc8d1c",
       "reading": "051c16b6ec83b2997c02436121cb69785a34b95a4a658885a6cf0ce9c3d57844",
-      "lab": "f3af6ef19a3b8832c6bd5c0383a23213230d7c229513d50f224e4cda5869fe91"
+      "lab": "04c07dc504990cc5e97e335b9859c550340f7cdaba7a63ba86b063f0c8f2e5b1"
     },
     "ml-regresion": {
       "guide": "c7d7dab70f5904a04f24dee9d59ba164b63ed930b7490455a3118c85af50143f",
-      "lesson": "fb52335429469ad758810ca6a0ccae994bbf6b6293df23247479f5009a8fd5c9",
+      "lesson": "63bd63506ddc6a5cd73d3320be7af293ff5b0ed977bcf7337472057cc2c443ed",
       "reading": "7569ffdff8a49c4f9d09a88031736764e5f07af95f6a5d44cd75ed1d4dce046b",
-      "lab": "ec08ccecb4d4a8f37eceb6b114b5cbe394e87fbce53fea6f8d88b388644341b4"
+      "lab": "b8e5c7687345bf450b1fef3a5cf6af5dd09d2492a62fb5be518bd923cc8368ce"
     },
     "ml-clasificacion": {
       "guide": "8d5be6eacd8994510d6386ce3e7c5e219db381d3a5f2d424ae5b11c12b8cbf3f",
-      "lesson": "76227d945c7511248a5e65270670550319dcb4126bd7c143f4e6ed5caac69143",
+      "lesson": "25be997c8679e0702c2908de4fc5f3acba32153ea104c615e2a42352cba58755",
       "reading": "7e564c6132d3f2783c1601675f274a62ef2fc14361efeaa3bf257f643a340063",
-      "lab": "d42ffd922dfbc5c5ecb5b0d9da9394204ba8458cee7360046fc97592d12ba283"
+      "lab": "086666d8d15d81b17801c57ef1e4282fa48eab7c195e5f6ed8c4348b66bba5fa"
     },
     "ml-metricas": {
       "guide": "a33689d0c0f591bda6787723feeb334613cca151139af13a7266df4238cc2dc5",
-      "lesson": "33dc8b08f5abaca6a4121b7579e7a4619aa6b144a9fcbe73f323932e6f70bdfe",
+      "lesson": "28d58cacb9f0bf5f40f4ff9dcbe1023d4ea04eeda8371d746e90e410cdd12885",
       "reading": "72a729f2ea583eb84682c50ffd1b0dc16a4b806a8c46e8241e69e1eb2663e79a",
-      "lab": "13427ba89a047b869d58e9ac273e7538d0af2a5bfd29689839c2ab545ce3b1c7"
+      "lab": "0accac4fa3b64e0af367db3f0d610d4a5ec97771abcaa3635850f9dcf5e88338"
     },
     "ml-umbral": {
       "guide": "8f8f1fd30b21e98471b96e8cd829fbd9c3e5d0599fd7149c0e2cccb2221c7f1c",
-      "lesson": "4f6858fa9adafc653ab73dc380101c6425286028120937a5425b18f1acf34570",
+      "lesson": "2089ce03fa9d21be281284d9cccc1a392574a6abd386ac7a5ca2ff9552378233",
       "reading": "e38808976c57e28a8e3eec60e107f2af0f5beb935655b040243833b74aae4a34",
-      "lab": "e5a92fe016dfefe31ea3b86a9c48779bdcee18f064a34793810bdcb97c7b2a13"
+      "lab": "1b712330664121ccfba574eef41058ff215d04e4ee690fa6c88100c1038e348a"
     }
   },
   "firstAgendas": [
@@ -240,5 +240,9 @@
   "firstMeetingHTML": [
     "a9138750ea3e7a5c5492eaf9bde4530859cb2394dc6632eb1ab338612e1e474e",
     "cf96197d18abe4e2251b92377d423f59fec5382fd8f54bbf481e4cd57f1f7597"
-  ]
+  ],
+  "notebookNavigationUpdate": {
+    "date": "2026-10-31",
+    "reason": "Solicitud expresa de revisar y contextualizar los Colab de todos los encuentros: principal por encuentro y ruta para los primeros seis temas. Teoría, casos, agendas y ocho cuadernos originales conservados."
+  }
 }

@@ -1,5 +1,5 @@
 import {renderMeetingContext} from './lesson-context.js?v=organizacion-20261027';
-import {renderNotebookPath} from './notebook-paths.js';
+import {renderNotebookPath,SOURCE_NOTEBOOK_PATHS} from './notebook-paths.js';
 import {renderMeetingDefinitions} from './definitions.js?v=claridad-20261030';
 import {renderSessionPlan} from './session-plans.js?v=1';
 // Orientación editorial: acompaña el contenido, sin cambiar acceso ni progreso.
@@ -54,7 +54,7 @@ export function renderMeetingOffering(courseId,index,meeting,{teacher=false}={})
 }
 export function renderNotebookBridge(l){
  const o=LESSON_OFFERING[l.id],guide=l.guide.lab.notebookGuide;
- const explanation=(o?'<p><b>La conexión con el ejemplo:</b> '+esc(o.bridge)+'</p>':'')+'<p><b>Dónde continuar en tu copia:</b> '+esc(guide)+'</p>',path=renderNotebookPath(l.id);
+ const support=SOURCE_NOTEBOOK_PATHS[l.id],explanation=(support?'<p><b>Cuaderno de apoyo:</b> '+esc(support.file)+'. Las referencias a sus bloques numerados corresponden a ese archivo. El cuaderno principal reúne la preparación dentro de cada tema.</p>':'')+(o?'<p><b>La conexión con el ejemplo:</b> '+esc(o.bridge)+'</p>':'')+'<p><b>Dónde continuar en tu copia:</b> '+esc(guide)+'</p>',path=renderNotebookPath(l.id);
  return path?path+'<details class="notebook-context"><summary>Cómo se conecta el cuaderno con este ejemplo</summary>'+explanation+'</details>':explanation;
 }
 export function renderExplorerLink(id){

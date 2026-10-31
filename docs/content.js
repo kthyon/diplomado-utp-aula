@@ -1,5 +1,6 @@
 import {reviewedGlossary} from './definitions.js?v=claridad-20261030';
 import {LESSON_GUIDES} from './learning-guides.js?v=claridad-20261030';
+import {ENCOUNTER_NOTEBOOKS,encounterForTopic} from './encounter-notebooks.js';
 export const REPO='kthyon/diplomado-utp-aula';
 export const SOURCES={ml:'https://docs.google.com/presentation/d/1UOnYu1aT7Sg58BUlmPL6_BNyoFlhFc4Zu456IZP93ns/edit',terms:'https://docs.google.com/document/d/1WfPiuA4LUkE3axpf3qb_-_cQu55OEpnwQohtTyN2zYo/edit',dl:'https://docs.google.com/document/d/1buuOnf-xMsWfpRQeyW2swHEt9I7JKsroikz0rKsG_G0/edit',activation:'https://docs.google.com/document/d/1qsi3HQwW0zRlLMyAplVuANgZzmuLhcIhvOAJaiUxU6c/edit'};
 export const COURSES={
@@ -477,7 +478,7 @@ const LESSON_BASE=[
     "source": "https://scikit-learn.org/stable/common_pitfalls.html"
   }
 ];
-export const LESSONS=LESSON_BASE.map(lesson=>{const guide=LESSON_GUIDES[lesson.id];return {...lesson,guide,summary:guide.objective,example:guide.case.context+' '+guide.case.conclusion,steps:guide.case.reasoning,sim:guide.explorer};});
+export const LESSONS=LESSON_BASE.map(lesson=>{const guide=LESSON_GUIDES[lesson.id],meeting=encounterForTopic(lesson.id);return {...lesson,notebooks:[meeting.file,...lesson.notebooks],guide,summary:guide.objective,example:guide.case.context+' '+guide.case.conclusion,steps:guide.case.reasoning,sim:guide.explorer};});
 const BASE_GLOSSARY=[
   [
     "Machine Learning",
@@ -664,6 +665,7 @@ export const GLOSSARY=reviewedGlossary(BASE_GLOSSARY);
 export function findLesson(id){return LESSONS.find(l=>l.id===id)}
 export function classOf(id){const c=COURSES[id.split('-')[0]];return c?.classes.find(cl=>cl.topics.includes(id))}
 export const NOTEBOOKS={
+ ...Object.fromEntries(ENCOUNTER_NOTEBOOKS.map(meeting=>[meeting.file,{title:meeting.title,hint:'Los tres temas del encuentro, con preparación incluida, ejemplos explicados y comprobaciones. Empieza por el tema indicado en el aula.'}])),
  'laboratorio-ml.ipynb':{title:'Laboratorio ML explicado',hint:'Preparación, referencia, métricas, ensambles, DBSCAN y series. Empieza por el bloque de esta clase.'},
  'regresion.ipynb':{title:'Regresión con fertilizante y lluvia',hint:'Recta, curva y regularización con ejemplos simulados.'},
  'clasificacion.ipynb':{title:'Clasificación e Iris',hint:'Logística, bosque, SVM y KNN con datos distintos.'},
