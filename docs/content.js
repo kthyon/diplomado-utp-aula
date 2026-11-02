@@ -1,5 +1,5 @@
-import {reviewedGlossary} from './definitions.js?v=claridad-20261030';
-import {LESSON_GUIDES} from './learning-guides.js?v=claridad-20261030';
+import {reviewedGlossary,reviewedTopicVocabulary} from './definitions.js?v=revision-dl-20261102c';
+import {LESSON_GUIDES} from './learning-guides.js?v=revision-dl-20261102c';
 import {ENCOUNTER_NOTEBOOKS,encounterForTopic} from './encounter-notebooks.js';
 export const REPO='kthyon/diplomado-utp-aula';
 export const SOURCES={ml:'https://docs.google.com/presentation/d/1UOnYu1aT7Sg58BUlmPL6_BNyoFlhFc4Zu456IZP93ns/edit',terms:'https://docs.google.com/document/d/1WfPiuA4LUkE3axpf3qb_-_cQu55OEpnwQohtTyN2zYo/edit',dl:'https://docs.google.com/document/d/1buuOnf-xMsWfpRQeyW2swHEt9I7JKsroikz0rKsG_G0/edit',activation:'https://docs.google.com/document/d/1qsi3HQwW0zRlLMyAplVuANgZzmuLhcIhvOAJaiUxU6c/edit'};
@@ -478,7 +478,7 @@ const LESSON_BASE=[
     "source": "https://scikit-learn.org/stable/common_pitfalls.html"
   }
 ];
-export const LESSONS=LESSON_BASE.map(lesson=>{const guide=LESSON_GUIDES[lesson.id],meeting=encounterForTopic(lesson.id);return {...lesson,notebooks:[meeting.file,...lesson.notebooks],guide,summary:guide.objective,example:guide.case.context+' '+guide.case.conclusion,steps:guide.case.reasoning,sim:guide.explorer};});
+export const LESSONS=LESSON_BASE.map(lesson=>{const originalGuide=LESSON_GUIDES[lesson.id],guide=lesson.id.startsWith('dl-')?{...originalGuide,vocabulary:reviewedTopicVocabulary(originalGuide.vocabulary)}:originalGuide,meeting=encounterForTopic(lesson.id);return {...lesson,notebooks:[meeting.file,...lesson.notebooks],guide,summary:guide.objective,example:guide.case.context+' '+guide.case.conclusion,steps:guide.case.reasoning,sim:guide.explorer};});
 const BASE_GLOSSARY=[
   [
     "Machine Learning",

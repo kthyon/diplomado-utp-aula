@@ -1,5 +1,5 @@
 import {ML_DEFINITIONS} from './definition-catalog-ml.js?v=claridad-20261030';
-import {DL_DEFINITIONS} from './definition-catalog-dl.js?v=sesgo-20261102';
+import {DL_DEFINITIONS} from './definition-catalog-dl.js?v=revision-dl-20261102c';
 import {SUPPORT_DEFINITIONS} from './definition-catalog-support.js';
 
 export const DEFINITIONS=[...ML_DEFINITIONS,...DL_DEFINITIONS,...SUPPORT_DEFINITIONS];
@@ -9,6 +9,10 @@ export const getDefinition=id=>byId.get(id);
 export function findDefinition(term){const key=norm(term);return key?DEFINITIONS.find(d=>[d.term,...d.aliases].some(a=>norm(a)===key)):undefined;}
 export function definitionName(d){return d.expansion?`${d.term}: ${d.expansion} (${d.translation}). `:d.translation&&norm(d.translation)!==norm(d.term)?`${d.term}: ${d.translation}. `:'';}
 export function definitionText(d,{example=true}={}){return definitionName(d)+d.meaning+' '+d.reading+(example?' '+d.example:'');}
+export function reviewedTopicVocabulary(vocabulary){
+ const used=new Set();
+ return vocabulary.flatMap(item=>{const d=findDefinition(item.term),key=d?.id||norm(item.term);if(used.has(key))return [];used.add(key);return [{...item,meaning:d?definitionText(d,{example:false}):item.meaning}];});
+}
 export function reviewedGlossary(base){
  const used=new Set(),rows=[];
  for(const [term,meaning] of base){const d=findDefinition(term);if(!d){rows.push([term,meaning]);continue;}if(used.has(d.id))continue;used.add(d.id);rows.push(glossaryRow(d));}
@@ -34,10 +38,10 @@ export const TOPIC_DEFINITION_IDS={
  'ml-clustering':['dbscan','k-means','mean-shift'], 'ml-pca':['pca','pc','varianza','varianza-explicada'],
  'ml-ensambles':['mae','rmse','r2','bagging','boosting','random-forest'], 'ml-series':['mae'],
  'ml-refuerzo':['rl','q-learning','alpha','gamma','epsilon'], 'ml-integracion':['mae'],
- 'dl-redes':['dl','relu','sigmoide'], 'dl-activaciones':['relu','sigmoide','tanh'],
+ 'dl-redes':['dl','relu','sigmoide','peso','sesgo'], 'dl-activaciones':['relu','sigmoide','tanh','identidad','saturacion','calibracion'],
  'dl-entrenamiento':['mse','bce','bce-logits','adam','gradiente','retropropagacion','tasa-aprendizaje'],
- 'dl-vision':['rgb','yolo'], 'dl-cnn':['cnn','relu'], 'dl-transferencia':['yolo','coco'],
- 'dl-secuencias':['rnn','lstm','mae'], 'dl-atencion':['qkv','softmax'], 'dl-transformers':['transformer','token','embedding'],
+ 'dl-vision':['rgb','yolo'], 'dl-cnn':['cnn','relu','cross-entropy'], 'dl-transferencia':['yolo','coco'],
+ 'dl-secuencias':['rnn','lstm','mae'], 'dl-atencion':['qkv','softmax'], 'dl-transformers':['transformer','token','embedding','residual','layernorm','cross-entropy','logit'],
  'dl-yolo':['yolo','coco','nms'], 'dl-evaluacion':['iou','tp','fp','fn','ap','map'], 'dl-integracion':[]
 };
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

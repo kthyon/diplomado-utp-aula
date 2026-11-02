@@ -1,5 +1,5 @@
 import {TOPICS,FARMS,PLANTS,SHIPMENTS,initialIdea,ideaCase,ideaResult,stepIdea} from './idea-models.js?v=graficos-20261027b';
-import {renderDLPrerequisites,renderDLReason,renderDLCheck,renderActivationBridge,mountActivationBridge} from './dl-foundations.js';
+import {renderDLPrerequisites,renderDLReason,renderDLCheck,renderActivationBridge,mountActivationBridge} from './dl-foundations.js?v=revision-dl-20261102c';
 import {activation} from './math.js';
 import {renderThreeScene} from './three-scenes.js?v=graficos-20261027b';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

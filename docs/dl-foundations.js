@@ -98,7 +98,7 @@ export const DL_FOUNDATIONS = {
   why: '¿Por qué separar comparación y contenido?',
   reason: 'Las claves permiten decidir cuánto participa cada fuente; los valores contienen lo que aporta. Primero se multiplican componentes correspondientes y se suman: producto escalar. Se divide por la raíz de la dimensión de la clave para moderar la escala de las puntuaciones; softmax normaliza después. Esto no garantiza probabilidades calibradas ni explica causalidad.',
   flow: [['Comparar','Q=[1,0]; claves [1,0] y [0,1] → 1 y 0'],['Escalar','Dimensión 2 → dividir entre √2'],['Normalizar','softmax(0,7071; 0) → 0,6698 y 0,3302'],['Mezclar V','0,6698×10 + 0,3302×20 ≈ 13,302']],
-  read: 'Los números son construidos, sin unidades físicas. Los pesos de atención se recalculan al cambiar Q; no son los parámetros aprendidos de las proyecciones que generan Q, K y V en una red real.',
+  read: 'Q y K son vectores construidos sin unidades físicas. V contiene 10 y 20 cajas ficticias; la mezcla conserva esa unidad. Los pesos de atención no tienen unidades y se recalculan al cambiar Q; no son los parámetros aprendidos de las proyecciones que generan Q, K y V en una red real.',
   question: 'Con Q=[0,0], ¿se elimina la información o se mezcla de otra manera?',
   answer: 'Ambos productos escalares son 0. softmax asigna 0,5 a cada fuente y la salida es 0,5×10+0,5×20=15. Consulta cero no implica salida cero: los valores siguen siendo 10 y 20.',
   source: 'https://arxiv.org/abs/1706.03762'
@@ -110,7 +110,7 @@ export const DL_FOUNDATIONS = {
   flow: [['Entrada','[1,2,3,4]: cuatro cantidades'],['Representación','Vectores + información de posición'],['Bloques','Autoatención y transformaciones'],['Respuesta','¿Última < primera? 4<1 → no (0)']],
   read: 'La regla última<primera genera la etiqueta de referencia de la tarea sintética. El dibujo no muestra una red entrenada ni promete que siempre acierte; la práctica entrena y compara sus predicciones con esas etiquetas.',
   question: '¿Qué respuesta debe tener [4,3,2,1]? ¿Y [2,1,4,2]?',
-  answer: 'Primera: 1<4 es verdadero → etiqueta 1. Segunda: 2<2 es falso → etiqueta 0. «Menor» es estricto. Antes de mirar una predicción puedes calcular su respuesta de referencia y después comprobarla en casos reservados.',
+  answer: 'Primera: 1<4 es verdadero → etiqueta 1. Segunda: 2<2 es falso → etiqueta 0. «Menor» es estricto. La segunda respuesta se obtiene de la regla: el generador de entrenamiento y prueba de Colab excluye extremos iguales, por lo que su evaluación no comprueba ese caso.',
   source: 'https://arxiv.org/abs/1706.03762'
  },
  'dl-yolo': {
@@ -137,7 +137,7 @@ export const DL_FOUNDATIONS = {
   before: [['Política','Regla que transforma una salida del modelo en una acción.'],['Coste supuesto','Puntos para comparar consecuencias; no representan precios reales.'],['Evidencia de uso','Datos, errores y condiciones que permiten justificar el alcance de una decisión.']],
   why: '¿Por qué la mejor política depende de las consecuencias?',
   reason: 'Revisar consume recursos; omitir un defecto también puede tener consecuencias. Aquí suponemos que revisar identifica y retira cualquier defecto revisado. El coste suma revisiones y defectos aceptados; no añade otra penalización por falsa alerta porque su revisión ya está contada. En una aplicación habría que medir tiempos, errores humanos y capacidad disponible.',
-  flow: [['Política A','4 revisiones; 1 defecto aceptado'],['Costes elegidos','1 punto/revisión; 8/defecto aceptado'],['Comparar','A: 4×1+1×8=12; revisar 10: 10×1=10'],['Cambiar una consecuencia','Con 1/defecto: A=5; revisar 10=10']],
+  flow: [['Corte 0,50','4 revisiones; 1 defecto aceptado → 4×1+1×8=12'],['Corte 0,30','6 revisiones; 0 defectos aceptados → coste 6'],['Referencia','Revisar los 10 → 10×1=10'],['Con coste 1/defecto','0,70 y 0,90 empatan en 4, con distinta carga y omisiones']],
   read: 'Las cantidades son un escenario construido para entender la cuenta; la práctica usa su propia tabla de diez granos. Cambian las consecuencias o el umbral, no las puntuaciones. Las dos alternativas deben evaluarse sobre los mismos casos.',
   question: '¿Puedes elegir el umbral mirando la prueba final y luego anunciar ese coste como evaluación independiente?',
   answer: 'No. Usa validación para elegir el umbral y la política, y una prueba reservada para estimar el resultado final. Documenta la regla, sus costes supuestos, capacidad y errores. Una comparación didáctica no autoriza un uso industrial.',

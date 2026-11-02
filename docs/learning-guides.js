@@ -1439,7 +1439,7 @@ export const LESSON_GUIDES={
   },
   "dl-redes": {
     "objective": "Construir el cálculo de una neurona y rastrear cómo sus entradas producen una salida.",
-    "concept": "Una red neuronal es un conjunto de pequeñas unidades de cálculo conectadas. No es un cerebro ni entiende por ver una imagen. Recibe números y los transforma. Una neurona es una de esas unidades: multiplica cada entrada por un valor llamado peso, suma los resultados y añade otro número llamado sesgo. Después aplica una regla, la activación, para obtener su salida. Las unidades pueden organizarse en capas: la salida de una alimenta a la siguiente. Primero seguiremos una sola neurona con valores dados. Aprender será cambiar pesos y sesgos a partir de ejemplos; esta cuenta aún no los cambia.",
+    "concept": "Una red neuronal conecta unidades de cálculo llamadas neuronas. Cada neurona multiplica sus entradas por pesos, suma los productos y añade un sesgo; después aplica una activación para obtener su salida. Una capa reúne varias de esas unidades. Sus salidas forman una representación que puede alimentar otra capa hasta producir la respuesta de la tarea. Primero seguiremos una neurona con parámetros dados. Entrenar cambia parámetros a partir de una pérdida; hacer inferencia usa sus valores actuales.",
     "relevance": "Permite explicar el cálculo antes de confiar en una etiqueta o una puntuación.",
     "case": {
       "title": "Dos señales y un ajuste",
@@ -1529,7 +1529,8 @@ export const LESSON_GUIDES={
       "instruction": "Pulsa «Restablecer ejemplo». Anota suma y salida; cambia solo «Sesgo b» de 0,5 a −0,5 y vuelve a anotarlas.",
       "watch": "Los productos x × w permanecen en 1 y −1; cambia el sesgo que se añade antes de ReLU.",
       "expected": "Con sesgo 0,5: z = 0,5 y salida = 0,5. Con sesgo −0,5: z = −0,5 y salida = 0. Son parámetros elegidos, sin entrenamiento.",
-      "notebookGuide": "En tu copia de Laboratorio DL, ejecuta las dos celdas de preparación y la primera celda de código del bloque 09. Allí se fijan entradas [0,6; 0,2], pesos [2; −1] y sesgo −0,5; se aplica sigmoide, no ReLU."
+      "notebookGuide": "En tu copia de Laboratorio DL, ejecuta las dos celdas de preparación y la primera celda de código del bloque 09. Allí se fijan entradas [0,6; 0,2], pesos [2; −1] y sesgo −0,5; se aplica sigmoide, no ReLU.",
+      "context": "La calculadora web usa entradas [2,1], pesos [0,5;−1], sesgo 0,5 y ReLU. El cuaderno usa [0,6;0,2], [2;−1], sesgo −0,5 y sigmoide: z=1,2−0,2−0,5=0,5 y salida≈0,622. Coincide z, pero cambia la activación; por eso no debe coincidir la salida. Son parámetros manuales en ambos casos."
     },
     "build": {
       "title": "Calculadora de una neurona",
@@ -1556,7 +1557,7 @@ export const LESSON_GUIDES={
   },
   "dl-activaciones": {
     "objective": "Configurar una transformación de señales y comprobar su rango de salida.",
-    "concept": "Una activación es una regla que recibe la suma de una neurona y la convierte en el número que seguirá adelante. No añade una foto ni decide por sí sola si hay un defecto. ReLU devuelve cero si recibe un número negativo y conserva los positivos. La sigmoide lleva cualquier entrada finita a un valor entre cero y uno. Tanh la lleva entre menos uno y uno. Estas transformaciones permiten combinar señales de manera más flexible que repetir solo sumas y multiplicaciones. Veremos la misma entrada en las tres, antes de leer sus curvas.",
+    "concept": "Una activación transforma la suma z de una neurona en la salida que continúa hacia otras operaciones. ReLU (Rectified Linear Unit; unidad lineal rectificada) devuelve máximo(0,z). La sigmoide devuelve 1/(1+exp(−z)), entre 0 y 1 para entradas finitas; exp significa la función exponencial de base e≈2,718. Tanh, la tangente hiperbólica, devuelve un número entre −1 y 1. Las activaciones no lineales permiten que varias capas representen relaciones que no se reducen a una sola transformación afín, es decir, multiplicar y sumar. Su salida todavía necesita interpretarse según la tarea.",
     "relevance": "Ayuda a evitar que un cero, un negativo o un valor entre cero y uno se confundan con una categoría o un acierto.",
     "case": {
       "title": "La misma señal sigue tres reglas",
@@ -1633,6 +1634,18 @@ export const LESSON_GUIDES={
       {
         "term": "Capa de salida",
         "meaning": "Última transformación. Su tamaño y activación deben corresponder a la cantidad o categorías que se quieren predecir."
+      },
+      {
+        "term": "Identidad",
+        "meaning": "Función que devuelve su entrada: identidad(z)=z."
+      },
+      {
+        "term": "Saturación",
+        "meaning": "Zona en la que cambios de la entrada producen cambios muy pequeños de salida; en sigmoide y tanh puede reducir el gradiente transmitido. No significa que la pérdida sea pequeña."
+      },
+      {
+        "term": "Calibración",
+        "meaning": "Concordancia entre puntuaciones interpretadas como probabilidades y frecuencias observadas en grupos de casos."
       }
     ],
     "explorer": "activation",
@@ -1644,7 +1657,8 @@ export const LESSON_GUIDES={
       "instruction": "Fija «Señal de entrada» en −2. Cambia «Función» entre ReLU, Sigmoid y tanh; registra las tres salidas. Repite con 0 y 2.",
       "watch": "El punto muestra entrada en el eje X y salida en el eje Y. Cambiar función conserva la entrada.",
       "expected": "Para −2: 0; 0,119; −0,964. Para 0: 0; 0,5; 0. Para 2: 2; 0,881; 0,964, en el orden ReLU, sigmoid y tanh.",
-      "notebookGuide": "En la primera celda de código del bloque 09 de Laboratorio DL, ejecuta las curvas de activación. En la celda siguiente, localiza ReLU en las capas ocultas y la sigmoide que se aplica al evaluar la salida."
+      "notebookGuide": "En la primera celda de código del bloque 09 de Laboratorio DL, ejecuta las curvas de activación. En la celda siguiente, localiza ReLU en las capas ocultas y la sigmoide que se aplica al evaluar la salida.",
+      "context": "Aquí hay dos experimentos: la comparación de capas muestra qué permite representar ReLU; las tres curvas comparan funciones sobre una misma z. En Colab, cambia SENAL para repetir esa comparación. Una identidad entrega z sin cambiarlo; la sigmoide de una clasificación binaria se aplica al logit al interpretar la salida, no antes de BCEWithLogitsLoss."
     },
     "build": {
       "title": "Tabla de pruebas de activación",
@@ -1671,7 +1685,7 @@ export const LESSON_GUIDES={
   },
   "dl-entrenamiento": {
     "objective": "Ajustar un parámetro y diagnosticar un paso que empeora el resultado.",
-    "concept": "Entrenar es corregir los valores ajustables de una red usando ejemplos con respuestas conocidas. Esos valores, como pesos y sesgos, se llaman parámetros. Primero calculamos una salida y medimos cuánto se aparta de la respuesta; el número que resume ese desacuerdo es la pérdida. Después calculamos cómo cambiaría la pérdida al mover cada parámetro: eso es el gradiente. El tamaño de la corrección depende de una tasa de aprendizaje elegida. En una red, la retropropagación calcula esas influencias a través de sus capas y el optimizador aplica la actualización. Entenderemos el ciclo con un solo ajuste antes de mirar una red completa. La regla de restar tasa por gradiente describe el descenso básico de nuestro ejemplo. Adam, utilizado en el cuaderno, también emplea el historial de los gradientes para ajustar cada parámetro.",
+    "concept": "En este encuentro entrenamos de forma supervisada: usamos entradas con respuestas conocidas, llamadas etiquetas, para ajustar pesos y sesgos. Una pasada hacia delante calcula la salida; una función de pérdida mide el desacuerdo. El gradiente indica cómo cambia localmente esa pérdida al variar cada parámetro. La retropropagación calcula los gradientes a través de las capas; el optimizador aplica las actualizaciones. La tasa de aprendizaje regula su tamaño. Primero veremos descenso básico con un parámetro; Adam (Adaptive Moment Estimation; estimación adaptativa de momentos), usado en Colab, emplea además el historial de gradientes.",
     "relevance": "Ayuda a interpretar una curva de entrenamiento: ajustar más fuerte puede empeorar.",
     "case": {
       "title": "Acercarse a un objetivo sin pasarse",
@@ -1768,6 +1782,18 @@ export const LESSON_GUIDES={
       {
         "term": "Adam",
         "meaning": "Adam: Adaptive Moment Estimation (Estimación adaptativa de momentos). Optimizador que ajusta los parámetros usando promedios de los gradientes y de sus cuadrados. El nombre procede de esas estimaciones adaptativas. Tiene una tasa global y un ajuste dependiente del historial para cada parámetro; no aplica simplemente el mismo paso del descenso básico."
+      },
+      {
+        "term": "Hiperparámetro",
+        "meaning": "Configuración elegida durante el desarrollo, como tasa, épocas o tamaño de lote; se distingue de los pesos aprendidos."
+      },
+      {
+        "term": "Regla de la cadena",
+        "meaning": "Calcula la sensibilidad de operaciones encadenadas multiplicando sensibilidades locales. Para z=2w y L=(z−3)²: dL/dw=2(z−3)×2; en w=1 vale −4."
+      },
+      {
+        "term": "Prueba reservada",
+        "meaning": "Casos usados para estimar el resultado final, una vez elegidas las configuraciones. Si se eligen configuraciones mirando esos resultados, deja de ser una prueba independiente."
       }
     ],
     "explorer": "training",
@@ -1779,7 +1805,8 @@ export const LESSON_GUIDES={
       "instruction": "Pulsa «Reiniciar», fija «Tasa de aprendizaje» en 0,10 y pulsa «Dar un paso». Registra el resultado. Reinicia y repite con 1,10.",
       "watch": "Lee la cuenta de actualización y la pérdida. En ambas pruebas el parámetro empieza en −2 y la pérdida en 25.",
       "expected": "El gradiente inicial es −10. Con tasa 0,10: parámetro −1 y pérdida 16. Con 1,10: parámetro 9 y pérdida 36; un paso mayor empeora esta cuenta.",
-      "notebookGuide": "En Laboratorio DL, el bloque 01 contiene la celda «Pérdida L(w) = (w−3)^2»: compara TASA = 0.10 y 1.10 ejecutando la celda desde el inicio. El bloque 09 entrena otra red y usa otra pérdida; sus cifras no son las de este ejemplo."
+      "notebookGuide": "En Laboratorio DL, el bloque 01 contiene la celda «Pérdida L(w) = (w−3)^2»: compara TASA = 0.10 y 1.10 ejecutando la celda desde el inicio. El bloque 09 entrena otra red y usa otra pérdida; sus cifras no son las de este ejemplo.",
+      "context": "El descenso manual minimiza (θ−3)², con objetivo elegido 3. La red de café de Colab usa otra tarea y pérdida: y=1 significa sano y y=0, defectuoso; una puntuación alta favorece sano. BCEWithLogitsLoss recibe la puntuación bruta y aplica internamente sigmoide y entropía cruzada binaria. La práctica separa entrenamiento y prueba, pero no implementa un conjunto de validación ni parada temprana: no uses la prueba para elegir épocas o tasa."
     },
     "build": {
       "title": "Registro de ajustes y pérdidas",
@@ -1806,7 +1833,7 @@ export const LESSON_GUIDES={
   },
   "dl-vision": {
     "objective": "Definir la salida visual que necesita una operación y probar una detección.",
-    "concept": "Una imagen digital está formada por pequeños cuadritos llamados píxeles. Cada uno guarda números que representan su brillo o color. Visión por computador es usar esos números para responder preguntas sobre imágenes. La primera decisión es qué respuesta necesitamos: una etiqueta para toda la foto, la ubicación de cada objeto o su superficie visible. Son tareas diferentes. Clasificación responde sobre la foto; detección propone objetos y ubicaciones; segmentación marca regiones de píxeles. Una máscara es el conjunto de píxeles marcados, no un rectángulo alrededor del objeto.",
+    "concept": "Una imagen digital organiza números por posiciones llamadas píxeles. En escala de grises cada píxel tiene una intensidad; en RGB (Red, Green, Blue; rojo, verde y azul) tiene tres componentes de color. Visión por computador utiliza esos números para responder preguntas. En nuestro ejemplo, clasificar da una etiqueta para la foto; detectar propone categoría y ubicación de cada objeto; segmentar asigna categorías o identidades a píxeles. Una máscara representa los píxeles marcados. Para distinguir objetos de la misma categoría se necesitan instancias separadas.",
     "relevance": "Evita pedir posiciones o contornos a una herramienta que solamente clasifica.",
     "case": {
       "title": "Una foto de tres frutos, tres necesidades",
@@ -1904,7 +1931,8 @@ export const LESSON_GUIDES={
       "instruction": "En «Pregunta», recorre Clasificación, Detección y Segmentación. Para cada opción, anota qué información nueva aparece sobre la misma escena.",
       "watch": "Una etiqueta describe la imagen; las cajas localizan objetos; las máscaras delimitan regiones. La escena conserva los mismos tres frutos.",
       "expected": "Obtienes una etiqueta, tres cajas o tres regiones coloreadas. Son salidas dibujadas para comparar tareas, no predicciones de una red.",
-      "notebookGuide": "En Laboratorio DL, ejecuta Preparación 1–2 y 10B · Comparar etiqueta, cajas y regiones: dibuja dos objetos para comparar etiqueta, cajas y regiones. El aula usa tres frutos, pero la distinción entre tareas es la misma. Después puedes pasar a YOLO 2–6 para ver detección real con pesos existentes."
+      "notebookGuide": "En Laboratorio DL, ejecuta Preparación 1–2 y 10B · Comparar etiqueta, cajas y regiones: dibuja dos objetos para comparar etiqueta, cajas y regiones. El aula usa tres frutos, pero la distinción entre tareas es la misma. Después puedes pasar a YOLO 2–6 para ver detección real con pesos existentes.",
+      "context": "La web dibuja tres frutos con máscaras separadas. Colab dibuja dos objetos y una máscara binaria común: distingue objeto de fondo, pero no asigna un identificador distinto a cada objeto. Ninguno de esos dibujos es una inferencia. En otras tareas una imagen puede recibir varias etiquetas; aquí la clasificación global usa una sola."
     },
     "build": {
       "title": "De una foto a una salida definida",
@@ -1931,7 +1959,7 @@ export const LESSON_GUIDES={
   },
   "dl-cnn": {
     "objective": "Construir un mapa de filtro y distinguir cambios de imagen de cambios de pesos.",
-    "concept": "Para entender una CNN (Convolutional Neural Network; red neuronal convolucional), empieza con un cuadrito de imagen: un píxel guarda un número. Una ventana reúne unos pocos píxeles vecinos. Un filtro es una pequeña lista de pesos que se coloca sobre esa ventana: multiplica cada píxel por el peso correspondiente y suma. Después se mueve y repite la misma operación. Los números obtenidos forman el mapa de respuestas. Una CNN es una red que usa este tipo de operaciones locales y aprende filtros con ejemplos. Nuestro primer filtro está elegido de antemano para ver de dónde sale cada número; una respuesta del filtro aún no identifica un producto.",
+    "concept": "Una CNN (Convolutional Neural Network; red neuronal convolucional) aprende filtros que se aplican a zonas cercanas de una entrada. Empezaremos con una imagen de un canal: un número por píxel. Una ventana reúne píxeles vecinos y un filtro, también llamado kernel, aporta un peso por posición. Multiplicamos los valores correspondientes y sumamos; al mover la ventana, las sumas forman un mapa de respuestas. Compartir el filtro reutiliza sus pesos en distintas posiciones. En una imagen de varios canales, un filtro combina también información de esos canales. Aquí fijamos un filtro a mano para inspeccionar una operación.",
     "relevance": "Ayuda a distinguir píxeles, pesos y resultados, antes de interpretar lo que reconoce una red.",
     "case": {
       "title": "Encontrar un cambio entre filas",
@@ -2006,6 +2034,14 @@ export const LESSON_GUIDES={
       {
         "term": "ReLU",
         "meaning": "ReLU: Rectified Linear Unit (Unidad lineal rectificada). Función de activación que devuelve el mayor entre la entrada y cero. Conserva números positivos y convierte los negativos en cero. Su salida no tiene límite superior y no representa por sí sola una probabilidad."
+      },
+      {
+        "term": "CrossEntropyLoss",
+        "meaning": "Pérdida de entropía cruzada para clasificación: recibe las puntuaciones brutas y la clase correcta. En el cuaderno no se aplica softmax antes."
+      },
+      {
+        "term": "Aplanar o Flatten",
+        "meaning": "Reorganizar todos los valores de los mapas en una lista; no aprende pesos ni selecciona por sí solo los importantes."
       }
     ],
     "explorer": "convolution",
@@ -2017,7 +2053,8 @@ export const LESSON_GUIDES={
       "instruction": "Selecciona «Filtro: Horizontal» y «Columna de la ventana: 1». Recorre las filas 1, 2 y 3; registra sus sumas. Vuelve a fila 1 y elige Promedio.",
       "watch": "La ventana sombreada señala los nueve píxeles que producen la celda marcada del mapa.",
       "expected": "Horizontal: 3, 3 y 0 para las tres filas. Cada columna repite esos valores. Promedio en fila 1, columna 1: 1/3 ≈ 0,333.",
-      "notebookGuide": "En Laboratorio DL, ejecuta el bloque 10: entrena una CNN de clasificación de dígitos y muestra después un filtro fijo sobre una imagen 8 × 8. Ese filtro y su relleno son distintos del explorador; no deben producir mapas iguales."
+      "notebookGuide": "En Laboratorio DL, ejecuta el bloque 10: entrena una CNN de clasificación de dígitos y muestra después un filtro fijo sobre una imagen 8 × 8. Ese filtro y su relleno son distintos del explorador; no deben producir mapas iguales.",
+      "context": "La calculadora usa 5×5, filtro 3×3, paso 1 y sin relleno: salida 3×3. Colab clasifica dígitos reales de 8×8, un canal, con valores de intensidad 0–16 divididos entre 16. Aprende 8 filtros con relleno 1: produce 8 mapas de 8×8. Max pooling 2×2 conserva el máximo de cada región y reduce cada mapa a 4×4; al aplanar hay 8×4×4=128 valores. La salida tiene 10 puntuaciones, una por dígito. El filtro fijo mostrado después es una ilustración distinta de los filtros aprendidos."
     },
     "build": {
       "title": "Mapa de respuestas locales",
@@ -2134,7 +2171,8 @@ export const LESSON_GUIDES={
       "instruction": "En YOLO, ejecuta hasta la sección 3. Consulta «modelo.names»: busca la categoría person y comprueba si existe una categoría café defectuoso.",
       "watch": "El archivo de pesos aporta categorías aprendidas; TRADUCCION solo cambia sus nombres visibles.",
       "expected": "person figura entre las categorías; café defectuoso no. Cargar pesos o traducir una etiqueta no adapta el modelo a una clase nueva.",
-      "notebookGuide": "YOLO, secciones 3, 5 y 6: carga de pesos, inferencia y lectura de filas. La sección 9 filtra una categoría existente. El cuaderno no realiza ajuste fino ni entrena clases nuevas."
+      "notebookGuide": "YOLO, secciones 3, 5 y 6: carga de pesos, inferencia y lectura de filas. La sección 9 filtra una categoría existente. El cuaderno no realiza ajuste fino ni entrena clases nuevas.",
+      "context": "El cuaderno carga un detector y consulta modelo.names: ejecuta inferencia, no ajuste fino. La transferencia con extractor congelado entrenaría una cabeza nueva; el ajuste fino modificaría además parte o todo el extractor. Ambas adaptaciones requieren ejemplos de la tarea y evaluación. Que una categoría esté en el catálogo es necesario para esa salida directa, pero no garantiza buen desempeño en las imágenes locales."
     },
     "build": {
       "title": "Ficha de compatibilidad del modelo",
@@ -2161,7 +2199,7 @@ export const LESSON_GUIDES={
   },
   "dl-secuencias": {
     "objective": "Construir un resumen de una secuencia que tenga en cuenta el orden.",
-    "concept": "Una secuencia es una lista en la que importa qué ocurrió primero y qué vino después. Recibir 10, luego 20 y luego 30 cajas cuenta una historia diferente de recibirlas en el orden inverso. Una regla recurrente conserva un pequeño resumen del pasado y lo actualiza con cada nueva lectura. A ese resumen lo llamamos estado. Primero veremos un estado calculado con una regla fija y sencilla. Una RNN es una red que aprende cómo actualizarlo. Una LSTM (Long Short-Term Memory; memoria de largo y corto plazo) es un tipo de RNN con mecanismos para conservar o descartar información durante ese recorrido.",
+    "concept": "Una secuencia es una lista ordenada: recibir 10,20,30 cajas cuenta un recorrido distinto de recibir 30,20,10. Una regla recurrente actualiza un resumen llamado estado con la entrada actual y el estado anterior. Una RNN (Recurrent Neural Network; red neuronal recurrente) aprende los parámetros de esa actualización. Una LSTM (Long Short-Term Memory; memoria de largo y corto plazo) es una red recurrente con estado de celda y compuertas numéricas que regulan qué conservar e incorporar. Primero seguiremos una regla fija de mitades; después distinguiremos ese resumen de un pronóstico aprendido.",
     "relevance": "Un resumen de sensores o ventas puede perder información si ignora qué ocurrió primero.",
     "case": {
       "title": "Los mismos valores, dos recorridos",
@@ -2240,6 +2278,10 @@ export const LESSON_GUIDES={
       {
         "term": "Compuerta",
         "meaning": "Mecanismo numérico que regula cuánto de una información pasa a otra operación; no implica comprensión humana."
+      },
+      {
+        "term": "Estado oculto y estado de celda",
+        "meaning": "La LSTM mantiene dos vectores internos: una representación oculta y un estado de celda regulado por compuertas. Su tamaño no es el número de lecturas de la ventana."
       }
     ],
     "explorer": "sequence",
@@ -2251,7 +2293,8 @@ export const LESSON_GUIDES={
       "instruction": "Elige Ascendente en «Orden de la secuencia» y pulsa «Ver el siguiente paso» tres veces. Cambia a Descendente y recorre sus tres pasos desde cero.",
       "watch": "Cada fila usa solo el estado anterior y la entrada actual. El promedio no cambia al invertir los valores.",
       "expected": "Ascendente: estados 5; 12,5; 21,25. Descendente: 15; 17,5; 13,75. Ambos conjuntos promedian 20. La regla fija no se entrena.",
-      "notebookGuide": "En Laboratorio DL, bloque 11, la celda de LSTM usa las 12 lecturas previas para pronosticar un paso. Ejecuta las preparaciones y esa celda; compara los dos MAE que imprime sobre los mismos 60 instantes reservados."
+      "notebookGuide": "En Laboratorio DL, bloque 11, la celda de LSTM usa las 12 lecturas previas para pronosticar un paso. Ejecuta las preparaciones y esa celda; compara los dos MAE que imprime sobre los mismos 60 instantes reservados.",
+      "context": "La regla manual resume cantidades de cajas; Colab pronostica una señal artificial sin unidades físicas. VENTANA=12 indica doce lecturas previas. En nn.LSTM(1,12), el segundo 12 es el tamaño del estado oculto, otra configuración distinta. Los 60 instantes de prueba se evalúan de uno en uno, usando las observaciones previas disponibles en cada instante; no son 60 pasos pronosticados desde un único origen. La referencia repite la última lectura y ambos MAE usan los mismos instantes."
     },
     "build": {
       "title": "Registro de estados y pronóstico",
@@ -2368,7 +2411,8 @@ export const LESSON_GUIDES={
       "instruction": "En «Consulta Q», recorre [1,0], [0,1] y [0,0]. Para cada consulta, anota peso de A, peso de B y salida combinada.",
       "watch": "K y V permanecen fijos. Los productos se dividen por √2; softmax produce los pesos que multiplican 10 y 20.",
       "expected": "Los pesos suman 1 en cada caso. Las salidas son aproximadamente 13,302; 16,698 y 15; la consulta nula asigna 0,5 a cada fuente.",
-      "notebookGuide": "En 12A · Mezclar dos registros con atención de Laboratorio DL se reconstruye la misma mezcla A=10 y B=20 del aula. Ejecuta Preparación 1–2 y esa celda. Sigue comparación → pesos → mezcla para las consultas [1,0], [0,1] y [0,0]."
+      "notebookGuide": "En 12A · Mezclar dos registros con atención de Laboratorio DL se reconstruye la misma mezcla A=10 y B=20 del aula. Ejecuta Preparación 1–2 y esa celda. Sigue comparación → pesos → mezcla para las consultas [1,0], [0,1] y [0,0].",
+      "context": "Q y K son listas de dos números abstractos, sin unidades físicas. V contiene cantidades ficticias de 10 y 20 cajas, de modo que la mezcla conserva la unidad cajas y puede ser fraccionaria. Los pesos de atención no tienen unidades y se recalculan al cambiar Q. No son los pesos aprendidos de una capa lineal ni un conteo de cajas físicas enviadas."
     },
     "build": {
       "title": "Tabla de consulta, pesos y resultado",
@@ -2395,7 +2439,7 @@ export const LESSON_GUIDES={
   },
   "dl-transformers": {
     "objective": "Construir una prueba de clasificación de secuencias con respuestas verificables.",
-    "concept": "Un Transformer es una forma de organizar una red para trabajar con secuencias. La atención permite que cada parte combine información de otras partes. La posición informa en qué lugar aparece cada entrada: sin ella se puede confundir el primer valor con el último. Cada entrada se expresa como una lista de números para que la red pueda calcular; a esa lista se le llama representación vectorial. No hace falta empezar por sus matrices: primero resolveremos una pregunta de cuatro entregas y sabremos cuál debe ser la respuesta correcta. Después comprobaremos qué calculó la red.",
+    "concept": "Un Transformer organiza bloques de atención y otras transformaciones para construir representaciones con contexto. En la tarea del cuaderno cada número es un token, una unidad de entrada, y una tabla aprendida llamada embedding lo convierte en un vector. La autoatención mezcla información de la misma secuencia. El modelo añade información de posición y combina las cuatro posiciones para producir dos puntuaciones de clase. El orden puede estar disponible tanto por esa información añadida como por la manera de leer las posiciones al final: este experimento no aísla el efecto de la posición añadida.",
     "relevance": "Una arquitectura solo puede evaluarse después de definir qué debería responder.",
     "case": {
       "title": "¿El primero es mayor que el último?",
@@ -2437,7 +2481,7 @@ export const LESSON_GUIDES={
         "Cambiar el orden de los mismos números puede cambiar la etiqueta.",
         "La red debe aprender esta regla. La etiqueta calculada no es su predicción."
       ],
-      "conclusion": "La posición es necesaria para esta regla: [1,2,3,4] requiere 0 y [4,3,2,1] requiere 1. La tabla da respuestas esperadas; para saber qué predice el Transformer hay que ejecutar la red y leer su evaluación.",
+      "conclusion": "Esta regla necesita información de orden: [1,2,3,4] requiere 0 y [4,3,2,1] requiere 1. El cuaderno conserva el orden al combinar las cuatro posiciones y además aprende información posicional; no demuestra que esta última sea la única causa del resultado. Las etiquetas de la tabla son referencias; las predicciones se conocen al ejecutar la red.",
       "stages": [
         {
           "title": "Entrada y posición",
@@ -2498,6 +2542,18 @@ export const LESSON_GUIDES={
       {
         "term": "Conexión residual y normalización",
         "meaning": "La conexión residual suma la entrada de un bloque a su transformación; la normalización ajusta la escala de activaciones. Ayudan al funcionamiento del bloque, pero no sustituyen su entrenamiento."
+      },
+      {
+        "term": "Conexión residual",
+        "meaning": "Suma la entrada de una transformación a su resultado: h+F(h)."
+      },
+      {
+        "term": "Normalización de capa",
+        "meaning": "LayerNorm centra y escala las componentes de cada representación y puede aplicar ajustes aprendidos. No equivale a dividir una imagen entre 255."
+      },
+      {
+        "term": "CrossEntropyLoss",
+        "meaning": "Entropía cruzada para las dos clases: recibe logits y la etiqueta; no requiere softmax previo."
       }
     ],
     "explorer": null,
@@ -2509,7 +2565,8 @@ export const LESSON_GUIDES={
       "instruction": "Resuelve las cuatro etiquetas del ejemplo con la regla «último menor que primero». En 12B · Comprobar el orden con un Transformer de Laboratorio DL compara las cuatro respuestas esperadas con las que realmente calcula la red.",
       "watch": "La regla da la respuesta esperada. El cuaderno calcula puntuaciones de clase, pérdida y exactitud sobre secuencias reservadas.",
       "expected": "Las cuatro etiquetas del ejemplo son 0, 1, 0 y 1. El cuaderno imprime esos cuatro casos con sus respuestas esperadas y calculadas; la exactitud real se conoce al ejecutar y no se garantiza.",
-      "notebookGuide": "En 12B · Comprobar el orden con un Transformer, se crean secuencias distintas, se calcula su respuesta conocida y se separan entrenamiento y prueba. La red combina representación numérica, posición, bloques de atención y salida. Compara las cuatro respuestas esperadas con las realmente calculadas."
+      "notebookGuide": "En 12B · Comprobar el orden con un Transformer, se crean secuencias distintas, se calcula su respuesta conocida y se separan entrenamiento y prueba. La red combina representación numérica, posición, bloques de atención y salida. Compara las cuatro respuestas esperadas con las realmente calculadas.",
+      "context": "La regla completa asigna 1 si primero>último y 0 en caso contrario, incluida la igualdad. El generador de entrenamiento/prueba elimina los casos con extremos iguales y las secuencias duplicadas. Por eso la pregunta con extremos iguales comprueba tu comprensión de la regla, pero no es un caso evaluado por esa prueba. La red devuelve dos logits, uno por clase; argmax elige el índice de la puntuación mayor. Softmax se usa para mostrar participaciones de clase, no antes de la pérdida de entropía cruzada."
     },
     "build": {
       "title": "Banco de pruebas para una secuencia",
@@ -2618,7 +2675,8 @@ export const LESSON_GUIDES={
       "instruction": "Cambia «Umbral de puntuación» a 0,50, 0,80 y 0,90. Registra cuántas filas se conservan y observa cuándo desaparece la caja propuesta. La puntuación permanece en 0,80.",
       "watch": "La misma propuesta tiene categoría Fruto, puntuación 0,80 y una caja fija. Cambia el corte para conservarla o descartarla; el objeto dibujado permanece en la imagen.",
       "expected": "Se conserva una fila a 0,50 y 0,80, y ninguna a 0,90. La igualdad cuenta como conservar; el objeto conocido sigue presente aunque descartes la propuesta.",
-      "notebookGuide": "En tu copia de YOLO, ejecuta en orden hasta la sección 8. Obtendrás foto marcada, tabla por detección, conteos y comparación de umbrales. La sección 11 permite guardar CSV y configuración."
+      "notebookGuide": "En tu copia de YOLO, ejecuta en orden hasta la sección 8. Obtendrás foto marcada, tabla por detección, conteos y comparación de umbrales. La sección 11 permite guardar CSV y configuración.",
+      "context": "En la calculadora se filtra una propuesta dada de 0,80 con ≥. En la inferencia de Colab, Ultralytics usa > conf; la igualdad exacta puede comportarse de otra manera. tabla_detecciones lee xyxy en píxeles de la foto original: ancho=x₂−x₁ y alto=y₂−y₁. imgsz=640 configura el procesamiento de entrada, no convierte esas coordenadas de salida en coordenadas de una foto de 640×640. Una fila es una detección conservada, no un objeto verificado."
     },
     "build": {
       "title": "Registro visual: de la foto a las filas",
@@ -2645,7 +2703,7 @@ export const LESSON_GUIDES={
   },
   "dl-evaluacion": {
     "objective": "Construir una comprobación de localización que separe filtro y coincidencia.",
-    "concept": "Evaluar un detector es comprobar sus propuestas contra respuestas de referencia. En una imagen de evaluación, una persona ha marcado qué objetos hay y dónde están; esas marcas son anotaciones. Para dar por correcta una propuesta comprobamos la categoría y cuánto coincide su caja con la anotada. IoU es una medida de esa coincidencia: compara la superficie compartida con toda la superficie cubierta por ambas cajas. Primero miraremos dos rectángulos. Después contaremos propuestas correctas, propuestas incorrectas y objetos que quedaron sin detectar. Una mala propuesta puede producir los dos últimos errores a la vez.",
+    "concept": "Evaluar un detector es contrastar propuestas con objetos de referencia anotados. Para considerar correcta una propuesta, se exige categoría adecuada y suficiente coincidencia espacial. IoU (Intersection over Union; intersección sobre unión) es área compartida dividida entre el área cubierta por ambas cajas, contando la intersección una sola vez. Primero filtramos puntuaciones; después emparejamos propuestas y referencias una a una. Una propuesta sin coincidencia es un falso positivo; una referencia sin propuesta válida es un falso negativo. Una mala caja conservada puede producir ambos errores.",
     "relevance": "Una puntuación alta no garantiza una caja bien ubicada ni evita objetos omitidos.",
     "case": {
       "title": "Conservar una caja no basta",
@@ -2743,7 +2801,8 @@ export const LESSON_GUIDES={
       "instruction": "Fija «IoU mínima para coincidencia» en 0,50. Con umbral de puntuación 0,50, prueba desplazamientos 10 y 30. Vuelve a 10 y sube el umbral a 0,90.",
       "watch": "Registra IoU, filas conservadas, verdaderos positivos, falsos positivos y objetos omitidos. La puntuación y la referencia permanecen fijas.",
       "expected": "Las tres pruebas dan IoU 0,60; 1/7 ≈ 0,143; 0,60 y TP/FP/FN 1/0/0; 0/1/1; 0/0/1. Descartar una mala propuesta no borra el objeto omitido.",
-      "notebookGuide": "En YOLO, ejecuta las celdas de preparación de la sección 2 y ve a 13 · Evaluación didáctica: comprobar cajas, sección de cajas sintéticas. Usa referencias sintéticas conocidas para reproducir IoU y TP/FP/FN del aula. No necesita evaluar las fotos bus.jpg ni zidane.jpg."
+      "notebookGuide": "En YOLO, ejecuta las celdas de preparación de la sección 2 y ve a 13 · Evaluación didáctica: comprobar cajas, sección de cajas sintéticas. Usa referencias sintéticas conocidas para reproducir IoU y TP/FP/FN del aula. No necesita evaluar las fotos bus.jpg ni zidane.jpg.",
+      "context": "Web y Colab usan cajas de 40×40 y los mismos desplazamientos; sus orígenes difieren (web x=20; cuaderno x=10), pero las IoU y los conteos coinciden. El ejemplo exige la misma categoría y admite como máximo una propuesta. En una evaluación con varias cajas, cada referencia se empareja como máximo una vez: una segunda propuesta sobre el mismo objeto puede ser un falso positivo. La precisión de detecciones es TP/(TP+FP); recall o sensibilidad es TP/(TP+FN). Estas medidas no son exactitud ni mAP."
     },
     "build": {
       "title": "Prueba de aceptación de cajas",
@@ -2860,7 +2919,8 @@ export const LESSON_GUIDES={
       "instruction": "En el bloque 14 de Laboratorio DL, ejecuta primero con COSTO_DEFECTO_ACEPTADO = 8. Guarda la tabla; cambia ese valor a 1 y vuelve a ejecutar la celda.",
       "watch": "Puntuaciones, revisiones y defectos omitidos permanecen iguales. Solo cambia el coste asignado a aceptar un defecto.",
       "expected": "Con coste 8: 6, 12, 11 y 25 para umbrales 0,30; 0,50; 0,70; 0,90. Con coste 1: 6, 5, 4 y 4. Revisar todos cuesta 10 en ambos casos.",
-      "notebookGuide": "Ejecuta las preparaciones y la celda del bloque 14. La tabla usa diez granos ficticios; la línea discontinua representa revisar todos. El ejercicio supone que la revisión detecta todos los defectos y usa costes ficticios."
+      "notebookGuide": "Ejecuta las preparaciones y la celda del bloque 14. La tabla usa diez granos ficticios; la línea discontinua representa revisar todos. El ejercicio supone que la revisión detecta todos los defectos y usa costes ficticios.",
+      "context": "Esta tabla usa puntuaciones ficticias de defecto: aquí y=1 significa defectuoso, mientras que en el entrenamiento del primer encuentro significaba sano. Son tareas y conjuntos distintos: no reutilices una puntuación sin comprobar qué representa. Con coste de defecto 1, los cortes 0,70 y 0,90 empatan en 4 puntos, pero exigen 3 y 1 revisiones y omiten 1 y 3 defectos, respectivamente. El coste por sí solo no decide un desempate; documenta capacidad y errores aceptables."
     },
     "build": {
       "title": "Tabla de decisión para revisión asistida",

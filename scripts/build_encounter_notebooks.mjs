@@ -81,6 +81,7 @@ function topicCells(id){
   cells[0].source=intro.replace('### Entiende la idea', '### Antes de seguir: tres ideas necesarias\n\n'+foundation.before.map(([term,meaning])=>'**'+term+':** '+meaning).join('\n\n')+'\n\n### Entiende la idea');
   cells.push(md('fundamento-'+id,'### '+foundation.why+'\n\n'+foundation.reason+'\n\n**Sigue este recorrido:**\n\n'+foundation.flow.map(([title,value],i)=>(i+1)+'. **'+title+':** '+value).join('\n')+'\n\n'+foundation.read+'\n\n[Consultar el fundamento]('+foundation.source+')'));
  }
+ if(g.lab.context)cells.push(md('alcance-'+id,'### Qué cambia entre el ejemplo y esta práctica\n\n'+g.lab.context));
  const explained=new Set();
  const isReading=text=>/^###\s+(?:Lectura|Después de ejecutar|Lee las figuras)/i.test(text.trim());
  const addExplanation=(notebook,index,cellId)=>{
