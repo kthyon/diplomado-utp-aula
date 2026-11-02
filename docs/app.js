@@ -1,5 +1,5 @@
 import {isOrganizedTopic,renderTopicCompass,renderOrganizedFinish,mountLessonSections} from './learning-organization.js?v=organizacion-20261027';
-import {renderGlossary} from './definitions.js?v=colab-20261031b';
+import {renderGlossary} from './definitions.js?v=sesgo-20261102';
 import {notebookResourceRole} from './notebook-paths.js?v=colab-20261031b';
 import {colabNotebookUrl} from './encounter-notebooks.js';
 import {mountRoadmap} from './roadmap.js?v=1';
@@ -12,7 +12,7 @@ import {renderFlowGuide,renderLessonFlow} from './flow-guidance.js?v=descripcion
 import {laboratoryDestination} from './lab-access.js';
 import {readReferenceOffset,nextScheduleDelay} from './schedule-clock.js';
 import {summarizeProgress,renderProgressDashboard} from './progress-dashboard.js';
-import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=dl-20261102';
+import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=sesgo-20261102';
 import {mountProblemExplorer} from './learning-explorers.js';
 import {mountActivationBridge} from './dl-foundations.js';
 import {mountDLExplorer} from './dl-explorers.js?v=dl-20261102';

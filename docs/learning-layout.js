@@ -3,7 +3,7 @@ import {LESSON_OFFERING,renderNotebookBridge,renderExplorerLink} from './lesson-
 import {renderConceptConnections} from './concept-connections.js?v=definiciones-20261027';
 import {LESSON_SCENES,renderCaseDetail} from './lesson-scenes.js';
 import {isOrganizedTopic} from './learning-organization.js?v=organizacion-20261027';
-import {renderDLPrerequisites,renderDLReason,renderDLCheck,renderActivationBridge} from './dl-foundations.js';
+import {renderDLPrerequisites,renderDLReason,renderDLCheck,renderActivationBridge} from './dl-foundations.js?v=sesgo-20261102';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const CLASS_PURPOSES={
   "ml": [
