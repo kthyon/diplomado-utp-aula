@@ -1,4 +1,4 @@
-import {mountPlantNeuron} from './plant-neuron.js?v=planta-20261102';
+import {mountPlantNeuron} from './plant-neuron.js?v=planta-20261102b';
 import {knnFoundation,distancePanel,workedDistance,neighborGraphic,thresholdFoundation,scorePlot,thresholdSelection,metricExplanation} from './lab-explanations.js?v=graficos-20261027b';
 import {checkLabAccess} from './lab-access.js';
 import {STUDENT_RECORDS} from './database-config.js';

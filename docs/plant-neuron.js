@@ -29,7 +29,7 @@ function diagram(x,m,r,step,pending,mobile=false,target=1){
  const paths=mobile?['M88 100 V160 Q88 200 159 260','M300 100 V160 Q300 200 229 260','M194 327 V413','M194 483 V585']:['M144 91 C245 91 287 141 390 168','M144 267 C245 267 287 220 390 193','M480 181 H637','M725 181 H847'];
  const biasPath=mobile?'M305 250 Q305 268 232 274':'M435 76 V137';
  const reverse=mobile?'M114 755 H26 V287 H150':'M811 311 H435 V224';
- const reverseWeights=mobile?['M155 287 L88 162','M233 287 L300 162']:['M390 178 C287 141 245 91 206 91','M390 193 C287 220 245 267 206 267'];
+ const reverseWeights=mobile?['M155 287 L88 171','M233 287 L300 171']:['M390 178 C365 150 340 110 320 91','M390 193 C365 220 340 248 320 267'];
  const wire=(d,color,active,payload='',delay=0)=>`<path d="${d}" fill="none" stroke="${ink(color)}" stroke-width="${active?4:2}" opacity="${active?1:.45}" marker-end="url(#pn-arrow-${color.slice(1)})"/>${active?`<g class="pn-packet" opacity="0"><set attributeName="opacity" to="1" begin="${delay}s" dur="2s"/><circle r="7" fill="${ink(color)}"/>${payload?`<text x="0" y="-13" text-anchor="middle" class="pn-payload" style="fill:${ink(color)}">${payload}</text>`:''}<animateMotion begin="${delay}s" dur="2s" repeatCount="1" path="${d}"/></g>`:''}`;
  const text=(cx,cy,content,cls='')=>`<text x="${cx}" y="${cy}" text-anchor="middle" class="${cls}">${content}</text>`;
  const node=(pos,title,value,color,active,sub='')=>`<g><rect x="${pos[0]-43}" y="${pos[1]-37}" width="86" height="74" rx="20" fill="var(--paper)" stroke="${ink(color)}" stroke-width="${active?3:1.5}"/>${text(pos[0],pos[1]-9,title,'pn-node-title')}${text(pos[0],pos[1]+17,value,'pn-node-value')}${sub?text(pos[0],pos[1]+61,sub,'pn-node-sub'):''}</g>`;
@@ -39,7 +39,7 @@ function diagram(x,m,r,step,pending,mobile=false,target=1){
  ${mobile?'<rect x="111" y="240" width="168" height="270" rx="28" class="pn-neuron-boundary"/>':'<rect x="369" y="128" width="362" height="144" rx="28" class="pn-neuron-boundary"/>'}
  ${wire(paths[0],'#397ca4',forward,fmt(r.contributions[0]))}${wire(paths[1],'#be681e',forward,fmt(r.contributions[1]))}${wire(biasPath,'#8455ad',forward,fmt(m.b))}${wire(paths[2],'#278071',step===2||step===5,fmt(r.z),step===5?2:0)}${wire(paths[3],'#278071',step===2||step===5,fmt(r.p),step===5?4:2)}
  ${(step===3||step===4)?wire(mobile?'M194 695 V715':'M891 248 V272','#bf3978',step===3,fmt(r.p)):''}
- ${back?wire(reverse,'#bf3978',true,fmt(pending.error,3))+reverseWeights.map((d,i)=>wire(d,'#bf3978',true,'g = '+fmt(pending.gradients.w[i],3),2)).join('')+wire(mobile?'M194 250 L272 230':'M435 137 V78','#bf3978',true,'g = '+fmt(pending.gradients.b,3),2):''}
+ ${back?wire(reverse,'#bf3978',true,fmt(pending.error,3))+reverseWeights.map((d,i)=>wire(d,'#bf3978',true,'g = '+fmt(pending.gradients.w[i],3),2)).join('')+wire(mobile?'M194 250 L260 230':'M435 137 V89','#bf3978',true,'g = '+fmt(pending.gradients.b,3),2):''}
  ${node(s.a,'Sequedad',fmt(x[0]),'#397ca4',true)}${node(s.b,'Calor',fmt(x[1]),'#be681e',true)}
  ${badge(mobile?88:250,mobile?151:91,`× ${fmt(m.w[0])} = ${fmt(r.contributions[0])}`,'#397ca4')}
  ${badge(mobile?300:250,mobile?151:267,`× ${fmt(m.w[1])} = ${fmt(r.contributions[1])}`,'#be681e')}
