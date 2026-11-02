@@ -1,6 +1,27 @@
 import {withDiagramZoom} from './dl-figures.js';
 // Puentes de comprensión: solo se renderizan para los doce temas de Deep Learning.
 const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export const BIAS_EXPLANATION = {
+ title:'Sesgo: un desplazamiento que la neurona puede aprender',
+ meaning:'El sesgo b es un parámetro que se suma después de multiplicar las entradas por sus pesos y antes de aplicar la activación: z = w₁x₁ + w₂x₂ + … + b; salida = activación(z). Puede ser positivo, negativo o cero. Para unas mismas entradas, cambiar b desplaza z en esa cantidad.',
+ purpose:'¿Por qué hace falta? Sin sesgo, entradas todas iguales a cero obligan a que z sea cero, sin importar los pesos. Con sesgo, z puede valer b. Esto permite desplazar el punto en el que responde una unidad, sin cambiar cuánto aporta cada entrada. En una unidad con salida identidad, el peso cambia la pendiente y el sesgo mueve la recta arriba o abajo. Con otra activación, ese desplazamiento ocurre antes de transformarla.',
+ learning:'Durante el entrenamiento, el optimizador puede ajustar b a partir de los ejemplos, igual que los pesos. Durante una predicción, usa su valor actual sin modificarlo. «Sesgo» aquí no significa prejuicio, error de medición ni una corrección elegida después de ver cada respuesta.',
+ exampleTitle:'Una operación real: pesar producto sin contar la caja',
+ context:'En pesaje se resta la tara —el peso del recipiente vacío— del peso bruto para obtener el peso neto del producto. Supón una caja de 2 kg: cargada marca 12 kg; el producto pesa 10 kg. Es una operación real de báscula, con cifras ilustrativas, no mediciones de una finca.',
+ mapping:'Podemos escribir esa operación como una unidad con salida identidad, que devuelve z sin transformarlo: entrada x = peso bruto en kg; peso multiplicador w = 1, sin unidades; sesgo b = −2 kg. Así, salida = 1 × 12 kg + (−2 kg) = 10 kg. Aquí fijamos b usando la tara conocida; no lo entrenamos.',
+ comparison:'Con la misma caja: bruto 2 kg → neto 0 kg; bruto 7 kg → neto 5 kg; bruto 12 kg → neto 10 kg. Si el bruto aumenta 1 kg, el neto aumenta 1 kg: w=1 mantiene esa relación. El sesgo resta siempre los mismos 2 kg. Sin él, la unidad daría 12 kg para la caja cargada y contaría el envase como producto.',
+ reading:'Horizontal: peso bruto. Vertical: salida calculada. Línea continua: x−2, con sesgo. Línea discontinua: x, sin sesgo. Ambas tienen la misma pendiente; sus salidas se separan siempre 2 kg. Mostramos x≥2 kg, el dominio de esta caja. Una báscula puede ejecutar esta resta directamente; el ejemplo ayuda a entender la función de b en una neurona.',
+ question:'¿Qué b usarías para una caja vacía de 3 kg, si cargada marca 12 kg?',
+ answer:'b=−3 kg; salida=1×12−3=9 kg de producto. Conservas w=1: cambia el desplazamiento, no la cantidad que añade cada kg de entrada. Si cambia la tara entre cajas, una sola constante no basta: debes registrar la tara correspondiente o incorporarla como otra entrada.',
+ source:'https://www.canscale.com/support/software/dispatch/docs/3.1/webhelp/term_gross_tare_net.htm'
+};
+
+export function renderBiasExplanation(){
+ const b=BIAS_EXPLANATION;
+ const x=v=>65+(v-2)*31,y=v=>220-v*14;
+ const graph=withDiagramZoom(`<svg viewBox="0 0 440 290" role="img" aria-label="Misma pendiente: sin sesgo la salida es x; con sesgo menos dos kilogramos es x menos dos"><path d="M65 35V220H375" fill="none" stroke="currentColor"/>${[0,5,10,12].map(v=>`<text x="52" y="${y(v)+5}" text-anchor="end">${v}</text>`).join('')}${[2,7,12].map(v=>`<text x="${x(v)}" y="245" text-anchor="middle">${v}</text>`).join('')}<path d="M${x(2)} ${y(2)}L${x(12)} ${y(12)}" fill="none" stroke="currentColor" stroke-dasharray="6 5" stroke-width="2"/><path d="M${x(2)} ${y(0)}L${x(12)} ${y(10)}" fill="none" stroke="currentColor" stroke-width="3"/>${[2,7,12].map(v=>`<circle cx="${x(v)}" cy="${y(v-2)}" r="5" fill="currentColor"/>`).join('')}<text x="65" y="20">Salida (kg)</text><text x="220" y="277" text-anchor="middle">Peso bruto (kg)</text></svg>`);
+ return `<section class="dl-bias-explanation"><h3>${esc(b.title)}</h3><p>${esc(b.meaning)}</p><p>${esc(b.purpose)}</p><p>${esc(b.learning)}</p><h4>${esc(b.exampleTitle)}</h4><p>${esc(b.context)}</p><p>${esc(b.mapping)}</p><div class="dl-activation-bridge">${graph}<p>${esc(b.reading)}</p></div><p>${esc(b.comparison)}</p><details><summary>${esc(b.question)}</summary><p>${esc(b.answer)}</p></details><p class="dl-foundation-source"><a href="${b.source}" target="_blank" rel="noopener noreferrer">Pesaje bruto, tara y neto · documentación de CanScale ↗</a></p></section>`;
+}
 export const DL_FOUNDATIONS = {
  'dl-redes': {
   before: [['Entrada x','Número disponible antes de calcular la respuesta. El subíndice identifica cuál entrada es.'],['Parámetro','Número ajustable del modelo: un peso w multiplica y un sesgo b se añade.'],['Capa y representación','Una capa reúne unidades de cálculo. Su lista de salidas es una nueva representación de las mismas entradas.']],
@@ -130,7 +151,7 @@ export function renderDLPrerequisites(id) {
 }
 export function renderDLReason(id) {
  const item = DL_FOUNDATIONS[id]; if (!item) return '';
- return `<div class="dl-foundation"><h3>${esc(item.why)}</h3><p>${esc(item.reason)}</p><figure class="dl-path"><figcaption>Una idea que puedes seguir</figcaption><ol>${item.flow.map(([title, value], index)=>`<li><span class="dl-path-index" aria-hidden="true">${index+1}</span><b>${esc(title)}</b><span>${esc(value)}</span></li>`).join('')}</ol><p>${esc(item.read)}</p></figure><p class="dl-foundation-source"><a href="${item.source}" target="_blank" rel="noopener noreferrer">Consultar el fundamento ↗</a></p></div>`;
+ return `<div class="dl-foundation">${id==='dl-redes'?renderBiasExplanation():''}<h3>${esc(item.why)}</h3><p>${esc(item.reason)}</p><figure class="dl-path"><figcaption>Una idea que puedes seguir</figcaption><ol>${item.flow.map(([title, value], index)=>`<li><span class="dl-path-index" aria-hidden="true">${index+1}</span><b>${esc(title)}</b><span>${esc(value)}</span></li>`).join('')}</ol><p>${esc(item.read)}</p></figure><p class="dl-foundation-source"><a href="${item.source}" target="_blank" rel="noopener noreferrer">Consultar el fundamento ↗</a></p></div>`;
 }
 export function renderDLCheck(id) {
  const item = DL_FOUNDATIONS[id]; if (!item) return '';

@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {DL_FOUNDATIONS} from '../docs/dl-foundations.js';
+import {DL_FOUNDATIONS,BIAS_EXPLANATION} from '../docs/dl-foundations.js';
 import {COURSES,LESSONS} from '../docs/content.js';
 import {ENCOUNTER_NOTEBOOKS} from '../docs/encounter-notebooks.js';
 import {SOURCE_NOTEBOOK_PATHS,NOTEBOOK_PATHS} from '../docs/notebook-paths.js';
@@ -73,6 +73,10 @@ function topicCells(id){
  const cells=[md('tema-'+id,`## ${route.section}\n\n**Lo que vas a poder hacer:** ${g.objective}\n\n${g.relevance}\n\n### Entiende la idea\n\n${g.concept}\n\n### Un caso pequeño antes del programa\n\n**${g.case.title}**\n\n${g.case.context}\n\n${g.case.columns?.length?table(g.case.columns,g.case.rows):''}\n\n${g.case.reasoning.map((s,i)=>(i+1)+'. '+s).join('\n')}\n\n**Qué demuestra:** ${g.case.conclusion}\n\n### Ahora identifica los datos de esta práctica\n\n${p.observe}\n\nEl caso pequeño y la ejecución pueden usar conjuntos diferentes: interpreta las cifras con las unidades y filas declaradas en cada uno.\n\n**Antes de ejecutar:** este tema incluye su preparación. Ejecuta sus celdas en orden; no requiere ejecutar los temas anteriores. Si repites un tema, comienza desde su primera celda.\n\n**Qué cambiar y qué conservar:** ${p.tip}`)];
  const foundation=DL_FOUNDATIONS[id];
  if(foundation){
+  if(id==='dl-redes'){
+   const b=BIAS_EXPLANATION;
+   cells.push(md('sesgo-con-ejemplo-real','### '+b.title+'\n\n'+[b.meaning,b.purpose,b.learning,'**'+b.exampleTitle+'**',b.context,b.mapping,b.comparison,b.question,b.answer,'[Operación real documentada]('+b.source+')'].join('\n\n')));
+  }
   const intro=cells[0].source;
   cells[0].source=intro.replace('### Entiende la idea', '### Antes de seguir: tres ideas necesarias\n\n'+foundation.before.map(([term,meaning])=>'**'+term+':** '+meaning).join('\n\n')+'\n\n### Entiende la idea');
   cells.push(md('fundamento-'+id,'### '+foundation.why+'\n\n'+foundation.reason+'\n\n**Sigue este recorrido:**\n\n'+foundation.flow.map(([title,value],i)=>(i+1)+'. **'+title+':** '+value).join('\n')+'\n\n'+foundation.read+'\n\n[Consultar el fundamento]('+foundation.source+')'));

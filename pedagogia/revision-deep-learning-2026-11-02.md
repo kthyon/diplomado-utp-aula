@@ -31,3 +31,7 @@ Revisión en navegador con sesión docente sintética local: 12 temas × 5 ancho
 No se repitió la ejecución CPU de Colab: el código es idéntico al ya auditado; esta revisión cambia exclusivamente su explicación. Los gráficos de la web sí ejecutan sus propias cuentas y se verifican con los modelos y controles reales.
 
 La página /aula/ del servicio Sites sirve los recursos de GitHub Pages. Estos cambios se publican en ese repositorio; no requieren modificar ni desplegar el backend de registros.
+
+## Ampliación: sesgo de una neurona
+
+A petición de Cristian, se explica b antes de la activación, su diferencia frente a pendiente/peso, su aprendizaje y su valor durante inferencia. Ejemplo de una operación real documentada de pesaje: neto=bruto−tara, con cifras ilustrativas. Unidad identidad w=1, b=−2 kg: 12 kg brutos → 10 kg netos; gráfico de dos rectas paralelas y comparación de tres pesajes. Se distingue la operación física del uso de una red y se explica la limitación de una tara variable. Definición común DL y principal del encuentro 1 sincronizados, sin cambios en código de práctica.
