@@ -56,7 +56,7 @@ test('cada ventana y filtro actualiza la celda seleccionada y mantiene las tabla
   assert.ok(e.status.textContent.includes(`fila ${row}, columna ${column}`));
   assert.ok(e.status.textContent.endsWith(`es ${value}.`));
   assert.ok(e.visual.innerHTML.includes(`celda marcada (${row}, ${column})`));
-  assert.equal((e.visual.innerHTML.match(/role="region"/g)||[]).length,4,'las cuatro matrices conservan un desplazamiento local con nombre');
+  assert.equal((e.visual.innerHTML.match(/role="region"/g)||[]).length,5,'las cuatro matrices y el gráfico ampliado conservan desplazamiento local con nombre');
   assert.equal((e.visual.innerHTML.match(/<caption>/g)||[]).length,4);
  }
  assert.equal(e.mounts,1);

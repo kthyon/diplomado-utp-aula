@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import * as models from '../docs/lab-clear-models.js';
 import * as teaching from '../docs/lab-explanations.js';
+import * as foundations from '../docs/dl-foundations.js';
+import {networkCohort} from '../docs/dl-lab-evidence.js';
 
 // A small DOM fixture runs the actual active page and its event handlers, without
 // registration/network calls. Geometry is checked separately in a real browser.
@@ -36,7 +38,7 @@ function laboratory(hash='#red'){
  const matches=(n,s)=>s.startsWith('.')?n.className.split(/\s+/).includes(s.slice(1)):s.startsWith('[')?(()=>{const m=s.match(/^\[([\w-]+)(?:="([^"]*)")?\]$/);return m&&m[1]in n.attrs&&(m[2]===undefined||m[2]===n.attrs[m[1]]);})():n.tag===s;
  const listeners=new Map(),timers=new Map();let nextTimer=0;
  const document={body:root,hidden:false,getElementById:id=>descendants(root).find(n=>n.attrs.id===id)||null,querySelector:s=>descendants(root).find(n=>matches(n,s))||null,querySelectorAll:s=>descendants(root).filter(n=>matches(n,s)),createElement:tag=>new Element(tag),addEventListener:(event,fn)=>listeners.set(event,fn)};
- const location={hash};const context=vm.createContext({...models,...teaching,document,location,window:{scrollTo(){},addEventListener:(event,fn)=>listeners.set(event,fn)},setTimeout(fn){timers.set(++nextTimer,fn);return nextTimer},clearTimeout:id=>timers.delete(id)});
+ const location={hash};const context=vm.createContext({...models,...teaching,...foundations,networkCohort,document,location,window:{scrollTo(){},addEventListener:(event,fn)=>listeners.set(event,fn)},setTimeout(fn){timers.set(++nextTimer,fn);return nextTimer},clearTimeout:id=>timers.delete(id)});
  const source=fs.readFileSync(new URL('../docs/lab-clear.js',import.meta.url),'utf8');vm.runInContext(source.slice(source.indexOf('const $=')),context);
  const node=id=>{const n=document.getElementById(id);assert.ok(n,'active control exists: '+id);return n};
  return {document,node,timers,run:code=>vm.runInContext(code,context),click:id=>node(id).onclick(),change(id,value,event='onchange'){const n=node(id);n.value=value;n[event]({target:n});},tab(value){location.hash='#'+value;listeners.get('hashchange')();},tick(){const [id,fn]=timers.entries().next().value||[];assert.ok(fn,'pending animation frame');timers.delete(id);fn();},hide(){document.hidden=true;listeners.get('visibilitychange')();}};

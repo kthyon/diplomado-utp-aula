@@ -12,9 +12,10 @@ import {renderFlowGuide,renderLessonFlow} from './flow-guidance.js?v=descripcion
 import {laboratoryDestination} from './lab-access.js';
 import {readReferenceOffset,nextScheduleDelay} from './schedule-clock.js';
 import {summarizeProgress,renderProgressDashboard} from './progress-dashboard.js';
-import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=colab-20261031b';
+import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=dl-20261102';
 import {mountProblemExplorer} from './learning-explorers.js';
-import {mountDLExplorer} from './dl-explorers.js?v=colab-20261031b';
+import {mountActivationBridge} from './dl-foundations.js';
+import {mountDLExplorer} from './dl-explorers.js?v=dl-20261102';
 import {icon} from './icons.js';
 import {initStudentRegistration,saveStudentProgress,studentConnected,openStudentRegistration,registerStudent,isConnectedView,retryStudentProgress,refreshStudentSaveStatus,studentSavePending} from './student-registration.js?v=7';
 import {normalizeProgress,importProgress,decodeSearch} from './progress-state.js';
@@ -27,7 +28,7 @@ import {canAccess} from './math.js';
 import {colombiaDay,scheduleReleases,validFullName,mayEnter} from './access-policy.js';
 import {mountSimulator} from './simulators.js?v=cercania-20261030';
 import {showWelcome,maybeShowWelcome} from './welcome.js';
-import {mountIdeaStudio} from './idea-studio.js?v=graficos-20261027b';
+import {mountIdeaStudio} from './idea-studio.js?v=dl-20261102';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const welcomeVariant=Math.floor(Math.random()*3);
 let state=normalizeProgress({});
@@ -143,7 +144,7 @@ function searchSuggestions(){return '<nav class="search-suggestions" aria-label=
 async function loadReleases(){releases=scheduleReleases(COURSES,colombiaDay(new Date(Date.now()+serverClockOffset)),teacherView)}
 function copyNotebook(name,topic){if(!NOTEBOOKS[name])return;const url=colabNotebookUrl(name,topic);modal(`<div class="eyebrow">TU CUADERNO PERSONAL</div><h2 style="margin-top:12px">${NOTEBOOKS[name].title}</h2><p>Si ya guardaste una copia personal de este cuaderno, continúa en ella y ve al apartado indicado. El cuaderno principal reúne los tres temas de su encuentro.</p><p>Si es la primera vez:</p><ol><li>Abre el cuaderno publicado con el botón de abajo.</li><li>En Colab, elige <b>Archivo → Guardar una copia en Drive</b>.</li><li>Renómbrala y ejecuta la preparación y el apartado indicado.</li><li>Vuelve a esta pestaña para registrar lo observado y marcar el tema como visto.</li></ol><p>Colab no envía resultados ni marca tu progreso en el aula automáticamente. Usa CPU; estos ejemplos no requieren contratar un entorno de pago.</p>${link(url,'Abrir versión publicada en Colab','button')}<p class="field-note">Colab puede pedir iniciar sesión con Google. Tu copia es independiente del archivo del aula.</p>`)}
 
-function bind(route,id){mountLessonSections();mountTools($('.tool-section'));document.querySelectorAll('[data-connect-registration]').forEach(b=>b.onclick=connectRegistration);document.querySelectorAll('[data-welcome]').forEach(b=>b.onclick=openWelcome);document.querySelectorAll('.copy-notebook').forEach(b=>b.onclick=()=>copyNotebook(b.dataset.notebook,b.dataset.topic));if(route==='tema'&&access(id)){const l=findLesson(id);if(l.sim){const target=$('#lesson-sim');if(l.sim==='problem')mountProblemExplorer(target);else if(l.id.startsWith('dl-')&&['neuron','convolution','sequence','attention','detection'].includes(l.sim))mountDLExplorer(target,l.sim,{mode:l.id==='dl-yolo'?'filter':'evaluation'});else mountSimulator(target,l.sim);}$('.quiz').querySelectorAll('.quiz-answer').forEach(b=>b.onclick=()=>{const correct=Number(b.dataset.answer)===l.quiz.answer;$('.quiz').querySelectorAll('button').forEach(x=>x.classList.remove('correct','wrong'));b.classList.add(correct?'correct':'wrong');$('#quiz-feedback').textContent=(correct?'Bien razonado. ':'Revisa esta distinción. ')+l.quiz.feedback;state.quiz[id]=correct;save()});$('#study-note').oninput=e=>{state.notes[id]=e.target.value;save()};$('#complete-lesson').onclick=()=>completeTopic(id)}
+function bind(route,id){mountLessonSections();mountTools($('.tool-section'));document.querySelectorAll('[data-connect-registration]').forEach(b=>b.onclick=connectRegistration);document.querySelectorAll('[data-welcome]').forEach(b=>b.onclick=openWelcome);document.querySelectorAll('.copy-notebook').forEach(b=>b.onclick=()=>copyNotebook(b.dataset.notebook,b.dataset.topic));if(route==='tema'&&access(id)){const l=findLesson(id);if(l.id==='dl-activaciones')mountActivationBridge(document);if(l.sim){const target=$('#lesson-sim');if(l.sim==='problem')mountProblemExplorer(target);else if(l.id.startsWith('dl-')&&['neuron','convolution','sequence','attention','detection'].includes(l.sim))mountDLExplorer(target,l.sim,{mode:l.id==='dl-yolo'?'filter':'evaluation'});else mountSimulator(target,l.sim);}$('.quiz').querySelectorAll('.quiz-answer').forEach(b=>b.onclick=()=>{const correct=Number(b.dataset.answer)===l.quiz.answer;$('.quiz').querySelectorAll('button').forEach(x=>x.classList.remove('correct','wrong'));b.classList.add(correct?'correct':'wrong');$('#quiz-feedback').textContent=(correct?'Bien razonado. ':'Revisa esta distinción. ')+l.quiz.feedback;state.quiz[id]=correct;save()});$('#study-note').oninput=e=>{state.notes[id]=e.target.value;save()};$('#complete-lesson').onclick=()=>completeTopic(id)}
 
  if(route==='ruta'&&teacherView){mountRoadmap($('#roadmap-root'),{courses:COURSES,now:new Date(Date.now()+serverClockOffset),day:releases.day,teacher:teacherView,onGeneralidades:openWelcome,initial:id})}
  if(route==='explorar'){mountIdeaStudio($('#visual-studio'),id)}
