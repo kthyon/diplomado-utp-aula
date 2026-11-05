@@ -1,3 +1,4 @@
+import {STUDENT_RECORDS} from '../docs/database-config.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -171,7 +172,7 @@ function code(id,text,origin){return {cell_type:'code',id,metadata:{utp_source:o
 const table=(columns,rows)=>'| '+columns.join(' | ')+' |\n| '+columns.map(()=>'---').join(' | ')+' |\n'+rows.map(r=>'| '+r.join(' | ')+' |').join('\n');
 const CUSTOM_GUIDES={
  'lab01-calculo':'### 1 · Reconstruye los aportes de una neurona\n\nLa tabla separa lo que multiplica cada entrada de la cantidad fija que añade el bias. La salida ReLU es un número intermedio, no una categoría. Esta celda tiene sus propias importaciones y datos.',
- 'capas-en-cadena':'### 2 · Sigue la salida hasta la siguiente capa\n\nLa primera salida h se convierte en entrada de otra unidad. Repetimos los parámetros del ejemplo para que puedas ejecutar esta celda por sí sola. No se repiten las curvas de activación: aquí importa el recorrido entre capas.',
+ 'capas-en-cadena':'### 2 · Sigue la salida hasta la siguiente capa\n\nLa primera salida h se convierte en entrada de otra unidad. Repetimos los parámetros del ejemplo para que puedas ejecutar esta celda por sí sola. Observa qué recibe cada capa y qué transformación entrega.',
  'comparar-activaciones':'### 1 · Compara cuatro respuestas para una misma señal\n\nEmpieza con SENAL = −2. Las filas de la tabla representan alternativas: ninguna recibe la salida de la anterior. La identidad sirve de comparación sin transformación.',
  'curvas-activaciones':'### 2 · Ubica esa misma señal en las curvas\n\nEl punto conserva la misma entrada en los cuatro gráficos. Si cambias SENAL en la tabla, pon el mismo valor en esta celda para repetir la comparación. Las curvas no entrenan un modelo.',
  'un-paso-gradiente':'### 1 · Comprueba un solo ajuste antes de entrenar una red\n\nCada fila vuelve a empezar en −2. La tasa 0,10 produce −1 y pérdida 16; la tasa 1,10 produce 9 y pérdida 36. Compara estos resultados con el inicio, pérdida 25. La celda imprime la cuenta elegida, la tabla y las dos flechas.'
@@ -224,8 +225,8 @@ function topicCells(id){
   }}
  }
  if(dl){
-  const topics=COURSES.dl.classes.flatMap(m=>m.topics),next=topics[topics.indexOf(id)+1];
-  cells.push(md('comprueba-'+id,`### Lee, comprueba y explica\n\n**Qué debes poder comprobar:** ${dl.colab.check}\n\n**Prueba pequeña:** ${p.tip}\n\n**Pregunta:** ${dl.example.check.question}\n\n**Respuesta razonada:** ${dl.example.check.answer}\n\n**Registra en tu copia:** qué cambiaste, qué observaste y por qué ocurrió. No es una entrega ni una calificación.\n\n[Volver al tema del aula](https://kthyon.github.io/diplomado-utp-aula/#tema/${id})${next?'\n\n[Siguiente tema: '+LESSONS.find(l=>l.id===next).title+'](https://kthyon.github.io/diplomado-utp-aula/#tema/'+next+')':''}`));
+  const topics=COURSES.dl.classes.flatMap(m=>m.topics),next=topics[topics.indexOf(id)+1],aula=new URL('/aula/',STUDENT_RECORDS.url).href;
+  cells.push(md('comprueba-'+id,`### Lee, comprueba y explica\n\n**Qué debes poder comprobar:** ${dl.colab.check}\n\n**Prueba pequeña:** ${p.tip}\n\n**Pregunta:** ${dl.example.check.question}\n\n**Respuesta razonada:** ${dl.example.check.answer}\n\n**Registra en tu copia:** qué cambiaste, qué observaste y por qué ocurrió. No es una entrega ni una calificación.\n\n[Volver al tema del aula](${aula}#tema/${id})${next?'\n\n[Siguiente tema: '+LESSONS.find(l=>l.id===next).title+']('+aula+'#tema/'+next+')':''}`));
  }else cells.push(md('comprueba-'+id,`### Lee, comprueba y explica\n\n${p.observe}\n\n**Prueba pequeña:** ${p.tip}\n\n**Vuelve al caso:** ${g.takeaway}\n\n${g.understanding?'**Pregunta:** '+g.understanding.question+'\n\n**Respuesta razonada:** '+g.understanding.answer:''}\n\n**Registra en tu copia:** qué representan las filas, qué valores cambiaste, qué observaste y qué límite tiene la conclusión. No es una entrega ni una calificación.\n\n[Volver al tema del aula](https://kthyon.github.io/diplomado-utp-aula/#tema/${id})`));
  if(foundation&&!dl)cells.push(md('razona-'+id,'### Anticipa y explica\n\n'+foundation.question+'\n\n<details><summary>Comparar mi razonamiento</summary>\n\n'+foundation.answer+'\n\n</details>\n'));
  return cells;

@@ -14,6 +14,7 @@ Se usaron tres agentes: auditoría pedagógica de los doce temas, fuentes y grá
 - Un ejemplo principal por tema sustituye la acumulación de `foundation.flow`, escena con pasos, resultados y cuentas repetidas. La cuenta completa queda consultable en un detalle cerrado; el simulador se presenta después para cambiar una condición y comprobarla.
 - El concepto comienza con una definición breve y tres términos. El vocabulario completo y el fundamento avanzado siguen disponibles bajo desplegables.
 - La práctica principal se identifica por encuentro y tema. Los capítulos del apoyo dejan de ser las instrucciones visibles del principal. Las ampliaciones se agrupan como opcionales.
+- Los enlaces de regreso y siguiente tema en los cuatro Colab DL apuntan al aula conectada, para conservar el mismo registro y la sesión del estudiante o docente; se corrigió un salto previo a otro origen.
 - Los enlaces complementarios abren aparte. La neurona de riego tiene regreso explícito al tema; los exploradores opcionales incluyen un enlace para volver y continuar en Colab.
 - «Ampliar gráfico» cambia el tamaño de un único SVG en su mismo recuadro, sin insertar una segunda copia. Permite reducirlo y conserva el estado ampliado al cambiar parámetros; las regiones mantienen nombres y desplazamiento local accesible.
 - La vista docente conserva un hash explícito, por ejemplo `#tema/dl-redes`; `?vista=docente` solo elige el panel inicial cuando no hay destino. No concede rol.
@@ -54,7 +55,7 @@ Quedan 49 celdas de código DL: 12, 13, 9 y 15 por encuentro. Archivos 4.5, IDs 
 - 12 comprobaciones enfocadas repetidas tras los ajustes de figuras y cierre, más 20 comprobaciones del control de ampliación y los exploradores.
 - Cuatro cuadernos completos y doce temas en sesiones limpias: **16 recorridos CPU correctos**, 98 ejecuciones de celdas, cero intentos de red. PyTorch 2.14.1+cpu, NumPy 2.5.4, pandas 3.0.6, scikit-learn 1.9.1 y Ultralytics 8.4.175 en el entorno de comprobación.
 - Las cinco nuevas celdas introductorias también se ejecutaron aisladas sin ejecutar preparación previa: correctas.
-- Generación reproducible verificada con `--check`; hashes de ML y apoyos conservados.
+- Generación reproducible verificada con `--check`; hashes de ML y apoyos conservados. Tras corregir los enlaces de regreso, se repitieron 12 pruebas enfocadas y se verificó que las 49 celdas de código eran idénticas a las ejecutadas.
 - Doce temas × cinco tamaños (320, 390, 768, 1024 y 1440) × claro/oscuro: 120 combinaciones sin desbordamiento de página. Los gráficos anchos se desplazan dentro de su propia región accesible.
 - Se revisaron capturas de los doce recorridos/figuras representativas, controles, foco al continuar, conservación de parámetros, regreso desde el laboratorio y enlace al cuaderno. Consola sin errores. Las dos figuras retocadas al final se volvieron a revisar visualmente.
 - No se escribieron registros de estudiantes en producción. La vista local emplea sesiones sintéticas. No se alteran fechas, matrícula, rol, API, progreso ni la lógica de la neurona de riego aceptada.
@@ -72,4 +73,5 @@ Se crearon gráficos originales de operaciones; no se copiaron medios de tercero
 - [scikit-learn: selección de umbral](https://scikit-learn.org/stable/modules/classification_threshold.html).
 
 Las cifras de modelos entrenados se leen de cada ejecución; no se prometen resultados para datos nuevos.
+
 

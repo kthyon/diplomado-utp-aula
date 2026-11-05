@@ -4,7 +4,20 @@ import fs from 'node:fs';
 import {COURSES,LESSONS,NOTEBOOKS} from '../docs/content.js';
 import {ENCOUNTER_NOTEBOOKS,colabNotebookUrl} from '../docs/encounter-notebooks.js';
 import {NOTEBOOK_PATHS} from '../docs/notebook-paths.js';
+import {STUDENT_RECORDS} from '../docs/database-config.js';
 import {buildEncounterNotebooks} from '../scripts/build_encounter_notebooks.mjs';
+
+test('los principales DL vuelven al mismo aula conectada y al tema específico, conservando la sesión del alumno o docente',()=>{
+ for(const meeting of ENCOUNTER_NOTEBOOKS.filter(m=>m.course==='dl')){
+  const nb=JSON.parse(fs.readFileSync(new URL('../docs/notebooks/'+meeting.file,import.meta.url),'utf8'));
+  for(const id of meeting.topics){
+   const close=nb.cells.find(c=>c.id==='comprueba-'+id).source;
+   const returnURL=new URL('/aula/',STUDENT_RECORDS.url).href+'#tema/'+id;
+   assert.ok(close.includes('[Volver al tema del aula]('+returnURL+')'));
+   assert.doesNotMatch(close,/github\.io/,'volver no debe enviar a otro origen con un registro distinto');
+  }
+ }
+});
 
 test('cada uno de los ocho encuentros tiene un principal con sus tres temas y enlaces al punto correcto',()=>{
  assert.equal(ENCOUNTER_NOTEBOOKS.length,8);
