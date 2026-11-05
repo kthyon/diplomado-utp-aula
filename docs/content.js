@@ -380,7 +380,7 @@ const LESSON_BASE=[
       "answer": 0,
       "feedback": "La regla combina estado anterior y entrada actual: produce 21,25 en un orden y 13,75 en el inverso. El promedio de los mismos tres valores es 20."
     },
-    "source": "https://arxiv.org/abs/1706.03762"
+    "source": "https://docs.pytorch.org/docs/stable/generated/torch.nn.LSTM.html"
   },
   {
     "id": "dl-atencion",
@@ -475,7 +475,7 @@ const LESSON_BASE=[
       "answer": 2,
       "feedback": "Coste = 4 × 1 + 1 × 8 = 12. La comparación de políticas conserva los casos y aplica la misma fórmula."
     },
-    "source": "https://scikit-learn.org/stable/common_pitfalls.html"
+    "source": "https://scikit-learn.org/stable/modules/classification_threshold.html"
   }
 ];
 export const LESSONS=LESSON_BASE.map(lesson=>{const originalGuide=LESSON_GUIDES[lesson.id],guide=lesson.id.startsWith('dl-')?{...originalGuide,vocabulary:reviewedTopicVocabulary(originalGuide.vocabulary)}:originalGuide,meeting=encounterForTopic(lesson.id);return {...lesson,notebooks:[meeting.file,...lesson.notebooks],guide,summary:guide.objective,example:guide.case.context+' '+guide.case.conclusion,steps:guide.case.reasoning,sim:guide.explorer};});

@@ -13,6 +13,8 @@ if(labAccess.status!=='ready'){
  const hash=['#red','#vecinos','#metricas','#riego'].includes(location.hash)?location.hash:'#red';
  location.replace('./?destino='+encodeURIComponent('laboratorio.html'+hash));await new Promise(()=>{});
 }
+const returnTopic=new URLSearchParams(location.search).get('volver');
+if(['dl-redes','dl-entrenamiento'].includes(returnTopic)){const back=document.querySelector('.ll-header>a');back.href='./#tema/'+returnTopic;back.textContent='← Volver al tema y continuar en Colab';}
 const $=id=>document.getElementById(id),f=(n,d=2)=>Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}),percent=n=>n===null?'No definida':f(n*100,1)+' %';
 let tab='',plantLab=null,plantState=null;
 let length=43,mass=4200,k=3,unit='g',threshold=1,selectedPiece=100,distanceId='C';

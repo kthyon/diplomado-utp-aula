@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
+import {DL_LEARNING_PATHS} from '../docs/dl-learning-paths.js';
 import {COURSES,LESSONS} from '../docs/content.js';
 import {LESSON_GUIDES} from '../docs/learning-guides.js';
 import {renderLearningGuide,renderLearningLab,CLASS_PURPOSES} from '../docs/learning-layout.js';
@@ -41,7 +42,11 @@ test('el alcance es exactamente seis encuentros y dieciocho temas existentes, si
  for(const id of expected){const t=TOPIC_CONTEXT[id],g=LESSON_GUIDES[id],html=renderLearningGuide({id,guide:g});
   assert.ok(MEETING_CONTEXT[t.meeting]);assert.equal(g.build.steps.length,3,id);assert.ok(g.outcome.result&&g.outcome.reading,id);
   for(const text of [g.concept,g.case.context,g.case.conclusion,g.outcome.result])assert.ok(typeof text==='string'&&text.trim(),id);
-  assert.match(html,/Qué información tenemos/);assert.match(html,/Qué queremos decidir/);assert.match(html,/Resultado y cómo interpretarlo/);
+  if(id.startsWith('dl-')){
+   assert.ok(html.includes(DL_LEARNING_PATHS[id].definition));
+   assert.equal((html.match(/class="dl-essential-terms"/g)||[]).length,1);
+   assert.match(html,/data-dl-primary-example=/);
+  }else {assert.match(html,/Qué información tenemos/);assert.match(html,/Qué queremos decidir/);assert.match(html,/Resultado y cómo interpretarlo/);}
   if(g.vocabulary.length>g.essentialCount)assert.match(html,/Vocabulario para profundizar/);
  }
 });

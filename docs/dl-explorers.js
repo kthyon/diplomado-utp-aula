@@ -1,4 +1,4 @@
-import {neuronFigure,convolutionFigure} from './dl-figures.js';
+import {neuronFigure,convolutionFigure} from './dl-figures.js?v=dl-recorrido-20261105';
 import { neuronExample, convolutionExample, sequenceState, attentionExample, detectionExample } from './dl-example-models.js';
 
 const fmt = (value, digits = 4) => Number(value).toLocaleString('es-CO', { maximumFractionDigits: digits });

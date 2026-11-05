@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {DL_LEARNING_PATHS} from '../docs/dl-learning-paths.js';
 import {COURSES,LESSONS,classOf} from '../docs/content.js';
 import {TOPIC_CONTEXT} from '../docs/lesson-context.js';
 import {NOTEBOOK_PATHS} from '../docs/notebook-paths.js';
@@ -42,18 +43,27 @@ test('la nueva guía se limita a los dieciocho temas futuros y sus botones manti
   const html=renderTopicCompass(l,{courseTitle:course.title,classIndex,topicIndex:meeting.topics.indexOf(l.id),purpose,flowHtml});
   assert.equal(isOrganizedTopic(l.id),futureIds.includes(l.id),l.id);
   if(!futureIds.includes(l.id)){assert.equal(html,'',l.id+' conserva la rama original');continue;}
-  includesAll(html,[l.guide.objective,purpose],l.id+' orientación completa');
+  includesAll(html,[DL_LEARNING_PATHS[l.id]?.goal||l.guide.objective,purpose],l.id+' orientación completa');
   assert.ok(html.includes(flowHtml),l.id+' instrucciones de continuidad completas');
   const buttons=[...html.matchAll(/<button\b[^>]*data-lesson-section="([^"]+)"[^>]*>/g)];
-  assert.deepEqual(buttons.map(m=>m[1]),targets,l.id+' tres destinos');
+  assert.deepEqual(buttons.map(m=>m[1]),l.id.startsWith('dl-')?[...targets,'cuaderno-del-tema']:targets,l.id+' destinos de lectura y práctica');
   for(const target of targets)assert.ok(!html.includes('href="#'+target+'"'),l.id+' no usa el router para desplazarse');
  }
  assert.equal(isOrganizedTopic('tema-inexistente'),false);
 });
 
-test('cada lectura conserva definiciones, contexto, caso, cuentas, interpretación y conexiones completas',()=>{
+test('ML conserva su lectura completa y DL presenta básicos y una sola explicación visual con referencias',()=>{
  for(const l of futureLessons){
   const g=l.guide,c=g.case,t=TOPIC_CONTEXT[l.id],html=renderLearningGuide(l);
+  if(l.id.startsWith('dl-')){
+   const p=DL_LEARNING_PATHS[l.id];
+   includesAll(html,[p.definition,...p.terms.flat(),p.example.question,p.example.intro,p.example.reading,p.example.takeaway,c.context,...c.reasoning],l.id+' lectura básica y referencia');
+   assert.equal((html.match(/data-dl-primary-example=/g)||[]).length,1,l.id+' un ejemplo principal');
+   assert.ok(!html.includes(renderLessonScene(l.id)),l.id+' no repite la escena anterior');
+   assert.ok(!insideClosedDetail(html,esc(p.definition)),l.id+' definición visible');
+   for(const v of g.vocabulary)assert.ok(insideClosedDetail(html,'<summary>'+esc(v.term)+'</summary><p>'+esc(v.meaning)+'</p>'),l.id+' referencia consultable');
+   detailsIn(html);continue;
+  }
   includesAll(html,[g.objective,g.concept,t.question,t.situation,t.known,t.decision,
    c.title,c.context,c.question,c.conclusion,g.takeaway,...c.reasoning,
    ...g.vocabulary.flatMap(v=>[v.term,v.meaning]),...(c.columns||[]),...(c.rows||[]).flat(),
@@ -82,17 +92,20 @@ test('la práctica conserva los pasos y la ruta real de Colab sin duplicar simul
   const g=l.guide,path=NOTEBOOK_PATHS[l.id];
   const notes='<textarea id="study-note">NOTA_ORIGINAL</textarea>';
   const lab=renderLearningLab(l,'<div>CUADERNO_ORIGINAL</div>',notes);
-  includesAll(lab,[g.build.title,g.lab.objective,g.lab.instruction,g.lab.watch,g.lab.expected,g.lab.notebookGuide,
+  if(l.id.startsWith('dl-')){
+   const p=DL_LEARNING_PATHS[l.id];
+   includesAll(lab,[p.practice.title,p.practice.prompt,p.practice.change,p.practice.watch,p.practice.expected,p.colab.goal,...p.colab.steps,p.colab.check,path.section,path.observe,path.tip],l.id+' práctica secuencial');
+  }else includesAll(lab,[g.build.title,g.lab.objective,g.lab.instruction,g.lab.watch,g.lab.expected,g.lab.notebookGuide,
    ...g.build.steps,g.build.check,g.build.transfer,g.build.stretch,g.next,
    path.section,path.prepare,path.observe,path.tip,LESSON_OFFERING[l.id].bridge],l.id+' práctica');
   assert.ok(lab.includes('CUADERNO_ORIGINAL')&&lab.includes(notes),l.id+' recursos y bitácora originales');
   const finish='<button id="complete-lesson">AVANCE_ORIGINAL</button>';
-  const html=renderLearningGuide(l)+'<div class="quiz"><div id="quiz-feedback"></div></div>'+lab+renderOrganizedFinish(finish);
-  for(const id of [...targets,'study-note','quiz-feedback','complete-lesson']){
+  const dl=l.id.startsWith('dl-'),html=renderLearningGuide(l)+(dl?'':'<div class="quiz"><div id="quiz-feedback"></div></div>')+lab+renderOrganizedFinish(finish);
+  for(const id of [...targets,'study-note',...(dl?['cuaderno-del-tema']:['quiz-feedback']),'complete-lesson']){
    assert.equal((html.match(new RegExp('\\bid="'+id+'"','g'))||[]).length,1,l.id+' destino único: '+id);
   }
   assert.equal((html.match(/\bid="lesson-sim"/g)||[]).length,l.sim?1:0,l.id+' montaje único del laboratorio');
-  assert.equal((html.match(/class="quiz"/g)||[]).length,1,l.id+' quiz único');
+  assert.equal((html.match(/class="quiz"/g)||[]).length,dl?0:1,l.id+' comprobación sin quiz duplicado');
   assert.ok(html.includes(finish),l.id+' botón de avance conservado');
   const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
   assert.equal(new Set(ids).size,ids.length,l.id+' IDs sin duplicados');

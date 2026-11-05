@@ -1,4 +1,4 @@
-import {withDiagramZoom} from './dl-figures.js';
+import {withDiagramZoom} from './dl-figures.js?v=dl-recorrido-20261105';
 // Puentes de comprensión: solo se renderizan para los doce temas de Deep Learning.
 const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const BIAS_EXPLANATION = {

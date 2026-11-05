@@ -50,11 +50,19 @@ const PRIMARY_SECTIONS={
  'dl-evaluacion':'Comprobar cajas con una referencia conocida',
  'dl-integracion':'Comparar costes de revisión'
 };
+// La práctica principal introduce una tarea por tema; el apoyo conserva sus bloques originales.
+export const PRIMARY_NOTEBOOK_PRACTICES={
+ 'dl-redes':{codeIds:['lab01-calculo','capas-en-cadena'],observe:'Sigue los aportes 1 y −1, el sesgo 0,5 y la salida ReLU 0,5. Después esa salida entra en otra capa: 2×0,5−1=0 y sigmoide(0)=0,5.',tip:'Los parámetros están dados. Cambiar un dato y recalcular es predecir; todavía no estás entrenando. Cada celda vuelve a definir su ejemplo para poder ejecutarse sola.'},
+ 'dl-activaciones':{codeIds:['comparar-activaciones','curvas-activaciones'],observe:'Compara las cuatro funciones sobre una misma señal: identidad, sigmoide, tanh y ReLU. Son alternativas, no cuatro transformaciones consecutivas.',tip:'Para repetir la misma comparación en tabla y curvas, usa el mismo valor de SENAL en ambas celdas. Sus importaciones y valores iniciales están incluidos.'},
+ 'dl-entrenamiento':{codeIds:['un-paso-gradiente','lab09-entrenar'],observe:'La primera celda calcula e imprime un solo paso desde −2 y compara tasas 0,10 y 1,10. La celda siguiente entrena otra red con sus propios datos y pérdida.',tip:'Con tasa 0,10, el primer paso llega a −1 y la pérdida baja de 25 a 16; con 1,10 llega a 9 y sube a 36. Las dos comparaciones parten del mismo inicio.'},
+ 'dl-transformers':{codeIds:['lab12-transformer'],observe:'Resuelve la regla último menor que primero y contrástala con la respuesta de un Transformer pequeño entrenado. Este tema no vuelve a ejecutar la mezcla manual de atención del anterior.',tip:'En 3→1→7→2 la respuesta conocida es 1: 2 es menor que 3. La respuesta calculada por la red puede equivocarse; se comprueba al ejecutar, sin prometer aciertos.'}
+};
 export const NOTEBOOK_PATHS=Object.fromEntries(Object.entries(SOURCE_NOTEBOOK_PATHS).map(([id,path])=>{
  const meeting=encounterForTopic(id),number=meeting.topics.indexOf(id)+1;
- return [id,{...path,file:meeting.file,sourceFile:path.file,section:'Tema '+number+' · '+(PRIMARY_SECTIONS[id]||path.section),
+ const practice={...path,...PRIMARY_NOTEBOOK_PRACTICES[id]};
+ return [id,{...practice,file:meeting.file,sourceFile:path.file,section:'Tema '+number+' · '+(PRIMARY_SECTIONS[id]||path.section),
   prepare:'Ve al Tema '+number+' de este cuaderno. Ejecuta sus celdas de arriba abajo: incluye toda su preparación y puede ejecutarse sin pasar por otros temas.',
-  prepareIds:path.prepareIds.map(cell=>id+'--'+cell),codeIds:path.codeIds.map(cell=>id+'--'+cell)}];
+  prepareIds:practice.prepareIds.map(cell=>id+'--'+cell),codeIds:practice.codeIds.map(cell=>id+'--'+cell)}];
 }));
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function renderNotebookPath(id){const p=NOTEBOOK_PATHS[id];return p?`<div class="notebook-path"><h4>Tu recorrido en Colab</h4><p><b>Empieza aquí:</b> ${esc(p.section)}.</p><ol><li>${esc(p.prepare)}</li><li>${esc(p.observe)}</li></ol><p class="notebook-tip"><b>Tip:</b> ${esc(p.tip)}</p></div>`:'';}

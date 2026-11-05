@@ -117,15 +117,23 @@ def validate(topic, n):
         assert n['grid'][n['trajectory'][-1]] == 'G'
         assert np.isfinite(n['Q']).all() and len(n['returns']) == 2000
         return {'episodes':2000,'trajectory':n['trajectory'],'return':n['total']}
-    if topic in ('dl-redes','dl-activaciones'):
-        assert np.isclose(n['z'].item(),.5) and np.isclose(n['p'].item(),1/(1+np.exp(-.5)))
-        if topic == 'dl-activaciones':
-            assert np.allclose(n['comparacion_activaciones'].Salida,[-2,1/(1+np.exp(2)),np.tanh(-2),0])
-        return {'z':n['z'].item(),'sigmoid':n['p'].item(),'same_signal_comparison':n.get('comparacion_activaciones')}
+    if topic == 'dl-redes':
+        assert np.isclose(n['z_primera'], .5) and np.isclose(n['h'], .5)
+        assert np.isclose(n['z_salida'], 0) and np.isclose(n['p'], .5)
+        assert np.allclose(n['entradas'], [2,1]) and np.allclose(n['pesos'], [.5,-1])
+        return {'first_sum':n['z_primera'],'relu':n['h'],'next_sum':n['z_salida'],'sigmoid':n['p']}
+    if topic == 'dl-activaciones':
+        d=n['comparacion_activaciones']
+        assert np.allclose(d.Salida,[-2,1/(1+np.exp(2)),np.tanh(-2),0])
+        assert d.Entrada.tolist() == [-2]*4 and n['SENAL'] == -2
+        return {'same_signal_comparison':d,'signal_in_curves':n['SENAL']}
     if topic == 'dl-entrenamiento':
+        steps=n['comparacion_pasos']
+        assert np.allclose(steps['Parámetro nuevo'],[-1,9])
+        assert np.allclose(steps['Pérdida nueva'],[16,36])
         assert len(n['historial']) == 40 and n['historial'][-1] < n['historial'][0]
         assert len(n['probs']) == len(n['yte']) == 80
-        return {'epochs':40,'loss_start':n['historial'][0],'loss_end':n['historial'][-1],'reserved_accuracy':n['accuracy_score'](n['yte'],n['probs']>=.5)}
+        return {'one_step_comparison':steps,'epochs':40,'loss_start':n['historial'][0],'loss_end':n['historial'][-1],'reserved_accuracy':n['accuracy_score'](n['yte'],n['probs']>=.5)}
     if topic == 'dl-vision':
         assert n['mascara'].ndim == 2 and n['mascara'].sum()>0
         return {'illustrative_mask_shape':n['mascara'].shape}

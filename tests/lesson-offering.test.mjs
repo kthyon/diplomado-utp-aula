@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {DL_LEARNING_PATHS} from '../docs/dl-learning-paths.js';
 import {LESSON_GUIDES} from '../docs/learning-guides.js';
 import {COURSES} from '../docs/content.js';
 import {TOPICS} from '../docs/idea-models.js';
@@ -16,10 +17,18 @@ test('la distribución orientativa de los ocho encuentros solo se incluye para d
   assert.match(renderMeetingOffering(id,i,cl,{teacher:true}),/Distribución orientativa/);
  });
 });
-test('los 24 recorridos conservan conceptos, vocabulario, casos, pasos y ampliaciones al añadir orientación',()=>{
+test('los recorridos ML conservan su material y DL ofrece básicos, caso y práctica sin orientación duplicada',()=>{
  assert.deepEqual(Object.keys(LESSON_OFFERING).sort(),Object.keys(LESSON_GUIDES).sort());
  for(const [id,guide] of Object.entries(LESSON_GUIDES)){
   const lesson={id,guide,sim:true},reading=renderLearningGuide(lesson),lab=renderLearningLab(lesson,'<div>RECURSO_ORIGINAL</div>','<div>BITACORA_ORIGINAL</div>');
+  if(id.startsWith('dl-')){
+   const p=DL_LEARNING_PATHS[id];
+   for(const text of [p.definition,...p.terms.flat(),p.example.question,p.example.intro,p.example.reading,p.example.takeaway,guide.case.context,...guide.case.reasoning])assert.ok(reading.includes(esc(text)),id+': '+text);
+   for(const text of [p.practice.prompt,p.practice.change,p.practice.watch,p.practice.expected,p.colab.goal,...p.colab.steps,p.colab.check])assert.ok(lab.includes(esc(text)),id+': '+text);
+   assert.ok(lab.includes('RECURSO_ORIGINAL')&&lab.includes('BITACORA_ORIGINAL'));
+   assert.equal((lab.match(/class="button dl-colab-link"/g)||[]).length,1,id+' entrada principal única');
+   continue;
+  }
   for(const text of [guide.objective,guide.concept,guide.case.context,guide.case.conclusion,...guide.case.reasoning,...guide.vocabulary.flatMap(v=>[v.term,v.meaning])])assert.ok(reading.includes(esc(text)),id+': '+text);
   for(const text of [guide.lab.instruction,guide.lab.watch,guide.lab.expected,guide.lab.notebookGuide,...guide.build.steps,guide.build.check,guide.build.transfer,guide.build.stretch])assert.ok(lab.includes(esc(text)),id+': '+text);
   assert.ok(lab.includes('RECURSO_ORIGINAL')&&lab.includes('BITACORA_ORIGINAL'));

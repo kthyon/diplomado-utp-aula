@@ -1,9 +1,10 @@
+import {renderDLGuide,renderDLPractice} from './dl-course-journey.js?v=dl-recorrido-20261105';
 import {renderTopicContext,renderTopicVocabulary,renderTopicOutcome,renderCaseEvidence} from './lesson-context.js?v=organizacion-20261027';
 import {LESSON_OFFERING,renderNotebookBridge,renderExplorerLink} from './lesson-offering.js?v=revision-dl-20261102c';
 import {renderConceptConnections} from './concept-connections.js?v=definiciones-20261027';
 import {LESSON_SCENES,renderCaseDetail} from './lesson-scenes.js';
 import {isOrganizedTopic} from './learning-organization.js?v=organizacion-20261027';
-import {renderDLPrerequisites,renderDLReason,renderDLCheck,renderActivationBridge} from './dl-foundations.js?v=revision-dl-20261102c';
+import {renderDLPrerequisites,renderDLReason,renderDLCheck,renderActivationBridge} from './dl-foundations.js?v=dl-recorrido-20261105';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const CLASS_PURPOSES={
   "ml": [
@@ -20,6 +21,7 @@ export const CLASS_PURPOSES={
   ]
 };
 export function renderLearningGuide(l){
+  if(l.id.startsWith('dl-'))return renderDLGuide(l);
   const g=l.guide,c=g.case;
   const table=c.columns?.length&&c.rows?.length?`<div class="learning-table-wrap"><table class="learning-table"><caption>${esc(c.title)}</caption><thead><tr>${c.columns.map(t=>`<th scope="col">${esc(t)}</th>`).join('')}</tr></thead><tbody>${c.rows.map(row=>`<tr>${row.map((v,i)=>i?`<td>${esc(v)}</td>`:`<th scope="row">${esc(v)}</th>`).join('')}</tr>`).join('')}</tbody></table></div>`:'';
   if(isOrganizedTopic(l.id))return renderOrganizedGuide(l,table);
@@ -39,6 +41,7 @@ function renderOrganizedGuide(l,table){
  <details class="concept-reference"><summary>Conecta esta idea con lo que ya aprendiste</summary>${renderConceptConnections(l.id)}</details>`;
 }
 export function renderLearningLab(l,notebooks,notes=''){
+  if(l.id.startsWith('dl-'))return renderDLPractice(l,notebooks,notes);
   const g=l.guide,b=g.build;
   return `<section class="guided-exploration" id="practica-del-tema"><div class="exploration-prompt"><div class="eyebrow">03 · LABORATORIO GUIADO</div><h2>${esc(b.title)}</h2><p class="lab-objective"><b>Objetivo:</b> ${esc(g.lab.objective)}</p><p>${esc(g.lab.instruction)}</p><p><b>Qué observar:</b> ${esc(g.lab.watch)}</p></div>${g.lab.context?`<details class="expected-result practice-context"><summary>Qué cambia entre el ejemplo y Colab</summary><p>${esc(g.lab.context)}</p></details>`:''}${l.id==='dl-activaciones'?renderActivationBridge():''}${l.sim?'<div id="lesson-sim"></div>':''}<details class="expected-result"><summary>Comprobar el ejemplo</summary><p>${esc(g.lab.expected)}</p></details>${renderExplorerLink(l.id)}<section class="panel notebook-lab" id="cuaderno-del-tema"><h3>Construye tu solución</h3>${renderNotebookBridge(l)}<p class="field-note">Crea una copia personal antes de ejecutar o modificar el cuaderno. Puedes registrar tus tablas y decisiones en el cuaderno o en tu bitácora.</p>${notebooks}<p class="field-note">Los pasos siguientes conectan el caso con los cuadernos de apoyo. El cuaderno principal incluye sus propias instrucciones dentro de cada tema.</p><ol class="worked-steps build-steps">${b.steps.map(step=>`<li>${esc(step)}</li>`).join('')}</ol><div class="learning-result build-check"><h4>Comprueba tu construcción</h4><p>${esc(b.check)}</p></div><details class="practice-transfer"><summary>Aplícalo a otra operación</summary><p>${esc(b.transfer)}</p></details><details class="practice-transfer"><summary>Para profundizar: un paso más con código</summary><p>${esc(b.stretch)}</p></details>${notes}</section><p class="learning-bridge"><b>La siguiente conexión:</b> ${esc(g.next)}</p></section>`;
 }

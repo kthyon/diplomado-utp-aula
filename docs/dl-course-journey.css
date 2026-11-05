@@ -1,0 +1,58 @@
+/* Read mode: one example, with a visible next action at each stage. */
+.dl-course-reading{--dl-input:#28638e;--dl-parameter:#78519a;--dl-operation:#a45823;--dl-output:#28745c;counter-reset:none}
+[data-theme=dark] .dl-course-reading{--dl-input:#8ac7f0;--dl-parameter:#c8a8eb;--dl-operation:#f2b485;--dl-output:#8ad3b9}
+.organized-reading.dl-course-reading{max-width:1080px;margin:0 auto;width:100%}
+.dl-course-reading .dl-lesson-section{padding:32px 0 40px;border-top:1px solid var(--line);margin:0 0 24px;scroll-margin-top:24px;min-width:0}
+.dl-course-reading .dl-lesson-section>h2{font-size:1.65rem;line-height:1.35;max-width:40ch;margin:0 0 24px;letter-spacing:-.02em}
+.dl-course-reading .dl-lesson-section>h2>span{color:var(--accent);font-weight:500;margin-right:5px}
+.dl-course-reading :is(p,dd,li){font-size:1rem;line-height:1.8;max-width:72ch}
+.dl-course-reading .dl-definition{font-size:1.125rem;line-height:1.8;margin:0 0 28px;color:var(--ink)}
+.dl-essential-terms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin:24px 0 28px;min-width:0}
+.dl-essential-terms>div{min-width:0;padding:0 0 18px;border-bottom:1px solid var(--line)}
+.dl-essential-terms dt{font-size:1rem;font-weight:650;line-height:1.6;display:flex;align-items:center;gap:9px;min-width:0}
+.dl-essential-terms dd{margin:12px 0 0;color:var(--muted);font-size:.95rem}
+.dl-term-index{display:inline-grid;place-items:center;min-width:28px;height:28px;border-radius:50%;background:color-mix(in srgb,var(--dl-input) 12%,var(--paper));color:var(--dl-input);font-size:.8rem;font-variant-numeric:tabular-nums}
+.dl-essential-terms>div:nth-child(2) .dl-term-index{color:var(--dl-parameter);background:color-mix(in srgb,var(--dl-parameter) 12%,var(--paper))}
+.dl-essential-terms>div:nth-child(3) .dl-term-index{color:var(--dl-output);background:color-mix(in srgb,var(--dl-output) 12%,var(--paper))}
+.dl-course-reading :is(.dl-reference,.dl-understanding){margin:22px 0 0;padding:0;border-top:1px solid var(--line);min-width:0}
+.dl-course-reading :is(.dl-reference,.dl-understanding)>summary{padding:16px 0;cursor:pointer;font-size:.95rem;font-weight:600;line-height:1.65;color:var(--accent)}
+.dl-course-reading .dl-reference[open]{padding-bottom:16px}
+.dl-course-reading .dl-reference :is(h3,h4){margin:24px 0 12px;line-height:1.45}
+.dl-course-reading .dl-understanding>p{padding:0 0 12px;margin:0;color:var(--muted)}
+.dl-section-action{display:flex;justify-content:flex-end;gap:14px;margin:28px 0 0}
+.dl-course-reading .dl-continue{min-height:46px;font-size:.95rem;line-height:1.5;white-space:normal;text-align:left}
+.dl-example-question{font-size:1.125rem!important;line-height:1.65;font-weight:600;color:var(--ink);margin:0 0 14px}
+.dl-diagram-reading{margin:24px 0 14px;max-width:72ch}
+.dl-diagram-reading h3{font-size:1.125rem;margin:0 0 10px}
+.dl-diagram-reading p{margin:0;color:var(--muted)}
+.dl-course-reading .dl-takeaway{padding:18px 0;margin:18px 0;border-bottom:1px solid var(--line);color:var(--ink)}
+.dl-full-calculation{padding-left:22px;display:grid;gap:14px}
+.dl-experiment-brief{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:26px 0 24px}
+.dl-experiment-brief dt{font-weight:650;color:var(--ink);font-size:1rem}
+.dl-experiment-brief dd{margin:8px 0 0;color:var(--muted)}
+.dl-course-reading #lesson-sim{margin:24px 0;min-width:0}
+.dl-without-simulator{padding:20px;background:var(--soft);border-radius:12px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:20px 0}
+.dl-without-simulator p{margin:0;flex:1 1 300px}
+.dl-colab-location{display:grid;gap:8px;padding:20px 0;margin:12px 0 20px;border-block:1px solid var(--line)}
+.dl-colab-location strong{font-size:1.05rem;color:var(--ink)}
+.dl-colab-location span{font-size:1rem;line-height:1.6}
+.dl-colab-location small{font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
+.dl-course-reading .dl-colab-link{font-size:1rem;min-height:48px;line-height:1.6;white-space:normal;max-width:100%}
+.dl-colab-steps{margin:28px 0 18px;padding-left:24px;display:grid;gap:14px}
+.dl-course-reading .dl-execution-note{font-size:.9rem;color:var(--muted);margin:18px 0}
+.dl-build-check{background:var(--soft);padding:22px;border-radius:12px;margin:24px 0}
+.dl-build-check h3{font-size:1.125rem;margin:0 0 10px}
+.dl-build-check p{margin:0;color:var(--ink)}
+.dl-course-reading .dl-optional-material .resource{padding:18px 0;background:transparent;box-shadow:none;border:0;border-bottom:1px solid var(--line);border-radius:0}
+.dl-topic-continuation{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;margin:30px 0;padding:26px 0;border-block:1px solid var(--line)}
+.dl-topic-continuation>a{display:grid;gap:6px;color:var(--accent);flex:1 1 250px;line-height:1.6;text-decoration:none;min-height:48px}
+.dl-topic-continuation>a small{font-size:.8rem;color:var(--muted)}
+.dl-topic-continuation>a span{text-decoration:underline;text-underline-offset:4px;font-weight:600}
+.dl-topic-continuation>p{flex-basis:100%;margin:0;font-size:.85rem;color:var(--muted)}
+.dl-course-closure{padding:28px 0;margin:24px 0;border-top:1px solid var(--line)}.dl-course-closure>h2{font-size:1.5rem;line-height:1.4;margin:0 0 16px}
+.dl-course-reading :is(button,a,summary,input,select,textarea):focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+.dl-course-reading a{text-underline-offset:4px}.dl-course-reading ::selection{background:color-mix(in srgb,var(--dl-parameter) 25%,transparent)}
+.dl-compass .lesson-section-nav{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(min-width:1200px){.dl-compass .lesson-section-nav{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:850px){.dl-compass .lesson-section-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.dl-essential-terms{grid-template-columns:1fr;gap:18px}.dl-essential-terms>div{padding-bottom:16px}.dl-essential-terms dd{margin:10px 0 0}.dl-experiment-brief{grid-template-columns:1fr;gap:20px}.dl-course-reading .dl-lesson-section{padding-top:24px}.dl-course-reading .dl-lesson-section>h2{font-size:1.4rem}.dl-section-action{justify-content:stretch}.dl-continue{width:100%}.dl-build-check{padding:18px}}

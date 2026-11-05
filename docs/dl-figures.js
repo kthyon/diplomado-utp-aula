@@ -1,8 +1,12 @@
 const fmt=n=>n.toLocaleString('es-CO',{maximumFractionDigits:3});
+let zoomId=0;
 export function withDiagramZoom(html){
  const svg=html.match(/<svg[\s\S]*?<\/svg>/)?.[0];if(!svg)return html;
- const extra=`<details class="dl-figure-zoom"><summary>Ampliar gráfico y etiquetas</summary><div class="dl-figure-scroll" role="region" tabindex="0" aria-label="Gráfico ampliado; desplázate horizontalmente para leer sus etiquetas">${svg}</div></details>`;
- return html.includes('<figcaption>')?html.replace('<figcaption>',extra+'<figcaption>'):html+extra;
+ const id='dl-zoom-view-'+(++zoomId);
+ // Native disclosure stores the size choice. CSS enlarges this one viewport;
+ // the SVG is never copied into a second version of the diagram.
+ const view=`<div class="dl-zoomable"><details class="dl-figure-zoom"><summary aria-controls="${id}"><span class="dl-zoom-label-open">Ampliar gráfico y etiquetas</span><span class="dl-zoom-label-close">Reducir gráfico</span></summary><p class="dl-zoom-hint">El mismo gráfico tiene etiquetas más grandes. Puedes desplazarte dentro de él para leerlo.</p></details><div class="dl-figure-scroll" id="${id}" role="region" tabindex="0" aria-label="Gráfico; al ampliar, desplázate dentro de este recuadro para leer las etiquetas">${svg}</div></div>`;
+ return html.replace(svg,view);
 }
 export function neuronFigure(r){
  return withDiagramZoom(`<figure class="dl-live-diagram"><svg viewBox="0 0 440 290" role="img" aria-label="Entradas ${r.inputs.join(' y ')}, contribuciones ${r.products.join(' y ')}, suma ${r.sum}, salida ReLU ${r.output}"><rect x="10" y="10" width="200" height="85" rx="12"/><rect x="230" y="10" width="200" height="85" rx="12"/><text x="110" y="40" text-anchor="middle">x₁=${fmt(r.inputs[0])}; w₁=${fmt(r.weights[0])}</text><text x="110" y="72" text-anchor="middle">Aporte: ${fmt(r.products[0])}</text><text x="330" y="40" text-anchor="middle">x₂=${fmt(r.inputs[1])}; w₂=${fmt(r.weights[1])}</text><text x="330" y="72" text-anchor="middle">Aporte: ${fmt(r.products[1])}</text><path d="M110 95V115H220V135M330 95V115H220"/><rect x="55" y="135" width="330" height="60" rx="12"/><text x="220" y="172" text-anchor="middle">Añadir b=${fmt(r.bias)} → z=${fmt(r.sum)}</text><path d="M220 195V215"/><rect x="55" y="215" width="330" height="60" rx="12"/><text x="220" y="252" text-anchor="middle">ReLU: máximo(0, z)=${fmt(r.output)}</text></svg><figcaption>Los dos aportes se reúnen antes de aplicar ReLU. Un peso negativo puede restar; un resultado negativo antes de ReLU se convierte en cero. Las cifras se recalculan con tus controles.</figcaption></figure>`);

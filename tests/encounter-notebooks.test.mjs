@@ -54,3 +54,21 @@ test('las explicaciones de preparación acompañan su código y no se adelantan 
  const code=topic2.findIndex(c=>c.id==='ml-preparacion--utp-95bdbbfc11ccfd84');
  assert.ok(intro>=0&&intro<code);
 });
+
+test('Deep Learning separa cálculo, activaciones y un paso de ajuste sin repetir sus programas entre temas',()=>{
+ const one=JSON.parse(fs.readFileSync(new URL('../docs/notebooks/dl-encuentro-1.ipynb',import.meta.url)));
+ const three=JSON.parse(fs.readFileSync(new URL('../docs/notebooks/dl-encuentro-3.ipynb',import.meta.url)));
+ assert.ok(!one.cells.some(c=>c.cell_type==='code'&&c.id.endsWith('--lab09-neurona')),'la neurona con curvas no se repite en Redes y Activaciones');
+ assert.ok(one.cells.some(c=>c.id==='dl-redes--capas-en-cadena'));
+ assert.ok(one.cells.some(c=>c.id==='dl-activaciones--comparar-activaciones'));
+ assert.ok(one.cells.some(c=>c.id==='dl-activaciones--curvas-activaciones'));
+ assert.ok(one.cells.some(c=>c.id==='dl-entrenamiento--un-paso-gradiente'));
+ assert.ok(!one.cells.some(c=>c.id==='dl-entrenamiento--lab01-gradiente'),'la curva de doce pasos no sustituye la comprobación de un paso');
+ assert.ok(!three.cells.some(c=>c.id==='dl-transformers--lab12-atencion'),'Transformer conserva su propia tarea; no repite la mezcla previa');
+ const ids=new Set(['dl-redes--lab01-calculo','dl-redes--capas-en-cadena','dl-activaciones--comparar-activaciones','dl-activaciones--curvas-activaciones','dl-entrenamiento--un-paso-gradiente']);
+ for(const cell of one.cells.filter(c=>ids.has(c.id)))assert.match(cell.source,/^import |^from /m,cell.id+' declara sus herramientas');
+ const fingerprints=new Set();
+ for(const notebook of [one,three])for(const cell of notebook.cells.filter(c=>c.cell_type==='code'&&!/--preparacion[12]$/.test(c.id))){
+  assert.ok(!fingerprints.has(cell.source),cell.id+' código principal duplicado');fingerprints.add(cell.source);
+ }
+});
