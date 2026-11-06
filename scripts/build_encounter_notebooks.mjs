@@ -177,6 +177,29 @@ const CUSTOM_GUIDES={
  'curvas-activaciones':'### 2 · Ubica esa misma señal en las curvas\n\nEl punto conserva la misma entrada en los cuatro gráficos. Si cambias SENAL en la tabla, pon el mismo valor en esta celda para repetir la comparación. Las curvas no entrenan un modelo.',
  'un-paso-gradiente':'### 1 · Comprueba un solo ajuste antes de entrenar una red\n\nCada fila vuelve a empezar en −2. La tasa 0,10 produce −1 y pérdida 16; la tasa 1,10 produce 9 y pérdida 36. Compara estos resultados con el inicio, pérdida 25. La celda imprime la cuenta elegida, la tabla y las dos flechas.'
 };
+// Clarify the principal reading without changing the preserved support notebook.
+const DL_READING_CLARIFICATIONS={
+ 'dl-entrenamiento':{
+  'lectura-lab09-entrenar':`### Después de ejecutar: tres comprobaciones pequeñas
+
+**Datos reservados:** de los 320 casos simulados, 240 entrenan la red y 80 quedan para comprobarla. Aquí 1 significa sano y 0, defectuoso.
+
+**Pérdida y aciertos:** el primer punto de la curva resume las pérdidas de los lotes durante la primera época; no es la pérdida antes de aprender. Compáralo con la última época sin convertirlo a porcentaje. La salida «Accuracy en prueba» sí es una proporción de aciertos entre 0 y 1: por ejemplo, 0,95 equivale al 95 %.
+
+**Cómo leer el mapa:** el fondo representa la puntuación de la red para sano: tonos rojos para valores bajos y verdes para altos. Los puntos representan las etiquetas conocidas de los casos reservados: rojo = defectuoso; verde = sano. Compara cada punto con el fondo de su zona; un punto no es la predicción del modelo.
+
+Si pruebas otra tasa, registra la comparación. Elegir con esa reserva la convierte en validación, no en una prueba final nueva.`
+ },
+ 'dl-cnn':{
+  'utp-99a3c1dce2d23643':`### De los cuadritos a la respuesta
+
+La CNN recibe una imagen de 8×8 y aplica ocho filtros de 3×3 cuyos pesos aprende. Producen ocho mapas de respuestas. ReLU cambia a cero las respuestas negativas. MaxPool toma el máximo de cada zona y reduce los mapas de 8×8 a 4×4. Al final, la red calcula diez puntuaciones, una por dígito, y elige la mayor. Esas puntuaciones se llaman logits, no son diez objetos.
+
+**Cómo leer las figuras:** compara «Real» y «pred.» para cada imagen. Después observa el mapa de un filtro fijo que compara izquierda y derecha; es distinto de los ocho filtros aprendidos y del filtro del aula que compara filas. Sus colores representan respuestas numéricas, no clases de dígitos ni probabilidades.
+
+**Qué probar:** cambia solo EPOCAS de 12 a 1 y vuelve a ejecutar la celda entera. Compara respuestas y pérdida sin prometer que cada imagen empeorará. Si eliges una versión mirando repetidamente la misma reserva, la estás usando como validación. Para reutilizar pesos, continúa en el **Tema 3 de este mismo cuaderno**: carga otro modelo para otra tarea; no convierte esta CNN de dígitos en detector.`
+ }
+};
 function dlIntro(item,route){
  return `## ${route.section}\n\n**Lo que vas a poder hacer:** ${item.goal}\n\n### Entiende la idea\n\n${item.definition}\n\n${item.terms.map(([term,meaning])=>'**'+term+':** '+meaning).join('\n\n')}\n\n### Un caso pequeño antes del programa\n\n**${item.example.question}**\n\n${item.example.intro}\n\n**Cómo leerlo:** ${item.example.reading}\n\n**Para recordar:** ${item.example.takeaway}\n\n### Ahora identifica los datos de esta práctica\n\n${item.colab.goal}\n\n${item.colab.steps.map((step,i)=>(i+1)+'. '+step).join('\n')}\n\n**Antes de ejecutar:** este tema incluye su preparación. Ejecuta las celdas en orden; no requiere los temas anteriores. Las celdas nuevas de cuentas pequeñas incluyen sus propias importaciones y datos.\n\n**Qué cambiar y qué conservar:** ${route.tip}`;
 }
@@ -198,8 +221,10 @@ function topicCells(id){
  const isReading=text=>/^###\s+(?:Lectura|Después de ejecutar|Lee las figuras)/i.test(text.trim());
  const addExplanation=(notebook,index,cellId)=>{
   const originalCell=notebook.cells[index],key=p.file+':'+originalCell.id;
+  // This optional support-only block precedes lab14 but is not part of its lesson.
+  if(dl&&originalCell.id==='extensiones')return;
   if(explained.has(key))return;
-  explained.add(key);const text=source(originalCell);cells.push(md(cellId+'-lectura-'+index,dl?text.replace(/^(###)\s+\d+(?:\.\d+)?[A-Z]?\s*[·.:]\s*/gm,'$1 '):text));
+  explained.add(key);const text=DL_READING_CLARIFICATIONS[id]?.[originalCell.id]||source(originalCell);cells.push(md(cellId+'-lectura-'+index,dl?text.replace(/^(###)\s+\d+(?:\.\d+)?[A-Z]?\s*[·.:]\s*/gm,'$1 '):text));
  };
  const identifiers=dl?[...route.prepareIds,...route.codeIds].map(full=>full.slice(id.length+2)):[...p.prepareIds,...p.codeIds];
  for(const identifier of identifiers){

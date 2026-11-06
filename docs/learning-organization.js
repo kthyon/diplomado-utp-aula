@@ -1,4 +1,4 @@
-import {DL_LEARNING_PATHS} from './dl-learning-paths.js?v=dl-recorrido-20261105';
+import {DL_LEARNING_PATHS} from './dl-learning-paths.js?v=dl-precision-20261105';
 import {TOPIC_CONTEXT} from './lesson-context.js?v=organizacion-20261027';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const isOrganizedTopic=id=>Object.hasOwn(TOPIC_CONTEXT,id);

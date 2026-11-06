@@ -1,10 +1,10 @@
-import {DL_LEARNING_PATHS} from './dl-learning-paths.js?v=dl-recorrido-20261105';
-import {renderDLTopicDiagram} from './dl-topic-diagrams.js?v=dl-recorrido-20261105';
+import {DL_LEARNING_PATHS} from './dl-learning-paths.js?v=dl-precision-20261105';
+import {renderDLTopicDiagram} from './dl-topic-diagrams.js?v=dl-precision-20261105';
 import {DL_FOUNDATIONS,renderBiasExplanation,renderActivationBridge} from './dl-foundations.js?v=dl-recorrido-20261105';
 import {renderTopicVocabulary} from './lesson-context.js';
-import {NOTEBOOK_PATHS} from './notebook-paths.js?v=dl-recorrido-20261105';
+import {NOTEBOOK_PATHS} from './notebook-paths.js?v=dl-precision-20261105';
 import {encounterForTopic,colabNotebookUrl} from './encounter-notebooks.js';
-import {LESSON_OFFERING} from './lesson-offering.js?v=dl-recorrido-20261105';
+import {LESSON_OFFERING} from './lesson-offering.js?v=dl-precision-20261105';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nextSection=(target,label)=>`<button type="button" class="button dl-continue" data-lesson-section="${target}">${label}<span aria-hidden="true"> →</span></button>`;

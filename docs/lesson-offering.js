@@ -1,5 +1,5 @@
 import {renderMeetingContext} from './lesson-context.js?v=organizacion-20261027';
-import {renderNotebookPath,SOURCE_NOTEBOOK_PATHS} from './notebook-paths.js?v=colab-20261031b';
+import {renderNotebookPath,SOURCE_NOTEBOOK_PATHS} from './notebook-paths.js?v=dl-precision-20261105';
 import {renderMeetingDefinitions} from './definitions.js?v=revision-dl-20261102c';
 import {renderSessionPlan} from './session-plans.js?v=1';
 // Orientación editorial: acompaña el contenido, sin cambiar acceso ni progreso.

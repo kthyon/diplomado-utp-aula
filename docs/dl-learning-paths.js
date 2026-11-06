@@ -3,7 +3,7 @@
 export const DL_LEARNING_PATHS = {
  'dl-redes': {
   goal:'Explicar qué entra a una neurona, qué hacen sus parámetros y cómo su salida alimenta otra capa.',
-  definition:'Deep Learning (aprendizaje profundo) es parte de Machine Learning (aprendizaje automático), que pertenece a la inteligencia artificial (IA). Una red neuronal transforma números mediante capas de unidades de cálculo. En cada unidad, los pesos multiplican entradas, el bias suma un ajuste y una activación produce la salida.',
+  definition:'Deep Learning (aprendizaje profundo) es parte de Machine Learning (aprendizaje automático), que pertenece a la inteligencia artificial (IA). Lo «profundo» se refiere a varias capas que aprenden representaciones sucesivas de los datos. Una red neuronal transforma números mediante unidades de cálculo: los pesos multiplican entradas, el bias suma un ajuste y una activación produce la salida. Añadir capas no garantiza aprender mejor.',
   terms:[
    ['Entrada','Número que recibe la unidad para calcular su respuesta.'],
    ['Peso y bias','El peso multiplica una entrada; el bias, o sesgo, se suma a los aportes. Son parámetros que pueden aprenderse.'],
@@ -12,7 +12,7 @@ export const DL_LEARNING_PATHS = {
   example:{
    question:'¿Cómo se transforma un par de números en una salida?',
    intro:'Seguimos una neurona con dos señales abstractas, 2 y 1. Entradas, pesos y bias fueron elegidos para ver la cuenta; no son mediciones de una planta.',
-   reading:'Sigue las flechas: cada entrada se multiplica por su peso. Los aportes 1 y −1 se suman con bias 0,5. ReLU conserva la suma positiva: sale 0,5.',
+   reading:'Sigue las flechas: cada entrada se multiplica por su peso. Los aportes 1 y −1 se suman con bias 0,5. ReLU convierte una suma negativa en cero y conserva la no negativa: aquí sale 0,5.',
    takeaway:'Usar parámetros actuales es inferencia. Cambiar un control a mano explora el cálculo; todavía no entrena la neurona.',
    check:{question:'Si la siguiente capa recibe 0,5, ¿recibe un dato nuevo o una transformación de las entradas?',answer:'Recibe una transformación de las mismas entradas. Encadenar capas permite construir nuevas representaciones; no añade por sí solo una medición nueva.'}
   },
@@ -322,7 +322,7 @@ export const DL_LEARNING_PATHS = {
    intro:'Tenemos diez granos ficticios. Revisar cuesta 1 punto y dejar pasar un defecto cuesta 8; suponemos que cada revisión identifica el defecto correctamente.',
    reading:'Con corte 0,50 hay cuatro revisiones y un defecto aceptado: coste 12. Con 0,30 hay seis revisiones y ningún defecto aceptado: coste 6. Revisar los diez costaría 10.',
    takeaway:'La alternativa preferida depende de las consecuencias declaradas, además del modelo. La revisión perfecta es un supuesto que habría que comprobar.',
-   check:{question:'Si cambias el coste de aceptar un defecto, ¿cambian automáticamente las puntuaciones de la red?',answer:'No. Conservas los mismos casos y puntuaciones; recalculas las consecuencias de cada regla. Podría cambiar la política preferida sin entrenar otra vez.'}
+   check:{question:'Si cambias el coste de aceptar un defecto, ¿cambian automáticamente las puntuaciones dadas del ejemplo?',answer:'No. Conservas los mismos casos y puntuaciones; recalculas las consecuencias de cada regla. Podría cambiar la política preferida sin entrenar otra vez.'}
   },
   practice:{
    title:'Conserva los casos y cambia una consecuencia',

@@ -1,4 +1,4 @@
-import {renderDLGuide,renderDLPractice} from './dl-course-journey.js?v=dl-recorrido-20261105';
+import {renderDLGuide,renderDLPractice} from './dl-course-journey.js?v=dl-precision-20261105';
 import {renderTopicContext,renderTopicVocabulary,renderTopicOutcome,renderCaseEvidence} from './lesson-context.js?v=organizacion-20261027';
 import {LESSON_OFFERING,renderNotebookBridge,renderExplorerLink} from './lesson-offering.js?v=revision-dl-20261102c';
 import {renderConceptConnections} from './concept-connections.js?v=definiciones-20261027';

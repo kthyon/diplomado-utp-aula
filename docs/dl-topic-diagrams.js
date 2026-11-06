@@ -71,14 +71,15 @@ function convolution(id){
 }
 
 function transfer(id){
- return {height:385,kind:'reuse',label:'Usar el modelo conserva sus pesos. Adaptarlo puede conservar un extractor previo y entrenar una cabeza nueva con datos etiquetados.',body:
+ return {height:600,kind:'reuse',label:'Usar el modelo conserva sus pesos. Al adaptar una cabeza nueva, solo la imagen entra al extractor congelado. La cabeza produce una predicción que se compara con una etiqueta externa para calcular la pérdida y ajustar la cabeza.',body:
  `${t(20,30,'Usar lo ya aprendido','dl-topic-label','start')}${box(20,55,155,84,'input',['Nueva imagen'])}${box(227,55,234,84,'parameter',['Modelo previo','Pesos sin cambios'])}${box(520,55,212,84,'result',['Categorías que','ya reconoce'])}
  ${arrow(id,'M178 97 H223')}${arrow(id,'M465 97 H516','result')}
- ${t(20,202,'Adaptar a otra tarea: una posibilidad de entrenamiento','dl-topic-label','start')}${box(20,225,155,100,'input',['Imágenes y','etiquetas nuevas'])}${box(227,225,234,100,'parameter',['Extractor previo','Congelado al inicio'])}${box(520,225,212,100,'operation',['Cabeza nueva','Se entrena'])}
- ${arrow(id,'M178 276 H223')}${arrow(id,'M465 276 H516')}
- <path d="M538 237V218H715V237" class="dl-topic-parameter-line"/>
- ${t(380,368,'Cambiar un nombre en pantalla no cambia ninguno de estos pesos.','dl-topic-small')}`,
- caption:'Azul: datos. Morado: parámetros reutilizados; congelar impide actualizarlos. Naranja: parte nueva que sí se entrenaría. La ruta inferior ilustra una estrategia de adaptación, no afirma que el Colab la ejecute: la práctica del tema usa pesos existentes para inferencia. Ajuste fino también puede actualizar parte del extractor.'};
+ ${t(20,202,'Adaptar a otra tarea: entrenar una cabeza nueva','dl-topic-label','start')}${box(20,220,155,80,'input',['Nueva imagen'])}${box(227,220,234,80,'parameter',['Extractor previo','Se mantiene fijo'])}${box(520,220,212,80,'operation',['Cabeza nueva','Parámetros ajustables'])}
+ ${arrow(id,'M178 260 H223','input')}${arrow(id,'M465 260 H516')}${arrow(id,'M626 304 V336','result')}
+ ${box(520,340,212,68,'result',['Predicción'])}${box(20,340,250,68,'input',['Etiqueta conocida','No entra al extractor'])}
+ ${arrow(id,'M626 412 V431 H380 V446','result')}${arrow(id,'M145 412 V485 H281','input')}${box(285,450,190,70,'operation',['Compara y','calcula pérdida'])}
+ ${arrow(id,'M380 524 V552 H750 V260 H736')}${t(535,578,'La pérdida guía el ajuste de la cabeza.','dl-topic-small')}`,
+ caption:'Azul: imagen y etiqueta, con recorridos separados. Morado: extractor congelado, cuyos parámetros permanecen fijos. Naranja: cabeza que se entrena y comparación con la etiqueta externa. La actualización usa gradientes de la pérdida; la etiqueta no es una entrada del extractor. Esta adaptación es ilustrativa: el Colab del tema solo ejecuta inferencia. Ajuste fino también puede actualizar parte del extractor.'};
 }
 
 function sequence(id){
@@ -106,23 +107,26 @@ function attention(id){
 }
 
 function transformer(id){
- return {height:520,kind:'contextual-sequence',label:'Cuatro cantidades y sus posiciones pasan por un bloque Transformer. Su salida produce dos puntuaciones para decidir clase cero o uno. Esa clase se compara con una etiqueta externa: uno, porque la última cantidad dos es menor que la primera tres. No se muestra una predicción numérica inventada.',body:
+ return {height:650,kind:'contextual-sequence',label:'Cada una de las cuatro cantidades se representa como un vector y se combina con su posición. Un bloque Transformer transforma esos vectores. La cabeza lee las posiciones y produce dos puntuaciones para decidir clase cero o uno. La clase se compara con una etiqueta externa: uno, porque dos es menor que tres. No se inventa la predicción de la red.',body:
  `${[3,1,7,2].map((v,i)=>box(23+i*185,25,157,67,'input',[`Cantidad ${v}`])+box(23+i*185,104,157,57,'parameter',[`Posición ${i+1}`])).join('')}
- ${[101,286,471,656].map(x=>arrow(id,`M${x} 164 V195`,'input')).join('')}
- <rect x="23" y="199" width="712" height="92" rx="15" class="dl-topic-unit"/>${t(379,230,'Bloque Transformer','dl-topic-label')}${t(379,260,'Autoatención + transformaciones por posición','dl-topic-value')}
- ${arrow(id,'M379 295 V309 H187 V321','result')}${box(20,325,335,74,'result',['Salida del modelo','Dos puntuaciones → clase 0 o 1'])}
- ${box(405,325,330,74,'input',['Etiqueta esperada: 1','Porque 2 < 3'])}
- ${arrow(id,'M187 403 V460 H281','result')}${arrow(id,'M570 403 V460 H479','input')}${box(285,425,190,70,'operation',['Compara la clase','con la etiqueta'])}`,
- caption:'Azul: cantidades ficticias y etiqueta de referencia; morado: posición. Solo cantidades y posiciones entran al bloque. La etiqueta se calcula por la regla última < primera y se mantiene fuera del modelo para comprobarlo. El gráfico no inventa qué clase predecirá la red: eso se observa al ejecutar la práctica. Se omiten conexiones residuales y normalización para situar el recorrido básico.'};
+ ${[101,286,471,656].map(x=>arrow(id,`M${x} 164 V188`,'input')).join('')}
+ ${box(23,192,712,58,'parameter',['Representación: vector de cada cantidad + posición'])}${arrow(id,'M379 254 V277','parameter')}
+ <rect x="23" y="281" width="712" height="76" rx="15" class="dl-topic-unit"/>${t(379,309,'Bloque Transformer','dl-topic-label')}${t(379,337,'Autoatención + transformaciones por posición','dl-topic-value')}
+ ${arrow(id,'M379 361 V386')}${box(167,390,424,58,'operation',['Cabeza: lee las posiciones → 2 puntuaciones'])}
+ ${arrow(id,'M379 452 V466 H187 V477','result')}${box(20,481,335,68,'result',['Predicción','Clase elegida: 0 o 1'])}
+ ${box(405,481,330,68,'input',['Etiqueta esperada: 1','Porque 2 < 3'])}
+ ${arrow(id,'M187 553 V601 H281','result')}${arrow(id,'M570 553 V601 H479','input')}${box(285,566,190,70,'operation',['Compara la clase','con la etiqueta'])}`,
+ caption:'Cada cantidad se convierte en un vector (embedding) y se combina con su posición. El bloque transforma esos vectores; la cabeza del cuaderno conserva la lectura de las posiciones para producir dos puntuaciones. La etiqueta se calcula con la regla última < primera y solo entra en la comparación externa, nunca en el bloque. La predicción real se observa al ejecutar la práctica. Se omiten conexiones residuales y normalización para situar el recorrido básico.'};
 }
 
 function yolo(id){
- return {height:365,kind:'proposal-gate',label:'Una propuesta se describe mediante categoría, coordenadas de caja y puntuación cero coma ochenta; un corte cero coma cincuenta la conserva para revisión.',body:
- `<rect x="18" y="54" width="233" height="220" rx="10" class="dl-topic-image-field"/><circle cx="135" cy="165" r="57" class="dl-topic-object"/><rect x="63" y="93" width="145" height="145" class="dl-topic-detection-box"/>
- ${t(135,32,'Propuesta en la imagen','dl-topic-label')}${arrow(id,'M255 166 H302')}${box(307,56,213,83,'result',['Categoría propuesta','«fruto»'])}${box(307,155,213,83,'result',['Caja [x₁,y₁,x₂,y₂]','[20,20,60,60] px'])}${box(307,254,213,83,'result',['Puntuación dada','0,80'])}
+ return {height:400,kind:'proposal-gate',label:'En una imagen ficticia de cien por cien píxeles, la caja va de veinte,veinte a sesenta,sesenta y mide cuarenta por cuarenta píxeles. La propuesta tiene categoría fruto y puntuación cero coma ochenta. Un corte cero coma cincuenta la conserva para revisión.',body:
+ `<rect x="18" y="54" width="220" height="220" class="dl-topic-image-field"/><circle cx="106" cy="142" r="34" class="dl-topic-object"/><rect x="62" y="98" width="88" height="88" data-image-box="20,20,60,60" class="dl-topic-detection-box"/>
+ ${t(128,32,'Imagen 100 × 100 px','dl-topic-label')}${t(23,77,'(0,0)','dl-topic-small','start')}${t(58,91,'(20,20)','dl-topic-small','start')}${t(155,205,'(60,60)','dl-topic-small','start')}
+ ${arrow(id,'M242 166 H302')}${box(307,56,213,83,'result',['Categoría propuesta','«fruto»'])}${box(307,155,213,83,'result',['Caja [x₁,y₁,x₂,y₂]','[20,20,60,60] px'])}${box(307,254,213,83,'result',['Puntuación dada','0,80'])}
  ${arrow(id,'M524 297 H562 V166 H587')}${box(591,123,144,87,'operation',['Corte 0,50','Se conserva'])}
- ${t(642,253,'0,80 ≥ 0,50','dl-topic-equation')}${t(135,310,'Coordenadas de ejemplo','dl-topic-small')}`,
- caption:'La figura solo ilustra una propuesta; las coordenadas y la puntuación son datos inventados. La caja se expresa en píxeles y el corte se elige después de puntuar. Conservarla no verifica categoría ni ubicación. La regla didáctica usa ≥; el cuaderno de Ultralytics filtra > conf y puede diferir con igualdad exacta.'};
+ ${t(642,253,'0,80 ≥ 0,50','dl-topic-equation')}${t(128,310,'x crece hacia la derecha','dl-topic-small')}${t(128,335,'y crece hacia abajo','dl-topic-small')}${t(380,382,'La caja mide (60 − 20) × (60 − 20) = 40 × 40 px.','dl-topic-equation')}`,
+ caption:'Imagen, categoría, caja y puntuación son inventadas. El origen (0,0) está arriba a la izquierda; las dos esquinas señaladas coinciden con las coordenadas del registro. La imagen mantiene la misma escala en ambos ejes. El umbral se elige después de puntuar; conservar una propuesta no verifica categoría ni ubicación. La regla didáctica usa ≥; Ultralytics filtra > conf y puede diferir con igualdad exacta.'};
 }
 
 function evaluation(id){
