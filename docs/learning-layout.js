@@ -1,4 +1,4 @@
-import {renderDLGuide,renderDLPractice} from './dl-course-journey.js?v=dl-precision-20261105';
+import {renderDLGuide,renderDLPractice} from './dl-course-journey.js?v=e3-20261107';
 import {renderTopicContext,renderTopicVocabulary,renderTopicOutcome,renderCaseEvidence} from './lesson-context.js?v=organizacion-20261027';
 import {LESSON_OFFERING,renderNotebookBridge,renderExplorerLink} from './lesson-offering.js?v=revision-dl-20261102c';
 import {renderConceptConnections} from './concept-connections.js?v=definiciones-20261027';
@@ -16,7 +16,7 @@ export const CLASS_PURPOSES={
   "dl": [
     "Explicar cómo una red transforma entradas en salidas y cómo la pérdida guía el ajuste; distinguir parámetros, activación y tasa de aprendizaje.",
     "Relacionar píxeles, filtros y representaciones con la salida visual requerida; distinguir inferencia, transferencia y ajuste fino.",
-    "Explicar orden, estado y representación vectorial; seguir una mezcla por atención y ubicarla dentro de un Transformer.",
+    "Seguir el diario de una cooperativa: conservar el orden con un estado, relacionar sus días mediante atención y reunir posición, relaciones y salida en un Transformer.",
     "Distinguir puntuación de detección y coincidencia espacial; evaluar errores y justificar una política de revisión con costes explícitos."
   ]
 };

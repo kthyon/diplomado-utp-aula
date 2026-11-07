@@ -1,16 +1,29 @@
 import {DL_LEARNING_PATHS} from './dl-learning-paths.js?v=dl-precision-20261105';
+import {isEncounterThree,renderEncounterThreeGuide} from './dl-encounter-three.js?v=e3-20261107';
+import {renderDLTopicExtraResource} from './dl-extra-resources.js?v=e2-recurso-20261107';
 import {renderDLTopicDiagram} from './dl-topic-diagrams.js?v=dl-precision-20261105';
 import {DL_FOUNDATIONS,renderBiasExplanation,renderActivationBridge} from './dl-foundations.js?v=dl-recorrido-20261105';
 import {renderTopicVocabulary} from './lesson-context.js';
 import {NOTEBOOK_PATHS} from './notebook-paths.js?v=dl-precision-20261105';
 import {encounterForTopic,colabNotebookUrl} from './encounter-notebooks.js';
-import {LESSON_OFFERING} from './lesson-offering.js?v=dl-precision-20261105';
+import {LESSON_OFFERING} from './lesson-offering.js?v=e3-20261107';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nextSection=(target,label)=>`<button type="button" class="button dl-continue" data-lesson-section="${target}">${label}<span aria-hidden="true"> →</span></button>`;
 const check=({question,answer})=>`<details class="dl-understanding"><summary>${esc(question)}</summary><p>${esc(answer)}</p></details>`;
+const E3_PRACTICES={
+ 'dl-secuencias':{title:'Cuenta la misma historia al revés',prompt:'En el diario del ejemplo, lee los cuatro días con «Siguiente día». Antes de terminar, predice si el estado final es una entrega futura o un resumen.',change:'Invierte el diario, vuelve a leer desde cero y conserva la regla mitad del estado anterior + mitad de la entrada.',watch:'Las mismas cantidades conservan total y promedio. El recorrido y los estados cambian.',expected:'Con 10→20→30→40, los estados son 5; 12,5; 21,25 y 30,625. Al invertir, terminan en 16,25. Ninguno es un pronóstico. La regla fija ilustra recurrencia, no una LSTM entrenada.'},
+ 'dl-atencion':{title:'Consulta el diario sin cambiar sus entregas',prompt:'En el mismo diario, empieza con un reparto igual. Después calcula afinidades para el día 4 y observa qué aporta cada registro.',change:'Cambia el día que consulta. Conserva las entregas para comparar únicamente el reparto.',watch:'Participación es un porcentaje. Aporte es participación × cantidad; la suma de aportes es el contexto.',expected:'En el diario inicial, cuatro participaciones del 25 % producen 25 cajas de contexto. Al cambiar la consulta, cambia la mezcla. Es un resumen calculado, no la respuesta a «último menor que primero» ni una medida de causalidad.'},
+ 'dl-transformers':{title:'Recorre la arquitectura con la pregunta a la vista',prompt:'Sigue los pasos del esquema: representación, posición, autoatención, otras transformaciones y salida. Conserva el diario de los temas anteriores.',change:'Invierte las entregas y compara primero y último. Cambia a altibajos para comprobar que no preguntamos si todos los días disminuyen.',watch:'La información de posición identifica los extremos. La etiqueta obtenida con la regla está fuera del bloque del modelo.',expected:'10→20→30→40 da referencia 0; 40→30→20→10 da 1; 30→10→40→20 también da 1, aunque suba entre días. No hemos ejecutado una predicción entrenada en este esquema.'}
+};
+const E3_COLAB_BRIDGES={
+ 'dl-secuencias':'La historia explica cómo se actualiza un estado. El cuaderno cambia a una serie artificial y entrena una LSTM para pronosticar una siguiente lectura. El estado del diario no es ese pronóstico.',
+ 'dl-atencion':'Conservamos consulta → participaciones → aportes → contexto. El cuaderno usa dos registros y vectores de dos componentes; sus cifras cambian, pero puedes reconstruir las mismas operaciones.',
+ 'dl-transformers':'La web muestra las piezas y una referencia manual. El cuaderno sí entrena un Transformer para comparar extremos de secuencias sintéticas y contrasta sus predicciones con etiquetas reservadas. No es el mismo modelo que la LSTM del tema 1.'
+};
 
 export function renderDLGuide(lesson){
+ if(isEncounterThree(lesson.id))return renderEncounterThreeGuide(lesson);
  const p=DL_LEARNING_PATHS[lesson.id];if(!p)return '';
  const g=lesson.guide,c=g.case,f=DL_FOUNDATIONS[lesson.id];
  const table=c.columns?.length?`<div class="learning-table-wrap"><table class="learning-table"><caption>${esc(c.title)}</caption><thead><tr>${c.columns.map(t=>`<th scope="col">${esc(t)}</th>`).join('')}</tr></thead><tbody>${c.rows.map(row=>`<tr>${row.map((v,i)=>i?`<td>${esc(v)}</td>`:`<th scope="row">${esc(v)}</th>`).join('')}</tr>`).join('')}</tbody></table></div>`:'';
@@ -27,21 +40,24 @@ export function renderDLGuide(lesson){
 
 export function renderDLPractice(lesson,supportBooks='',notes=''){
  const p=DL_LEARNING_PATHS[lesson.id];if(!p)return '';
+ const story=isEncounterThree(lesson.id),practice=E3_PRACTICES[lesson.id]||p.practice;
  const route=NOTEBOOK_PATHS[lesson.id],meeting=encounterForTopic(lesson.id),topicIndex=meeting.topics.indexOf(lesson.id)+1;
  const primaryURL=colabNotebookUrl(meeting.file,lesson.id),extra=LESSON_OFFERING[lesson.id]?.explorer;
  const plant=['dl-redes','dl-entrenamiento'].includes(lesson.id)?`<a href="laboratorio.html?volver=${lesson.id}#red" target="_blank" rel="noopener noreferrer">Seguir el viaje de la información con una planta ↗</a>`:'';
- return `<section id="practica-del-tema" class="dl-lesson-section dl-practice"><h2><span>3.</span> ${esc(p.practice.title)}</h2><p>${esc(p.practice.prompt)}</p><dl class="dl-experiment-brief"><div><dt>Qué cambiar</dt><dd>${esc(p.practice.change)}</dd></div><div><dt>Qué observar</dt><dd>${esc(p.practice.watch)}</dd></div></dl>
- ${lesson.sim?'<div id="lesson-sim"></div>':`<div class="dl-without-simulator"><p>Haz la comparación sobre el gráfico del ejemplo. Después compruébala en el cuaderno.</p>${nextSection('ejemplo-del-tema','Volver al gráfico')}</div>`}
- <details class="dl-understanding"><summary>Comprobar lo que observaste</summary><p>${esc(p.practice.expected)}</p></details>
+ return `<section id="practica-del-tema" class="dl-lesson-section dl-practice"><h2><span>3.</span> ${esc(practice.title)}</h2><p>${esc(practice.prompt)}</p><dl class="dl-experiment-brief"><div><dt>Qué cambiar</dt><dd>${esc(practice.change)}</dd></div><div><dt>Qué observar</dt><dd>${esc(practice.watch)}</dd></div></dl>
+ ${story?nextSection('ejemplo-del-tema','Probar con nuestro diario de entregas'):''}
+ ${story?`<details class="dl-reference"><summary>Orientación del ejemplo anterior · otros datos</summary><h3>${esc(p.practice.title)}</h3><p>${esc(p.practice.prompt)}</p><p>${esc(p.practice.change)}</p><p>${esc(p.practice.watch)}</p><p>${esc(p.practice.expected)}</p><p>Esta ampliación conserva el ejemplo original. Para seguir el hilo principal usa el diario compartido de arriba.</p></details>`:''}
+ ${lesson.sim?(story?`<details class="dl-reference"><summary>Ampliación opcional: el simulador anterior con otros datos</summary><p>Este ejemplo usa ${lesson.id==='dl-secuencias'?'tres entregas y un estado inicial cero':'dos fuentes y vectores de dos componentes'}. Conserva la idea, pero sus cifras no son las del diario de cuatro días.</p><div id="lesson-sim"></div></details>`:'<div id="lesson-sim"></div>'):`<div class="dl-without-simulator"><p>Haz la comparación sobre el gráfico del ejemplo. Después compruébala en el cuaderno.</p>${nextSection('ejemplo-del-tema','Volver al gráfico')}</div>`}
+ <details class="dl-understanding"><summary>Comprobar lo que observaste</summary><p>${esc(practice.expected)}</p></details>
  <div class="dl-section-action">${nextSection('cuaderno-del-tema','Continuar al cuaderno de este tema')}</div></section>
- <section id="cuaderno-del-tema" class="dl-lesson-section dl-notebook"><h2><span>4.</span> Hazlo en Colab</h2><p>${esc(p.colab.goal)}</p>
+ <section id="cuaderno-del-tema" class="dl-lesson-section dl-notebook"><h2><span>4.</span> Hazlo en Colab</h2>${story?`<p class="dl-execution-note"><strong>De la historia a una prueba con código:</strong> ${esc(E3_COLAB_BRIDGES[lesson.id])}</p>`:''}<p>${esc(p.colab.goal)}</p>
  <div class="dl-colab-location"><strong>Encuentro ${meeting.index+1} · Tema ${topicIndex} de 3</strong><span>${esc(route.section)}</span><small>${esc(meeting.file)}</small></div>
  <a class="button dl-colab-link" href="${esc(primaryURL)}" target="_blank" rel="noopener noreferrer">Abrir la práctica de este tema en Colab ↗</a>
  <p class="dl-execution-note">La primera vez, elige <strong>Archivo → Guardar una copia en Drive</strong>. Si ya tienes tu copia del encuentro, reutilízala y ve a <strong>${esc(route.section)}</strong>.</p><ol class="dl-colab-steps">${p.colab.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol><p>Vuelve a esta pestaña para comprobar y registrar lo que observaste.</p>
  <p class="dl-execution-note">Cada tema incluye su preparación: ejecuta sus celdas en orden. Puedes trabajar en CPU. El cuaderno no marca automáticamente el progreso del aula.</p>
  <details class="dl-reference"><summary>Datos, unidades y alcance de esta práctica</summary><p>${esc(route.observe)}</p><p>${esc(route.tip)}</p></details>
  <div class="dl-build-check"><h3>Al terminar, comprueba</h3><p>${esc(p.colab.check)}</p></div>
- <details class="dl-reference dl-optional-material"><summary>Apoyos y otros ejemplos · opcionales</summary><p>El recorrido principal termina con el cuaderno de arriba. Estos recursos amplían la idea. Se abren aparte; vuelve a esta pestaña para continuar.</p>${plant?`<p>${plant}</p>`:''}${extra?`<p><a href="?tema-origen=${lesson.id}#explorar/${extra}" target="_blank" rel="noopener noreferrer">Explorar ${esc(lesson.title||'esta idea')} con otros datos ↗</a></p>`:''}${lesson.id==='dl-activaciones'?`<details><summary>Por qué una activación cambia lo que pueden representar varias capas</summary>${renderActivationBridge()}</details>`:''}${supportBooks?`<h3>Cuadernos de apoyo</h3><p>Estos archivos conservan sus propios capítulos y ejemplos; sus números de sección son distintos del cuaderno principal.</p>${supportBooks}`:''}<p><a href="notebooks/${meeting.file}" download>Descargar el cuaderno principal .ipynb</a></p></details>
+ <details class="dl-reference dl-optional-material"><summary>Apoyos y otros ejemplos · opcionales</summary>${renderDLTopicExtraResource(lesson.id)}<p>El recorrido principal termina con el cuaderno de arriba. Estos recursos amplían la idea. Se abren aparte; vuelve a esta pestaña para continuar.</p>${plant?`<p>${plant}</p>`:''}${extra?`<p><a href="?tema-origen=${lesson.id}#explorar/${extra}" target="_blank" rel="noopener noreferrer">Explorar ${esc(lesson.title||'esta idea')} con otros datos ↗</a></p>`:''}${lesson.id==='dl-activaciones'?`<details><summary>Por qué una activación cambia lo que pueden representar varias capas</summary>${renderActivationBridge()}</details>`:''}${supportBooks?`<h3>Cuadernos de apoyo</h3><p>Estos archivos conservan sus propios capítulos y ejemplos; sus números de sección son distintos del cuaderno principal.</p>${supportBooks}`:''}<p><a href="notebooks/${meeting.file}" download>Descargar el cuaderno principal .ipynb</a></p></details>
  ${notes}</section>${lesson.id==='dl-integracion'?renderDLCourseEssentials():''}`;
 }
 

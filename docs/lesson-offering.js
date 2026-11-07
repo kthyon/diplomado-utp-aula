@@ -1,3 +1,4 @@
+import {renderDLExtraResources} from './dl-extra-resources.js?v=e2-recurso-20261107';
 import {renderMeetingContext} from './lesson-context.js?v=organizacion-20261027';
 import {renderNotebookPath,SOURCE_NOTEBOOK_PATHS} from './notebook-paths.js?v=dl-precision-20261105';
 import {renderMeetingDefinitions} from './definitions.js?v=revision-dl-20261102c';
@@ -50,7 +51,7 @@ export function renderMeetingOffering(courseId,index,meeting,{teacher=false}={})
  const focus='<details class="concept-depth"><summary>En qué nos centraremos y qué puedes profundizar</summary><p><b>Durante la clase:</b> '+esc(row[0])+'</p><p><b>Para profundizar:</b> '+esc(row[1])+'</p><p>Puedes volver a estos apoyos cuando lo necesites; las comprobaciones son opcionales y sin nota.</p>'+agenda+'</details>';
  const context=renderMeetingContext(courseId,index);
  if(!context)return focus;
- return '<div class="meeting-supports"><details class="meeting-reference"><summary>Contexto, recorrido y alcance del encuentro</summary>'+context+focus+'</details>'+renderMeetingDefinitions(courseId,index)+'</div>';
+ return '<div class="meeting-supports">'+renderDLExtraResources(courseId,index)+'<details class="meeting-reference"><summary>Contexto, recorrido y alcance del encuentro</summary>'+context+focus+'</details>'+renderMeetingDefinitions(courseId,index)+'</div>';
 }
 export function renderNotebookBridge(l){
  const o=LESSON_OFFERING[l.id],guide=l.guide.lab.notebookGuide;
