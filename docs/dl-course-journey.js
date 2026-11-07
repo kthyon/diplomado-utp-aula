@@ -1,5 +1,5 @@
 import {DL_LEARNING_PATHS} from './dl-learning-paths.js?v=dl-precision-20261105';
-import {isEncounterThree,renderEncounterThreeGuide} from './dl-encounter-three.js?v=e3-20261107';
+import {isEncounterThree,renderEncounterThreeGuide} from './dl-encounter-three.js?v=e3-imagenes-20261107';
 import {renderDLTopicExtraResource} from './dl-extra-resources.js?v=e2-recurso-20261107';
 import {renderDLTopicDiagram} from './dl-topic-diagrams.js?v=dl-precision-20261105';
 import {DL_FOUNDATIONS,renderBiasExplanation,renderActivationBridge} from './dl-foundations.js?v=dl-recorrido-20261105';

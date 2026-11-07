@@ -1,0 +1,45 @@
+{
+  "retrieved_on": "2026-11-07",
+  "images": [
+    {
+      "topic": "dl-secuencias",
+      "title": "Recurrent neural network unfold",
+      "author": "fdeloche (usuario Ixnay en Wikimedia Commons)",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Recurrent_neural_network_unfold.svg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Recurrent_neural_network_unfold.svg",
+      "original_file": "rnn-desplegada.svg",
+      "original_dimensions": {"width": 2126, "height": 709},
+      "preview_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/Recurrent_neural_network_unfold.svg/1280px-Recurrent_neural_network_unfold.svg.png",
+      "preview_file": "rnn-desplegada.png",
+      "preview_dimensions": {"width": 1280, "height": 427},
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": "Ninguna modificación local. El PNG es la representación publicada por Wikimedia Commons del SVG original.",
+      "alt_es": "Una misma red recurrente, compacta a la izquierda y desplegada en tres instantes a la derecha: entradas x, estados h y salidas o.",
+      "caption_es": "La red de la izquierda se representa a la derecha en momentos sucesivos. Los bloques azules son la misma red aplicada en distintos instantes, no tres redes diferentes. En nuestro diario, cada x sería la entrega de un día; h lleva información al siguiente instante. La figura muestra tres posiciones como ejemplo y puede extenderse a nuestros cuatro días.",
+      "credit_es": "fdeloche (Ixnay), Wikimedia Commons, CC BY-SA 4.0. Copia sin modificaciones.",
+      "placement": "Imagen principal de apoyo del subtema 1, después de presentar el diario y antes del ejemplo numérico.",
+      "rendering_note": "Transparencia: usar fondo blanco explícito; las líneas y algunas etiquetas son negras y se pierden sobre el tema oscuro. Ofrecer abrir imagen completa."
+    },
+    {
+      "topic": "dl-secuencias",
+      "title": "Long Short-Term Memory",
+      "author": "fdeloche (usuario Ixnay en Wikimedia Commons)",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Long_Short-Term_Memory.svg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/6/63/Long_Short-Term_Memory.svg",
+      "original_file": "celda-lstm.svg",
+      "original_dimensions": {"width": 1594, "height": 709},
+      "preview_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/63/Long_Short-Term_Memory.svg/1280px-Long_Short-Term_Memory.svg.png",
+      "preview_file": "celda-lstm.png",
+      "preview_dimensions": {"width": 1280, "height": 569},
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": "Ninguna modificación local. El PNG es la representación publicada por Wikimedia Commons del SVG original.",
+      "alt_es": "Interior de una celda LSTM: entrada actual, memoria anterior y controles de olvido, entrada y salida, con una memoria que continúa al siguiente instante.",
+      "caption_es": "Sigue primero la línea de memoria de izquierda a derecha. Los controles regulan qué conservar, qué incorporar y qué mostrar. El dibujo enseña la estructura de una LSTM; nuestra regla fija de mitad y mitad no ejecuta esta celda ni aprende sus compuertas.",
+      "credit_es": "fdeloche (Ixnay), Wikimedia Commons, CC BY-SA 4.0. Copia sin modificaciones.",
+      "placement": "Ampliación visual de LSTM dentro del subtema 1, después de entender estado y recurrencia. Evitar abrir el tema con todas sus ecuaciones.",
+      "rendering_note": "Transparencia: usar fondo blanco explícito. Imagen de ampliación; ofrecer verla completa y mantener pie guiado en español."
+    }
+  ]
+}

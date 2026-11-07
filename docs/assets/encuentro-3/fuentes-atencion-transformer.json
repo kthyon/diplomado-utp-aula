@@ -1,0 +1,32 @@
+{
+  "retrieved_on": "2026-11-07",
+  "images": [
+    {
+      "file": "atencion-relaciones.png",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Encoder_self-attention,_block_diagram.png",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/5/58/Encoder_self-attention%2C_block_diagram.png",
+      "author": "Daniel Voigt Godoy (dvgodoy)",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "changes": "Ninguna; original alojado localmente. Guía en español añadida fuera de la imagen."
+    },
+    {
+      "file": "atencion-detalle.png",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Encoder_self-attention,_detailed_diagram.png",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/7/74/Encoder_self-attention%2C_detailed_diagram.png",
+      "author": "Daniel Voigt Godoy (dvgodoy)",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "changes": "Ninguna; original alojado localmente. Guía en español añadida fuera de la imagen."
+    },
+    {
+      "file": "transformer-arquitectura.png",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Transformer,_full_architecture.png",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/3/34/Transformer%2C_full_architecture.png",
+      "author": "Daniel Voigt Godoy (dvgodoy)",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "changes": "Ninguna; original alojado localmente. Guía en español añadida fuera de la imagen."
+    }
+  ]
+}

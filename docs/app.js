@@ -1,5 +1,5 @@
-import {mountEncounterThree} from './dl-encounter-three.js?v=e3-20261107';
-import {renderDLContinuation} from './dl-course-journey.js?v=e3-20261107';
+import {mountEncounterThree} from './dl-encounter-three.js?v=e3-imagenes-20261107';
+import {renderDLContinuation} from './dl-course-journey.js?v=e3-imagenes-20261107';
 import {isOrganizedTopic,renderTopicCompass,renderOrganizedFinish,mountLessonSections} from './learning-organization.js?v=dl-precision-20261105';
 import {renderGlossary} from './definitions.js?v=revision-dl-20261102c';
 import {notebookResourceRole} from './notebook-paths.js?v=dl-precision-20261105';
@@ -14,7 +14,7 @@ import {renderFlowGuide,renderLessonFlow} from './flow-guidance.js?v=descripcion
 import {laboratoryDestination} from './lab-access.js';
 import {readReferenceOffset,nextScheduleDelay} from './schedule-clock.js';
 import {summarizeProgress,renderProgressDashboard} from './progress-dashboard.js';
-import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=e3-20261107';
+import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=e3-imagenes-20261107';
 import {mountProblemExplorer} from './learning-explorers.js';
 import {mountActivationBridge} from './dl-foundations.js?v=dl-recorrido-20261105';
 import {mountDLExplorer} from './dl-explorers.js?v=dl-recorrido-20261105';
