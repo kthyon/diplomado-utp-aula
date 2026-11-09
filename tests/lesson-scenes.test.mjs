@@ -4,6 +4,7 @@ import {LESSONS} from '../docs/content.js';
 import {TOPIC_CONTEXT} from '../docs/lesson-context.js';
 import {LESSON_SCENES} from '../docs/lesson-scenes.js';
 import {renderLearningGuide} from '../docs/learning-layout.js';
+import {PRACTICAL_LESSONS} from '../docs/dl-practical-lessons.js';
 
 test('ML conserva la escena y DL muestra una figura principal antes de la cuenta cerrada',()=>{
  assert.deepEqual(Object.keys(LESSON_SCENES).sort(),Object.keys(TOPIC_CONTEXT).sort());
@@ -12,6 +13,15 @@ test('ML conserva la escena y DL muestra una figura principal antes de la cuenta
   if(id.startsWith('dl-')){
    const example=html.indexOf('data-dl-primary-example='),figure=html.indexOf('data-dl-diagram='),table=html.indexOf('<table');
    assert.ok(example>=0&&figure>example,id+' figura dentro del ejemplo principal');
+   if(PRACTICAL_LESSONS[id]){
+    const p=PRACTICAL_LESSONS[id],escaped=String(p.problem).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    assert.ok(html.indexOf(escaped)<figure,id+' problema antes de la representación');
+    assert.match(html,/class="pw-challenge"/);assert.match(html,/data-p3-reveal disabled|data-p4-reveal disabled/,id+' resultados requieren anticipación');
+    assert.equal((html.match(/data-dl-primary-example=/g)||[]).length,1);assert.equal((html.match(/data-dl-diagram=/g)||[]).length,1);
+    assert.doesNotMatch(html,/class="lesson-scene"|id="lesson-sim"/);
+    const stack=[];for(const match of html.matchAll(/<details\b[^>]*>|<\/details>/g)){if(match[0].startsWith('</'))assert.ok(stack.pop(),id+' cierre válido');else stack.push(match[0]);}assert.equal(stack.length,0);
+    continue;
+   }
    assert.ok(table>figure,id+' la figura precede la tabla de cuentas');
    assert.equal((html.match(/data-dl-primary-example=/g)||[]).length,1,id+' ejemplo principal único');
    assert.ok(!html.includes('class="lesson-scene"'),id+' no vuelve a mostrar la escena anterior');
@@ -36,6 +46,13 @@ test('ML conserva la escena y DL muestra una figura principal antes de la cuenta
 test('el detalle mantiene todos los datos originales y las unidades para reconstruir el ejemplo visual',()=>{
  for(const id of Object.keys(LESSON_SCENES)){
   const l=LESSONS.find(l=>l.id===id),html=renderLearningGuide(l);
+  if(PRACTICAL_LESSONS[id]){
+   assert.match(html,/datos|registros|cajas|puntuaciones|escena/i,id+' identifica los datos del nuevo ejercicio');
+   assert.match(html,/data-p3-question|data-p4-prediction/,id+' anticipación manual');
+   assert.match(html,/data-p3-equations|data-p4-result hidden/,id+' cuenta no adelantada como tabla');
+   assert.match(html,/Ver siguiente paso|Preparar el siguiente día|Revelar y comprobar/i,id+' acción para comprobar');
+   continue;
+  }
   for(const row of l.guide.case.rows)for(const value of row){
    const escaped=String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
    assert.ok(html.includes(escaped),id+': '+value);

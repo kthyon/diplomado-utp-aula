@@ -177,8 +177,202 @@ const CUSTOM_GUIDES={
  'curvas-activaciones':'### 2 · Ubica esa misma señal en las curvas\n\nEl punto conserva la misma entrada en los cuatro gráficos. Si cambias SENAL en la tabla, pon el mismo valor en esta celda para repetir la comparación. Las curvas no entrenan un modelo.',
  'un-paso-gradiente':'### 1 · Comprueba un solo ajuste antes de entrenar una red\n\nCada fila vuelve a empezar en −2. La tasa 0,10 produce −1 y pérdida 16; la tasa 1,10 produce 9 y pérdida 36. Compara estos resultados con el inicio, pérdida 25. La celda imprime la cuenta elegida, la tabla y las dos flechas.'
 };
+// The last two encounters begin with an action rather than a second textbook.
+const PRACTICAL_NOTEBOOK_GUIDES={
+ 'dl-secuencias':{
+  problem:'¿Una red puede anticipar la siguiente lectura mejor que repetir la última?',
+  data:'Usaremos una serie artificial de 240 lecturas sin unidades físicas. Cada entrada contiene las 12 lecturas anteriores; la respuesta buscada es la lectura que sigue. El corte temporal reserva los últimos 60 instantes para comprobar, uno por uno.',
+  predict:'Dibuja una subida. Si el pronóstico repite la última lectura disponible, ¿quedará por encima o por debajo de la siguiente si la subida continúa? Escribe tu predicción sin mirar la salida.',
+  run:'Ejecuta las dos celdas de preparación de este tema y después «Una LSTM real». Espera al gráfico y a los dos números MAE.',
+  compare:'Elige el mismo instante en las tres líneas: Real simulado, LSTM y Último valor. Compara quién queda más cerca en una subida y en una bajada. Después compara los dos MAE; menor significa menor distancia media en esta reserva, no acierto garantizado en cada instante.',
+  explain:'«En este instante la entrada es el pasado disponible; la respuesta real es…; el pronóstico de… queda más cerca porque…».',
+  bridge:'La regla de mitades de la web muestra cómo actualizar un resumen. Aquí una LSTM (memoria de largo y corto plazo) sí aprende parámetros y una capa de salida produce un pronóstico. Son datos y resultados diferentes.',
+  change:'Conserva primero datos, semilla y entrenamiento. Cambia el instante que observas y compara los mismos tres valores. No ejecutes de nuevo solo para buscar un resultado que te guste.',
+  check:'El estado resume lo leído; la capa de salida produce el pronóstico. Un MAE menor significa menor distancia media sobre la misma reserva, sin garantizar que el modelo gane en cada instante. Usa los dos números que obtuviste para justificar tu comparación.'
+ },
+ 'dl-atencion':{
+  problem:'¿Cómo cambia una mezcla si consultamos de otra forma los mismos dos registros?',
+  data:'A contiene 10 cajas ficticias y B contiene 20. Las claves K son [1,0] y [0,1]. Las consultas Q son [1,0], [0,1] y [0,0]. Los valores V que se mezclan son 10 y 20. Todos estos números están dados; aquí no se entrena una red.',
+  predict:'Para la consulta [0,0], ambas fuentes recibirán el mismo peso. Calcula por tu cuenta mitad de 10 + mitad de 20. Para [1,0], ¿esperas una mezcla más cerca de 10 o de 20?',
+  run:'Ejecuta la preparación de este tema y la celda de las dos fuentes. No necesitas ejecutar la LSTM anterior.',
+  compare:'Compara las filas [1,0] y [0,0] del mapa: cuánto participa A, cuánto B y cuánto suman. Sigue esas participaciones hasta las barras de mezcla. Comprueba con tus números la fila neutra antes de leer las demás.',
+  explain:'«Cambió Q; K y V se conservaron. La fuente… recibió más participación y por eso la mezcla se acercó a…».',
+  bridge:'Atención compara Q con K, calcula participaciones y mezcla V. Es una operación que luego puede formar parte de un Transformer; la LSTM no se convierte en Transformer al ejecutar esta celda.',
+  change:'Conserva claves y valores. El código ya calcula tres consultas para que compares únicamente ese cambio.',
+  check:'La consulta neutra da participaciones 0,5/0,5 y mezcla 15. La primera consulta acerca la mezcla a 10 y la segunda a 20. Cambian los pesos de atención; los valores y los parámetros dados se conservan.'
+ },
+ 'dl-transformers':{
+  problem:'¿La respuesta de una red coincide con una regla que tú puedes comprobar?',
+  data:'La tarea pregunta únicamente «¿el último número es menor que el primero?». Clase 1 significa sí y clase 0 significa no. Se entrena un Transformer pequeño con secuencias artificiales de cuatro números; los patrones de prueba no se comparten con entrenamiento.',
+  predict:'Resuelve estas cuatro filas mirando solo los extremos: [1,2,3,4], [4,3,2,1], [2,7,1,3] y [3,1,7,2]. Anota una etiqueta 0 o 1 por fila antes de ejecutar. Una subida intermedia no cambia la pregunta.',
+  run:'Ejecuta la preparación de este tema y el Transformer. Espera a que termine el entrenamiento y aparezcan las cuatro comparaciones.',
+  compare:'En cada fila, separa «respuesta conocida» de «respuesta de la red». Marca coincidencia o error. La puntuación de clase 1 es la preferencia calculada para sí; no es la etiqueta correcta. El acierto en prueba resume otros patrones reservados.',
+  explain:'«La referencia de esta fila es… porque comparé… con…; la red respondió…; por tanto aquí acertó/falló».',
+  bridge:'El modelo representa números, añade información de posición, relaciona elementos mediante atención y calcula dos puntuaciones de clase. La web usa puntuaciones dadas para aprender a leerlas; aquí sí se calculan con parámetros entrenados.',
+  change:'Conserva primero los cuatro casos y compara sus respuestas. No confundas «último menor que primero» con «todos los pasos disminuyen». En esta prueba se excluyen extremos iguales.',
+  check:'Las referencias manuales son 0, 1, 0 y 1. Solo después de ejecutar sabes qué respondió esta red entrenada. Compara cada predicción con su referencia; su puntuación de clase 1 por sí sola no certifica que acertó.'
+ },
+ 'dl-yolo':{
+  problem:'¿Cómo seguimos un objeto propuesto desde la foto hasta un registro que podamos revisar?',
+  data:'Usaremos bus.jpg, una foto incluida en la biblioteca, y un detector preentrenado con categorías de COCO. Bus y persona pertenecen a su catálogo; defectos del café no se aprenden al cambiar un nombre.',
+  predict:'Antes de pedir predicciones, mira la foto y nombra dos objetos que buscarías. Después predice qué cambiará al elevar el umbral: ¿los píxeles originales o las propuestas conservadas?',
+  run:'Ejecuta las celdas de este tema en orden: preparación, catálogo, foto, detección, tabla, conteo, umbrales y guardado. Lee la foto original antes de ejecutar la detección.',
+  compare:'Elige una caja y encuentra una fila con la misma categoría y coordenadas aproximadas. Compara después las tres fotos de umbrales 0,15, 0,50 y 0,85: identifica una propuesta que permanezca o desaparezca, además del total.',
+  explain:'«La fila propone… en la zona… con puntuación…; el corte… la conserva/descarta. Todavía falta comprobar…».',
+  bridge:'La web usa puntuaciones dadas para aprender el filtro. Aquí el modelo calcula propuestas sobre una foto real. El registro guarda propuestas conservadas, todavía no un inventario confirmado.',
+  change:'Conserva foto y modelo; compara únicamente los umbrales del bloque. Tanto esta biblioteca como el nuevo ejercicio de la web conservan puntuaciones estrictamente mayores que el corte. Igualar el corte no basta para conservar una propuesta.',
+  check:'El corte filtra propuestas, conserva los píxeles de entrada y no entrena de nuevo. Cada fila corresponde a una propuesta conservada. Para comprobar calidad hacen falta referencias anotadas; la foto marcada y su conteo no bastan.'
+ },
+ 'dl-evaluacion':{
+  problem:'¿Una propuesta conservada está bien localizada o deja un objeto sin detectar?',
+  data:'Cambiamos de la foto real a dos cajas inventadas con referencia conocida. Ambas miden 40×40 píxeles y tienen la misma categoría. La propuesta vale 0,80. Esta práctica evalúa esas cajas; no calcula la calidad del detector sobre bus.jpg.',
+  predict:'Con el corte de puntuación en 0,50 y la IoU mínima en 0,50, ¿desplazar la propuesta 30 píxeles puede producir una falsa propuesta y una omisión a la vez? Dibuja qué quedaría sin emparejar.',
+  run:'Ejecuta la preparación de este tema y la evaluación de cajas. Observa los tres escenarios de la misma figura.',
+  compare:'Primero compara desplazamientos de 10 y 30 píxeles: área compartida e IoU. Después compara 10 píxeles con corte 0,50 y con corte 0,90: la ubicación es la misma, pero la propuesta se filtra. Justifica cada TP, FP y FN con una caja concreta.',
+  explain:'«La propuesta se conserva/descarta porque…; coincide/no coincide porque…; la referencia queda…; por eso los conteos son…».',
+  bridge:'El tema anterior obtenía propuestas sin anotaciones. Ahora añadimos una referencia inventada para aprender a comprobar ubicación. IoU mide superposición; la puntuación del modelo sirve para filtrar. Son números diferentes.',
+  change:'Conserva inicialmente los tres escenarios del código. Compara una sola diferencia cada vez. Una referencia se empareja como máximo una vez.',
+  check:'Con la configuración inicial, los tres escenarios producen TP/FP/FN de 1/0/0, 0/1/1 y 0/0/1. La propuesta mal ubicada es falsa y deja sin detectar la referencia. Filtrarla elimina esa falsa propuesta, pero la referencia sigue omitida.'
+ },
+ 'dl-integracion':{
+  problem:'¿Qué regla de revisión conviene si revisar y dejar pasar defectos tienen consecuencias diferentes?',
+  data:'Tenemos diez granos ficticios con puntuaciones dadas de defecto. Aquí 1 significa defectuoso y 0 significa sin defecto. Revisar cuesta 1 punto; aceptar un defecto cuesta inicialmente 8. Suponemos revisión perfecta; los puntos no son dinero real.',
+  predict:'Con corte 0,50 se revisan cuatro granos y se acepta un defecto. Separa la cuenta en coste de revisar + coste de omitir. ¿Podría salir más caro que revisar los diez?',
+  run:'Ejecuta la preparación de este tema y la tabla de costes. Guarda la comparación inicial. Cambia solo COSTO_DEFECTO_ACEPTADO de 8 a 1 y vuelve a ejecutar la celda completa.',
+  compare:'Para los cortes 0,30 y 0,50, compara revisiones, defectos omitidos y coste. Después compara las dos ejecuciones: las dos primeras cantidades no cambian; cambia su valoración. Si hay empate, compara también cuántas revisiones exige cada regla.',
+  explain:'«Con estos costes prefiero… porque supone… revisiones y… defectos aceptados. Si cambia…, la comparación…».',
+  bridge:'Esta es otra tarea: decidir revisión de unidades conocidas mediante puntuaciones de defecto dadas. Estas puntuaciones no son la confianza de presencia de YOLO ni salen del detector de autobuses.',
+  change:'Mantén los diez granos, sus etiquetas, sus puntuaciones y el coste de revisión. Cambia solo el coste de omisión. Las etiquetas conocidas sirven para evaluar; una regla real se elige con validación y se comprueba después con prueba reservada.',
+  check:'Con coste de omisión 8, el corte 0,30 cuesta 6 puntos y el 0,50 cuesta 12; revisar todos cuesta 10. Al cambiar a 1 se conserva cuántos granos revisa y omite cada regla, pero cambia el total. Compara también carga de trabajo y supuestos, especialmente ante un empate.'
+ }
+};
+const practicalIntro=(guide,route)=>`## ${route.section}\n\n**Lo que vas a poder hacer:** ${guide.problem}\n\n${guide.data}\n\n### Predice antes de ejecutar\n\n${guide.predict}\n\n### Ejecuta y compara\n\n1. ${guide.run}\n2. ${guide.compare}\n\n### Explica con tus palabras\n\n${guide.explain}\n\n**Cómo conecta con el aula:** ${guide.bridge}\n\n**Antes de ejecutar:** este tema incluye su preparación. Ejecuta sus celdas en orden; no requiere los temas anteriores. Si repites el tema desde cero, comienza por su preparación.\n\n**Qué cambiar y qué conservar:** ${guide.change}`;
 // Clarify the principal reading without changing the preserved support notebook.
 const DL_READING_CLARIFICATIONS={
+ 'dl-secuencias':{
+  'paso-lab11-lstm':`### Pon una pregunta junto al gráfico
+
+Ejecuta la celda. Cuando termine, elige un instante de subida y compara las tres lecturas en ese mismo punto. Las doce lecturas anteriores son la entrada; la siguiente es la respuesta que queremos anticipar. La LSTM actualiza un estado y una capa de salida lo convierte en pronóstico.`,
+  'lectura-lab11-lstm':`### Después de ejecutar: construye el error paso a paso
+
+Primero compara las líneas **Real simulado**, **LSTM** y **Último valor** en el mismo instante. Estar más cerca de la línea real significa cometer un error menor en ese instante.
+
+**MAE** significa error absoluto medio. Se construye así, con un ejemplo independiente del gráfico:
+
+1. Una respuesta real de 1 y un pronóstico de 0,7 dejan una diferencia de 1−0,7=0,3.
+2. Tomamos su magnitud: |0,3|=0,3. Si el pronóstico fuera 1,3, |1−1,3|=0,3 también. Los errores por encima y por debajo no se cancelan.
+3. Si tres errores fueran 0,3; 0,1 y 0,2, los sumamos: 0,3+0,1+0,2=0,6.
+4. Repartimos entre los tres casos: 0,6÷3=0,2. Esa es la distancia media de ese ejemplo, no el resultado de la LSTM.
+
+Ahora lee los **dos MAE que imprime tu ejecución**. Se calcularon sobre los mismos instantes reservados: menor MAE significa menor distancia media en esa reserva. El promedio puede mejorar aunque un punto concreto empeore. Los valores no tienen unidades físicas ni son porcentajes.
+
+Son 60 comprobaciones de un paso usando el pasado disponible en cada instante, no un pronóstico recursivo de los 60 pasos a partir de una sola ventana. Si eliges parámetros mirando repetidamente esta reserva, pasa a ser validación y necesitas otra prueba final.`
+ },
+ 'dl-atencion':{
+  'defs-atencion-20261027':`### Tres nombres para seguir la cuenta
+
+**Q, consulta:** lista de números que determina qué comparamos. **K, claves:** listas de cada fuente con las que se compara Q. **V, valores:** cantidades que se mezclan después. Una lista de números se llama vector; [1,0] tiene dos componentes, no es una fracción.
+
+**Softmax** convierte las comparaciones en participaciones positivas cuya suma es 1. Verás sus operaciones con números en el paso siguiente.`,
+  'utp-60cef2918a69df7e':`### De comparar a mezclar: una sola consulta
+
+Sigue Q=[1,0], K de A=[1,0], K de B=[0,1], V de A=10 y V de B=20. Son números dados para enseñar la operación.
+
+| Paso | Sustituye los números | Qué significa |
+| --- | --- | --- |
+| Comparar con A | 1×1 + 0×0 = 1 | Multiplicar componentes del mismo lugar y sumar se llama producto punto. |
+| Comparar con B | 1×0 + 0×1 = 0 | La misma consulta se compara con la otra clave. |
+| Ajustar la escala | 1÷√2≈0,7071; 0÷√2=0 | d=2 es el número de componentes de cada clave. √2≈1,4142. Este ajuste forma parte de esta atención. |
+| Preparar una cuenta estable | 0,7071−0,7071=0; 0−0,7071≈−0,7071 | Restamos el mayor a ambos. Evita números enormes al usar exponenciales y conserva el reparto final. |
+| Convertir a cantidades positivas | exp(0)=1; exp(−0,7071)≈0,4931 | exp es la función exponencial; usa calculadora o el programa, no necesitas resolverla mentalmente. |
+| Sumar las partes | 1+0,4931≈1,4931 | Total antes de repartir. |
+| Dividir cada parte por el total | A: 1÷1,4931≈0,6698; B: 0,4931÷1,4931≈0,3302 | Participaciones aproximadas del 66,98 % y 33,02 %; suman 100 %. |
+| Calcular aportes y sumarlos | 0,6698×10 + 0,3302×20≈13,302 | Cada participación multiplica su valor; la suma es el contexto o mezcla. |
+
+El código conserva más decimales que esta tabla. La mezcla queda más cerca de 10 porque A participa más. Estos pesos cambian con Q; no son parámetros entrenados ni demuestran una causa.`,
+  'paso-lab12-atencion':`### Ahora comprueba tu predicción
+
+Ejecuta la celda y busca primero Q=[0,0]. ¿Coincide con la mezcla que calculaste antes? Después compara Q=[1,0] con Q=[0,1] sin cambiar las claves ni los valores.`,
+  'lectura-lab12-atencion':`### Después de ejecutar: une la fila con la barra
+
+En Q=[0,0], la participación es 0,5 y 0,5; los aportes son 0,5×10=5 y 0,5×20=10; la mezcla es 5+10=15. Q=[1,0] produce una mezcla cercana a 13,302 y Q=[0,1] una cercana a 16,698.
+
+Cada fila del mapa debe sumar 100 %. Cada barra representa una mezcla, no un porcentaje ni una cantidad de objetos detectados. Aquí Q, K y V estaban dados y no hubo entrenamiento. El tema siguiente usa atención dentro de otra arquitectura y entrena una tarea diferente.`
+ },
+ 'dl-transformers':{
+  'paso-lab12-transformer':`### Conserva tus cuatro etiquetas junto a la salida
+
+Antes de ejecutar, anota tus etiquetas 0/1 de las cuatro secuencias de la introducción. El programa entrena una red; tus etiquetas manuales sirven para comprobar sus respuestas, no para sustituirlas.`,
+  'lectura-lab12-transformer':`### Después de ejecutar: comprueba cada respuesta
+
+Las cuatro referencias son **0, 1, 0, 1**: en cada fila se compara únicamente el último número con el primero. Una subida intermedia no cambia la tarea. Busca para cada fila la «respuesta de la red» y marca si coincide; una puntuación alta también puede acompañar un error.
+
+**Cómo leer la puntuación:** el modelo calcula dos valores y softmax los transforma en dos participaciones que suman 1. El programa imprime la de clase 1. Por ejemplo, si imprimiera 0,80 para clase 1, la de clase 0 sería 1−0,80=0,20. Elegiría 1 porque 0,80 es mayor que 0,20. Es un ejemplo de lectura, no una salida prometida. El código elige la mayor; en empate exacto elige clase 0.
+
+**Cómo leer «Accuracy en prueba»:** cuenta respuestas correctas y divide entre los casos reservados. Ejemplo independiente: 3 aciertos÷4 casos=0,75, equivalente al 75 %. El valor que imprime tu ejecución procede de los patrones reservados, no solo de estas cuatro filas. La curva de pérdida pertenece al entrenamiento y no es ese porcentaje.
+
+El modelo del cuaderno representa cada número, añade posición, aplica un bloque con atención y otras transformaciones y calcula la salida. Su lectura final también conserva las posiciones; esta práctica no aísla el efecto de añadir posición. El resultado comprueba esta tarea artificial, no tareas de conversación ni lenguaje.`
+ },
+ 'dl-yolo':{
+  'defs-yolo-20261027':`### Herramientas que vas a usar
+
+**YOLO** (You Only Look Once, solo se mira una vez) es una familia de detectores. **COCO** (Common Objects in Context, objetos comunes en contexto) es el conjunto de categorías del modelo usado. **CPU** es el procesador; esta práctica no necesita GPU. **RGB** significa rojo, verde y azul: son los tres canales de la foto.
+
+Ejecuta la preparación y mira la foto original antes de pedir propuestas.`,
+  'defs-formatos-20261027':`### Guarda qué se propuso y con qué configuración
+
+**CSV** (valores separados por comas) guarda las filas de detecciones y conteos como tablas. **JSON** (notación de objetos de JavaScript) guarda nombres y valores de la configuración, como modelo y umbral. Guardar archivos permite revisar la ejecución; no demuestra que las detecciones sean correctas.`
+ },
+ 'dl-evaluacion':{
+  'defs-yolo-20261027':`### Prepara este tema de forma independiente
+
+Ejecuta las dos celdas de preparación aunque no hayas abierto el tema anterior. La evaluación siguiente utiliza cajas dadas: no necesita entrenar un modelo ni evaluar objetos de una foto.`,
+  'defs-evaluacion-20261027':`### Construye la superposición antes de contar errores
+
+La referencia es [10,20,50,60]: esquina izquierda-superior (10,20) y derecha-inferior (50,60). Ancho=50−10=40 píxeles; alto=60−20=40; área=40×40=1600 píxeles cuadrados. La propuesta mide lo mismo.
+
+Para desplazar **10 píxeles** a la derecha:
+
+1. La propuesta queda en [20,20,60,60].
+2. El ancho común es 50−20=30; alto común=40; área común=30×40=1200.
+3. Sumamos áreas y restamos lo común para no contarlo dos veces: 1600+1600−1200=2000.
+4. **IoU** (intersección sobre unión)=área común÷área de la unión=1200÷2000=0,60. No tiene unidades.
+
+Para desplazar **30 píxeles**: ancho común=10; área común=10×40=400; unión=1600+1600−400=2800; IoU=400÷2800≈0,143.
+
+La puntuación 0,80 se compara con el corte para conservar la propuesta. Después, la categoría correcta y una IoU de al menos 0,50 permiten emparejarla con la referencia.
+
+- **TP, verdadero positivo:** propuesta y referencia emparejadas correctamente.
+- **FP, falso positivo:** propuesta conservada sin coincidencia válida.
+- **FN, falso negativo:** objeto de referencia que quedó sin una propuesta válida.
+
+Una propuesta mal ubicada puede generar un FP y dejar un FN al mismo tiempo. Esta cuenta pequeña no calcula AP ni mAP, métricas agregadas que requieren otro protocolo y más anotaciones.`
+ },
+ 'dl-integracion':{
+  'utp-2edbf927925d5fd5':`### Separa decisión y consecuencia
+
+En esta celda **real_defecto=1 significa defectuoso** y 0 significa sin defecto. Las puntuaciones p_defecto están dadas; no provienen de YOLO ni de una red entrenada aquí. La etiqueta real sirve para comprobar después qué defecto se omitió.
+
+Para el corte 0,50:
+
+1. Se revisa si p_defecto≥0,50. Eso selecciona los granos 2, 5, 7 y 8: **4 revisiones**.
+2. Entre los aceptados queda el grano 4, que era defectuoso: **1 defecto omitido**.
+3. Coste de revisar=4 revisiones×1 punto por revisión=**4 puntos**.
+4. Coste de omitir=1 defecto×8 puntos por defecto=**8 puntos**.
+5. Total=coste de revisar+coste de omitir=4+8=**12 puntos**.
+
+No se cuenta como omitido un defecto revisado: suponemos que la revisión lo identifica correctamente. Esta revisión perfecta y estos costes son supuestos del ejercicio, no resultados medidos de una operación.`,
+  'paso-lab14-costos':`### Compara dos valoraciones de los mismos casos
+
+Ejecuta con COSTO_DEFECTO_ACEPTADO=8 y conserva la tabla. Después cambia solo ese coste a 1 y vuelve a ejecutar la celda. Aquí positivo significa defectuoso, aunque otros ejemplos del curso usaran 1 para sano.`,
+  'lectura-lab14-costos':`### Después de ejecutar: explica el coste y la carga de trabajo
+
+Con coste de omisión 8, el corte 0,30 produce 6 revisiones×1+0 omisiones×8=**6 puntos**. El corte 0,50 produce 4×1+1×8=**12 puntos**. Revisar todos cuesta 10×1=**10 puntos**.
+
+Con coste de omisión 1, el corte 0,70 revisa 3 y omite 1: 3×1+1×1=**4**. El corte 0,90 revisa 1 y omite 3: 1×1+3×1=**4**. Empatan en puntos, pero requieren distintas revisiones y aceptan distintos defectos.
+
+Las puntuaciones y etiquetas se conservaron; cambió una consecuencia. En una aplicación real habría que medir capacidad, costes y errores de la revisión. La validación ayuda a elegir la regla y una prueba reservada permite comprobarla después; estas diez filas didácticas no hacen ambas funciones de manera independiente.`
+ },
  'dl-entrenamiento':{
   'lectura-lab09-entrenar':`### Después de ejecutar: tres comprobaciones pequeñas
 
@@ -200,12 +394,13 @@ La CNN recibe una imagen de 8×8 y aplica ocho filtros de 3×3 cuyos pesos apren
 **Qué probar:** cambia solo EPOCAS de 12 a 1 y vuelve a ejecutar la celda entera. Compara respuestas y pérdida sin prometer que cada imagen empeorará. Si eliges una versión mirando repetidamente la misma reserva, la estás usando como validación. Para reutilizar pesos, continúa en el **Tema 3 de este mismo cuaderno**: carga otro modelo para otra tarea; no convierte esta CNN de dígitos en detector.`
  }
 };
-function dlIntro(item,route){
+function dlIntro(item,route,id){
+ if(PRACTICAL_NOTEBOOK_GUIDES[id])return practicalIntro(PRACTICAL_NOTEBOOK_GUIDES[id],route);
  return `## ${route.section}\n\n**Lo que vas a poder hacer:** ${item.goal}\n\n### Entiende la idea\n\n${item.definition}\n\n${item.terms.map(([term,meaning])=>'**'+term+':** '+meaning).join('\n\n')}\n\n### Un caso pequeño antes del programa\n\n**${item.example.question}**\n\n${item.example.intro}\n\n**Cómo leerlo:** ${item.example.reading}\n\n**Para recordar:** ${item.example.takeaway}\n\n### Ahora identifica los datos de esta práctica\n\n${item.colab.goal}\n\n${item.colab.steps.map((step,i)=>(i+1)+'. '+step).join('\n')}\n\n**Antes de ejecutar:** este tema incluye su preparación. Ejecuta las celdas en orden; no requiere los temas anteriores. Las celdas nuevas de cuentas pequeñas incluyen sus propias importaciones y datos.\n\n**Qué cambiar y qué conservar:** ${route.tip}`;
 }
 function topicCells(id){
  const lesson=LESSONS.find(l=>l.id===id),g=lesson.guide,p={...SOURCE_NOTEBOOK_PATHS[id],...PRIMARY_NOTEBOOK_PRACTICES[id]},route=NOTEBOOK_PATHS[id],dl=DL_LEARNING_PATHS[id];
- const cells=dl?[md('tema-'+id,dlIntro(dl,route))]:[md('tema-'+id,`## ${route.section}\n\n**Lo que vas a poder hacer:** ${g.objective}\n\n${g.relevance}\n\n### Entiende la idea\n\n${g.concept}\n\n### Un caso pequeño antes del programa\n\n**${g.case.title}**\n\n${g.case.context}\n\n${g.case.columns?.length?table(g.case.columns,g.case.rows):''}\n\n${g.case.reasoning.map((s,i)=>(i+1)+'. '+s).join('\n')}\n\n**Qué demuestra:** ${g.case.conclusion}\n\n### Ahora identifica los datos de esta práctica\n\n${p.observe}\n\nEl caso pequeño y la ejecución pueden usar conjuntos diferentes: interpreta las cifras con las unidades y filas declaradas en cada uno.\n\n**Antes de ejecutar:** este tema incluye su preparación. Ejecuta sus celdas en orden; no requiere ejecutar los temas anteriores. Si repites un tema, comienza desde su primera celda.\n\n**Qué cambiar y qué conservar:** ${p.tip}`)];
+ const cells=dl?[md('tema-'+id,dlIntro(dl,route,id))]:[md('tema-'+id,`## ${route.section}\n\n**Lo que vas a poder hacer:** ${g.objective}\n\n${g.relevance}\n\n### Entiende la idea\n\n${g.concept}\n\n### Un caso pequeño antes del programa\n\n**${g.case.title}**\n\n${g.case.context}\n\n${g.case.columns?.length?table(g.case.columns,g.case.rows):''}\n\n${g.case.reasoning.map((s,i)=>(i+1)+'. '+s).join('\n')}\n\n**Qué demuestra:** ${g.case.conclusion}\n\n### Ahora identifica los datos de esta práctica\n\n${p.observe}\n\nEl caso pequeño y la ejecución pueden usar conjuntos diferentes: interpreta las cifras con las unidades y filas declaradas en cada uno.\n\n**Antes de ejecutar:** este tema incluye su preparación. Ejecuta sus celdas en orden; no requiere ejecutar los temas anteriores. Si repites un tema, comienza desde su primera celda.\n\n**Qué cambiar y qué conservar:** ${p.tip}`)];
  const foundation=DL_FOUNDATIONS[id];
  if(foundation&&!dl){
   if(id==='dl-redes'){
@@ -251,7 +446,8 @@ function topicCells(id){
  }
  if(dl){
   const topics=COURSES.dl.classes.flatMap(m=>m.topics),next=topics[topics.indexOf(id)+1],aula=new URL('/aula/',STUDENT_RECORDS.url).href;
-  cells.push(md('comprueba-'+id,`### Lee, comprueba y explica\n\n**Qué debes poder comprobar:** ${dl.colab.check}\n\n**Prueba pequeña:** ${p.tip}\n\n**Pregunta:** ${dl.example.check.question}\n\n**Respuesta razonada:** ${dl.example.check.answer}\n\n**Registra en tu copia:** qué cambiaste, qué observaste y por qué ocurrió. No es una entrega ni una calificación.\n\n[Volver al tema del aula](${aula}#tema/${id})${next?'\n\n[Siguiente tema: '+LESSONS.find(l=>l.id===next).title+']('+aula+'#tema/'+next+')':''}`));
+  const practical=PRACTICAL_NOTEBOOK_GUIDES[id];
+  cells.push(md('comprueba-'+id,`### Lee, comprueba y explica\n\n**Qué debes poder comprobar:** ${practical?practical.compare:dl.colab.check}\n\n**Prueba pequeña:** ${practical?practical.change:p.tip}\n\n**Pregunta:** ${practical?practical.problem:dl.example.check.question}\n\n**Respuesta razonada:** ${practical?practical.check:dl.example.check.answer}\n\n**Registra en tu copia:** ${practical?practical.explain:'qué cambiaste, qué observaste y por qué ocurrió.'} No es una entrega ni una calificación.\n\n[Volver al tema del aula](${aula}#tema/${id})${next?'\n\n[Siguiente tema: '+LESSONS.find(l=>l.id===next).title+']('+aula+'#tema/'+next+')':''}`));
  }else cells.push(md('comprueba-'+id,`### Lee, comprueba y explica\n\n${p.observe}\n\n**Prueba pequeña:** ${p.tip}\n\n**Vuelve al caso:** ${g.takeaway}\n\n${g.understanding?'**Pregunta:** '+g.understanding.question+'\n\n**Respuesta razonada:** '+g.understanding.answer:''}\n\n**Registra en tu copia:** qué representan las filas, qué valores cambiaste, qué observaste y qué límite tiene la conclusión. No es una entrega ni una calificación.\n\n[Volver al tema del aula](https://kthyon.github.io/diplomado-utp-aula/#tema/${id})`));
  if(foundation&&!dl)cells.push(md('razona-'+id,'### Anticipa y explica\n\n'+foundation.question+'\n\n<details><summary>Comparar mi razonamiento</summary>\n\n'+foundation.answer+'\n\n</details>\n'));
  return cells;

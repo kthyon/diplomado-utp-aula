@@ -1,9 +1,9 @@
-import {renderDLGuide,renderDLPractice} from './dl-course-journey.js?v=e3-imagenes-20261107';
+import {renderDLGuide,renderDLPractice} from './dl-course-journey.js?v=practica-20261109';
 import {renderTopicContext,renderTopicVocabulary,renderTopicOutcome,renderCaseEvidence} from './lesson-context.js?v=organizacion-20261027';
 import {LESSON_OFFERING,renderNotebookBridge,renderExplorerLink} from './lesson-offering.js?v=revision-dl-20261102c';
 import {renderConceptConnections} from './concept-connections.js?v=definiciones-20261027';
 import {LESSON_SCENES,renderCaseDetail} from './lesson-scenes.js';
-import {isOrganizedTopic} from './learning-organization.js?v=organizacion-20261027';
+import {isOrganizedTopic} from './learning-organization.js?v=practica-20261109';
 import {renderDLPrerequisites,renderDLReason,renderDLCheck,renderActivationBridge} from './dl-foundations.js?v=dl-recorrido-20261105';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const CLASS_PURPOSES={
@@ -16,8 +16,8 @@ export const CLASS_PURPOSES={
   "dl": [
     "Explicar cómo una red transforma entradas en salidas y cómo la pérdida guía el ajuste; distinguir parámetros, activación y tasa de aprendizaje.",
     "Relacionar píxeles, filtros y representaciones con la salida visual requerida; distinguir inferencia, transferencia y ajuste fino.",
-    "Seguir el diario de una cooperativa: conservar el orden con un estado, relacionar sus días mediante atención y reunir posición, relaciones y salida en un Transformer.",
-    "Distinguir puntuación de detección y coincidencia espacial; evaluar errores y justificar una política de revisión con costes explícitos."
+    "Calcular una memoria, reconstruir una mezcla de atención y comprobar una clasificación de secuencias; explicar cómo se relacionan sin confundir sus salidas.",
+    "Seguir una detección hasta su registro, construir IoU con áreas y justificar una regla de revisión calculando sus consecuencias."
   ]
 };
 export function renderLearningGuide(l){

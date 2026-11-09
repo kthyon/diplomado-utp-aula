@@ -6,6 +6,7 @@ import {ENCOUNTER_NOTEBOOKS,colabNotebookUrl} from '../docs/encounter-notebooks.
 import {NOTEBOOK_PATHS} from '../docs/notebook-paths.js';
 import {STUDENT_RECORDS} from '../docs/database-config.js';
 import {buildEncounterNotebooks} from '../scripts/build_encounter_notebooks.mjs';
+import {PRACTICAL_LESSONS} from '../docs/dl-practical-lessons.js';
 
 test('los principales DL vuelven al mismo aula conectada y al tema específico, conservando la sesión del alumno o docente',()=>{
  for(const meeting of ENCOUNTER_NOTEBOOKS.filter(m=>m.course==='dl')){
@@ -51,7 +52,12 @@ test('los cuadernos publicados reproducen las fuentes, contienen contexto y no g
   }
   for(const id of m.topics){
    const intro=nb.cells.find(c=>c.id==='tema-'+id).source;
-   for(const text of ['Lo que vas a poder hacer','Entiende la idea','Un caso pequeño','Antes de ejecutar','Qué cambiar y qué conservar'])assert.ok(intro.includes(text),id+' '+text);
+   const headings=PRACTICAL_LESSONS[id]?['Lo que vas a poder hacer','Predice antes de ejecutar','Ejecuta y compara','Explica con tus palabras','Cómo conecta con el aula','Antes de ejecutar','Qué cambiar y qué conservar']:['Lo que vas a poder hacer','Entiende la idea','Un caso pequeño','Antes de ejecutar','Qué cambiar y qué conservar'];
+   for(const text of headings)assert.ok(intro.includes(text),id+' '+text);
+   if(PRACTICAL_LESSONS[id]){
+    assert.ok(intro.indexOf('Predice antes de ejecutar')<intro.indexOf('Ejecuta y compara')&&intro.indexOf('Ejecuta y compara')<intro.indexOf('Explica con tus palabras'),id+' anticipar → ejecutar → explicar');
+    assert.doesNotMatch(intro,/### Entiende la idea|### Un caso pequeño/,id+' no vuelve al bloque teórico sustituido');
+   }
    assert.ok(nb.cells.find(c=>c.id==='comprueba-'+id).source.includes('Respuesta razonada'));
   }
  }

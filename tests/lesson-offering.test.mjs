@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {DL_LEARNING_PATHS} from '../docs/dl-learning-paths.js';
+import {PRACTICAL_LESSONS,renderPracticalMap} from '../docs/dl-practical-lessons.js';
 import {LESSON_GUIDES} from '../docs/learning-guides.js';
 import {COURSES} from '../docs/content.js';
 import {TOPICS} from '../docs/idea-models.js';
@@ -23,6 +24,16 @@ test('los recorridos ML conservan su material y DL ofrece básicos, caso y prác
   const lesson={id,guide,sim:true},reading=renderLearningGuide(lesson),lab=renderLearningLab(lesson,'<div>RECURSO_ORIGINAL</div>','<div>BITACORA_ORIGINAL</div>');
   if(id.startsWith('dl-')){
    const p=DL_LEARNING_PATHS[id];
+   if(PRACTICAL_LESSONS[id]){
+    const practical=PRACTICAL_LESSONS[id];
+    for(const text of [practical.problem,practical.goal,practical.task,practical.checkQuestion,practical.checkAnswer,p.definition,...p.terms.flat()])assert.ok(reading.includes(esc(text)),id+': '+text);
+    for(const text of [practical.change,practical.watch,practical.expected,practical.bridge,practical.colabBridge])assert.ok(lab.includes(esc(text)),id+': '+text);
+    assert.ok(reading.includes(renderPracticalMap(id)));assert.equal((reading.match(/data-dl-primary-example=/g)||[]).length,1);assert.equal((reading.match(/data-dl-diagram=/g)||[]).length,1);
+    assert.equal((reading.match(/data-p3-topic=|data-p4-workbench=/g)||[]).length,1);assert.doesNotMatch(lab,/id="lesson-sim"/);
+    assert.ok(lab.includes('RECURSO_ORIGINAL')&&lab.includes('BITACORA_ORIGINAL'));
+    assert.equal((lab.match(/class="button dl-colab-link"/g)||[]).length,1,id+' entrada principal única');
+    continue;
+   }
    for(const text of [p.definition,...p.terms.flat(),p.example.question,p.example.intro,p.example.reading,p.example.takeaway,guide.case.context,...guide.case.reasoning])assert.ok(reading.includes(esc(text)),id+': '+text);
    for(const text of [p.practice.prompt,p.practice.change,p.practice.watch,p.practice.expected,p.colab.goal,...p.colab.steps,p.colab.check])assert.ok(lab.includes(esc(text)),id+': '+text);
    assert.ok(lab.includes('RECURSO_ORIGINAL')&&lab.includes('BITACORA_ORIGINAL'));

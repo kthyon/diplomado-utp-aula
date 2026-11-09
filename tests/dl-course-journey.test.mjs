@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import {COURSES,LESSONS,NOTEBOOKS,classOf} from '../docs/content.js';
 import {DL_LEARNING_PATHS} from '../docs/dl-learning-paths.js';
+import {PRACTICAL_LESSONS} from '../docs/dl-practical-lessons.js';
 import {renderDLGuide,renderDLPractice,renderDLContinuation} from '../docs/dl-course-journey.js';
 import {renderLearningGuide,renderLearningLab,CLASS_PURPOSES} from '../docs/learning-layout.js';
 import {renderTopicCompass,renderOrganizedFinish,mountLessonSections} from '../docs/learning-organization.js';
@@ -38,12 +39,19 @@ function renderPage(id,{seen=false}={}){
  return vm.runInContext(`lesson(${JSON.stringify(id)})`,context);
 }
 
-test('los doce temas tienen una definición inicial, tres términos y un solo ejemplo visual principal',()=>{
+test('los doce temas conservan definición y términos; los seis prácticos parten del problema antes de su figura',()=>{
  assert.deepEqual(Object.keys(DL_LEARNING_PATHS),topics);
  for(const lesson of lessons){
   const p=DL_LEARNING_PATHS[lesson.id],html=renderDLGuide(lesson);
   assert.equal(p.terms.length,3,lesson.id);
   assert.ok(html.includes(esc(p.definition)),lesson.id+' definición visible');
+  if(PRACTICAL_LESSONS[lesson.id]){
+   const practical=PRACTICAL_LESSONS[lesson.id],problem=html.indexOf(esc(practical.problem)),figure=html.indexOf('data-dl-diagram='),definition=html.indexOf(esc(p.definition));
+   assert.ok(problem>=0&&problem<figure&&figure<definition,lesson.id+' problema → ejercicio → definición de referencia');
+   const workbench=lesson.id.startsWith('dl-')&&['dl-secuencias','dl-atencion','dl-transformers'].includes(lesson.id)?'data-p3-topic=':'data-p4-workbench=';
+   assert.equal(count(html,new RegExp(workbench,'g')),1,lesson.id+' un ejercicio nuevo');
+   assert.match(html,/class="pw-challenge"/);
+  }
   const terms=html.match(/<dl class="dl-essential-terms">([\s\S]*?)<\/dl>/)?.[1];
   assert.equal(count(terms,/<dt>/g),3,lesson.id+' tres ideas esenciales');
   assert.equal(count(html,/data-dl-primary-example=/g),1,lesson.id+' un ejemplo');
@@ -81,7 +89,8 @@ test('la página integrada mantiene notas y progreso únicos; los apoyos no dupl
   for(const id of [...sections,'study-note','complete-lesson'])assert.equal(count(html,new RegExp(`\\bid="${id}"`,'g')),1,lesson.id+' '+id);
   assert.equal(count(html,/class="quiz"/g),0,lesson.id+' no añade el quiz anterior a las comprobaciones nuevas');
   assert.equal(count(html,/id="quiz-feedback"/g),0,lesson.id+' no crea feedback huérfano');
-  assert.equal(count(html,/id="lesson-sim"/g),lesson.sim?1:0,lesson.id+' simulador único');
+  assert.equal(count(html,/id="lesson-sim"/g),PRACTICAL_LESSONS[lesson.id]?0:lesson.sim?1:0,lesson.id+' simulador antiguo solo donde corresponde');
+  if(PRACTICAL_LESSONS[lesson.id])assert.equal(count(html,/data-p3-topic=|data-p4-workbench=/g),1,lesson.id+' un ejercicio práctico');
   assert.ok(html.includes('OBSERVACIÓN_PERSONAL'),lesson.id+' conserva la nota');
   assert.ok(!html.includes(`data-notebook="${meeting.file}"`),lesson.id+' principal fuera de tarjetas de apoyo');
   for(const support of lesson.notebooks.slice(1))assert.equal(count(html,new RegExp(`data-notebook="${support.replaceAll('.','\\.')}"`,'g')),1,lesson.id+' apoyo una sola vez');

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {DL_LEARNING_PATHS} from '../docs/dl-learning-paths.js';
+import {PRACTICAL_LESSONS,renderPracticalMap} from '../docs/dl-practical-lessons.js';
 import {COURSES,LESSONS,classOf} from '../docs/content.js';
 import {TOPIC_CONTEXT} from '../docs/lesson-context.js';
 import {NOTEBOOK_PATHS} from '../docs/notebook-paths.js';
@@ -43,7 +44,8 @@ test('la nueva guía se limita a los dieciocho temas futuros y sus botones manti
   const html=renderTopicCompass(l,{courseTitle:course.title,classIndex,topicIndex:meeting.topics.indexOf(l.id),purpose,flowHtml});
   assert.equal(isOrganizedTopic(l.id),futureIds.includes(l.id),l.id);
   if(!futureIds.includes(l.id)){assert.equal(html,'',l.id+' conserva la rama original');continue;}
-  includesAll(html,[DL_LEARNING_PATHS[l.id]?.goal||l.guide.objective,purpose],l.id+' orientación completa');
+  includesAll(html,[PRACTICAL_LESSONS[l.id]?.goal||DL_LEARNING_PATHS[l.id]?.goal||l.guide.objective,purpose],l.id+' orientación completa');
+  if(PRACTICAL_LESSONS[l.id])includesAll(html,['Ubica el problema','Predice y comprueba'],l.id+' orientación a la acción');
   assert.ok(html.includes(flowHtml),l.id+' instrucciones de continuidad completas');
   const buttons=[...html.matchAll(/<button\b[^>]*data-lesson-section="([^"]+)"[^>]*>/g)];
   assert.deepEqual(buttons.map(m=>m[1]),l.id.startsWith('dl-')?[...targets,'cuaderno-del-tema']:targets,l.id+' destinos de lectura y práctica');
@@ -57,6 +59,20 @@ test('ML conserva su lectura completa y DL presenta básicos y una sola explicac
   const g=l.guide,c=g.case,t=TOPIC_CONTEXT[l.id],html=renderLearningGuide(l);
   if(l.id.startsWith('dl-')){
    const p=DL_LEARNING_PATHS[l.id];
+   if(PRACTICAL_LESSONS[l.id]){
+    const practical=PRACTICAL_LESSONS[l.id],map=renderPracticalMap(l.id);
+    includesAll(html,[practical.problem,practical.goal,practical.task,p.definition,...p.terms.flat(),practical.checkQuestion,practical.checkAnswer],l.id+' problema, tarea y referencia');
+    assert.ok(html.indexOf(esc(practical.problem))<html.indexOf('data-dl-diagram='),l.id+' problema antes de figura');
+    assert.ok(html.indexOf('data-dl-diagram=')<html.indexOf(esc(p.definition)),l.id+' definición después del ejercicio');
+    assert.ok(insideClosedDetail(html,esc(p.definition)),l.id+' teoría de consulta opcional');
+    assert.ok(html.includes(map));assert.equal((map.match(/href="#tema\//g)||[]).length,3,l.id+' mapa de tres temas');
+    assert.equal((map.match(/aria-current="page"/g)||[]).length,1,l.id+' ubicación única en el mapa');
+    assert.match(map,new RegExp('href="#tema/'+l.id+'" aria-current="page"'),l.id+' ubicación correcta');
+    assert.match(map,/permite|comparan|exige|forma parte/,l.id+' mapa con relaciones expresadas por verbos');
+    assert.equal((html.match(/data-dl-primary-example=/g)||[]).length,1);assert.equal((html.match(/data-dl-diagram=/g)||[]).length,1);
+    for(const v of g.vocabulary)assert.ok(insideClosedDetail(html,'<summary>'+esc(v.term)+'</summary><p>'+esc(v.meaning)+'</p>'),l.id+' vocabulario consultable');
+    detailsIn(html);continue;
+   }
    includesAll(html,[p.definition,...p.terms.flat(),p.example.question,p.example.intro,p.example.reading,p.example.takeaway,c.context,...c.reasoning],l.id+' lectura básica y referencia');
    assert.equal((html.match(/data-dl-primary-example=/g)||[]).length,1,l.id+' un ejemplo principal');
    assert.ok(!html.includes(renderLessonScene(l.id)),l.id+' no repite la escena anterior');
@@ -94,7 +110,11 @@ test('la práctica conserva los pasos y la ruta real de Colab sin duplicar simul
   const lab=renderLearningLab(l,'<div>CUADERNO_ORIGINAL</div>',notes);
   if(l.id.startsWith('dl-')){
    const p=DL_LEARNING_PATHS[l.id];
-   includesAll(lab,[p.practice.title,p.practice.prompt,p.practice.change,p.practice.watch,p.practice.expected,p.colab.goal,...p.colab.steps,p.colab.check,path.section,path.observe,path.tip],l.id+' práctica secuencial');
+   if(PRACTICAL_LESSONS[l.id]){
+    const practical=PRACTICAL_LESSONS[l.id];
+    includesAll(lab,[practical.change,practical.watch,practical.expected,practical.bridge,practical.colabBridge,path.section,path.observe,path.tip],l.id+' práctica de manipular, explicar y transferir');
+    includesAll(lab,['Al cambiar ___, observé ___, porque ___','Archivo → Guardar una copia en Drive','Cada tema incluye su preparación'],l.id+' evidencia y preparación');
+   }else includesAll(lab,[p.practice.title,p.practice.prompt,p.practice.change,p.practice.watch,p.practice.expected,p.colab.goal,...p.colab.steps,p.colab.check,path.section,path.observe,path.tip],l.id+' práctica secuencial');
   }else includesAll(lab,[g.build.title,g.lab.objective,g.lab.instruction,g.lab.watch,g.lab.expected,g.lab.notebookGuide,
    ...g.build.steps,g.build.check,g.build.transfer,g.build.stretch,g.next,
    path.section,path.prepare,path.observe,path.tip,LESSON_OFFERING[l.id].bridge],l.id+' práctica');
@@ -104,7 +124,8 @@ test('la práctica conserva los pasos y la ruta real de Colab sin duplicar simul
   for(const id of [...targets,'study-note',...(dl?['cuaderno-del-tema']:['quiz-feedback']),'complete-lesson']){
    assert.equal((html.match(new RegExp('\\bid="'+id+'"','g'))||[]).length,1,l.id+' destino único: '+id);
   }
-  assert.equal((html.match(/\bid="lesson-sim"/g)||[]).length,l.sim?1:0,l.id+' montaje único del laboratorio');
+  assert.equal((html.match(/\bid="lesson-sim"/g)||[]).length,PRACTICAL_LESSONS[l.id]?0:l.sim?1:0,l.id+' montaje antiguo solo donde corresponde');
+  if(PRACTICAL_LESSONS[l.id])assert.equal((html.match(/data-p3-topic=|data-p4-workbench=/g)||[]).length,1,l.id+' un laboratorio nuevo');
   assert.equal((html.match(/class="quiz"/g)||[]).length,dl?0:1,l.id+' comprobación sin quiz duplicado');
   assert.ok(html.includes(finish),l.id+' botón de avance conservado');
   const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
