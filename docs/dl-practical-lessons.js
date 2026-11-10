@@ -1,16 +1,18 @@
-import {PRACTICAL_E3,renderE3Workbench,mountE3Workbench} from './practical-e3.js?v=practica-20261109';
-import {PRACTICAL_E4,renderE4Workbench,mountE4Workbench} from './practical-e4.js?v=practica-20261109';
+import {PRACTICAL_E3,renderE3Workbench,mountE3Workbench} from './practical-e3.js?v=guia-20261109b';
+import {PRACTICAL_E4,renderE4Workbench,mountE4Workbench} from './practical-e4.js?v=guia-20261109b';
 import {DL_LEARNING_PATHS} from './dl-learning-paths.js?v=dl-precision-20261105';
 import {renderTopicVocabulary} from './lesson-context.js';
-import {renderEncounterThreeMedia} from './dl-encounter-three-media.js?v=practica-20261109';
+import {renderEncounterThreeMedia} from './dl-encounter-three-media.js?v=guia-20261109b';
 import {NOTEBOOK_PATHS} from './notebook-paths.js?v=dl-precision-20261105';
 import {encounterForTopic,colabNotebookUrl} from './encounter-notebooks.js';
+import {PRACTICAL_STORY,renderStudentStory} from './dl-practical-story.js?v=guia-20261109b';
+import {renderIndustryContext} from './dl-industry-context.js?v=guia-20261109b';
 
-export const PRACTICAL_LESSONS={...PRACTICAL_E3,...PRACTICAL_E4};
+export const PRACTICAL_LESSONS=Object.fromEntries(Object.entries({...PRACTICAL_E3,...PRACTICAL_E4}).map(([id,p])=>[id,{...p,problem:PRACTICAL_STORY[id].resume,bridge:PRACTICAL_STORY[id].next,colabBridge:PRACTICAL_STORY[id].reading}]));
 export const isPracticalLesson=id=>Object.hasOwn(PRACTICAL_LESSONS,id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const next=(target,label)=>`<button type="button" class="button dl-continue" data-lesson-section="${target}">${label} →</button>`;
-const node=(id,current,name,detail)=>`<a href="#tema/${id}" ${id===current?'aria-current="page"':''}><strong>${name}</strong><span>${detail}</span></a>`;
+const node=(id,current,name,detail)=>`<a href="#tema/${id}" ${id===current?'aria-current="page"':''} data-pw-topic="${id}"><strong>${name}</strong><span>${detail}</span><span class="pw-map-action">${id===current?'Estás aquí · Ir al ejercicio':'Abrir este tema'} →</span></a>`;
 
 export function renderPracticalMap(id){
  const e3=Object.hasOwn(PRACTICAL_E3,id);
@@ -30,8 +32,9 @@ export function renderPracticalMap(id){
 export function renderPracticalGuide(lesson){
  const id=lesson.id,p=PRACTICAL_LESSONS[id],base=DL_LEARNING_PATHS[id],e3=Object.hasOwn(PRACTICAL_E3,id);
  if(!p)return '';
- return `<section id="idea-del-tema" class="dl-lesson-section pw-orientation"><h2>1. Partamos de un problema</h2><p class="pw-problem">${esc(p.problem)}</p><p><strong>Hoy podrás:</strong> ${esc(p.goal)}</p>${renderPracticalMap(id)}<div class="dl-section-action">${next('ejemplo-del-tema','Resolverlo paso a paso')}</div></section>
+ return `<section id="idea-del-tema" class="dl-lesson-section pw-orientation"><h2>1. Sigamos el caso de la cooperativa</h2>${renderStudentStory(id)}<p><strong>Hoy podrás:</strong> ${esc(p.goal)}</p><div class="dl-section-action">${next('ejemplo-del-tema','Resolver esta parte del caso')}</div>${renderIndustryContext(id)}${renderPracticalMap(id)}</section>
  <section id="ejemplo-del-tema" class="dl-lesson-section pw-workbench" data-dl-primary-example="${id}"><h2>2. Primero predice; después comprueba</h2><p>${esc(p.task)}</p>${e3?renderE3Workbench(id):renderE4Workbench(id)}
+ <p class="pw-carried"><strong>Lo que conservas para continuar:</strong> ${esc(PRACTICAL_STORY[id].carried)}</p>
  ${id==='dl-secuencias'?`<div class="pw-learning-bridge"><h3>¿Qué aprendería una LSTM?</h3><p>Acabas de usar siempre la misma regla: conservar la mitad e incorporar la mitad. Una <strong>red recurrente (RNN)</strong> vuelve a usar su estado al leer cada entrada. Una <strong>LSTM</strong> es una RNN con controles aprendidos: regulan qué conservar de la memoria, qué incorporar y qué mostrar como salida. Esas proporciones pueden cambiar con los datos.</p><p>Para anticipar una entrega todavía falta transformar esa salida en un pronóstico y comprobarlo. En Colab harás precisamente esa segunda tarea: usar doce lecturas para anticipar la siguiente.</p><p class="pw-hint"><a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.LSTM.html" target="_blank" rel="noopener noreferrer">Referencia de la LSTM que usa el cuaderno ↗</a></p></div>`:''}
  <details class="dl-understanding"><summary>${esc(p.checkQuestion)}</summary><p>${esc(p.checkAnswer)}</p></details>
  <details class="dl-reference pw-reference"><summary>Ahora ponle nombre a lo que acabas de hacer</summary><p class="dl-definition">${esc(base.definition)}</p><dl class="dl-essential-terms">${base.terms.map(([term,meaning])=>`<div><dt>${esc(term)}</dt><dd>${esc(meaning)}</dd></div>`).join('')}</dl>${renderTopicVocabulary(id,lesson.guide.vocabulary,lesson.guide.essentialCount)}</details>
@@ -51,8 +54,19 @@ const COLAB_ACTIONS={
 export function renderPracticalPractice(lesson,supportBooks='',notes=''){
  const id=lesson.id,p=PRACTICAL_LESSONS[id];if(!p)return '';
  const meeting=encounterForTopic(id),route=NOTEBOOK_PATHS[id];
- return `<section id="practica-del-tema" class="dl-lesson-section pw-transfer"><h2>3. Cambia una cosa y explica qué pasó</h2><dl class="dl-experiment-brief"><div><dt>Qué cambiar</dt><dd>${esc(p.change)}</dd></div><div><dt>Qué observar</dt><dd>${esc(p.watch)}</dd></div></dl>${next('ejemplo-del-tema','Volver al ejercicio y probar')}<p class="pw-deliverable"><strong>Tu evidencia:</strong> escribe el caso inicial, el único cambio que hiciste y el resultado. Completa: «Al cambiar ___, observé ___, porque ___».</p><details class="pw-check"><summary>Comparar mi explicación con lo esperado</summary><p>${esc(p.expected)}</p></details><p class="pw-bridge"><strong>La conexión siguiente:</strong> ${esc(p.bridge)}</p><div class="dl-section-action">${next('cuaderno-del-tema','Continuar con la práctica en Colab')}</div></section>
+ return `<section id="practica-del-tema" class="dl-lesson-section pw-transfer"><h2>3. Deja una conclusión para continuar</h2><dl class="dl-experiment-brief"><div><dt>Qué cambiar</dt><dd>${esc(p.change)}</dd></div><div><dt>Qué observar</dt><dd>${esc(p.watch)}</dd></div></dl>${next('ejemplo-del-tema','Volver al ejercicio y probar')}<p class="pw-deliverable"><strong>Tu producto para la cooperativa:</strong> ${esc(PRACTICAL_STORY[id].deliverable)} Completa: «Al cambiar ___, observé ___, porque ___».</p><details class="pw-check"><summary>Comparar mi explicación con lo esperado</summary><p>${esc(p.expected)}</p></details><p class="pw-bridge"><strong>La conexión siguiente:</strong> ${esc(p.bridge)}</p><div class="dl-section-action">${next('cuaderno-del-tema','Continuar con la práctica en Colab')}</div></section>
  <section id="cuaderno-del-tema" class="dl-lesson-section dl-notebook"><h2>4. Compruébalo con código en Colab</h2><p>${esc(p.colabBridge)}</p><div class="dl-colab-location"><strong>Encuentro ${meeting.index+1} · Tema ${meeting.topics.indexOf(id)+1} de 3</strong><span>${esc(route.section)}</span><small>${esc(meeting.file)}</small></div><a class="button dl-colab-link" href="${esc(colabNotebookUrl(meeting.file,id))}" target="_blank" rel="noopener noreferrer">Abrir la práctica de este tema en Colab ↗</a><p class="dl-execution-note">La primera vez, elige <strong>Archivo → Guardar una copia en Drive</strong>. Si ya tienes tu copia, abre la sección indicada arriba.</p><ol class="dl-colab-steps">${COLAB_ACTIONS[id].map(s=>`<li>${esc(s)}</li>`).join('')}</ol><p class="dl-execution-note">Cada tema incluye su preparación: ejecuta sus celdas en orden. Puedes trabajar en CPU. Los resultados de una red entrenada pueden variar; compara lo que produjo tu ejecución.</p><details class="dl-reference"><summary>Qué demuestra esta práctica y qué queda por comprobar</summary><p>${esc(route.observe)}</p><p>${esc(route.tip)}</p></details><details class="dl-reference dl-optional-material"><summary>Cuadernos de apoyo y descarga · opcionales</summary><p>Para el recorrido principal usa el botón de arriba. Estos apoyos tienen otros capítulos y ejemplos.</p>${supportBooks}<p><a href="notebooks/${meeting.file}" download>Descargar el cuaderno principal .ipynb</a></p></details>${notes}</section>`;
 }
 
-export function mountPracticalLessons(root=document){mountE3Workbench(root);mountE4Workbench(root);}
+const mapMounts=new WeakSet();
+export function mountPracticalMap(root=document,readHash=()=>location.hash){
+ for(const link of root.querySelectorAll('[data-pw-topic]')){
+  if(mapMounts.has(link))continue;mapMounts.add(link);
+  link.addEventListener('click',event=>{
+   if(readHash()!=='#tema/'+link.dataset.pwTopic)return;
+   const section=root.querySelector('#ejemplo-del-tema');if(!section)return;
+   event.preventDefault();const heading=section.querySelector('h2');heading?.setAttribute('tabindex','-1');heading?.focus({preventScroll:true});section.scrollIntoView({block:'start',behavior:'auto'});
+  });
+ }
+}
+export function mountPracticalLessons(root=document){mountE3Workbench(root);mountE4Workbench(root);mountPracticalMap(root);}

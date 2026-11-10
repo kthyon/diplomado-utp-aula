@@ -62,16 +62,37 @@ test('atención calcula escala, softmax estable, aportes y contexto en tres cons
  assert.throws(()=>attentionCalculation([1]));
 });
 
-test('el alumno puede seguir las ocho operaciones y comprobar cada consulta',()=>{
+test('atención parte del historial y permite seguir reparto, aportes y suma antes del formalismo',()=>{
  const w=fixture('dl-atencion');w.click('case','a');w.click('reset');assert.equal(w.button('reveal').disabled,true);
+ assert.match(w.html,/dos primeros registros del mismo historial de la cooperativa/);
+ assert.match(w.html,/Consultar registro A · 10 cajas/);assert.match(w.html,/Consultar registro B · 20 cajas/);assert.match(w.html,/Consultar ambos por igual/);
+ assert.doesNotMatch(w.markup('diagram')+w.text('question')+w.markup('equations'),/Consulta Q|clave K|Valor V|√|66,98|33,02/,'antes de anticipar no muestra formalismo ni reparto');
+ assert.equal(w.button('previous').disabled,true);
  w.click('choice',1);assert.match(w.text('feedback'),/revisar/);w.click('choice',0);assert.match(w.text('feedback'),/coincide/);w.click('reveal');
+ assert.match(w.text('result'),/Paso 1 de 3/);assert.match(w.markup('equations'),/1\. Leer el reparto/);
+ assert.match(w.markup('diagram'),/66,98 %/);assert.match(w.markup('equations'),/33,02 % de participación/);
+ assert.doesNotMatch(w.markup('equations'),/data-p3-formal|√|Q es/,'primero construye el reparto visible');
+ w.click('next');assert.match(w.text('result'),/Paso 2 de 3/);assert.match(w.markup('equations'),/2\. Calcular cuánto aporta/);
+ assert.match(w.markup('equations'),/0,66976 × 10 ≈ 6,6976 cajas/);assert.match(w.markup('equations'),/0,33024 × 20 ≈ 6,6048 cajas/);
+ w.click('next');assert.match(w.text('result'),/Paso 3 de 3/);assert.match(w.text('result'),/13,3024 cajas/);assert.equal(w.button('next').disabled,true);
+ const markup=w.markup('equations'),formal=markup.match(/<details class="dl-reference p3-attention-formal"([^>]*)>([\s\S]*?)<\/details>/);
+ assert.ok(formal);assert.doesNotMatch(formal[1],/\bopen\b/,'formal completo cerrado inicialmente');
+ assert.match(formal[2],/<h3>De dónde salen las participaciones: Q, K y softmax<\/h3>/);
+ assert.match(formal[2],/Q es una lista de dos números/);assert.match(formal[2],/K son las claves/);assert.match(formal[2],/V son las cantidades/);
  const fragments=['Comparar Q','Escalar','Preparar la calculadora','Calcular exponenciales','Sumar las partes','Dividir cada parte','Calcular cada aporte','Sumar los aportes'];
- for(let phase=0;phase<8;phase++){assert.ok(w.markup('equations').includes(fragments[phase]));assert.match(w.text('result'),new RegExp('Cuenta '+(phase+1)+' de 8'));if(phase<7)w.click('next');}
- assert.match(w.text('result'),/13,3024 cajas/);assert.match(w.markup('equations'),/no.*pronóstico/i);
- w.click('previous');assert.match(w.text('result'),/Cuenta 7 de 8/);assert.match(w.markup('equations'),/Calcular cada aporte/);w.click('next');assert.match(w.text('result'),/13,3024 cajas/);
+ for(const fragment of fragments)assert.ok(formal[2].includes(fragment),fragment+' conservado');
+ assert.equal((formal[2].match(/class="pw-step"/g)||[]).length,8);
+ assert.match(formal[2],/d = 2; √d = √2/);assert.match(formal[2],/e es una constante/);assert.match(formal[2],/no son aquí parámetros aprendidos/);
+ assert.match(markup,/10 \+ 20 = 30 cajas/,'el resumen se distingue del inventario');
+ w.click('previous');assert.match(w.text('result'),/Paso 2 de 3/);assert.match(w.markup('equations'),/2\. Calcular cuánto aporta/);assert.doesNotMatch(w.markup('equations'),/data-p3-formal/);
+ w.click('previous');assert.match(w.text('result'),/Paso 1 de 3/);assert.equal(w.button('previous').disabled,true);
+ w.click('next');w.click('next');assert.match(w.text('result'),/13,3024 cajas/);
  w.click('case','b');finish(w,1);assert.match(w.text('result'),/16,6976 cajas/);
+ assert.match(w.markup('diagram'),/66,98 %/);assert.equal(w.button('next').disabled,true);
  w.click('case','equal');finish(w,2);assert.match(w.text('result'),/15 cajas/);
- w.click('reset');assert.equal(w.button('reveal').disabled,true);assert.match(w.text('question'),/Q=\[0; 0\]/);
+ assert.match(w.markup('equations'),/5 \+ 10 ≈ 15 cajas/);assert.match(w.markup('diagram'),/50 %/);
+ w.click('reset');assert.equal(w.button('reveal').disabled,true);assert.match(w.text('question'),/ambos registros por igual/);
+ assert.doesNotMatch(w.markup('equations'),/data-p3-formal/);assert.equal(w.button('previous').disabled,true);
 });
 
 test('Transformer distingue referencia, argmax de puntuaciones dadas y un error deliberado',()=>{
