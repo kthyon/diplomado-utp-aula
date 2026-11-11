@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import {DL_LEARNING_PATHS} from '../docs/dl-learning-paths.js';
+import {PRACTICAL_LESSONS} from '../docs/dl-practical-lessons.js';
 import {COURSES,LESSONS} from '../docs/content.js';
 import {LESSON_GUIDES} from '../docs/learning-guides.js';
 import {renderLearningGuide,renderLearningLab,CLASS_PURPOSES} from '../docs/learning-layout.js';
@@ -47,7 +48,7 @@ test('el alcance es exactamente seis encuentros y dieciocho temas existentes, si
    assert.equal((html.match(/class="dl-essential-terms"/g)||[]).length,1);
    assert.match(html,/data-dl-primary-example=/);
   }else {assert.match(html,/Qué información tenemos/);assert.match(html,/Qué queremos decidir/);assert.match(html,/Resultado y cómo interpretarlo/);}
-  if(g.vocabulary.length>g.essentialCount)assert.match(html,/Vocabulario para profundizar/);
+  if(PRACTICAL_LESSONS[id])assert.match(html,/Términos y siglas de este tema/);else if(g.vocabulary.length>g.essentialCount)assert.match(html,/Vocabulario para profundizar/);
  }
 });
 

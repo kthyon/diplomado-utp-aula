@@ -1,33 +1,39 @@
-import {PRACTICAL_E3,renderE3Workbench,mountE3Workbench} from './practical-e3.js?v=visual-20261111';
-import {PRACTICAL_E4,renderE4Workbench,mountE4Workbench} from './practical-e4.js?v=visual-20261111';
+import {PRACTICAL_E3,renderE3Workbench,mountE3Workbench} from './practical-e3.js?v=visual-20261111b';
+import {PRACTICAL_E4,renderE4Workbench,mountE4Workbench} from './practical-e4.js?v=visual-20261111b';
 import {DL_LEARNING_PATHS} from './dl-learning-paths.js?v=dl-precision-20261105';
 import {renderTopicVocabulary} from './lesson-context.js';
-import {renderEncounterThreeMedia} from './dl-encounter-three-media.js?v=visual-20261111';
+import {renderEncounterThreeMedia} from './dl-encounter-three-media.js?v=visual-20261111b';
 import {NOTEBOOK_PATHS} from './notebook-paths.js?v=dl-precision-20261105';
 import {encounterForTopic,colabNotebookUrl} from './encounter-notebooks.js';
-import {PRACTICAL_STORY,renderStudentStory} from './dl-practical-story.js?v=visual-20261111';
-import {renderIndustryContext} from './dl-industry-context.js?v=visual-20261111';
-import {renderVisualOpener,renderVisualIdea,renderVisualFigures,renderVisualCards,visualColabNote,renderEncounterGlossary,renderTopicBibliography,renderEncounterClosing,mountVisualExplainers} from './dl-visual-explainers.js?v=visual-20261111';
+import {PRACTICAL_STORY,renderStudentStory} from './dl-practical-story.js?v=visual-20261111b';
+import {renderIndustryContext} from './dl-industry-context.js?v=visual-20261111b';
+import {renderVisualOpener,renderVisualIdea,renderVisualFigures,renderVisualCards,visualColabNote,renderEncounterGlossary,renderTopicBibliography,renderEncounterClosing,mountVisualExplainers} from './dl-visual-explainers.js?v=visual-20261111b';
 
 export const PRACTICAL_LESSONS=Object.fromEntries(Object.entries({...PRACTICAL_E3,...PRACTICAL_E4}).map(([id,p])=>[id,{...p,problem:PRACTICAL_STORY[id].resume,bridge:PRACTICAL_STORY[id].next,colabBridge:PRACTICAL_STORY[id].reading}]));
 export const isPracticalLesson=id=>Object.hasOwn(PRACTICAL_LESSONS,id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const next=(target,label)=>`<button type="button" class="button dl-continue" data-lesson-section="${target}">${label} →</button>`;
-const node=(id,current,name,detail)=>`<a href="#tema/${id}" ${id===current?'aria-current="page"':''} data-pw-topic="${id}"><strong>${name}</strong><span>${detail}</span><span class="pw-map-action">${id===current?'Estás aquí · Ir al ejercicio':'Abrir este tema'} →</span></a>`;
+const MAP_FLOW={
+ 3:{lead:'Un mismo problema, entender datos que vienen en orden, resuelto de tres formas. Cada tema nace de un límite del anterior.',
+  nodes:[
+   ['dl-secuencias','blue','RNN y LSTM','Leer en orden','Lee un elemento tras otro y guarda un resumen en su memoria.','secuencia → memoria'],
+   ['dl-atencion','pink','Atención','Mirar lo que importa','Compara lo que busca con todo lo guardado y mezcla lo más parecido.','consulta + registros → mezcla ponderada'],
+   ['dl-transformers','violet','Transformer','Mirar todo a la vez','Relaciona todos los elementos con atención y añade su posición.','secuencia completa → respuesta de la tarea']],
+  links:[['La memoria olvida lo lejano.','La atención permite consultar directamente lo que importa, sin recordarlo todo.'],['Si la atención ya relaciona todo con todo, no hace falta leer en fila.','Pero así se pierde el orden: por eso la posición forma parte de la entrada.']],
+  note:'RNN y Transformer son dos arquitecturas para la misma clase de tareas. La atención es la pieza que las separa.'},
+ 4:{lead:'Un mismo flujo de trabajo: de una foto a una acción. Cada tema responde la pregunta que deja abierta el anterior.',
+  nodes:[
+   ['dl-yolo','blue','YOLO','Encontrar','Localiza y nombra los objetos de una imagen.','foto → cajas, categoría y confianza'],
+   ['dl-evaluacion','pink','IoU, precisión y recall','Comprobar','Compara las cajas con referencias anotadas y cuenta los errores.','cajas + referencias → aciertos, falsas alarmas y olvidos'],
+   ['dl-integracion','violet','Integración','Decidir','Convierte una puntuación en una acción según lo que cuesta cada error.','puntuación + costes → revisar o aceptar']],
+  links:[['Una caja dibujada no es una caja correcta.','Las cajas se comparan con referencias para medir cuánto coinciden.'],['Ya sabemos cuánto se equivoca el modelo.','Decidir exige fijar qué hacer con cada puntuación y cuánto cuesta cada error.']],
+  note:'En el tema 3 las puntuaciones de defecto son un dato del ejercicio: no salen del detector del tema 1.'}
+};
+const node=(id,current,color,index,name,verb,detail,flow)=>`<a class="pw-flow-node pw-flow-${color}" href="#tema/${id}" ${id===current?'aria-current="page"':''} data-pw-topic="${id}"><span class="pw-flow-step" aria-hidden="true">${index}</span><span class="pw-flow-body"><small>${esc(verb)}</small><strong>${esc(name)}</strong><span>${esc(detail)}</span><span class="pw-flow-io">${esc(flow)}</span><span class="pw-map-action">${id===current?'Estás aquí · Ir al ejercicio':'Abrir este tema'} →</span></span></a>`;
 
 export function renderPracticalMap(id){
- const e3=Object.hasOwn(PRACTICAL_E3,id);
- return `<div class="pw-concept-map" aria-label="Mapa conceptual del encuentro ${e3?3:4}"><h3>Cómo se conectan los tres temas</h3>${e3?`
- <p class="pw-map-source"><strong>Tenemos registros en orden.</strong> Podemos estudiarlos con herramientas diferentes:</p>
- <div class="pw-map-branches"><div><p>Leer uno después de otro permite…</p>${node('dl-secuencias',id,'1 · Memoria: RNN y LSTM','Actualizar un estado con lo leído hasta ahora.')}</div><div><p>Consultar varias fuentes permite…</p>${node('dl-atencion',id,'2 · Atención','Repartir participaciones y combinar valores.')}</div></div>
- <p class="pw-map-link">La atención, junto con la posición y otras capas, forma parte de…</p>
- <div class="pw-map-end">${node('dl-transformers',id,'3 · Transformer','Una arquitectura que puede aprender una tarea sobre la secuencia.')}</div>
- <p class="pw-hint">La RNN y el Transformer son alternativas de arquitectura. El estado y la mezcla nos ayudan a entender operaciones; la respuesta de una tarea necesita una salida y una comprobación propias.</p>`:`
- <p class="pw-map-source"><strong>Queremos apoyar una inspección.</strong> Separamos tres preguntas antes de decidir:</p>
- <div class="pw-map-row">${node('dl-yolo',id,'1 · Detectar con YOLO','Foto → propuestas de cajas, categorías y puntuaciones.')}<p>Se comparan<br>con referencias</p>${node('dl-evaluacion',id,'2 · Evaluar','Cajas + anotaciones → coincidencias, errores y omisiones.')}</div>
- <p class="pw-map-link">Una decisión operativa exige además definir la acción y sus consecuencias.</p>
- <div class="pw-map-end">${node('dl-integracion',id,'3 · Integrar una solución','Unidades + puntuación de defecto dada + costes → regla de revisión.')}</div>
- <p class="pw-hint">Cambia la tarea del último tema: la puntuación de defecto de los diez granos es un dato didáctico distinto de la puntuación de YOLO. No la obtiene el detector del tema 1.</p>`}</div>`;
+ const number=Object.hasOwn(PRACTICAL_E3,id)?3:4,map=MAP_FLOW[number];
+ return `<div class="pw-concept-map pw-flow" aria-label="Mapa conceptual del encuentro ${number}"><h3>Cómo se conectan los tres temas</h3><p class="pw-flow-lead">${esc(map.lead)}</p><ol class="pw-flow-list">${map.nodes.map(([topic,color,name,verb,detail,flow],i)=>`<li>${node(topic,id,color,i+1,name,verb,detail,flow)}${map.links[i]?`<p class="pw-flow-link"><span aria-hidden="true">↓</span><span><b>Límite:</b> ${esc(map.links[i][0])} <b>Siguiente paso:</b> ${esc(map.links[i][1])}</span></p>`:''}</li>`).join('')}</ol><p class="pw-hint">${esc(map.note)}</p></div>`;
 }
 
 export function renderPracticalGuide(lesson){
@@ -41,7 +47,7 @@ export function renderPracticalGuide(lesson){
  <p class="pw-carried"><strong>Lo que conservas para continuar:</strong> ${esc(PRACTICAL_STORY[id].carried)}</p>
  <details class="dl-understanding"><summary>${esc(p.checkQuestion)}</summary><p>${esc(p.checkAnswer)}</p></details>
  ${e3?`<details class="dl-reference pw-reference" open><summary>Relacionar la figura con las imágenes de una red</summary><p>Localiza en estas imágenes la operación que acabas de mover en la figura. Son ilustraciones de arquitecturas, no cuentas nuevas.</p>${renderEncounterThreeMedia(id)}</details>`:''}
- <details class="dl-reference pw-reference"><summary>Ver la definición formal y el vocabulario completo</summary><p class="dl-definition">${esc(base.definition)}</p><dl class="dl-essential-terms">${base.terms.map(([term,meaning])=>`<div><dt>${esc(term)}</dt><dd>${esc(meaning)}</dd></div>`).join('')}</dl>${renderTopicVocabulary(id,lesson.guide.vocabulary,lesson.guide.essentialCount)}</details>${renderEncounterGlossary(id)}
+ <details class="dl-reference pw-reference pw-definitions" data-pw-definitions><summary>Todas las definiciones para consultar <span>definición del tema, ${lesson.guide.vocabulary.length} términos con sus siglas y el glosario del encuentro</span></summary><div class="vx vx-inline"><p class="vx-formal dl-definition"><span>Definición del tema</span>${esc(base.definition)}</p><h4 class="vx-subhead">Tres ideas esenciales</h4><dl class="dl-essential-terms">${base.terms.map(([term,meaning])=>`<div><dt>${esc(term)}</dt><dd>${esc(meaning)}</dd></div>`).join('')}</dl><h4 class="vx-subhead">Términos y siglas de este tema</h4><dl class="vx-glossary vx-terms">${lesson.guide.vocabulary.map(v=>`<div><dt>${esc(v.term)}</dt><dd>${esc(v.meaning)}</dd></div>`).join('')}</dl>${renderEncounterGlossary(id)}</div></details>
  <div class="dl-section-action">${next('practica-del-tema','Hacer una comparación propia')}</div></section>`;
 }
 

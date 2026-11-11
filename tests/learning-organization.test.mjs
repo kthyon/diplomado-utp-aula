@@ -70,7 +70,7 @@ test('ML conserva su lectura completa y DL presenta básicos y una sola explicac
     assert.match(map,new RegExp('href="#tema/'+l.id+'" aria-current="page"'),l.id+' ubicación correcta');
     assert.match(map,/permite|comparan|exige|forma parte/,l.id+' mapa con relaciones expresadas por verbos');
     assert.equal((html.match(/data-dl-primary-example=/g)||[]).length,1);assert.equal((html.match(/data-dl-diagram=/g)||[]).length,1);
-    for(const v of g.vocabulary)assert.ok(insideClosedDetail(html,'<summary>'+esc(v.term)+'</summary><p>'+esc(v.meaning)+'</p>'),l.id+' vocabulario consultable');
+    for(const v of g.vocabulary)assert.ok(insideClosedDetail(html,'<dt>'+esc(v.term)+'</dt><dd>'+esc(v.meaning)+'</dd>'),l.id+' vocabulario consultable, visible al abrir un solo desplegable');
     detailsIn(html);continue;
    }
    includesAll(html,[p.definition,...p.terms.flat(),p.example.question,p.example.intro,p.example.reading,p.example.takeaway,c.context,...c.reasoning],l.id+' lectura básica y referencia');

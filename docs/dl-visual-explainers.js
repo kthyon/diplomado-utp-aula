@@ -2,7 +2,7 @@
 // Aportan a las secciones existentes de cada tema: la idea en una frase, una comparación cotidiana,
 // figuras manipulables y vocabulario en tarjetas de color.
 // Las figuras se recalculan con dl-visual-models.js; los datos son inventados y las cuentas son las mostradas.
-import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261111';
+import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261111b';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>Number(v).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -455,7 +455,7 @@ export function encounterReferences(id){
 const glossaryList=id=>`<dl class="vx-glossary">${encounterGlossary(id).map(r=>`<div><dt><span class="vx-dot vx-bg-${r.color}"></span>${esc(r.term)}<small>${esc(r.topic)}</small></dt><dd>${esc(r.meaning)}</dd></div>`).join('')}</dl>`;
 export function renderEncounterGlossary(id){
  const e=encounterOf(id);if(!e)return '';
- return `<details class="dl-reference vx vx-inline" data-vx-glossary="${id}"><summary>Glosario del encuentro ${e.number}: los ${encounterGlossary(id).length} términos y sus definiciones</summary>${glossaryList(id)}</details>`;
+ return `<div data-vx-glossary="${id}"><h4 class="vx-subhead">Glosario del encuentro ${e.number}: ${encounterGlossary(id).length} términos de los tres temas</h4>${glossaryList(id)}</div>`;
 }
 // Cierre para proyectar al terminar el tercer tema: repaso sin nota y glosario completo a la vista.
 export function renderEncounterClosing(id){

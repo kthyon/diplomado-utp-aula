@@ -161,3 +161,42 @@
 .dl-course-reading .vx .vx-flip p,.vx .vx-flip p{margin:0;padding:0 16px 16px;font-size:15px;line-height:1.6;max-width:none;color:var(--ink)}
 .pw-optional-challenge,.pw-industry{margin:22px 0}
 @media (max-width:720px){.vx-glossary>div{grid-template-columns:1fr}.vx.vx-closing{padding:16px 14px}.vx-flip summary::after{display:none}}
+
+/* Mapa «Cómo se conectan los tres temas»: recorrido de tres pasos con el límite que lleva al siguiente */
+.pw-concept-map.pw-flow{--vx-blue:#2563eb;--vx-pink:#db2777;--vx-violet:#7c3aed;--vx-amber:#d97706;--vx-on:#fff;padding:22px;border-radius:16px;background:var(--soft)}
+[data-theme=dark] .pw-concept-map.pw-flow{--vx-blue:#60a5fa;--vx-pink:#f472b6;--vx-violet:#a78bfa;--vx-amber:#fbbf24;--vx-on:#111}
+.pw-flow h3{margin:0 0 6px}
+.dl-course-reading .pw-flow .pw-flow-lead,.pw-flow .pw-flow-lead{margin:0 0 18px;font-size:16px;line-height:1.6;max-width:none;color:var(--ink)}
+.pw-flow-list{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.pw-flow-list>li{margin:0;padding:0}
+.pw-concept-map.pw-flow a.pw-flow-node{--c:var(--vx-blue);display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:16px 18px;border-radius:14px;border:2px solid color-mix(in srgb,var(--c) 45%,var(--line));border-left:8px solid var(--c);background:color-mix(in srgb,var(--c) 8%,var(--paper));color:var(--ink);text-decoration:none;flex-direction:initial}
+.pw-flow-pink{--c:var(--vx-pink)!important}.pw-flow-violet{--c:var(--vx-violet)!important}
+.pw-concept-map.pw-flow a.pw-flow-node:hover{border-color:var(--c);text-decoration:none}
+.pw-concept-map.pw-flow a.pw-flow-node[aria-current=page]{background:color-mix(in srgb,var(--c) 20%,var(--paper));border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 30%,transparent);color:var(--ink)}
+.pw-flow-step{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--c);color:var(--vx-on);font-weight:700;font-size:18px}
+.pw-flow-body{display:grid;gap:4px;min-width:0}
+.pw-concept-map.pw-flow .pw-flow-body small{font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:var(--c)}
+.pw-concept-map.pw-flow .pw-flow-body strong{font-size:19px;line-height:1.3}
+.pw-concept-map.pw-flow .pw-flow-body>span{font-size:15.5px;line-height:1.55}
+.pw-concept-map.pw-flow .pw-flow-io{justify-self:start;margin-top:4px;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--c) 16%,var(--paper));font-size:13.5px!important;font-weight:600}
+.pw-concept-map.pw-flow .pw-map-action{margin-top:6px;font-size:13.5px!important;font-weight:700;color:var(--c);text-decoration:underline;text-underline-offset:4px}
+.dl-course-reading .pw-flow .pw-flow-link,.pw-flow .pw-flow-link{display:grid;grid-template-columns:38px 1fr;gap:14px;align-items:center;margin:0;padding:10px 18px 10px 26px;font-size:14.5px;line-height:1.55;max-width:none;color:var(--ink)}
+.pw-flow-link>span:first-child{font-size:26px;line-height:1;text-align:center;color:var(--muted)}
+.pw-flow-link b{color:var(--vx-amber)}
+.dl-course-reading .pw-flow .pw-hint,.pw-flow .pw-hint{margin:16px 0 0;font-size:14px;line-height:1.6;color:var(--muted);max-width:none}
+
+/* Definiciones para consultar: todo visible al abrir un solo desplegable */
+.pw-definitions>summary span{display:block;font-weight:400;font-size:13.5px;color:var(--muted);margin-top:2px}
+.dl-course-reading .vx .vx-formal,.vx .vx-formal{margin:14px 0 6px;padding:16px 18px;border-radius:14px;border-left:6px solid var(--vx-violet);background:color-mix(in srgb,var(--vx-violet) 9%,var(--paper));font-size:16px;line-height:1.65;max-width:none;color:var(--ink)}
+.vx-formal span{display:block;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--vx-violet);margin-bottom:6px}
+.vx-subhead{margin:22px 0 8px;font-size:1.02rem;line-height:1.35}
+.pw-definitions .dl-essential-terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:0}
+.pw-definitions .dl-essential-terms>div{margin:0;padding:12px 14px;border-radius:12px;border-top:5px solid var(--vx-teal);background:color-mix(in srgb,var(--vx-teal) 8%,var(--paper))}
+.pw-definitions .dl-essential-terms>div:nth-child(2){border-top-color:var(--vx-orange);background:color-mix(in srgb,var(--vx-orange) 8%,var(--paper))}
+.pw-definitions .dl-essential-terms>div:nth-child(3){border-top-color:var(--vx-pink);background:color-mix(in srgb,var(--vx-pink) 8%,var(--paper))}
+.pw-definitions .dl-essential-terms dt{font-weight:700;font-size:15px;margin-bottom:4px}
+.pw-definitions .dl-essential-terms dd{margin:0;font-size:14.5px;line-height:1.55}
+.vx-terms>div:nth-child(odd){background:color-mix(in srgb,var(--vx-blue) 5%,transparent)}
+@media (max-width:720px){.pw-concept-map.pw-flow{padding:14px}.pw-concept-map.pw-flow a.pw-flow-node{padding:14px;gap:10px}.pw-flow .pw-flow-link{padding:10px 8px 10px 14px}}
+.vx-terms>div,.pw-definitions .vx-glossary>div{padding:10px 12px}
+.pw-definitions .dl-essential-terms dd{color:var(--ink)}
