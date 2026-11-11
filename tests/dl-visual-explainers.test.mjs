@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,softmax,ATTENTION_DAYS,attention,selfAttention,encodeSequence,sameSummary,SCENE,overlap,iou,suppressDuplicates,detect,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,cheapestCut} from '../docs/dl-visual-models.js';
 import {VISUAL_TOPICS,hasVisualExplainer,renderVisualIdea,renderVisualFigures,renderVisualCards,visualColabNote,drawVisualFigure,mountVisualExplainers,visualGoals,visualFigureDefaults,encounterGlossary,renderEncounterClosing,topicReferences,encounterReferences} from '../docs/dl-visual-explainers.js';
 import {PRACTICAL_LESSONS,renderPracticalGuide,renderPracticalPractice} from '../docs/dl-practical-lessons.js';
-import {LESSONS} from '../docs/content.js';
+import {LESSONS,COURSES} from '../docs/content.js';
+import {CLASS_ROUTES,classRouteIndex,renderClassRoute,renderTopicRoute} from '../docs/dl-class-route.js';
+import {SESSION_BLOCKS,getSessionPlan} from '../docs/session-plans.js';
 
 const near=(a,b,e=1e-9)=>assert.ok(Math.abs(a-b)<=e,`${a} ≈ ${b}`);
 
@@ -163,5 +165,39 @@ test('cada encuentro tiene glosario completo, cierre con repaso y bibliografía 
   for(const [cite,url,why] of refs){assert.match(url,/^https:\/\/(doi\.org|arxiv\.org|docs\.pytorch\.org|docs\.ultralytics\.com|scikit-learn\.org|mlanthology\.org|d2l\.ai|www\.deeplearningbook\.org|openaccess\.thecvf\.com)\//,url);assert.ok(cite.length>20&&why.length>20);assert.ok(page.includes(url),id+' enlaza '+url);}
   assert.match(guide,/data-vx-glossary=/,id+' glosario disponible en el tema');
   assert.match(LESSONS.find(l=>l.id===id).title,/^(RNN y LSTM|Atención|Transformer|YOLO|IoU, precisión y recall|Integración): /,id+' el título nombra el concepto');
+ }
+});
+
+test('la ruta de la clase coincide con la agenda y ubica cada tema',()=>{
+ const KIND={apertura:'retoma',tema:null,pausa:'pausa',practica:'practica',cierre:'cierre'};
+ for(const [key,route] of Object.entries(CLASS_ROUTES)){
+  const index=Number(key),blocks=SESSION_BLOCKS.dl[index],meeting=COURSES.dl.classes[index];
+  assert.equal(route.steps.length,blocks.length,'un paso por bloque de agenda');
+  route.steps.forEach((step,i)=>{if(KIND[step.kind])assert.equal(blocks[i][1],KIND[step.kind],route.number+' paso '+(i+1));assert.ok(['contenido','practica','retoma','pausa','cierre'].includes(blocks[i][1]));});
+  assert.deepEqual(route.steps.filter(s=>s.topic).map(s=>s.topic),meeting.topics,'los tres temas en el orden del encuentro');
+  assert.equal(route.steps.filter(s=>s.kind==='pausa').length,1);assert.equal(route.steps[0].kind,'apertura');assert.equal(route.steps.at(-1).kind,'cierre');
+  const student=renderClassRoute(index,{teacher:false,meeting}),teacher=renderClassRoute(index,{teacher:true,meeting}),plan=getSessionPlan('dl',index,meeting);
+  assert.equal((student.match(/class="class-route-step /g)||[]).length,route.steps.length);
+  assert.ok(!/\d\d:\d\d/.test(student),'los estudiantes no ven horas ni minutos');assert.ok(!/ min</.test(student));
+  for(const row of plan.rows)assert.ok(teacher.includes(row.from+'–'+row.to),'el docente ve la hora de cada paso');
+  assert.match(teacher,/colab\.research\.google\.com/);
+  for(const topic of meeting.topics){
+   const strip=renderTopicRoute(topic);assert.equal(classRouteIndex(topic),index);
+   assert.equal((strip.match(/aria-current="step"/g)||[]).length,1,topic+' un solo paso actual');
+   assert.equal((strip.match(/href="#tema\//g)||[]).length,2,topic+' enlaza a los otros dos temas');
+   const page=renderPracticalGuide(LESSONS.find(l=>l.id===topic));
+   assert.ok(page.indexOf('class="class-route is-compact"')!==-1&&page.indexOf('class="class-route is-compact"')<page.indexOf('data-student-story='),topic+' la ruta abre el tema');
+  }
+ }
+ assert.equal(renderClassRoute(0),'');assert.equal(renderTopicRoute('dl-redes'),'');assert.equal(classRouteIndex('dl-redes'),null);
+});
+
+test('cada tema define los términos de sus figuras y de su práctica',()=>{
+ const required={'dl-secuencias':['Paso de tiempo','Estado de celda','tanh','Línea base','MAE','Época','Pérdida'],'dl-atencion':['Vector','Mezcla ponderada','Escalado','Matriz de atención'],'dl-transformers':['Transformer','Bloque del encoder','Exactitud','Entrenamiento y prueba'],'dl-yolo':['YOLO','Propuesta','Modelo preentrenado','COCO','Inferencia'],'dl-evaluacion':['Intersección y unión','Umbral de IoU','AP ·','mAP50','Conjunto de validación'],'dl-integracion':['Regla de decisión','Defecto aceptado','Revisión innecesaria','Supuesto del ejercicio']};
+ for(const [id,terms] of Object.entries(required)){
+  const html=renderVisualCards(id),glossary=encounterGlossary(id).map(r=>r.term);
+  for(const term of terms){assert.ok(html.includes('</span>'+term),id+' tarjeta: '+term);assert.ok(glossary.some(g=>g.startsWith(term)),id+' glosario: '+term);}
+  assert.ok((html.match(/class="vx-card /g)||[]).length>=11,id+' al menos once definiciones');
+  assert.equal(new Set(glossary).size,glossary.length,'glosario sin repetidos');
  }
 });

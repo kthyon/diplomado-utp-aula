@@ -63,3 +63,9 @@ Criterio: artículo original, libro de texto de acceso abierto y documentación 
 | Integración | Elkan (2001), IJCAI, 973–978; guía de scikit-learn sobre el corte de decisión |
 
 Pendiente: el catálogo del backend (títulos en el panel docente) se actualiza al redesplegar el servicio. El encuentro 4 sigue sin fotografía real en la web.
+
+## Tercera pasada (11 de noviembre): definiciones y ruta de la clase
+
+- **Definiciones:** cada tema pasa de 7 u 8 tarjetas a entre 11 y 15, en dos grupos: conceptos del tema y términos de la práctica de Colab (por ejemplo paso de tiempo, estado de celda, tanh, línea base, MAE, época y pérdida en RNN y LSTM; YOLO, propuesta, modelo preentrenado, COCO e inferencia en detección; AP, mAP50 y mAP50-95 en evaluación). El glosario queda en 39 términos para el encuentro 3 y 38 para el 4.
+- **Ruta de la clase:** siete pasos por encuentro, iguales a los bloques de la agenda. Aparece completa en el bloque del encuentro, con horas solo para el docente, y como franja compacta al inicio de cada tema con el paso actual.
+- **Comprobaciones:** 267 pruebas; dos nuevas fijan que la ruta coincide con la agenda y que cada tema define los términos de sus figuras y de su práctica.

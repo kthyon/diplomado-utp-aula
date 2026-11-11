@@ -45,7 +45,7 @@ test('la nueva guía se limita a los dieciocho temas futuros y sus botones manti
   assert.equal(isOrganizedTopic(l.id),futureIds.includes(l.id),l.id);
   if(!futureIds.includes(l.id)){assert.equal(html,'',l.id+' conserva la rama original');continue;}
   includesAll(html,[PRACTICAL_LESSONS[l.id]?.goal||DL_LEARNING_PATHS[l.id]?.goal||l.guide.objective,purpose],l.id+' orientación completa');
-  if(PRACTICAL_LESSONS[l.id])includesAll(html,['Ubica el problema','Predice y comprueba'],l.id+' orientación a la acción');
+  if(PRACTICAL_LESSONS[l.id])includesAll(html,['Caso e idea','Figuras y vocabulario'],l.id+' orientación a la acción');
   assert.ok(html.includes(flowHtml),l.id+' instrucciones de continuidad completas');
   const buttons=[...html.matchAll(/<button\b[^>]*data-lesson-section="([^"]+)"[^>]*>/g)];
   assert.deepEqual(buttons.map(m=>m[1]),l.id.startsWith('dl-')?[...targets,'cuaderno-del-tema']:targets,l.id+' destinos de lectura y práctica');

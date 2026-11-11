@@ -2,7 +2,7 @@
 // Aportan a las secciones existentes de cada tema: la idea en una frase, una comparación cotidiana,
 // figuras manipulables y vocabulario en tarjetas de color.
 // Las figuras se recalculan con dl-visual-models.js; los datos son inventados y las cuentas son las mostradas.
-import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261111b';
+import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261111c';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>Number(v).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -258,7 +258,17 @@ const TOPICS={
    ['pink','🌫️','Desvanecimiento','En secuencias largas, la huella de los primeros pasos se multiplica muchas veces por números menores que 1 y casi se borra.','conservando el 50 %, el día 1 pesa 0,02 % tras 12 días.'],
    ['violet','🗄️','LSTM · memoria de largo y corto plazo','Red recurrente con una memoria protegida (estado de celda) y tres compuertas que regulan qué entra, qué se queda y qué sale.','la figura 2.'],
    ['red','🚪','Compuerta','Valor entre 0 y 1 que actúa como llave: 0 bloquea, 1 deja pasar todo. Hay tres: olvido, entrada y salida.','olvido en 100 % y entrada en 0 % = «no toques la memoria».'],
-   ['amber','🔲','Ventana','Las últimas lecturas que recibe el modelo para predecir la siguiente.','en Colab, 12 lecturas seguidas → predecir la número 13.']
+   ['amber','🔲','Ventana','Las últimas lecturas que recibe el modelo para predecir la siguiente.','en Colab, 12 lecturas seguidas → predecir la número 13.'],
+   ['green','⏱️','Paso de tiempo','Cada posición de la secuencia que la red lee, una después de otra.','el día 5 es el quinto paso; la figura 1 avanza un paso por día.'],
+   ['violet','🔒','Estado de celda','La memoria protegida de una LSTM, que las compuertas modifican poco a poco. Es distinta del estado oculto, que es lo que la celda deja ver.','en la figura 2, «Memoria nueva» es el estado de celda y «Lo que muestra» es el estado oculto.'],
+   ['teal','〰️','tanh · tangente hiperbólica','Función que lleva cualquier número al rango entre −1 y 1. La LSTM la usa para mantener acotados sus valores.','tanh(0,65) = 0,57.']
+  ],
+  practice:[
+   ['blue','🔮','Pronóstico de un paso','Predecir solo el valor que sigue a la ventana, no toda la serie futura.','con las lecturas 1 a 12 se predice la 13.'],
+   ['amber','📏','Línea base','Método sencillo contra el que se compara el modelo. Si el modelo no lo supera, no aporta.','repetir el último valor de la ventana.'],
+   ['pink','🎯','MAE · error absoluto medio','Promedio de las distancias entre lo predicho y lo real, sin signo. Cuanto más bajo, mejor.','errores de 0,1, 0,2 y 0,3 dan un MAE de 0,2.'],
+   ['orange','🔁','Época','Una pasada completa del modelo por todos los ejemplos de entrenamiento.','la LSTM del cuaderno entrena 90 épocas.'],
+   ['red','📉','Pérdida','Número que mide cuánto se equivoca el modelo durante el entrenamiento. Entrenar es ajustar los pesos para bajarla.','el cuaderno usa el error cuadrático medio.']
   ],
   refs:[
    ['Hochreiter, S. y Schmidhuber, J. (1997). Long Short-Term Memory. Neural Computation, 9(8), 1735–1780.','https://doi.org/10.1162/neco.1997.9.8.1735','El artículo que propuso la LSTM y sus compuertas.'],
@@ -279,6 +289,7 @@ const TOPICS={
     slider('temp','Temperatura del reparto',20,200,10,100),
     'cada fila es un día que pregunta «¿quién se parece a mí?». Cuanto más oscuro el cuadro, más atención. Cada fila suma 100 %. Así un Transformer relaciona todos los elementos de una secuencia entre sí.'),
   cards:[
+   ['green','➡️','Vector','Lista ordenada de números que representa algo. El lugar de cada número importa.','la clave del día 3 es el vector [1, 1].'],
    ['violet','❓','Consulta (Q, query)','Lo que estoy buscando ahora, expresado como una lista de números.','«mañana lloverá y no habrá mercado» → Q = [1, 0].'],
    ['blue','🏷️','Clave (K, key)','La etiqueta de cada registro guardado, con el mismo formato que la consulta para poder compararlas.','el día 3 llovió y hubo mercado → K = [1, 1].'],
    ['teal','📦','Valor (V, value)','El contenido que aporta cada registro si resulta elegido.','el día 3 se entregaron 30 cajas → V = 30.'],
@@ -286,7 +297,12 @@ const TOPICS={
    ['pink','🥧','Softmax','Operación que convierte las puntuaciones en porcentajes positivos que suman 100 %.','puntuaciones 0,71 y 0 → pesos 67 % y 33 %.'],
    ['green','⚖️','Peso de atención','El porcentaje con que participa cada registro en la respuesta. Un peso alto indica parecido, no que la fuente sea más confiable.','el grosor de las líneas de la figura 1.'],
    ['red','🌡️','Temperatura','Control que hace el reparto más concentrado (baja) o más parejo (alta).','con 0,2 casi toda la atención va al más parecido.'],
-   ['orange','🔄','Autoatención','Atención de una secuencia sobre sí misma: cada elemento es consulta y también clave.','la matriz de la figura 2.']
+   ['orange','🔄','Autoatención','Atención de una secuencia sobre sí misma: cada elemento es consulta y también clave.','la matriz de la figura 2.'],
+   ['teal','🧪','Mezcla ponderada','Suma de los valores multiplicados cada uno por su peso. Es la salida de la atención.','0,67 × 10 + 0,33 × 20 = 13,3 cajas.'],
+   ['amber','➗','Escalado (dividir entre √d)','La puntuación se divide entre la raíz del número de componentes de los vectores para que no crezca cuando son largos.','aquí los vectores tienen 2 componentes: se divide entre √2 ≈ 1,41.'],
+   ['violet','▦','Matriz de atención','Tabla con el peso que cada elemento da a cada uno de los demás: una fila por consulta, y cada fila suma 100 %.','la cuadrícula morada de la figura 2.']
+  ],
+  practice:[
   ],
   refs:[
    ['Bahdanau, D., Cho, K. y Bengio, Y. (2015). Neural Machine Translation by Jointly Learning to Align and Translate. ICLR 2015.','https://arxiv.org/abs/1409.0473','Introdujo la atención para que un traductor consulte toda la frase de origen.'],
@@ -305,6 +321,7 @@ const TOPICS={
     toggle('position','Sumar la señal de posición',false),
     'las dos secuencias tienen los mismos números en orden contrario. Compara los dos resúmenes con la posición apagada y encendida. En esta cuenta el resumen es el promedio de las salidas de la atención.'),
   cards:[
+   ['violet','🏗️','Transformer','Arquitectura de red que procesa toda la secuencia a la vez y relaciona sus elementos con atención, sin leer paso a paso.','las seis etapas de la figura 1.'],
    ['blue','🧩','Token','Unidad en que se parte la entrada: una palabra, un trozo de palabra o, aquí, un número.','la secuencia 6, 2, 5, 3 tiene cuatro tokens.'],
    ['teal','🔢','Embedding','Representación de un token como lista de números (vector), para que la red pueda compararlo y transformarlo. Se aprende durante el entrenamiento.','el token 6 → [0,4; 1,5] en la figura.'],
    ['amber','📍','Codificación posicional','Señal que se suma a cada embedding para indicar su lugar en la secuencia.','sin ella, 6-2-5-3 y 3-5-2-6 producen el mismo resumen.'],
@@ -312,7 +329,13 @@ const TOPICS={
    ['pink','👥','Varias cabezas','Varias atenciones en paralelo; cada una puede fijarse en una relación distinta.','el modelo del cuaderno usa 2 cabezas.'],
    ['green','⚙️','Red por posición (feed-forward)','Red pequeña que transforma cada posición por separado después de la atención.','etapa 5.'],
    ['red','➕','Atajo y normalización','El atajo (conexión residual) suma la entrada a la salida de cada bloque para no perder información; la normalización mantiene los números en un rango estable.','etapa 5.'],
-   ['orange','🎯','Encoder y cabeza','El encoder es el conjunto de bloques que produce las representaciones; la cabeza es la capa final que las convierte en la respuesta de la tarea.','en Colab la cabeza elige entre clase 0 y clase 1.']
+   ['orange','🎯','Encoder y cabeza','El encoder es el conjunto de bloques que produce las representaciones; la cabeza es la capa final que las convierte en la respuesta de la tarea.','en Colab la cabeza elige entre clase 0 y clase 1.'],
+   ['blue','🧱','Bloque del encoder','La unidad que se repite en un Transformer: autoatención y red por posición, cada una con su atajo y su normalización.','el modelo del cuaderno usa un solo bloque.']
+  ],
+  practice:[
+   ['pink','🏷️','Clase y puntuación de clase','La clase es la respuesta posible que el modelo debe elegir; la puntuación indica cuánto se inclina por cada una.','clase 1 = «el primer número es mayor que el último».'],
+   ['teal','✂️','Entrenamiento y prueba','Con los ejemplos de entrenamiento se ajustan los pesos; con los de prueba, que el modelo nunca vio, se mide si aprendió la regla.','en el cuaderno ninguna secuencia de prueba aparece en el entrenamiento.'],
+   ['green','✅','Exactitud (accuracy)','Fracción de respuestas correctas sobre el total. Va de 0 a 1.','0,95 significa 95 aciertos de cada 100.']
   ],
   refs:[
    ['Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł. y Polosukhin, I. (2017). Attention Is All You Need. NeurIPS 2017.','https://arxiv.org/abs/1706.03762','El artículo que propuso el Transformer: autoatención, varias cabezas y codificación posicional.'],
@@ -329,13 +352,21 @@ const TOPICS={
     slider('conf','Corte de confianza',5,95,5,25)+`<div class="vx-presets">${toggle('grid','Ver la rejilla',false)}${toggle('nms','Quitar repetidas (NMS)',false)}</div>`,
     'empieza con el corte bajo: hay más cajas que frutos. Sube el corte para descartar las inseguras y activa «quitar repetidas» para dejar una caja por fruto. La rejilla muestra en amarillo la celda donde cae el centro de cada fruto: esa zona de la red es la responsable de proponerlo. Ningún corte deja los 5 frutos sin falsas alarmas: por eso el siguiente tema enseña a medir los errores.'),
   cards:[
+   ['violet','👁️','YOLO','«You Only Look Once», solo se mira una vez: familia de detectores que predice todas las cajas de la imagen en una sola pasada de la red.','el cuaderno usa un modelo de esta familia.'],
    ['blue','🔎','Detección de objetos','Tarea que localiza y nombra varios objetos en una imagen. Clasificar dice «hay naranjas»; detectar dice «hay una naranja aquí y otra allá».','la canastilla de la figura.'],
    ['orange','⬜','Caja delimitadora','Rectángulo que encierra un objeto. Se escribe con las coordenadas de dos esquinas: [x₁, y₁, x₂, y₂], con el origen arriba a la izquierda.','P1 = [9, 11, 37, 39].'],
    ['pink','🏷️','Categoría','El nombre que el modelo asigna, elegido de la lista con la que fue entrenado. No puede nombrar lo que no está en su lista.','naranja o aguacate.'],
    ['green','📊','Confianza','Puntuación entre 0 y 1 que acompaña a cada caja. Alta no significa correcta: solo que el modelo está más seguro.','P1 tiene 0,92; P11 tiene 0,27.'],
    ['amber','▦','Rejilla','La red divide la imagen en celdas y cada celda propone cajas para los objetos cuyo centro cae en ella. Los modelos actuales usan rejillas de varios tamaños para objetos grandes y pequeños.','las celdas amarillas.'],
    ['violet','✂️','Corte de confianza','Regla para conservar solo las cajas con confianza mayor que un valor elegido.','con corte 0,50 se descarta P3 (0,48).'],
-   ['red','🧹','NMS · supresión de no máximos','Limpieza de repetidas: de las cajas de la misma categoría que se montan mucho, conserva la de mayor confianza. Algunos modelos recientes se entrenan para entregar una sola caja por objeto y omiten este paso.','P1, P2 y P3 marcan el mismo fruto; queda P1.']
+   ['red','🧹','NMS · supresión de no máximos','Limpieza de repetidas: de las cajas de la misma categoría que se montan mucho, conserva la de mayor confianza. Algunos modelos recientes se entrenan para entregar una sola caja por objeto y omiten este paso.','P1, P2 y P3 marcan el mismo fruto; queda P1.'],
+   ['teal','📌','Propuesta','Cada caja candidata que entrega el modelo antes de filtrar. Una propuesta puede ser correcta, repetida o falsa.','la figura parte de 12 propuestas.'],
+   ['green','📐','Píxel y coordenadas','La imagen es una cuadrícula de puntos llamados píxeles. La coordenada x crece hacia la derecha y la y hacia abajo, desde la esquina superior izquierda.','el punto (9, 11) está 9 a la derecha y 11 hacia abajo.']
+  ],
+  practice:[
+   ['blue','📦','Modelo preentrenado','Red cuyos pesos ya se aprendieron con un conjunto grande de imágenes. Se usa tal como está, sin entrenarla de nuevo.','el cuaderno carga el archivo de pesos yolo26n.pt.'],
+   ['amber','🗂️','COCO','«Common Objects in Context»: conjunto de fotos anotadas con 80 categorías de objetos cotidianos con el que se entrenó el modelo del cuaderno.','conoce «persona» y «bus», pero no «café».'],
+   ['pink','⚡','Inferencia','Usar un modelo ya entrenado para obtener predicciones sobre datos nuevos, sin cambiar sus pesos.','pasar la foto por el modelo y recibir las cajas.']
   ],
   refs:[
    ['Redmon, J., Divvala, S., Girshick, R. y Farhadi, A. (2016). You Only Look Once: Unified, Real-Time Object Detection. CVPR 2016, 779–788.','https://openaccess.thecvf.com/content_cvpr_2016/html/Redmon_You_Only_Look_CVPR_2016_paper.html','El artículo original de YOLO: rejilla, cajas y confianza en una sola pasada. Acceso abierto en las actas.'],
@@ -360,7 +391,14 @@ const TOPICS={
    ['amber','🙈','FN · falso negativo','Objeto real que quedó sin detectar: un olvido.','la naranja pequeña cuando el corte es alto.'],
    ['teal','🎯','Precisión','De todo lo que el modelo marcó, qué fracción era correcta: TP ÷ (TP + FP).','4 aciertos de 5 cajas = 80 %.'],
    ['pink','🧲','Recall (exhaustividad)','De todo lo que había, qué fracción encontró: TP ÷ (TP + FN).','4 de 5 frutos = 80 %.'],
-   ['orange','📈','Curva precisión-recall y mAP','La curva muestra el equilibrio al recorrer todos los cortes. AP resume su área para una categoría; mAP promedia las AP de todas las categorías.','mAP50 usa IoU mínima 0,50.']
+   ['orange','📈','Curva precisión-recall','Gráfica que muestra cuánta precisión se conserva para cada nivel de recall al recorrer todos los cortes de confianza.','el punto naranja de la figura 2 se mueve sobre ella.'],
+   ['teal','🔀','Intersección y unión','La intersección es la zona que cubren las dos cajas a la vez; la unión es toda la zona que cubre al menos una.','al desplazar 10 px: intersección 1.200 px², unión 2.000 px².'],
+   ['amber','🚧','Umbral de IoU','El IoU mínimo para que una propuesta cuente como acierto. Es una regla que se elige, no algo que aprende el modelo.','aquí 0,50; con 0,75 se exige más ajuste.'],
+   ['blue','📐','AP · precisión promedio','Número que resume la curva precisión-recall de una categoría: el área bajo la curva. Va de 0 a 1.','una curva que se mantiene alta da un AP cercano a 1.'],
+   ['violet','🏁','mAP50 y mAP50-95','mAP es el promedio de las AP de todas las categorías. mAP50 usa un IoU mínimo de 0,50; mAP50-95 promedia los resultados con mínimos de 0,50 a 0,95, y es más exigente.','un mismo modelo siempre tiene mAP50 mayor o igual que mAP50-95.'],
+   ['green','🗃️','Conjunto de validación','Imágenes con referencias que no se usaron para entrenar. Se reservan para medir el modelo.','las cajas azules hacen de validación en las figuras.']
+  ],
+  practice:[
   ],
   refs:[
    ['Everingham, M., Van Gool, L., Williams, C. K. I., Winn, J. y Zisserman, A. (2010). The PASCAL Visual Object Classes (VOC) Challenge. International Journal of Computer Vision, 88(2), 303–338.','https://doi.org/10.1007/s11263-009-0275-4','Describe el procedimiento de evaluación de detección que popularizó el criterio de IoU 0,50 y la precisión promedio.'],
@@ -383,7 +421,14 @@ const TOPICS={
    ['red','💥','Coste de un defecto aceptado','Lo que cuesta dejar pasar una unidad defectuosa. Suele ser mucho mayor que revisar.','8 puntos por grano defectuoso aceptado.'],
    ['green','🧮','Coste total','Revisiones × coste de revisar + defectos aceptados × coste del defecto. La mejor regla es la que lo hace más pequeño.','4 × 1 + 1 × 8 = 12.'],
    ['teal','🧪','Validación y prueba','El corte se elige con un conjunto de validación y se comprueba después en datos reservados que no se usaron para elegirlo.','elegir aquí y comprobar con otros diez granos.'],
-   ['pink','👷','Persona en el circuito','El modelo prioriza; una persona revisa los casos dudosos. La solución completa incluye esa revisión, no solo la red.','los granos en ámbar pasan a inspección manual.']
+   ['pink','👷','Persona en el circuito','El modelo prioriza; una persona revisa los casos dudosos. La solución completa incluye esa revisión, no solo la red.','los granos en ámbar pasan a inspección manual.'],
+   ['orange','📜','Regla de decisión','Instrucción explícita que convierte cada puntuación en una acción. Debe poder escribirse y revisarse.','«revisar si la puntuación es mayor o igual que 0,35».'],
+   ['red','🕳️','Defecto aceptado','Grano defectuoso que queda por debajo del corte y pasa sin revisión. Es un falso negativo de la regla.','el grano 4 (0,40) cuando el corte es 0,50.'],
+   ['amber','🔁','Revisión innecesaria','Grano sano que supera el corte y se envía a revisión. Es un falso positivo de la regla.','el grano 7 (0,60) con corte 0,50.'],
+   ['blue','📏','Línea base «revisar todos»','La alternativa más simple contra la que se compara la regla: inspeccionar todas las unidades.','diez revisiones cuestan 10 puntos.'],
+   ['violet','📎','Supuesto del ejercicio','Lo que el ejercicio da por cierto y habría que comprobar en un caso real.','aquí se supone que la revisión manual detecta todos los defectos.']
+  ],
+  practice:[
   ],
   refs:[
    ['Elkan, C. (2001). The Foundations of Cost-Sensitive Learning. IJCAI 2001, 973–978.','https://mlanthology.org/ijcai/2001/elkan2001ijcai-foundations/','Cómo elegir el corte de decisión cuando los errores no cuestan lo mismo.'],
@@ -411,7 +456,8 @@ export function renderVisualFigures(id){
 }
 export function renderVisualCards(id){
  const t=TOPICS[id];if(!t)return '';
- return `<div class="vx vx-inline" data-vx-cards="${id}"><dl class="vx-cards">${t.cards.map(c=>card(c[0],c[1],c[2],esc(c[3]),esc(c[4]))).join('')}</dl></div>`;
+ const group=cards=>`<dl class="vx-cards">${cards.map(c=>card(c[0],c[1],c[2],esc(c[3]),esc(c[4]))).join('')}</dl>`;
+ return `<div class="vx vx-inline" data-vx-cards="${id}"><h4 class="vx-subhead">Conceptos del tema (${t.cards.length})</h4>${group(t.cards)}${t.practice.length?`<h4 class="vx-subhead">Términos que verás en la práctica de Colab (${t.practice.length})</h4>${group(t.practice)}`:''}</div>`;
 }
 export const visualColabNote=id=>TOPICS[id]?.colab??'';
 export const topicReferences=id=>TOPICS[id]?.refs??[];
@@ -443,7 +489,7 @@ const encounterOf=id=>ENCOUNTERS.find(e=>e.topics.includes(id));
 export function encounterGlossary(id){
  const e=encounterOf(id);if(!e)return [];
  const seen=new Set(),rows=[];
- e.topics.forEach((topic,i)=>{for(const [color,,term,meaning] of TOPICS[topic].cards){if(seen.has(term))continue;seen.add(term);rows.push({term,meaning,color,topic:e.names[i]});}});
+ e.topics.forEach((topic,i)=>{for(const [color,,term,meaning] of [...TOPICS[topic].cards,...TOPICS[topic].practice]){if(seen.has(term))continue;seen.add(term);rows.push({term,meaning,color,topic:e.names[i]});}});
  return rows.sort((a,b)=>a.term.localeCompare(b.term,'es'));
 }
 // Bibliografía del encuentro: las fuentes de sus tres temas, sin repetir.

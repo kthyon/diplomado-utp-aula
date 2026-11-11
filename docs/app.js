@@ -1,12 +1,13 @@
-import {mountPracticalLessons,isPracticalLesson} from './dl-practical-lessons.js?v=visual-20261111b';
-import {renderDLContinuation} from './dl-course-journey.js?v=visual-20261111b';
-import {isOrganizedTopic,renderTopicCompass,renderOrganizedFinish,mountLessonSections} from './learning-organization.js?v=visual-20261111b';
+import {mountPracticalLessons,isPracticalLesson} from './dl-practical-lessons.js?v=visual-20261111c';
+import {renderDLContinuation} from './dl-course-journey.js?v=visual-20261111c';
+import {isOrganizedTopic,renderTopicCompass,renderOrganizedFinish,mountLessonSections} from './learning-organization.js?v=visual-20261111c';
 import {renderGlossary} from './definitions.js?v=revision-dl-20261102c';
 import {notebookResourceRole} from './notebook-paths.js?v=dl-precision-20261105';
 import {colabNotebookUrl} from './encounter-notebooks.js';
 import {mountRoadmap} from './roadmap.js?v=1';
 import {renderLearningMap} from './learning-map.js?v=1';
 import {courseHours} from './session-plans.js?v=1';
+import {renderClassRoute} from './dl-class-route.js?v=ruta-20261111';
 import {renderMeetingOffering} from './lesson-offering.js?v=e3-20261107';
 import {getJourney,getCalendarMoment,getTopicCompletion,hasNewTopics} from './journey-models.js';
 import {offerProgressDownload} from './progress-download.js';
@@ -14,7 +15,7 @@ import {renderFlowGuide,renderLessonFlow} from './flow-guidance.js?v=descripcion
 import {laboratoryDestination} from './lab-access.js';
 import {readReferenceOffset,nextScheduleDelay} from './schedule-clock.js';
 import {summarizeProgress,renderProgressDashboard} from './progress-dashboard.js';
-import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=visual-20261111b';
+import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=visual-20261111c';
 import {mountProblemExplorer} from './learning-explorers.js';
 import {mountActivationBridge} from './dl-foundations.js?v=dl-recorrido-20261105';
 import {mountDLExplorer} from './dl-explorers.js?v=dl-recorrido-20261105';
@@ -125,7 +126,7 @@ function lesson(id){
 
 function renderOrganizedMeeting(c,cl,i){
  const id=c.id;
- return `<section class="class-block organized-meeting" id="encuentro-${id}-${i+1}" tabindex="-1"><div class="class-header"><div><div class="class-number">ENCUENTRO ${i+1}</div><h3 style="margin-top:7px">${cl.title}</h3><span class="pill class-schedule">${scheduleLabel(fullDate(cl)+" · "+cl.time+" · Colombia",compactMeeting(cl))}</span></div><span class="pill">${teacherView?'Disponible para ti':cl.iso<=releases.day?'Abierto':'Próximamente'}</span></div><div class="meeting-goal"><b>Al terminar este encuentro</b><p>${esc(CLASS_PURPOSES[id][i])}</p></div><div class="topics">${cl.topics.map((tid,j)=>{const l=findLesson(tid),isDone=state.completed.includes(tid),open=access(tid);return `<div class="topic-row ${!open?'locked':''} ${isDone?'done':''}"><span class="topic-index" aria-hidden="true">${isDone?'✓':j+1}</span><div><h4>${l.title}</h4><p>${l.summary}</p></div>${open?`<span class="topic-state">${isDone?'✓ Visto':'Disponible'}</span>`:''}<a href="#tema/${tid}" aria-label="${open?'Abrir':'Ver fecha de apertura de'} ${esc(l.title)}" class="button small ${open?'':'secondary'}">${open?'Entrar →':'Ver fecha'}</a></div>`}).join('')}</div>${id==='dl'&&i===2?'<div class="e3-meeting-story"><h4>Nuestro proyecto: preparar la próxima recepción</h4><p>La cooperativa necesita estudiar sus entregas antes de planear la recepción de mañana. Partiremos de un mismo historial de cajas: seguiremos su orden, consultaremos registros y comprobaremos una respuesta sobre ellos. En cada tema conservarás una evidencia en tu bitácora. Las prácticas de LSTM y Transformer ensayan tareas distintas dentro de ese proyecto.</p></div>':id==='dl'&&i===3?'<div class="e3-meeting-story"><h4>De una imagen a una decisión comprobable</h4><p>Continuamos en la misma cooperativa: además de planear cantidades, necesitamos inspeccionar lo recibido. Construirás un registro visual, comprobarás su localización y estudiarás una regla para revisar una muestra. Conserva los resultados en la bitácora; las puntuaciones de defecto de esa muestra son datos propios, distintos de las propuestas del detector.</p></div>':''}<div class="meeting-reference-area">${renderMeetingOffering(id,i,cl,{teacher:teacherView})}</div></section>`;
+ return `<section class="class-block organized-meeting" id="encuentro-${id}-${i+1}" tabindex="-1"><div class="class-header"><div><div class="class-number">ENCUENTRO ${i+1}</div><h3 style="margin-top:7px">${cl.title}</h3><span class="pill class-schedule">${scheduleLabel(fullDate(cl)+" · "+cl.time+" · Colombia",compactMeeting(cl))}</span></div><span class="pill">${teacherView?'Disponible para ti':cl.iso<=releases.day?'Abierto':'Próximamente'}</span></div><div class="meeting-goal"><b>Al terminar este encuentro</b><p>${esc(CLASS_PURPOSES[id][i])}</p></div><div class="topics">${cl.topics.map((tid,j)=>{const l=findLesson(tid),isDone=state.completed.includes(tid),open=access(tid);return `<div class="topic-row ${!open?'locked':''} ${isDone?'done':''}"><span class="topic-index" aria-hidden="true">${isDone?'✓':j+1}</span><div><h4>${l.title}</h4><p>${l.summary}</p></div>${open?`<span class="topic-state">${isDone?'✓ Visto':'Disponible'}</span>`:''}<a href="#tema/${tid}" aria-label="${open?'Abrir':'Ver fecha de apertura de'} ${esc(l.title)}" class="button small ${open?'':'secondary'}">${open?'Entrar →':'Ver fecha'}</a></div>`}).join('')}</div>${id==='dl'&&i===2?'<div class="e3-meeting-story"><h4>Nuestro proyecto: preparar la próxima recepción</h4><p>La cooperativa necesita estudiar sus entregas antes de planear la recepción de mañana. Partiremos de un mismo historial de cajas: seguiremos su orden, consultaremos registros y comprobaremos una respuesta sobre ellos. En cada tema conservarás una evidencia en tu bitácora. Las prácticas de LSTM y Transformer ensayan tareas distintas dentro de ese proyecto.</p></div>':id==='dl'&&i===3?'<div class="e3-meeting-story"><h4>De una imagen a una decisión comprobable</h4><p>Continuamos en la misma cooperativa: además de planear cantidades, necesitamos inspeccionar lo recibido. Construirás un registro visual, comprobarás su localización y estudiarás una regla para revisar una muestra. Conserva los resultados en la bitácora; las puntuaciones de defecto de esa muestra son datos propios, distintos de las propuestas del detector.</p></div>':''}${id==='dl'?renderClassRoute(i,{teacher:teacherView,meeting:cl}):''}<div class="meeting-reference-area">${renderMeetingOffering(id,i,cl,{teacher:teacherView})}</div></section>`;
 }
 function organizedLesson(l,c,cl,seen,books){
  const id=l.id,g=l.guide,classIndex=c.classes.indexOf(cl),topicIndex=cl.topics.indexOf(id);
