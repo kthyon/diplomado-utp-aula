@@ -2,7 +2,7 @@
 // Aportan a las secciones existentes de cada tema: la idea en una frase, una comparación cotidiana,
 // figuras manipulables y vocabulario en tarjetas de color.
 // Las figuras se recalculan con dl-visual-models.js; los datos son inventados y las cuentas son las mostradas.
-import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261110b';
+import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261111';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>Number(v).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -322,7 +322,7 @@ const TOPICS={
   colab:'En Colab entrenarás un Transformer pequeño (embedding, posición, un bloque encoder con 2 cabezas y una cabeza de salida) para decidir si el primer número es mayor que el último, y comprobarás sus respuestas en secuencias que no vio.'
  },
  'dl-yolo':{
-  opener:'Mira la canastilla de la figura durante tres segundos. ¿Cuántos frutos hay y de qué tipo? Acabas de localizar, nombrar y contar: eso es detectar. Hoy veremos cómo lo hace una red y cómo saber si lo hizo bien.',
+  opener:'En la figura de la sección 2 hay una canastilla: mírala tres segundos. ¿Cuántos frutos hay y de qué tipo? Acabas de localizar, nombrar y contar: eso es detectar. Hoy veremos cómo lo hace una red y cómo saber si lo hizo bien.',
   idea:'Un detector responde tres preguntas por cada objeto: ¿dónde está? (caja), ¿qué es? (categoría) y ¿qué tan seguro estoy? (confianza). YOLO, «solo se mira una vez», las responde para toda la imagen en una sola pasada de la red.',
   analogy:['Marcar frutas en una foto','Muchos ayudantes proponen recuadros sobre la foto de la canastilla, cada uno con su grado de seguridad. Después te quedas con los más seguros y quitas los que marcan la misma fruta dos veces.'],
   figures:()=>figure('detector','Figura 1 · De muchas propuestas a un registro limpio',
@@ -397,9 +397,13 @@ export const VISUAL_TOPICS=Object.keys(TOPICS);
 export const hasVisualExplainer=id=>Object.hasOwn(TOPICS,id);
 
 // Cada pieza se inserta en la sección del tema donde ya vivía ese contenido.
+export function renderVisualOpener(id){
+ const t=TOPICS[id];if(!t?.opener)return '';
+ return `<div class="vx vx-inline" data-vx-opener="${id}"><p class="vx-opener"><b>Para abrir la clase.</b> ${esc(t.opener)}</p></div>`;
+}
 export function renderVisualIdea(id){
  const t=TOPICS[id];if(!t)return '';
- return `<div class="vx vx-inline" data-vx-idea="${id}">${t.opener?`<p class="vx-opener"><b>Para abrir la clase.</b> ${esc(t.opener)}</p>`:''}<p class="vx-idea"><span>La idea en una frase</span>${esc(t.idea)}</p><p class="vx-analogy"><b>Piénsalo así · ${esc(t.analogy[0])}.</b> ${esc(t.analogy[1])}</p></div>`;
+ return `<div class="vx vx-inline" data-vx-idea="${id}"><p class="vx-idea"><span>La idea en una frase</span>${esc(t.idea)}</p><p class="vx-analogy"><b>Piénsalo así · ${esc(t.analogy[0])}.</b> ${esc(t.analogy[1])}</p></div>`;
 }
 export function renderVisualFigures(id){
  const t=TOPICS[id];if(!t)return '';

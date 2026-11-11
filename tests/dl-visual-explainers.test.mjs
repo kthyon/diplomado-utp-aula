@@ -80,7 +80,14 @@ test('las mejoras viven dentro de las secciones existentes de cada tema, sin blo
   assert.ok(at('Dónde sirve en la industria')<example&&at('class="pw-concept-map"')<example,id+' industria y mapa siguen en la sección 1');
   // Sección 2: figura, ejercicio existente y vocabulario, en ese orden.
   const figures=at('data-vx-topic='),bench=page.search(/data-p3-topic=|data-p4-workbench=/),cards=at('data-vx-cards=');
-  assert.ok(example<figures&&figures<bench&&bench<cards,id+' figura → ejercicio → vocabulario');
+  assert.ok(example<figures&&figures<cards&&cards<bench,id+' figura → vocabulario → ejercicio');
+  // Orden completo de la página: apertura, caso, idea, figura, tarjetas, ejercicio, galería, vocabulario formal, glosario; la bibliografía cierra el tema.
+  const whole=page+practice,pos=t=>whole.indexOf(t);
+  const order=['data-vx-opener=','data-student-story=','data-vx-idea=','id="ejemplo-del-tema"','data-vx-topic=','data-vx-cards=',/data-p3-topic=|data-p4-workbench=/,'Relacionar la figura con las imágenes','Ver la definición formal','data-vx-glossary=','id="practica-del-tema"','id="cuaderno-del-tema"','dl-colab-link',/data-vx-refs=|data-vx-closing=/]
+   .map(k=>typeof k==='string'?pos(k):whole.search(k)).filter(i=>i!==-1);
+  assert.deepEqual(order,[...order].sort((a,b)=>a-b),id+' orden de bloques');
+  assert.equal(pos('data-vx-opener=')!==-1,['dl-secuencias','dl-yolo'].includes(id),id+' apertura solo en el primer tema');
+  assert.equal(page.includes('data-vx-refs='),false,id+' la bibliografía no interrumpe la explicación');
   assert.ok(cards<at('Ver la definición formal y el vocabulario completo'),id+' la definición formal sigue disponible');
   for(const [key,count] of [['data-vx-idea=',1],['data-vx-topic=',1],['data-vx-cards=',1],['class="vx-idea"',1],['class="vx-analogy"',1]])assert.equal(page.split(key).length-1,count,id+' '+key);
   assert.ok((page.match(/class="vx-card /g)||[]).length>=7,id+' vocabulario');assert.ok((page.match(/data-vx-fig=/g)||[]).length>=1,id+' figura');
@@ -151,9 +158,9 @@ test('cada encuentro tiene glosario completo, cierre con repaso y bibliografía 
   assert.ok(!renderPracticalPractice(LESSONS.find(l=>l.id===first)).includes('data-vx-closing='));
  }
  for(const id of VISUAL_TOPICS){
-  const refs=topicReferences(id),page=renderPracticalGuide(LESSONS.find(l=>l.id===id));assert.ok(refs.length>=2,id+' al menos dos fuentes');
+  const refs=topicReferences(id),lesson=LESSONS.find(l=>l.id===id),guide=renderPracticalGuide(lesson),page=guide+renderPracticalPractice(lesson);assert.ok(refs.length>=2,id+' al menos dos fuentes');
   for(const [cite,url,why] of refs){assert.match(url,/^https:\/\/(doi\.org|arxiv\.org|docs\.pytorch\.org|docs\.ultralytics\.com|scikit-learn\.org|mlanthology\.org|d2l\.ai|www\.deeplearningbook\.org|openaccess\.thecvf\.com)\//,url);assert.ok(cite.length>20&&why.length>20);assert.ok(page.includes(url),id+' enlaza '+url);}
-  assert.match(page,/data-vx-glossary=/,id+' glosario disponible en el tema');
+  assert.match(guide,/data-vx-glossary=/,id+' glosario disponible en el tema');
   assert.match(LESSONS.find(l=>l.id===id).title,/^(RNN y LSTM|Atención|Transformer|YOLO|IoU, precisión y recall|Integración): /,id+' el título nombra el concepto');
  }
 });
