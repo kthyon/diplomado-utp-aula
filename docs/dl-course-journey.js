@@ -1,5 +1,5 @@
 import {DL_LEARNING_PATHS} from './dl-learning-paths.js?v=dl-precision-20261105';
-import {isPracticalLesson,renderPracticalGuide,renderPracticalPractice} from './dl-practical-lessons.js?v=visual-20261111d';
+import {isPracticalLesson,renderPracticalGuide,renderPracticalPractice} from './dl-practical-lessons.js?v=visual-20261111e';
 import {renderDLTopicExtraResource} from './dl-extra-resources.js?v=e2-recurso-20261107';
 import {renderDLTopicDiagram} from './dl-topic-diagrams.js?v=dl-precision-20261105';
 import {DL_FOUNDATIONS,renderBiasExplanation,renderActivationBridge} from './dl-foundations.js?v=dl-recorrido-20261105';

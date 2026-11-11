@@ -246,3 +246,14 @@
  .class-route-line{padding-bottom:26px}
  .class-route-line .is-current .class-route-label{position:absolute;top:35px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:0}
 }
+
+/* Bloque del encuentro: el proyecto y la ruta respetan el margen interior de la tarjeta */
+.organized-meeting .e3-meeting-story{padding:6px 28px 4px}
+.organized-meeting .e3-meeting-story h4{margin:0 0 8px;font-size:17px;line-height:1.45}
+.organized-meeting .e3-meeting-story p{margin:0;font-size:15.5px;line-height:1.8;max-width:80ch;color:var(--ink)}
+.organized-meeting .class-route{margin:0;padding:22px 28px 24px}
+.organized-meeting .class-route h4{font-size:17px;line-height:1.45}
+@media (max-width:640px){
+ .organized-meeting .e3-meeting-story{padding:6px 22px 4px}
+ .organized-meeting .class-route{padding:20px 22px 22px}
+}
