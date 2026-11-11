@@ -1,0 +1,383 @@
+// Explicaciones visuales de los encuentros 3 y 4 de Deep Learning.
+// Aportan a las secciones existentes de cada tema: la idea en una frase, una comparación cotidiana,
+// figuras manipulables y vocabulario en tarjetas de color.
+// Las figuras se recalculan con dl-visual-models.js; los datos son inventados y las cuentas son las mostradas.
+import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261110';
+
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=(v,d=2)=>Number(v).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=(v,d=0)=>num(v*100,d)+' %';
+const DAY_COLORS=['blue','pink','teal','amber'];
+
+/* ---------- Piezas comunes ---------- */
+
+const card=(color,icon,term,meaning,example)=>`<div class="vx-card vx-c-${color}"><dt><span class="vx-icon" aria-hidden="true">${icon}</span>${esc(term)}</dt><dd>${meaning}${example?`<span class="vx-example"><b>Ejemplo:</b> ${example}</span>`:''}</dd></div>`;
+const slider=(key,label,min,max,step,value)=>`<label class="vx-slider"><span>${esc(label)} <output data-vx-value="${key}"></output></span><input type="range" data-vx-control="${key}" min="${min}" max="${max}" step="${step}" value="${value}"></label>`;
+const toggle=(key,label,checked)=>`<label class="vx-toggle"><input type="checkbox" data-vx-control="${key}" ${checked?'checked':''}><span>${esc(label)}</span></label>`;
+const preset=(label,values,key)=>`<button type="button" class="vx-chip" data-vx-set='${JSON.stringify(values)}'${key?` data-vx-key="${key}" data-vx-tab="${values[key]}"`:''}>${esc(label)}</button>`;
+const figure=(name,title,controls,reading)=>`<figure class="vx-fig" data-vx-fig="${name}"><figcaption>${esc(title)}</figcaption>${controls?`<div class="vx-controls">${controls}</div>`:''}<div class="vx-out" data-vx-out>${DRAW[name]({...DEFAULTS[name]})}</div>${reading?`<p class="vx-reading"><b>Cómo leerla:</b> ${reading}</p>`:''}</figure>`;
+const svg=(w,h,label,body,extra='')=>`<div class="vx-scroll"><svg class="vx-svg" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label)}" ${extra}>${body}</svg></div>`;
+const arrowDefs='<defs><marker id="vx-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="vx-f-ink"/></marker></defs>';
+
+/* ---------- Estado inicial y rótulos de los controles ---------- */
+
+const DEFAULTS={
+ memory:{keep:50,day:12},
+ gates:{forget:50,input:50,output:100},
+ attention:{rain:true,market:false,temp:100},
+ selfattention:{temp:100},
+ pipeline:{stage:1},
+ order:{position:false},
+ detector:{grid:false,conf:25,nms:false},
+ iou:{dx:10,dy:0},
+ pr:{conf:50},
+ review:{cut:50,price:8,truth:true}
+};
+const VALUE_LABELS={
+ keep:s=>s.keep+' %',day:s=>'día '+s.day,forget:s=>s.forget+' %',input:s=>s.input+' %',output:s=>s.output+' %',
+ temp:s=>num(s.temp/100,1),conf:s=>num(s.conf/100),dx:s=>s.dx+' px',dy:s=>s.dy+' px',cut:s=>num(s.cut/100),price:s=>s.price+(s.price===1?' punto':' puntos')
+};
+
+/* ---------- Figuras: Encuentro 3 ---------- */
+
+const DRAW={};
+
+DRAW.memory=({keep,day})=>{
+ const k=keep/100,states=recurrentStates(DELIVERIES,k),weights=memoryWeights(day,k);
+ const x=i=>62+i*45,y=v=>170-v*3.5;
+ const bars=DELIVERIES.map((v,i)=>`<rect x="${x(i)-15}" y="${y(v)}" width="30" height="${v*3.5}" rx="4" class="${i<day?'vx-f-blue':'vx-f-ghost'}"/><text x="${x(i)}" y="${y(v)-5}" class="vx-t-small" text-anchor="middle">${i<day?v:''}</text><text x="${x(i)}" y="186" class="vx-t-small ${i===day-1?'vx-t-strong':''}" text-anchor="middle">${i+1}</text>`).join('');
+ const line=states.slice(0,day).map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+ const dots=states.slice(0,day).map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="${i===day-1?6:3.5}" class="vx-f-orange"/>`).join('');
+ const weightBars=weights.map((w,i)=>`<rect x="${x(i)-15}" y="${318-w*100}" width="30" height="${Math.max(w*100,.6)}" rx="3" class="vx-f-pink"/><text x="${x(i)}" y="${312-w*100}" class="vx-t-small" text-anchor="middle">${w>=.005?pct(w):'≈0'}</text>`).join('');
+ const now=states[day-1];
+ return svg(620,330,`Entregas de ${day} días, memoria de ${num(now,1)} cajas`,`
+  <text x="20" y="14" class="vx-t-label">Entradas: cajas por día (azul) · Memoria tras cada lectura (naranja)</text>
+  <line x1="40" y1="170" x2="600" y2="170" class="vx-axis"/>${bars}
+  <polyline points="${line}" class="vx-l-orange"/>${dots}
+  <text x="${day>7?x(day-1)-12:x(day-1)+12}" y="${y(now)+22}" class="vx-t-strong vx-tc-orange" text-anchor="${day>7?'end':'start'}">memoria ${num(now,1)}</text>
+  <text x="20" y="212" class="vx-t-label">¿Cuánto pesa cada día en la memoria de hoy? (rosado)</text>
+  <line x1="40" y1="318" x2="600" y2="318" class="vx-axis"/>${weightBars}`)+
+ `<p class="vx-readout">Tras leer <b>${day}</b> ${day===1?'día':'días'} conservando el <b>${keep} %</b>, la memoria vale <b>${num(now,1)}</b>. ${day>1?`El día 1 pesa <b>${pct(weights[0],weights[0]<.01?2:0)}</b> y el día ${day} pesa <b>${pct(weights[day-1])}</b>.`:'Solo ha visto un día.'} ${keep>=80?'Recuerda mucho del pasado, pero reacciona despacio a lo nuevo.':keep<=20?'Reacciona rápido, pero casi no recuerda el pasado.':'Lo reciente domina; lo lejano se va borrando.'}</p>`;
+};
+
+DRAW.gates=({forget,input,output})=>{
+ const previous=.8,candidate=.5,f=forget/100,i=input/100,o=output/100,r=lstmStep({previous,candidate,forget:f,input:i,output:o});
+ const valve=(x,y,open,color,label,vertical=false)=>{const size=46,fill=size*open;return `<rect x="${x}" y="${y}" width="${size}" height="${size}" rx="8" class="vx-valve"/><rect x="${vertical?x:x}" y="${y+size-fill}" width="${size}" height="${fill}" rx="8" class="vx-f-${color}" opacity=".85"/><text x="${x+size/2}" y="${y+size/2+5}" class="vx-t-strong" text-anchor="middle">${Math.round(open*100)} %</text><text x="${x+size/2}" y="${y-8}" class="vx-t-small vx-tc-${color}" text-anchor="middle">${label}</text>`;};
+ const box=(x,y,w,title,value,color)=>`<rect x="${x}" y="${y}" width="${w}" height="58" rx="10" class="vx-box vx-b-${color}"/><text x="${x+w/2}" y="${y+22}" class="vx-t-small" text-anchor="middle">${title}</text><text x="${x+w/2}" y="${y+46}" class="vx-t-big" text-anchor="middle">${value}</text>`;
+ return svg(660,250,`Celda LSTM: memoria nueva ${num(r.memory)}, salida ${num(r.shown)}`,`${arrowDefs}
+  ${box(8,40,118,'Memoria anterior',num(previous),'violet')}
+  <line x1="126" y1="69" x2="150" y2="69" class="vx-flow" marker-end="url(#vx-arrow)"/>
+  ${valve(152,46,f,'red','Olvido')}
+  <line x1="198" y1="69" x2="246" y2="69" class="vx-flow" marker-end="url(#vx-arrow)"/><text x="222" y="60" class="vx-t-small" text-anchor="middle">${num(r.kept)}</text>
+  <circle cx="264" cy="69" r="16" class="vx-node"/><text x="264" y="75" class="vx-t-big" text-anchor="middle">+</text>
+  ${box(205,186,118,'Información nueva',num(candidate),'teal')}
+  <line x1="264" y1="186" x2="264" y2="160" class="vx-flow" marker-end="url(#vx-arrow)"/>
+  ${valve(241,112,i,'green','')}<text x="296" y="140" class="vx-t-small vx-tc-green">Entrada</text>
+  <line x1="264" y1="112" x2="264" y2="88" class="vx-flow" marker-end="url(#vx-arrow)"/><text x="232" y="104" class="vx-t-small" text-anchor="end">${num(r.added)}</text>
+  <line x1="280" y1="69" x2="318" y2="69" class="vx-flow" marker-end="url(#vx-arrow)"/>
+  ${box(320,40,118,'Memoria nueva',num(r.memory),'violet')}
+  <line x1="438" y1="69" x2="466" y2="69" class="vx-flow" marker-end="url(#vx-arrow)"/>
+  ${valve(468,46,o,'blue','Salida')}
+  <line x1="514" y1="69" x2="540" y2="69" class="vx-flow" marker-end="url(#vx-arrow)"/>
+  ${box(542,40,110,'Lo que muestra',num(r.shown),'orange')}`)+
+ `<p class="vx-readout">Memoria nueva = <b class="vx-tc-red">${num(f)}</b> × ${num(previous)} + <b class="vx-tc-green">${num(i)}</b> × ${num(candidate)} = <b>${num(r.memory)}</b>. Lo que muestra = <b class="vx-tc-blue">${num(o)}</b> × tanh(${num(r.memory)}) = <b>${num(r.shown)}</b>.</p>`;
+};
+
+const queryOf=s=>[s.rain?1:0,s.market?1:0];
+DRAW.attention=s=>{
+ const q=queryOf(s),keys=ATTENTION_DAYS.map(d=>d.key),values=ATTENTION_DAYS.map(d=>d.value),a=attention(q,keys,values,s.temp/100);
+ const words=k=>`${k[0]?'llovió':'sin lluvia'} · ${k[1]?'mercado':'sin mercado'}`;
+ const days=ATTENTION_DAYS.map((d,i)=>{const y=8+i*73,c=DAY_COLORS[i];return `<line x1="150" y1="150" x2="410" y2="${y+30}" class="vx-s-${c}" stroke-width="${2+a.weights[i]*26}" stroke-linecap="round" opacity=".8"/><rect x="295" y="${(150+y+30)/2-12+(i-1.5)*6}" width="50" height="22" rx="11" class="vx-pill"/><text x="320" y="${(150+y+30)/2+4+(i-1.5)*6}" class="vx-t-strong" text-anchor="middle">${pct(a.weights[i])}</text><rect x="410" y="${y}" width="200" height="60" rx="10" class="vx-box vx-b-${c}"/><text x="422" y="${y+19}" class="vx-t-strong">${d.name} · K = [${d.key.join(', ')}]</text><text x="422" y="${y+36}" class="vx-t-small">${words(d.key)}</text><text x="422" y="${y+52}" class="vx-t-small">V = ${d.value} cajas</text>`;}).join('');
+ const bar=a.contributions.map((c,i)=>`<span class="vx-bg-${DAY_COLORS[i]}" style="flex:${Math.max(c,.01)}" title="${ATTENTION_DAYS[i].name}">${c/a.output>.09?num(c,1):''}</span>`).join('');
+ const rows=ATTENTION_DAYS.map((d,i)=>`<tr><th scope="row"><span class="vx-dot vx-bg-${DAY_COLORS[i]}"></span>${d.name}</th><td>${num(a.scores[i])}</td><td>${pct(a.weights[i],1)}</td><td>${d.value}</td><td>${num(a.contributions[i])}</td></tr>`).join('');
+ return svg(620,300,`Atención desde la consulta hacia cuatro días; resumen ${num(a.output,1)} cajas`,`
+  <rect x="10" y="105" width="140" height="90" rx="12" class="vx-box vx-b-violet"/><text x="80" y="128" class="vx-t-strong" text-anchor="middle">Consulta: mañana</text><text x="80" y="150" class="vx-t-big" text-anchor="middle">Q = [${q.join(', ')}]</text><text x="80" y="172" class="vx-t-small" text-anchor="middle">${q[0]?'lloverá':'sin lluvia'}</text><text x="80" y="186" class="vx-t-small" text-anchor="middle">${q[1]?'habrá mercado':'sin mercado'}</text>${days}`)+
+ `<div class="vx-mix"><span class="vx-mix-label">Aportes que se suman</span><div class="vx-stack">${bar}</div><span class="vx-mix-total">= <b>${num(a.output,1)}</b> cajas</span></div>
+ <div class="vx-table-wrap"><table class="vx-table"><thead><tr><th scope="col">Registro</th><th scope="col">Parecido Q·K ÷ √2</th><th scope="col">Peso (softmax)</th><th scope="col">Valor</th><th scope="col">Aporte = peso × valor</th></tr></thead><tbody>${rows}</tbody></table></div>
+ <p class="vx-readout">${q[0]+q[1]===0?'Con Q = [0, 0] ningún día se parece más que otro: todos pesan 25 % y el resumen es el promedio simple.':`El resumen se inclina hacia los días que comparten condiciones con la consulta. ${s.temp<100?'Con temperatura baja, el reparto se concentra en los más parecidos.':s.temp>100?'Con temperatura alta, el reparto se aplana.':''}`}</p>`;
+};
+
+DRAW.selfattention=s=>{
+ const keys=ATTENTION_DAYS.map(d=>d.key),m=selfAttention(keys,s.temp/100),cell=58,x0=130,y0=46;
+ const head=ATTENTION_DAYS.map((d,j)=>`<text x="${x0+j*cell+cell/2}" y="${y0-10}" class="vx-t-small" text-anchor="middle">${d.name}</text>`).join('');
+ const body=m.map((row,i)=>`<text x="${x0-10}" y="${y0+i*cell+cell/2+4}" class="vx-t-small" text-anchor="end">${ATTENTION_DAYS[i].name} pregunta</text>`+row.map((w,j)=>`<rect x="${x0+j*cell+2}" y="${y0+i*cell+2}" width="${cell-4}" height="${cell-4}" rx="8" class="vx-f-violet" fill-opacity="${.08+w*.92}"/><text x="${x0+j*cell+cell/2}" y="${y0+i*cell+cell/2+5}" class="vx-t-strong ${w>.45?'vx-t-on':''}" text-anchor="middle">${pct(w)}</text>`).join('')).join('');
+ return svg(400,290,'Matriz de autoatención entre los cuatro días',`<text x="${x0+cell*2}" y="14" class="vx-t-label" text-anchor="middle">… mira a →</text>${head}${body}`);
+};
+
+const TOKENS=[6,2,5,3];
+const STAGES=[
+ ['Tokens','Partimos la entrada en unidades. Aquí cada número es un token.'],
+ ['Embedding','Cada token se convierte en un vector: una lista de números que la red puede comparar. En un modelo real esos números se aprenden.'],
+ ['Posición','A cada vector se le suma una señal distinta según su lugar. Sin ella, el modelo no sabría cuál iba primero.'],
+ ['Autoatención','Cada token consulta a todos los demás y decide cuánto mirar a cada uno. Cada fila suma 100 %.'],
+ ['Red por posición','La mezcla pasa por una red pequeña, posición por posición. Un atajo suma la entrada original y una normalización mantiene estables los números.'],
+ ['Salida','Una última capa, la cabeza, convierte el resultado en lo que pide la tarea: una clase, un número o el siguiente token. Sus pesos se aprenden entrenando.']
+];
+const vectorBars=(x,y,v,color,scale=16)=>v.map((value,d)=>`<rect x="${x+d*16}" y="${value>=0?y-value*scale:y}" width="12" height="${Math.abs(value)*scale}" rx="3" class="vx-f-${color}"/>`).join('')+`<line x1="${x-4}" y1="${y}" x2="${x+32}" y2="${y}" class="vx-axis"/>`;
+DRAW.pipeline=({stage})=>{
+ const enc=encodeSequence(TOKENS,true),cx=i=>150+i*110;
+ const chips=TOKENS.map((t,i)=>`<rect x="${cx(i)-24}" y="74" width="48" height="40" rx="10" class="vx-box vx-b-blue"/><text x="${cx(i)}" y="101" class="vx-t-big" text-anchor="middle">${t}</text>`).join('');
+ let detail='';
+ if(stage===1)detail=TOKENS.map((t,i)=>`<text x="${cx(i)}" y="140" class="vx-t-small" text-anchor="middle">lugar ${i+1}</text>`).join('');
+ if(stage===2)detail=TOKENS.map((t,i)=>{const e=embedToken(t);return vectorBars(cx(i)-14,190,e,'teal')+`<text x="${cx(i)}" y="214" class="vx-t-small" text-anchor="middle">[${num(e[0],1)}; ${num(e[1],1)}]</text>`;}).join('');
+ if(stage===3)detail=TOKENS.map((t,i)=>{const e=embedToken(t),p=positionSignal(i),v=enc.vectors[i];return vectorBars(cx(i)-14,166,e,'teal',14)+`<text x="${cx(i)}" y="196" class="vx-t-strong" text-anchor="middle">+</text>`+vectorBars(cx(i)-14,222,p,'amber',14)+`<text x="${cx(i)}" y="252" class="vx-t-strong" text-anchor="middle">=</text>`+vectorBars(cx(i)-14,300,v,'violet',14);}).join('')+`<text x="20" y="160" class="vx-t-small vx-tc-teal">embedding</text><text x="20" y="218" class="vx-t-small vx-tc-amber">posición</text><text x="20" y="290" class="vx-t-small vx-tc-violet">suma</text>`;
+ if(stage===4)detail=enc.weights.map((row,i)=>row.map((w,j)=>`<rect x="${cx(j)-24}" y="${124+i*26}" width="48" height="23" rx="5" class="vx-f-violet" fill-opacity="${.08+w*.92}"/><text x="${cx(j)}" y="${140+i*26}" class="vx-t-small ${w>.45?'vx-t-on':''}" text-anchor="middle">${pct(w)}</text>`).join('')+`<text x="${cx(0)-34}" y="${140+i*26}" class="vx-t-small" text-anchor="end">${TOKENS[i]} mira a</text>`).join('');
+ if(stage===5)detail=`${arrowDefs}`+[['Mezcla de atención','violet'],['+ entrada original (atajo)','teal'],['Normalizar','amber'],['Red pequeña por posición','pink']].map(([label,color],i)=>`<rect x="${20+i*150}" y="140" width="132" height="46" rx="10" class="vx-box vx-b-${color}"/><text x="${86+i*150}" y="168" class="vx-t-small" text-anchor="middle">${label}</text>${i<3?`<line x1="${152+i*150}" y1="163" x2="${168+i*150}" y2="163" class="vx-flow" marker-end="url(#vx-arrow)"/>`:''}`).join('');
+ if(stage===6)detail=`${arrowDefs}`+TOKENS.map((t,i)=>vectorBars(cx(i)-14,176,enc.mixed[i],'violet')).join('')+`<line x1="500" y1="160" x2="528" y2="160" class="vx-flow" marker-end="url(#vx-arrow)"/><rect x="532" y="134" width="80" height="52" rx="10" class="vx-box vx-b-orange"/><text x="572" y="156" class="vx-t-strong" text-anchor="middle">Cabeza</text><text x="572" y="174" class="vx-t-small" text-anchor="middle">→ respuesta</text>`;
+ return svg(620,stage===3?262:172,`Recorrido de un Transformer, etapa ${stage}: ${STAGES[stage-1][0]}`,`<g transform="translate(0,-62)">${stage<5||stage===6?chips:''}${detail}</g>`)+`<p class="vx-readout"><b>${stage}. ${STAGES[stage-1][0]}.</b> ${STAGES[stage-1][1]}</p>`;
+};
+
+DRAW.order=({position})=>{
+ const a=TOKENS,b=[...TOKENS].reverse(),A=encodeSequence(a,position),B=encodeSequence(b,position),same=sameSummary(A.summary,B.summary,1e-9);
+ const side=(x,title,tokens,enc)=>`<text x="${x+110}" y="18" class="vx-t-strong" text-anchor="middle">${title}</text>`+tokens.map((t,i)=>`<rect x="${x+20+i*48}" y="28" width="40" height="34" rx="8" class="vx-box vx-b-blue"/><text x="${x+40+i*48}" y="51" class="vx-t-big" text-anchor="middle">${t}</text>`).join('')+enc.weights.map((row,i)=>row.map((w,j)=>`<rect x="${x+20+j*48}" y="${74+i*24}" width="40" height="21" rx="5" class="vx-f-violet" fill-opacity="${.08+w*.92}"/><text x="${x+40+j*48}" y="${89+i*24}" class="vx-t-small ${w>.45?'vx-t-on':''}" text-anchor="middle">${pct(w)}</text>`).join('')).join('')+`<text x="${x+110}" y="196" class="vx-t-small" text-anchor="middle">Resumen de la secuencia</text><text x="${x+110}" y="220" class="vx-t-big ${same?'vx-tc-red':'vx-tc-green'}" text-anchor="middle">[${num(enc.summary[0],3)}; ${num(enc.summary[1],3)}]</text>`;
+ return svg(620,236,`Comparación de dos órdenes ${position?'con':'sin'} señal de posición: resúmenes ${same?'idénticos':'distintos'}`,`${side(20,'Orden original',a,A)}${side(340,'Orden invertido',b,B)}<text x="310" y="124" class="vx-t-big" text-anchor="middle">${same?'=':'≠'}</text>`)+
+ `<p class="vx-verdict ${same?'is-bad':'is-good'}">${same?'<b>Sin posición, los dos resúmenes son idénticos.</b> La atención trata la entrada como una bolsa de números: no puede saber si 6 iba primero o último.':'<b>Con posición, los resúmenes son distintos.</b> Ahora el modelo sí tiene con qué aprender una tarea que depende del orden, como «¿el primero es mayor que el último?».'}</p>`;
+};
+
+/* ---------- Figuras: Encuentro 4 ---------- */
+
+const CLASS_COLOR={naranja:'blue',aguacate:'pink'};
+const fruit=o=>{const [x1,y1,x2,y2]=o.box,cx=(x1+x2)/2,cy=(y1+y2)/2,rx=(x2-x1)/2,ry=(y2-y1)/2;
+ return o.cls==='naranja'?`<circle cx="${cx}" cy="${cy}" r="${rx*.94}" fill="#f59e0b"/><circle cx="${cx-rx*.3}" cy="${cy-ry*.32}" r="${rx*.22}" fill="#fde68a" opacity=".8"/><path d="M${cx} ${cy-ry*.9}q${rx*.35} ${-ry*.35} ${rx*.6} ${-ry*.05}q${-rx*.3} ${ry*.3} ${-rx*.6} ${ry*.05}" fill="#15803d"/>`
+  :`<ellipse cx="${cx}" cy="${cy}" rx="${rx*.86}" ry="${ry*.96}" fill="#365314"/><ellipse cx="${cx}" cy="${cy+ry*.06}" rx="${rx*.66}" ry="${ry*.78}" fill="#bef264"/><circle cx="${cx}" cy="${cy+ry*.26}" r="${rx*.3}" fill="#92400e"/>`;};
+const sceneBase=()=>`<rect width="100" height="100" rx="3" fill="#fef3c7"/>${[20,40,60,80].map(v=>`<line x1="0" y1="${v}" x2="100" y2="${v}" stroke="#fcd34d" stroke-width=".5"/>`).join('')}<rect x=".8" y=".8" width="98.4" height="98.4" rx="3" fill="none" stroke="#b45309" stroke-width="1.6"/>${SCENE.objects.map(fruit).join('')}`;
+const tag=(b,text,color)=>{const w=text.length*1.9+2.4,y=Math.max(b[1]-5,.6);return `<rect x="${b[0]}" y="${y}" width="${w}" height="4.6" rx="1" class="vx-f-${color}"/><text x="${b[0]+1.2}" y="${y+3.5}" class="vx-t-tag">${text}</text>`;};
+const boxRect=(p,color,extra='')=>`<rect x="${p.box[0]}" y="${p.box[1]}" width="${p.box[2]-p.box[0]}" height="${p.box[3]-p.box[1]}" rx="1" fill="none" class="vx-s-${color}" stroke-width="1" ${extra}/>`;
+
+DRAW.detector=({grid,conf,nms})=>{
+ const c=conf/100,r=detect(SCENE,c,nms,.5),real=SCENE.objects.length,final=r.kept.length;
+ const cells=grid?SCENE.objects.map(o=>{const cx=(o.box[0]+o.box[2])/2,cy=(o.box[1]+o.box[3])/2;return `<rect x="${Math.floor(cx/20)*20}" y="${Math.floor(cy/20)*20}" width="20" height="20" fill="#facc15" opacity=".45"/><circle cx="${cx}" cy="${cy}" r="1.4" fill="#111"/>`;}).join('')+[20,40,60,80].map(v=>`<line x1="${v}" y1="0" x2="${v}" y2="100" class="vx-grid"/><line x1="0" y1="${v}" x2="100" y2="${v}" class="vx-grid"/>`).join(''):'';
+ const removed=r.removed.map(p=>boxRect(p,'ghost','stroke-dasharray="2 1.5" opacity=".9"')).join('');
+ const kept=r.kept.map(p=>boxRect(p,CLASS_COLOR[p.cls])+tag(p.box,`${p.id} ${num(p.conf)}`,CLASS_COLOR[p.cls])).join('');
+ const message=final>real?'Sobran cajas: hay repetidas o falsas alarmas.':final<real?'Faltan objetos: el corte dejó fuera propuestas correctas.':'Hay tantas cajas como objetos. El siguiente tema comprueba si además están bien puestas.';
+ const list=r.kept.map(p=>`<li><span class="vx-dot vx-bg-${CLASS_COLOR[p.cls]}"></span><b>${p.id}</b> ${p.cls} · ${num(p.conf)} · [${p.box.join(', ')}]</li>`).join('');
+ return `<div class="vx-split"><div class="vx-scene"><svg class="vx-svg" viewBox="0 0 100 100" role="img" aria-label="Canastilla con ${real} frutos y ${final} cajas finales">${sceneBase()}${cells}${removed}${kept}</svg></div>
+ <div class="vx-side"><ol class="vx-funnel"><li><b>${SCENE.proposals.length}</b><span>propuestas del modelo</span></li><li><b>${r.passed.length}</b><span>con confianza &gt; ${num(c)}</span></li><li class="is-final"><b>${final}</b><span>${nms?'tras quitar repetidas':'sin quitar repetidas'}</span></li></ol>
+ <p class="vx-truth">Frutos reales en la canastilla: <b>${real}</b></p><p class="vx-verdict ${final===real?'is-good':'is-warn'}">${message}</p>
+ <p class="vx-legend"><span class="vx-dot vx-bg-blue"></span>naranja <span class="vx-dot vx-bg-pink"></span>aguacate${nms&&r.removed.length?' <span class="vx-dash"></span>repetida descartada':''}</p></div></div>
+ <details class="vx-rows"><summary>Ver el registro: una fila por caja final (${final})</summary><ul>${list||'<li>Ninguna caja supera el corte.</li>'}</ul></details>`;
+};
+
+const REFERENCE=[10,20,50,60];
+DRAW.iou=({dx,dy})=>{
+ const p=[REFERENCE[0]+dx,REFERENCE[1]+dy,REFERENCE[2]+dx,REFERENCE[3]+dy],o=overlap(REFERENCE,p),ok=o.iou>=.5,s=o.shared;
+ return `<div class="vx-split"><div class="vx-scene vx-drag" data-vx-drag title="Arrastra la caja naranja"><svg class="vx-svg" viewBox="0 0 100 85" role="img" aria-label="Referencia azul y propuesta naranja con IoU ${num(o.iou)}"><rect width="100" height="85" rx="3" class="vx-f-soft"/>${[20,40,60,80].map(v=>`<line x1="${v}" y1="0" x2="${v}" y2="85" class="vx-grid"/>`).join('')}${[20,40,60,80].map(v=>`<line x1="0" y1="${v}" x2="100" y2="${v}" class="vx-grid"/>`).join('')}
+ <rect x="10" y="20" width="40" height="40" class="vx-f-blue" fill-opacity=".28"/><rect x="10" y="20" width="40" height="40" fill="none" class="vx-s-blue" stroke-width="1"/>
+ <rect x="${p[0]}" y="${p[1]}" width="40" height="40" class="vx-f-orange" fill-opacity=".22"/>${s?`<rect x="${s[0]}" y="${s[1]}" width="${s[2]-s[0]}" height="${s[3]-s[1]}" class="vx-f-violet" fill-opacity=".75"/>`:''}
+ <rect x="${p[0]}" y="${p[1]}" width="40" height="40" fill="none" class="vx-s-orange" stroke-width="1.2"/>
+ <text x="11" y="18" class="vx-t-tag vx-tc-blue">referencia</text><text x="${p[0]+1}" y="${p[1]+44.5}" class="vx-t-tag vx-tc-orange">propuesta</text></svg></div>
+ <div class="vx-side"><dl class="vx-areas"><div><dt><span class="vx-dot vx-bg-violet"></span>Área común</dt><dd>${num(o.common,0)} px²</dd></div><div><dt><span class="vx-dot vx-bg-blue"></span><span class="vx-dot vx-bg-orange"></span>Unión</dt><dd>${num(o.union,0)} px²</dd></div></dl>
+ <p class="vx-iou">IoU = ${num(o.common,0)} ÷ ${num(o.union,0)} = <b>${num(o.iou)}</b></p>
+ <div class="vx-meter" aria-hidden="true"><span style="width:${o.iou*100}%" class="${ok?'vx-bg-green':'vx-bg-red'}"></span><i></i></div><p class="vx-meter-label">mínimo para aceptar: 0,50</p>
+ <p class="vx-verdict ${ok?'is-good':'is-bad'}">${ok?'<b>TP · acierto.</b> La propuesta coincide lo suficiente con la referencia.':'<b>FP + FN.</b> La propuesta no coincide: cuenta como falsa alarma y, además, el objeto real queda sin detectar.'}</p></div></div>`;
+};
+
+DRAW.pr=({conf})=>{
+ const c=conf/100,e=evaluateScene(SCENE,c),curve=precisionRecallCurve(SCENE).filter(p=>p.precision!==null);
+ const boxes=e.rows.map(r=>boxRect(r,r.result==='TP'?'green':'red')+tag(r.box,`${r.result} ${num(r.conf)}`,r.result==='TP'?'green':'red')).join('');
+ const missed=e.missed.map(o=>`<rect x="${o.box[0]-1.5}" y="${o.box[1]-1.5}" width="${o.box[2]-o.box[0]+3}" height="${o.box[3]-o.box[1]+3}" rx="2" fill="none" class="vx-s-amber" stroke-width="1.1" stroke-dasharray="2.5 1.5"/>`+tag([o.box[0]-1.5,o.box[1]-1.5],'FN sin detectar','amber')).join('');
+ const x=r=>24+r*120,y=p=>136-p*120,point=`${x(e.recall??0)},${y(e.precision??1)}`;
+ const bar=(label,value,formula,color)=>`<div class="vx-metric"><span>${label}</span><div class="vx-meter"><span class="vx-bg-${color}" style="width:${(value??0)*100}%"></span></div><b>${value===null?'sin definir':pct(value)}</b><small>${formula}</small></div>`;
+ return `<div class="vx-split"><div class="vx-scene"><svg class="vx-svg" viewBox="0 0 100 100" role="img" aria-label="Evaluación con corte ${num(c)}: ${e.tp} aciertos, ${e.fp} falsas alarmas, ${e.fn} sin detectar">${sceneBase()}${boxes}${missed}</svg></div>
+ <div class="vx-side"><ul class="vx-counts"><li class="vx-bg-green"><b>${e.tp}</b> TP · aciertos</li><li class="vx-bg-red"><b>${e.fp}</b> FP · falsas alarmas</li><li class="vx-bg-amber"><b>${e.fn}</b> FN · sin detectar</li></ul>
+ ${bar('Precisión',e.precision,`de las cajas mostradas, ¿cuántas acertaron? ${e.tp} ÷ ${e.tp+e.fp}`,'blue')}${bar('Recall',e.recall,`de los frutos reales, ¿cuántos encontró? ${e.tp} ÷ ${e.tp+e.fn}`,'pink')}
+ <svg class="vx-svg vx-curve" viewBox="0 0 160 160" role="img" aria-label="Curva precisión-recall"><line x1="24" y1="136" x2="148" y2="136" class="vx-axis"/><line x1="24" y1="136" x2="24" y2="12" class="vx-axis"/><polyline points="${curve.map(p=>`${x(p.recall)},${y(p.precision)}`).join(' ')}" class="vx-l-violet"/><circle cx="${point.split(',')[0]}" cy="${point.split(',')[1]}" r="5" class="vx-f-orange"/><text x="86" y="154" class="vx-t-small" text-anchor="middle">recall →</text><text x="12" y="76" class="vx-t-small" text-anchor="middle" transform="rotate(-90 12 76)">precisión →</text></svg></div></div>
+ <p class="vx-readout">${c>=.6?'Corte alto: casi todo lo que muestra es correcto (precisión alta), pero se le escapan frutos (recall bajo).':c<=.3?'Corte bajo: encuentra todos los frutos (recall alto), pero deja pasar falsas alarmas (precisión baja).':'Corte medio: equilibra aciertos y olvidos.'} El punto naranja recorre la curva al mover el corte.</p>`;
+};
+
+DRAW.review=({cut,price,truth})=>{
+ const c=cut/100,{scores,defects}=REVIEW_UNITS,r=reviewCost(REVIEW_UNITS,c,1,price),best=cheapestCut(REVIEW_UNITS,1,price),curve=costCurve(REVIEW_UNITS,1,price);
+ const x=v=>50+v*520,stack={};
+ const beans=scores.map((s,i)=>{const level=stack[s]=(stack[s]??-1)+1,cy=126-level*42,cx=x(s),bad=defects[i]===1;return `<ellipse cx="${cx}" cy="${cy}" rx="13" ry="15" class="${r.review[i]?'vx-f-amber':'vx-f-green'}"/>${truth&&bad?`<ellipse cx="${cx}" cy="${cy}" rx="17" ry="19" fill="none" class="vx-s-red" stroke-width="3.5"/>`:''}<text x="${cx}" y="${cy+5}" class="vx-t-strong vx-t-on" text-anchor="middle">${i+1}</text>`;}).join('');
+ const ticks=[0,.2,.4,.6,.8,1].map(v=>`<line x1="${x(v)}" y1="150" x2="${x(v)}" y2="156" class="vx-axis"/><text x="${x(v)}" y="170" class="vx-t-small" text-anchor="middle">${num(v,1)}</text>`).join('');
+ const top=Math.max(...curve.map(p=>p.total),10),cy=v=>120-v/top*100;
+ const chart=truth?svg(620,150,`Coste total según el corte; mínimo en ${num(best.cut)}`,`<line x1="50" y1="120" x2="570" y2="120" class="vx-axis"/><line x1="50" y1="${cy(10)}" x2="570" y2="${cy(10)}" class="vx-dashline"/><text x="54" y="${cy(10)-6}" class="vx-t-small">revisar todos: 10</text><polyline points="${curve.map(p=>`${x(p.cut)},${cy(p.total)}`).join(' ')}" class="vx-l-violet"/>${curve.map(p=>`<circle cx="${x(p.cut)}" cy="${cy(p.total)}" r="2.5" class="vx-f-violet"/>`).join('')}<circle cx="${x(best.cut)}" cy="${cy(best.total)}" r="7" fill="none" class="vx-s-green" stroke-width="3"/><text x="${x(best.cut)}" y="${cy(best.total)+22}" class="vx-t-small vx-tc-green" text-anchor="middle">más barato: ${best.total}</text><circle cx="${x(c)}" cy="${cy(r.total)}" r="6" class="vx-f-orange"/><text x="50" y="140" class="vx-t-small">corte 0</text><text x="570" y="140" class="vx-t-small" text-anchor="end">corte 1</text>`):'';
+ return svg(620,196,`Diez granos ordenados por puntuación con corte ${num(c)}: ${r.reviewed} a revisión`,`
+  <rect x="${x(0)-20}" y="8" width="${x(c)-x(0)+20}" height="140" class="vx-f-green" fill-opacity=".1"/><rect x="${x(c)}" y="8" width="${x(1)-x(c)+20}" height="140" class="vx-f-amber" fill-opacity=".14"/>
+  <text x="${Math.max(x(0)-12,(x(0)+x(c))/2-30)}" y="24" class="vx-t-strong vx-tc-green">${c>.12?'ACEPTAR':''}</text><text x="${Math.min(x(1)+12,(x(c)+x(1))/2+30)}" y="24" class="vx-t-strong vx-tc-amber" text-anchor="end">${c<.88?'REVISAR':''}</text>
+  <line x1="${x(0)-20}" y1="150" x2="${x(1)+20}" y2="150" class="vx-axis"/>${ticks}${beans}
+  <line x1="${x(c)}" y1="4" x2="${x(c)}" y2="176" class="vx-s-violet" stroke-width="3"/><text x="${x(c)}" y="190" class="vx-t-strong vx-tc-violet" text-anchor="middle">corte ${num(c)}</text>`)+
+ `<div class="vx-cost"><span class="vx-bg-amber"><b>${r.reviewed}</b> revisiones × 1 = ${r.reviewTotal}</span><i>+</i><span class="vx-bg-red">${truth?`<b>${r.accepted}</b> ${r.accepted===1?'defecto aceptado':'defectos aceptados'} × ${price} = ${r.defectTotal}`:'defectos aceptados: <b>?</b>'}</span><i>=</i><span class="vx-cost-total">${truth?`<b>${r.total}</b> puntos`:'<b>?</b>'}</span></div>${chart}
+ <p class="vx-readout">${truth?`${r.total<10?`Con este corte gastas <b>${r.total}</b>, menos que revisar los diez (10).`:r.total===10?'Con este corte gastas lo mismo que revisar los diez.':`Con este corte gastas <b>${r.total}</b>, más que revisar los diez (10): ${r.accepted} ${r.accepted===1?'defecto aceptado sale caro':'defectos aceptados salen caros'}.`} ${r.needless?`Revisas ${r.needless} ${r.needless===1?'grano sano':'granos sanos'} sin necesidad.`:''} El corte más barato con estos costes es <b>${num(best.cut)}</b>.`:'Sin las referencias (qué granos son defectuosos de verdad) no puedes saber cuánto cuesta una regla. Por eso se necesita un conjunto de validación con respuestas conocidas.'}</p>`;
+};
+
+/* ---------- Contenido de cada tema ---------- */
+
+const TOPICS={
+ 'dl-secuencias':{
+  idea:'Una red recurrente lee una secuencia como tú lees una frase: un elemento después de otro, guardando en una memoria un resumen de lo anterior.',
+  analogy:['Teléfono roto','Cada persona repite lo que oyó mezclado con algo nuevo. Tras muchos pasos, el primer mensaje casi desaparece. Eso le pasa a una red recurrente sencilla; la LSTM agrega compuertas para decidir qué conservar.'],
+  figures:()=>figure('memory','Figura 1 · La memoria se actualiza al leer y lo lejano se desvanece',
+    slider('day','Leer hasta',1,12,1,12)+slider('keep','Cuánto conserva de la memoria anterior',0,95,5,50)+`<button type="button" class="vx-chip vx-play" data-vx-play>▶ Leer los 12 días</button>`,
+    'cada barra azul es una entrega. El punto naranja es la memoria después de leerla: una mezcla de la memoria anterior y la entrada de hoy. Las barras rosadas muestran cuánto influye cada día en esa memoria. Sube «conserva» y verás que recuerda más lejos pero reacciona más lento.')
+   +figure('gates','Figura 2 · Las tres compuertas de una LSTM',
+    slider('forget','Compuerta de olvido',0,100,5,50)+slider('input','Compuerta de entrada',0,100,5,50)+slider('output','Compuerta de salida',0,100,5,100)+`<div class="vx-presets">${preset('Recordar todo',{forget:100,input:0,output:100})}${preset('Borrar y reemplazar',{forget:0,input:100,output:100})}${preset('Mezclar',{forget:50,input:50,output:100})}${preset('Guardar en silencio',{forget:100,input:0,output:0})}</div>`,
+    'cada compuerta es una llave entre 0 % (cerrada) y 100 % (abierta). Aquí las mueves tú; en una LSTM real la red calcula las tres en cada paso a partir de la entrada y de su estado, con pesos que aprende entrenando.'),
+  cards:[
+   ['blue','📈','Secuencia','Datos en los que el orden importa: si lo cambias, cambia el significado.','las entregas de 12 días seguidos, o «el perro persigue al gato» frente a «el gato persigue al perro».'],
+   ['orange','🧠','Estado oculto (memoria)','Número o lista de números que resume lo leído hasta ahora. Se actualiza en cada paso.','el punto naranja de la figura 1.'],
+   ['teal','🔁','RNN · red neuronal recurrente','Red que repite la misma operación en cada paso: combina la entrada de hoy con el estado anterior.','leer 12 días aplica 12 veces la misma regla.'],
+   ['pink','🌫️','Desvanecimiento','En secuencias largas, la huella de los primeros pasos se multiplica muchas veces por números menores que 1 y casi se borra.','conservando el 50 %, el día 1 pesa 0,02 % tras 12 días.'],
+   ['violet','🗄️','LSTM · memoria de largo y corto plazo','Red recurrente con una memoria protegida (estado de celda) y tres compuertas que regulan qué entra, qué se queda y qué sale.','la figura 2.'],
+   ['red','🚪','Compuerta','Valor entre 0 y 1 que actúa como llave: 0 bloquea, 1 deja pasar todo. Hay tres: olvido, entrada y salida.','olvido en 100 % y entrada en 0 % = «no toques la memoria».'],
+   ['amber','🔲','Ventana','Las últimas lecturas que recibe el modelo para predecir la siguiente.','en Colab, 12 lecturas seguidas → predecir la número 13.']
+  ],
+  colab:'En Colab entrenarás una LSTM de verdad: recibe ventanas de 12 lecturas y aprende sola sus compuertas para pronosticar la siguiente. Compararás su error con el de repetir el último valor.'
+ },
+ 'dl-atencion':{
+  idea:'La atención responde una pregunta: de todo lo que tengo guardado, ¿qué se parece más a lo que busco ahora? Lo más parecido participa más en la respuesta.',
+  analogy:['Buscar en una biblioteca','Llevas una pregunta (consulta), miras las etiquetas de los libros (claves) y te llevas una mezcla de sus contenidos (valores): más de los que mejor coinciden, menos de los demás.'],
+  figures:()=>figure('attention','Figura 1 · Una consulta reparte su atención entre cuatro registros',
+    `<div class="vx-presets"><span class="vx-controls-label">Mañana…</span>${toggle('rain','lloverá',true)}${toggle('market','habrá mercado',false)}</div>`+slider('temp','Temperatura del reparto',20,200,10,100),
+    'el grosor de cada línea es el peso de atención. Cambia la consulta y fíjate en qué días engordan: los que comparten condiciones. La barra de colores suma los aportes (peso × cajas) para dar el resumen. Baja la temperatura para concentrar la atención; súbela para repartirla.')
+   +figure('selfattention','Figura 2 · Autoatención: cada día consulta a todos los demás',
+    slider('temp','Temperatura del reparto',20,200,10,100),
+    'cada fila es un día que pregunta «¿quién se parece a mí?». Cuanto más oscuro el cuadro, más atención. Cada fila suma 100 %. Así un Transformer relaciona todos los elementos de una secuencia entre sí.'),
+  cards:[
+   ['violet','❓','Consulta (Q, query)','Lo que estoy buscando ahora, expresado como una lista de números.','«mañana lloverá y no habrá mercado» → Q = [1, 0].'],
+   ['blue','🏷️','Clave (K, key)','La etiqueta de cada registro guardado, con el mismo formato que la consulta para poder compararlas.','el día 3 llovió y hubo mercado → K = [1, 1].'],
+   ['teal','📦','Valor (V, value)','El contenido que aporta cada registro si resulta elegido.','el día 3 se entregaron 30 cajas → V = 30.'],
+   ['amber','📐','Puntuación de parecido','Número que mide cuánto coincide la consulta con una clave. Se calcula con el producto punto: multiplicar componente a componente y sumar.','[1, 0]·[1, 1] = 1×1 + 0×1 = 1.'],
+   ['pink','🥧','Softmax','Operación que convierte las puntuaciones en porcentajes positivos que suman 100 %.','puntuaciones 0,71 y 0 → pesos 67 % y 33 %.'],
+   ['green','⚖️','Peso de atención','El porcentaje con que participa cada registro en la respuesta. Un peso alto indica parecido, no que la fuente sea más confiable.','el grosor de las líneas de la figura 1.'],
+   ['red','🌡️','Temperatura','Control que hace el reparto más concentrado (baja) o más parejo (alta).','con 0,2 casi toda la atención va al más parecido.'],
+   ['orange','🔄','Autoatención','Atención de una secuencia sobre sí misma: cada elemento es consulta y también clave.','la matriz de la figura 2.']
+  ],
+  colab:'En Colab calcularás esta misma operación con matrices: Q, K y V, el producto punto escalado y softmax. Los días 1 y 2 de la figura son exactamente los registros A = 10 y B = 20 del cuaderno.'
+ },
+ 'dl-transformers':{
+  idea:'Un Transformer no lee paso a paso: mira toda la secuencia a la vez y deja que cada elemento consulte a los demás con atención. Como así se pierde el orden, se le devuelve con una señal de posición.',
+  analogy:['Una mesa redonda','Todos conversan con todos al mismo tiempo (atención) en lugar de pasarse el mensaje uno a uno. Pero si las sillas no están numeradas, nadie sabe quién habló primero: por eso hace falta la posición.'],
+  figures:()=>figure('pipeline','Figura 1 · El recorrido de la información por un Transformer',
+    `<div class="vx-presets">${STAGES.map(([name],i)=>preset(`${i+1}. ${name}`,{stage:i+1},'stage')).join('')}</div>`,
+    'pulsa cada etapa en orden. La secuencia de ejemplo es 6, 2, 5, 3. Las barras son los números de cada vector; el mapa morado es la atención entre tokens.')
+   +figure('order','Figura 2 · Experimento: ¿qué pasa si quitamos la posición?',
+    toggle('position','Sumar la señal de posición',false),
+    'las dos secuencias tienen los mismos números en orden contrario. Compara los dos resúmenes con la posición apagada y encendida. En esta cuenta el resumen es el promedio de las salidas de la atención.'),
+  cards:[
+   ['blue','🧩','Token','Unidad en que se parte la entrada: una palabra, un trozo de palabra o, aquí, un número.','la secuencia 6, 2, 5, 3 tiene cuatro tokens.'],
+   ['teal','🔢','Embedding','Representación de un token como lista de números (vector), para que la red pueda compararlo y transformarlo. Se aprende durante el entrenamiento.','el token 6 → [0,4; 1,5] en la figura.'],
+   ['amber','📍','Codificación posicional','Señal que se suma a cada embedding para indicar su lugar en la secuencia.','sin ella, 6-2-5-3 y 3-5-2-6 producen el mismo resumen.'],
+   ['violet','🔄','Autoatención','Cada token consulta a todos los demás y construye una mezcla ponderada. Es la operación del tema anterior, aplicada a toda la secuencia.','el mapa morado de la etapa 4.'],
+   ['pink','👥','Varias cabezas','Varias atenciones en paralelo; cada una puede fijarse en una relación distinta.','el modelo del cuaderno usa 2 cabezas.'],
+   ['green','⚙️','Red por posición (feed-forward)','Red pequeña que transforma cada posición por separado después de la atención.','etapa 5.'],
+   ['red','➕','Atajo y normalización','El atajo (conexión residual) suma la entrada a la salida de cada bloque para no perder información; la normalización mantiene los números en un rango estable.','etapa 5.'],
+   ['orange','🎯','Encoder y cabeza','El encoder es el conjunto de bloques que produce las representaciones; la cabeza es la capa final que las convierte en la respuesta de la tarea.','en Colab la cabeza elige entre clase 0 y clase 1.']
+  ],
+  colab:'En Colab entrenarás un Transformer pequeño (embedding, posición, un bloque encoder con 2 cabezas y una cabeza de salida) para decidir si el primer número es mayor que el último, y comprobarás sus respuestas en secuencias que no vio.'
+ },
+ 'dl-yolo':{
+  idea:'Un detector responde tres preguntas por cada objeto: ¿dónde está? (caja), ¿qué es? (categoría) y ¿qué tan seguro estoy? (confianza). YOLO, «solo se mira una vez», las responde para toda la imagen en una sola pasada de la red.',
+  analogy:['Marcar frutas en una foto','Muchos ayudantes proponen recuadros sobre la foto de la canastilla, cada uno con su grado de seguridad. Después te quedas con los más seguros y quitas los que marcan la misma fruta dos veces.'],
+  figures:()=>figure('detector','Figura 1 · De muchas propuestas a un registro limpio',
+    slider('conf','Corte de confianza',5,95,5,25)+`<div class="vx-presets">${toggle('grid','Ver la rejilla',false)}${toggle('nms','Quitar repetidas (NMS)',false)}</div>`,
+    'empieza con el corte bajo: hay más cajas que frutos. Sube el corte para descartar las inseguras y activa «quitar repetidas» para dejar una caja por fruto. La rejilla muestra en amarillo la celda donde cae el centro de cada fruto: esa zona de la red es la responsable de proponerlo.'),
+  cards:[
+   ['blue','🔎','Detección de objetos','Tarea que localiza y nombra varios objetos en una imagen. Clasificar dice «hay naranjas»; detectar dice «hay una naranja aquí y otra allá».','la canastilla de la figura.'],
+   ['orange','⬜','Caja delimitadora','Rectángulo que encierra un objeto. Se escribe con las coordenadas de dos esquinas: [x₁, y₁, x₂, y₂], con el origen arriba a la izquierda.','P1 = [9, 11, 37, 39].'],
+   ['pink','🏷️','Categoría','El nombre que el modelo asigna, elegido de la lista con la que fue entrenado. No puede nombrar lo que no está en su lista.','naranja o aguacate.'],
+   ['green','📊','Confianza','Puntuación entre 0 y 1 que acompaña a cada caja. Alta no significa correcta: solo que el modelo está más seguro.','P1 tiene 0,92; P11 tiene 0,27.'],
+   ['amber','▦','Rejilla','La red divide la imagen en celdas y cada celda propone cajas para los objetos cuyo centro cae en ella. Los modelos actuales usan rejillas de varios tamaños para objetos grandes y pequeños.','las celdas amarillas.'],
+   ['violet','✂️','Corte de confianza','Regla para conservar solo las cajas con confianza mayor que un valor elegido.','con corte 0,50 se descarta P3 (0,48).'],
+   ['red','🧹','NMS · supresión de no máximos','Limpieza de repetidas: de las cajas de la misma categoría que se montan mucho, conserva la de mayor confianza. Algunos modelos recientes se entrenan para entregar una sola caja por objeto y omiten este paso.','P1, P2 y P3 marcan el mismo fruto; queda P1.']
+  ],
+  colab:'En Colab ejecutarás un YOLO ya entrenado sobre una fotografía real, convertirás sus cajas en una tabla (categoría, confianza, coordenadas) y compararás cuántas quedan con tres cortes distintos.'
+ },
+ 'dl-evaluacion':{
+  idea:'Una caja dibujada no es una caja correcta. Evaluar es comparar cada propuesta con una referencia anotada por una persona y contar aciertos, falsas alarmas y olvidos.',
+  analogy:['Calificar un examen de «encierra las frutas»','Necesitas la hoja de respuestas (las referencias) y una regla para decidir cuándo un recuadro cuenta como acierto: cuánto debe coincidir con el de la hoja.'],
+  figures:()=>figure('iou','Figura 1 · IoU: cuánto coinciden dos cajas',
+    slider('dx','Mover a la derecha',-10,45,1,10)+slider('dy','Mover hacia abajo',-20,25,1,0)+`<div class="vx-presets">${preset('Sin desplazar',{dx:0,dy:0})}${preset('10 px',{dx:10,dy:0})}${preset('30 px',{dx:30,dy:0})}</div>`,
+    'arrastra la caja naranja o usa los controles. El morado es el área común; la unión es todo lo cubierto por alguna de las dos cajas, contando lo común una sola vez. IoU es la división de las dos. Los tres botones son los casos del cuaderno.')
+   +figure('pr','Figura 2 · Precisión y recall sobre la canastilla del tema anterior',
+    slider('conf','Corte de confianza',5,95,5,50),
+    'es la misma escena del tema 1, ahora comparada con sus referencias. Verde = acierto (TP), rojo = falsa alarma (FP), ámbar punteado = fruto sin detectar (FN). Mueve el corte: no puedes subir precisión y recall a la vez; eliges un equilibrio.'),
+  cards:[
+   ['blue','📝','Referencia (anotación)','Caja y categoría correctas, marcadas por una persona. Sin referencias no se puede evaluar.','la caja azul de la figura 1.'],
+   ['violet','🔲','IoU · intersección sobre unión','Área común dividida entre el área total cubierta por las dos cajas. Va de 0 (no se tocan) a 1 (idénticas).','desplazar 10 px da 1.200 ÷ 2.000 = 0,60.'],
+   ['green','✅','TP · verdadero positivo','Propuesta que coincide con una referencia: categoría correcta e IoU suficiente (aquí, al menos 0,50).','las cajas verdes.'],
+   ['red','🚨','FP · falso positivo','Propuesta que no corresponde a ninguna referencia: falsa alarma.','una caja sobre el fondo, o un aguacate llamado «naranja».'],
+   ['amber','🙈','FN · falso negativo','Objeto real que quedó sin detectar: un olvido.','la naranja pequeña cuando el corte es alto.'],
+   ['teal','🎯','Precisión','De todo lo que el modelo marcó, qué fracción era correcta: TP ÷ (TP + FP).','4 aciertos de 5 cajas = 80 %.'],
+   ['pink','🧲','Recall (exhaustividad)','De todo lo que había, qué fracción encontró: TP ÷ (TP + FN).','4 de 5 frutos = 80 %.'],
+   ['orange','📈','Curva precisión-recall y mAP','La curva muestra el equilibrio al recorrer todos los cortes. AP resume su área para una categoría; mAP promedia las AP de todas las categorías.','mAP50 usa IoU mínima 0,50.']
+  ],
+  colab:'En Colab calcularás IoU con las mismas dos cajas de 40 × 40 píxeles y contarás TP, FP y FN al desplazar la propuesta 10 y 30 píxeles y al subir el corte a 0,90.'
+ },
+ 'dl-integracion':{
+  idea:'El modelo entrega puntuaciones; la cooperativa necesita acciones. Integrar es convertir una puntuación en una decisión (revisar o aceptar) con una regla que tenga en cuenta cuánto cuesta cada error.',
+  analogy:['El filtro de un aeropuerto','Revisar a todos los pasajeros es lento y caro; no revisar a nadie es peligroso. El punto justo depende de cuánto cuesta cada revisión y cuánto cuesta dejar pasar un problema.'],
+  figures:()=>figure('review','Figura 1 · Mover el corte cambia qué revisas y cuánto cuesta',
+    slider('cut','Corte: revisar si la puntuación es mayor o igual',0,100,5,50)+slider('price','Coste de aceptar un grano defectuoso',1,12,1,8)+`<div class="vx-presets">${toggle('truth','Mostrar cuáles son defectuosos',true)}</div>`,
+    'cada grano está ubicado según su puntuación de defecto. A la derecha del corte van a revisión (ámbar); a la izquierda se aceptan (verde). El anillo rojo marca los defectuosos de verdad; el número identifica cada grano. La curva de abajo es el coste total para cada corte posible: busca el punto más bajo y luego cambia el coste del defecto para ver cómo se mueve.'),
+  cards:[
+   ['blue','🔀','Puntuación y decisión','La puntuación la produce el modelo; la decisión la produce una regla que alguien elige. Son dos cosas distintas.','0,60 es una puntuación; «revisar» es una decisión.'],
+   ['violet','📏','Corte de decisión','Valor a partir del cual se actúa. Moverlo cambia cuántas unidades se revisan y cuántos errores se cuelan.','con corte 0,50 se revisan 4 granos.'],
+   ['amber','🔍','Coste de revisar','Lo que cuesta inspeccionar una unidad, tenga o no defecto.','1 punto por grano.'],
+   ['red','💥','Coste de un defecto aceptado','Lo que cuesta dejar pasar una unidad defectuosa. Suele ser mucho mayor que revisar.','8 puntos por grano defectuoso aceptado.'],
+   ['green','🧮','Coste total','Revisiones × coste de revisar + defectos aceptados × coste del defecto. La mejor regla es la que lo hace más pequeño.','4 × 1 + 1 × 8 = 12.'],
+   ['teal','🧪','Validación y prueba','El corte se elige con un conjunto de validación y se comprueba después en datos reservados que no se usaron para elegirlo.','elegir aquí y comprobar con otros diez granos.'],
+   ['pink','👷','Persona en el circuito','El modelo prioriza; una persona revisa los casos dudosos. La solución completa incluye esa revisión, no solo la red.','los granos en ámbar pasan a inspección manual.']
+  ],
+  colab:'En Colab calcularás esta misma tabla de costes con los mismos diez granos y verás cómo cambia la mejor regla al bajar el coste del defecto de 8 a 1. Estas puntuaciones de defecto son un dato del ejercicio: el detector del tema 1 reconoce categorías, no defectos.'
+ }
+};
+
+export const VISUAL_TOPICS=Object.keys(TOPICS);
+export const hasVisualExplainer=id=>Object.hasOwn(TOPICS,id);
+
+// Cada pieza se inserta en la sección del tema donde ya vivía ese contenido.
+export function renderVisualIdea(id){
+ const t=TOPICS[id];if(!t)return '';
+ return `<div class="vx vx-inline" data-vx-idea="${id}"><p class="vx-idea"><span>La idea en una frase</span>${esc(t.idea)}</p><p class="vx-analogy"><b>Piénsalo así · ${esc(t.analogy[0])}.</b> ${esc(t.analogy[1])}</p></div>`;
+}
+export function renderVisualFigures(id){
+ const t=TOPICS[id];if(!t)return '';
+ return `<div class="vx vx-inline" data-vx-topic="${id}">${t.figures()}<p class="vx-note">Los datos de estas figuras son inventados para explicar. Las cuentas son reales: puedes rehacerlas a mano con los valores visibles.</p></div>`;
+}
+export function renderVisualCards(id){
+ const t=TOPICS[id];if(!t)return '';
+ return `<div class="vx vx-inline" data-vx-cards="${id}"><dl class="vx-cards">${t.cards.map(c=>card(c[0],c[1],c[2],esc(c[3]),esc(c[4]))).join('')}</dl></div>`;
+}
+export const visualColabNote=id=>TOPICS[id]?.colab??'';
+
+export const drawVisualFigure=(name,state={})=>DRAW[name]({...DEFAULTS[name],...state});
+export const visualFigureDefaults=name=>({...DEFAULTS[name]});
+
+/* ---------- Interacción ---------- */
+
+const mounted=new WeakSet();
+export function mountVisualExplainers(root=document){
+ for(const fig of root.querySelectorAll('[data-vx-fig]')){
+  if(mounted.has(fig))continue;mounted.add(fig);
+  const name=fig.dataset.vxFig,state={...DEFAULTS[name]},out=fig.querySelector('[data-vx-out]');
+  const sync=()=>{
+   for(const control of fig.querySelectorAll('[data-vx-control]')){const key=control.dataset.vxControl;if(control.type==='checkbox')control.checked=Boolean(state[key]);else control.value=state[key];}
+   for(const output of fig.querySelectorAll('[data-vx-value]'))output.textContent=VALUE_LABELS[output.dataset.vxValue]?.(state)??state[output.dataset.vxValue];
+   for(const tab of fig.querySelectorAll('[data-vx-tab]'))tab.setAttribute('aria-pressed',String(String(state[tab.dataset.vxKey])===tab.dataset.vxTab));
+   out.innerHTML=DRAW[name](state);
+  };
+  let timer=null;const stop=()=>{if(timer){clearInterval(timer);timer=null;}};
+  fig.addEventListener('input',event=>{const control=event.target.closest?.('[data-vx-control]');if(!control)return;stop();state[control.dataset.vxControl]=control.type==='checkbox'?control.checked:Number(control.value);sync();});
+  fig.addEventListener('click',event=>{
+   const set=event.target.closest?.('[data-vx-set]');
+   if(set){stop();Object.assign(state,JSON.parse(set.dataset.vxSet));sync();return;}
+   if(event.target.closest?.('[data-vx-play]')){
+    stop();
+    if(globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches){state.day=12;sync();return;}
+    state.day=1;sync();
+    timer=setInterval(()=>{if(!fig.isConnected||state.day>=12){stop();return;}state.day+=1;sync();},550);
+   }
+  });
+  if(name==='iou'){
+   let dragging=false;
+   const move=event=>{const box=out.querySelector('[data-vx-drag] svg')?.getBoundingClientRect();if(!box?.width)return;
+    const px=(event.clientX-box.left)/box.width*100,py=(event.clientY-box.top)/box.height*85;
+    state.dx=Math.max(-10,Math.min(45,Math.round(px-20-REFERENCE[0])));state.dy=Math.max(-20,Math.min(25,Math.round(py-20-REFERENCE[1])));sync();};
+   out.addEventListener('pointerdown',event=>{if(!event.target.closest?.('[data-vx-drag]'))return;dragging=true;out.setPointerCapture?.(event.pointerId);event.preventDefault();move(event);});
+   out.addEventListener('pointermove',event=>{if(dragging)move(event);});
+   for(const type of ['pointerup','pointercancel'])out.addEventListener(type,()=>{dragging=false;});
+  }
+  sync();
+ }
+}
