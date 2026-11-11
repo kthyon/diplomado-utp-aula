@@ -178,7 +178,7 @@ test('la ruta de la clase coincide con la agenda y ubica cada tema',()=>{
   assert.equal(route.steps.filter(s=>s.kind==='pausa').length,1);assert.equal(route.steps[0].kind,'apertura');assert.equal(route.steps.at(-1).kind,'cierre');
   const student=renderClassRoute(index,{teacher:false,meeting}),teacher=renderClassRoute(index,{teacher:true,meeting}),plan=getSessionPlan('dl',index,meeting);
   assert.equal((student.match(/class="class-route-step /g)||[]).length,route.steps.length);
-  assert.ok(!/\d\d:\d\d/.test(student),'los estudiantes no ven horas ni minutos');assert.ok(!/ min</.test(student));
+  assert.ok(!/\d\d:\d\d/.test(student),'los estudiantes no ven horas ni minutos');assert.ok(!student.includes('class-route-time'));
   for(const row of plan.rows)assert.ok(teacher.includes(row.from+'–'+row.to),'el docente ve la hora de cada paso');
   assert.match(teacher,/colab\.research\.google\.com/);
   for(const topic of meeting.topics){

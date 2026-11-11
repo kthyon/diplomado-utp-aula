@@ -1,14 +1,14 @@
-import {PRACTICAL_E3,renderE3Workbench,mountE3Workbench} from './practical-e3.js?v=visual-20261111c';
-import {PRACTICAL_E4,renderE4Workbench,mountE4Workbench} from './practical-e4.js?v=visual-20261111c';
+import {PRACTICAL_E3,renderE3Workbench,mountE3Workbench} from './practical-e3.js?v=visual-20261111d';
+import {PRACTICAL_E4,renderE4Workbench,mountE4Workbench} from './practical-e4.js?v=visual-20261111d';
 import {DL_LEARNING_PATHS} from './dl-learning-paths.js?v=dl-precision-20261105';
 import {renderTopicVocabulary} from './lesson-context.js';
-import {renderEncounterThreeMedia} from './dl-encounter-three-media.js?v=visual-20261111c';
+import {renderEncounterThreeMedia} from './dl-encounter-three-media.js?v=visual-20261111d';
 import {NOTEBOOK_PATHS} from './notebook-paths.js?v=dl-precision-20261105';
 import {encounterForTopic,colabNotebookUrl} from './encounter-notebooks.js';
-import {PRACTICAL_STORY,renderStudentStory} from './dl-practical-story.js?v=visual-20261111c';
-import {renderIndustryContext} from './dl-industry-context.js?v=visual-20261111c';
-import {renderTopicRoute} from './dl-class-route.js?v=ruta-20261111';
-import {renderVisualOpener,renderVisualIdea,renderVisualFigures,renderVisualCards,visualColabNote,renderEncounterGlossary,renderTopicBibliography,renderEncounterClosing,mountVisualExplainers} from './dl-visual-explainers.js?v=visual-20261111c';
+import {PRACTICAL_STORY,renderStudentStory} from './dl-practical-story.js?v=visual-20261111d';
+import {renderIndustryContext} from './dl-industry-context.js?v=visual-20261111d';
+import {renderTopicRoute} from './dl-class-route.js?v=ruta-20261111b';
+import {renderVisualOpener,renderVisualIdea,renderVisualFigures,renderVisualCards,visualColabNote,renderEncounterGlossary,renderTopicBibliography,renderEncounterClosing,mountVisualExplainers} from './dl-visual-explainers.js?v=visual-20261111d';
 
 export const PRACTICAL_LESSONS=Object.fromEntries(Object.entries({...PRACTICAL_E3,...PRACTICAL_E4}).map(([id,p])=>[id,{...p,problem:PRACTICAL_STORY[id].resume,bridge:PRACTICAL_STORY[id].next,colabBridge:PRACTICAL_STORY[id].reading}]));
 export const isPracticalLesson=id=>Object.hasOwn(PRACTICAL_LESSONS,id);
@@ -41,7 +41,7 @@ export function renderPracticalGuide(lesson){
  const id=lesson.id,p=PRACTICAL_LESSONS[id],base=DL_LEARNING_PATHS[id],e3=Object.hasOwn(PRACTICAL_E3,id);
  if(!p)return '';
  const folded=id!=='dl-transformers',bench=e3?renderE3Workbench(id):renderE4Workbench(id);
- return `<section id="idea-del-tema" class="dl-lesson-section pw-orientation"><h2>1. Sigamos el caso de la cooperativa</h2>${renderTopicRoute(id)}${renderVisualOpener(id)}${renderStudentStory(id)}${renderVisualIdea(id)}<p><strong>Hoy podrás:</strong> ${esc(p.goal)}</p><div class="dl-section-action">${next('ejemplo-del-tema','Resolver esta parte del caso')}</div><details class="dl-reference pw-industry"><summary>Ver un uso en la industria y cuándo tiene sentido</summary>${renderIndustryContext(id)}</details>${renderPracticalMap(id)}</section>
+ return `${renderTopicRoute(id)}<section id="idea-del-tema" class="dl-lesson-section pw-orientation"><h2>1. Sigamos el caso de la cooperativa</h2>${renderVisualOpener(id)}${renderStudentStory(id)}${renderVisualIdea(id)}<p><strong>Hoy podrás:</strong> ${esc(p.goal)}</p><div class="dl-section-action">${next('ejemplo-del-tema','Resolver esta parte del caso')}</div><details class="dl-reference pw-industry"><summary>Ver un uso en la industria y cuándo tiene sentido</summary>${renderIndustryContext(id)}</details>${renderPracticalMap(id)}</section>
  <section id="ejemplo-del-tema" class="dl-lesson-section pw-workbench" data-dl-primary-example="${id}"><h2>${folded?'2. Míralo funcionar y ponlo a prueba':'2. Míralo funcionar; después predice y comprueba'}</h2>${renderVisualFigures(id)}
  <h3 class="pw-turn">Ponle nombre a lo que acabas de ver</h3>${renderVisualCards(id)}
  ${folded?`<details class="dl-reference pw-optional-challenge" data-pw-challenge><summary>Reto opcional: predice a mano antes de ver la cuenta</summary><p>${esc(p.task)}</p>${bench}</details>`:`<h3 class="pw-turn">Tu turno: predice y comprueba</h3><p>${esc(p.task)}</p>${bench}`}

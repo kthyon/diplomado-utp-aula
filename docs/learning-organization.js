@@ -1,4 +1,4 @@
-import {PRACTICAL_LESSONS} from './dl-practical-lessons.js?v=visual-20261111c';
+import {PRACTICAL_LESSONS} from './dl-practical-lessons.js?v=visual-20261111d';
 import {DL_LEARNING_PATHS} from './dl-learning-paths.js?v=dl-precision-20261105';
 import {TOPIC_CONTEXT} from './lesson-context.js?v=organizacion-20261027';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

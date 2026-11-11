@@ -2,7 +2,7 @@
 // Aportan a las secciones existentes de cada tema: la idea en una frase, una comparación cotidiana,
 // figuras manipulables y vocabulario en tarjetas de color.
 // Las figuras se recalculan con dl-visual-models.js; los datos son inventados y las cuentas son las mostradas.
-import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261111c';
+import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261111d';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>Number(v).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});

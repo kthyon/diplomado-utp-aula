@@ -27,18 +27,18 @@ export const CLASS_ROUTES={
 };
 export const classRouteIndex=topicId=>{for(const [index,route] of Object.entries(CLASS_ROUTES))if(route.steps.some(s=>s.topic===topicId))return Number(index);return null;};
 
-// Ruta completa para la página de la asignatura. Con docente y horario, cada paso muestra su hora.
+// Ruta completa para la página de la asignatura: línea de tiempo sobria. Con docente y horario, cada paso muestra su hora.
 export function renderClassRoute(index,{teacher=false,meeting=null}={}){
  const route=CLASS_ROUTES[index];if(!route)return '';
  const plan=teacher&&meeting?getSessionPlan('dl',index,meeting):null;
- return `<div class="class-route" data-class-route="${route.number}"><h4>Ruta de la clase: qué haremos y en qué orden</h4><p class="class-route-lead">${esc(route.lead)}</p><ol class="class-route-list">${route.steps.map((s,i)=>{const row=plan?.rows[i],link=s.colab?notebook(s.colab):s.href;
-  return `<li class="class-route-step is-${s.kind}"><span class="class-route-number" aria-hidden="true">${i+1}</span><div><p class="class-route-kind">${KIND_LABEL[s.kind]}${row?` · <b>${row.from}–${row.to}</b> · ${row.minutes} min`:''}</p><strong>${esc(s.title)}</strong>${s.does?`<p>${esc(s.does)}</p>`:''}${link?`<a href="${esc(link)}"${s.colab?' target="_blank" rel="noopener"':''}>${esc(s.cta)} →</a>`:''}</div></li>`;}).join('')}</ol></div>`;
+ return `<div class="class-route" data-class-route="${route.number}"><h4>Ruta de la clase</h4><p class="class-route-lead">${esc(route.lead)}</p><ol class="class-route-list">${route.steps.map((s,i)=>{const row=plan?.rows[i],link=s.colab?notebook(s.colab):s.href;
+  return `<li class="class-route-step is-${s.kind}"><span class="class-route-number" aria-hidden="true">${i+1}</span><div class="class-route-body"><p class="class-route-kind">${KIND_LABEL[s.kind]}</p><strong>${esc(s.title)}</strong>${s.does?`<p>${esc(s.does)}</p>`:''}${link?`<a href="${esc(link)}"${s.colab?' target="_blank" rel="noopener"':''}>${esc(s.cta)} →</a>`:''}</div>${row?`<span class="class-route-time"><b>${row.from}–${row.to}</b><small>${row.minutes} min</small></span>`:''}</li>`;}).join('')}</ol></div>`;
 }
 
-// Franja compacta para la página de cada tema: los siete pasos y cuál es el actual.
+// Franja compacta para la página de cada tema: una sola línea con los siete pasos y el actual.
 export function renderTopicRoute(topicId){
  const index=classRouteIndex(topicId);if(index===null)return '';
- const route=CLASS_ROUTES[index],at=route.steps.findIndex(s=>s.topic===topicId),next=route.steps[at+1];
- return `<nav class="class-route is-compact" data-class-route="${route.number}" aria-label="Ruta de la clase del encuentro ${route.number}"><p class="class-route-title"><b>Ruta de la clase</b> · Encuentro ${route.number} · estás en el paso ${at+1} de ${route.steps.length}</p><ol class="class-route-chips">${route.steps.map((s,i)=>{const inner=`<span aria-hidden="true">${i+1}</span>${esc(s.short)}`,cls=`is-${s.kind}${i===at?' is-current':''}`;
-  return `<li class="${cls}"${i===at?' aria-current="step"':''}>${s.topic&&i!==at?`<a href="#tema/${s.topic}">${inner}</a>`:`<span class="class-route-chip">${inner}</span>`}</li>`;}).join('')}</ol>${next?`<p class="class-route-next">Después de este tema: <b>${esc(next.title)}</b>.</p>`:''}</nav>`;
+ const route=CLASS_ROUTES[index],at=route.steps.findIndex(s=>s.topic===topicId);
+ return `<nav class="class-route is-compact" data-class-route="${route.number}" aria-label="Ruta de la clase del encuentro ${route.number}"><p class="class-route-title">Ruta de la clase · Encuentro ${route.number} · Paso ${at+1} de ${route.steps.length}</p><ol class="class-route-line">${route.steps.map((s,i)=>{const inner=`<span class="class-route-dot" aria-hidden="true">${i+1}</span><span class="class-route-label">${esc(s.short)}</span>`,cls=i<at?'is-done':i===at?'is-current':'is-ahead';
+  return `<li class="${cls}"${i===at?' aria-current="step"':''}>${s.topic&&i!==at?`<a href="#tema/${s.topic}">${inner}</a>`:`<span class="class-route-item">${inner}</span>`}</li>`;}).join('')}</ol></nav>`;
 }
