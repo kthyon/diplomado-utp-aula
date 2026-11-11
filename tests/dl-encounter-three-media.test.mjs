@@ -14,13 +14,13 @@ test('los cinco apoyos visuales tienen imagen local, dimensiones reales, alterna
   assert.match(item.source,/^https:\/\/commons.wikimedia.org\/wiki\/File:/);assert.match(item.licenseURL,/^https:\/\/creativecommons.org\/licenses\//);assert.ok(item.author.length>4);
  }
 });
-test('cada subtema deja la galería plegada después del ejercicio y conserva un simulador principal',()=>{
+test('cada subtema muestra la galería después del ejercicio y conserva un simulador principal',()=>{
  for(const id of Object.keys(ENCOUNTER_THREE_MEDIA)){
   const html=renderDLGuide(LESSONS.find(l=>l.id===id));
-  const gallery=html.indexOf('<summary>Relacionar el ejercicio con las imágenes de una red</summary>'),image=html.indexOf('<img '),workbench=html.indexOf('data-p3-topic='),equations=html.indexOf('data-p3-equations');
+  const gallery=html.indexOf('<summary>Relacionar la figura con las imágenes de una red</summary>'),image=html.indexOf('<img '),workbench=html.indexOf('data-p3-topic='),equations=html.indexOf('data-p3-equations');
   assert.ok(workbench>=0&&equations>workbench&&gallery>equations&&image>gallery,id+' primero manipular y después consultar imágenes');
   const open=html.lastIndexOf('<details',gallery);assert.ok(open>equations);
-  assert.doesNotMatch(html.slice(open,gallery),/\bopen(?:\s|=|>)/,id+' galería cerrada inicialmente');
+  assert.match(html.slice(open,gallery),/\bopen(?:\s|=|>)/,id+' galería visible desde el inicio');
   assert.equal((html.match(/data-dl-diagram=/g)||[]).length,1);
   assert.equal((html.match(/data-p3-topic=/g)||[]).length,1,id+' un solo ejercicio');
   assert.match(html,/Abrir imagen en tamaño completo/);assert.match(html,/Copia sin modificaciones/);

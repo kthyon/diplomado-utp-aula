@@ -2,7 +2,7 @@
 // Aportan a las secciones existentes de cada tema: la idea en una frase, una comparación cotidiana,
 // figuras manipulables y vocabulario en tarjetas de color.
 // Las figuras se recalculan con dl-visual-models.js; los datos son inventados y las cuentas son las mostradas.
-import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261110';
+import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261110b';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>Number(v).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -15,7 +15,8 @@ const card=(color,icon,term,meaning,example)=>`<div class="vx-card vx-c-${color}
 const slider=(key,label,min,max,step,value)=>`<label class="vx-slider"><span>${esc(label)} <output data-vx-value="${key}"></output></span><input type="range" data-vx-control="${key}" min="${min}" max="${max}" step="${step}" value="${value}"></label>`;
 const toggle=(key,label,checked)=>`<label class="vx-toggle"><input type="checkbox" data-vx-control="${key}" ${checked?'checked':''}><span>${esc(label)}</span></label>`;
 const preset=(label,values,key)=>`<button type="button" class="vx-chip" data-vx-set='${JSON.stringify(values)}'${key?` data-vx-key="${key}" data-vx-tab="${values[key]}"`:''}>${esc(label)}</button>`;
-const figure=(name,title,controls,reading)=>`<figure class="vx-fig" data-vx-fig="${name}"><figcaption>${esc(title)}</figcaption>${controls?`<div class="vx-controls">${controls}</div>`:''}<div class="vx-out" data-vx-out>${DRAW[name]({...DEFAULTS[name]})}</div>${reading?`<p class="vx-reading"><b>Cómo leerla:</b> ${reading}</p>`:''}</figure>`;
+const goalList=name=>GOALS[name]?`<div class="vx-goals"><b>Retos</b><ul>${GOALS[name].map((g,i)=>`<li data-vx-goal="${i}"><span class="vx-goal-mark" aria-hidden="true"></span><span>${esc(g.text)}</span></li>`).join('')}</ul><p class="vx-goal-status" role="status" data-vx-goal-status></p></div>`:'';
+const figure=(name,title,controls,reading)=>`<figure class="vx-fig" data-vx-fig="${name}"><figcaption>${esc(title)}</figcaption>${controls?`<div class="vx-controls">${controls}</div>`:''}<div class="vx-out" data-vx-out>${DRAW[name]({...DEFAULTS[name]})}</div>${goalList(name)}${reading?`<p class="vx-reading"><b>Cómo leerla:</b> ${reading}</p>`:''}</figure>`;
 const svg=(w,h,label,body,extra='')=>`<div class="vx-scroll"><svg class="vx-svg" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label)}" ${extra}>${body}</svg></div>`;
 const arrowDefs='<defs><marker id="vx-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="vx-f-ink"/></marker></defs>';
 
@@ -37,6 +38,42 @@ const VALUE_LABELS={
  keep:s=>s.keep+' %',day:s=>'día '+s.day,forget:s=>s.forget+' %',input:s=>s.input+' %',output:s=>s.output+' %',
  temp:s=>num(s.temp/100,1),conf:s=>num(s.conf/100),dx:s=>s.dx+' px',dy:s=>s.dy+' px',cut:s=>num(s.cut/100),price:s=>s.price+(s.price===1?' punto':' puntos')
 };
+
+/* ---------- Retos con meta: se marcan solos cuando el estado de la figura los cumple ---------- */
+
+const finalDetections=s=>matchDetections(detect(SCENE,s.conf/100,s.nms,.5).kept,SCENE.objects);
+const GOALS={
+ memory:[
+  {text:'Leyendo los 12 días, encuentra cuánto conservar para que el día 1 pese al menos 3 %.',test:s=>s.day===12&&memoryWeights(12,s.keep/100)[0]>=.03},
+  {text:'Haz que la memoria del día 12 quede a menos de 1 caja de la última entrega (26).',test:s=>s.day===12&&Math.abs(recurrentStates(DELIVERIES,s.keep/100)[11]-DELIVERIES[11])<1}
+ ],
+ gates:[
+  {text:'Guarda la memoria intacta (0,80) sin mostrar nada a la salida.',test:s=>s.forget===100&&s.input===0&&s.output===0},
+  {text:'Consigue una memoria nueva de exactamente 0,50. Hay más de una forma.',test:s=>Math.abs(lstmStep({previous:.8,candidate:.5,forget:s.forget/100,input:s.input/100,output:1}).memory-.5)<.0051}
+ ],
+ attention:[
+  {text:'Haz que el día 3 reciba más del 60 % de la atención.',test:s=>attention([s.rain?1:0,s.market?1:0],ATTENTION_DAYS.map(d=>d.key),ATTENTION_DAYS.map(d=>d.value),s.temp/100).weights[2]>.6},
+  {text:'Consigue un resumen de exactamente 25 cajas.',test:s=>Math.abs(attention([s.rain?1:0,s.market?1:0],ATTENTION_DAYS.map(d=>d.key),ATTENTION_DAYS.map(d=>d.value),s.temp/100).output-25)<.05}
+ ],
+ order:[{text:'Consigue que el modelo pueda distinguir los dos órdenes.',test:s=>s.position}],
+ detector:[
+  {text:'Deja 4 cajas y que las 4 sean correctas.',test:s=>{const r=finalDetections(s);return r.rows.length===4&&r.fp===0;}},
+  {text:'Encuentra los 5 frutos con una sola caja por fruto, aunque sobren falsas alarmas.',test:s=>{const r=finalDetections(s);return s.nms&&r.tp===5;}}
+ ],
+ iou:[
+  {text:'Coloca la caja naranja hasta lograr IoU de 0,90 o más.',test:s=>overlap(REFERENCE,[REFERENCE[0]+s.dx,REFERENCE[1]+s.dy,REFERENCE[2]+s.dx,REFERENCE[3]+s.dy]).iou>=.9},
+  {text:'Déjala justo en el límite: IoU entre 0,50 y 0,55.',test:s=>{const v=overlap(REFERENCE,[REFERENCE[0]+s.dx,REFERENCE[1]+s.dy,REFERENCE[2]+s.dx,REFERENCE[3]+s.dy]).iou;return v>=.5&&v<=.55;}}
+ ],
+ pr:[
+  {text:'Consigue precisión de 100 % con el mayor recall posible.',test:s=>{const e=evaluateScene(SCENE,s.conf/100);return e.precision===1&&e.recall>=.8;}},
+  {text:'Consigue recall de 100 %. ¿Cuánto bajó la precisión?',test:s=>evaluateScene(SCENE,s.conf/100).recall===1}
+ ],
+ review:[
+  {text:'Con el coste del defecto en 8, encuentra el corte más barato.',test:s=>s.truth&&s.price===8&&reviewCost(REVIEW_UNITS,s.cut/100,1,8).total===cheapestCut(REVIEW_UNITS,1,8).total},
+  {text:'Cambia el coste del defecto hasta que lo más barato sea revisar 3 granos o menos, y ubica ese corte.',test:s=>{const r=reviewCost(REVIEW_UNITS,s.cut/100,1,s.price);return s.truth&&r.reviewed<=3&&r.total===cheapestCut(REVIEW_UNITS,1,s.price).total;}}
+ ]
+};
+export const visualGoals=name=>GOALS[name]??[];
 
 /* ---------- Figuras: Encuentro 3 ---------- */
 
@@ -205,6 +242,7 @@ DRAW.review=({cut,price,truth})=>{
 
 const TOPICS={
  'dl-secuencias':{
+  opener:'«No es malo, es buenísimo» y «No es buenísimo, es malo» usan las mismas palabras. ¿Qué cambió? Solo el orden. Hoy veremos cómo una red puede tenerlo en cuenta.',
   idea:'Una red recurrente lee una secuencia como tú lees una frase: un elemento después de otro, guardando en una memoria un resumen de lo anterior.',
   analogy:['Teléfono roto','Cada persona repite lo que oyó mezclado con algo nuevo. Tras muchos pasos, el primer mensaje casi desaparece. Eso le pasa a una red recurrente sencilla; la LSTM agrega compuertas para decidir qué conservar.'],
   figures:()=>figure('memory','Figura 1 · La memoria se actualiza al leer y lo lejano se desvanece',
@@ -221,6 +259,13 @@ const TOPICS={
    ['violet','🗄️','LSTM · memoria de largo y corto plazo','Red recurrente con una memoria protegida (estado de celda) y tres compuertas que regulan qué entra, qué se queda y qué sale.','la figura 2.'],
    ['red','🚪','Compuerta','Valor entre 0 y 1 que actúa como llave: 0 bloquea, 1 deja pasar todo. Hay tres: olvido, entrada y salida.','olvido en 100 % y entrada en 0 % = «no toques la memoria».'],
    ['amber','🔲','Ventana','Las últimas lecturas que recibe el modelo para predecir la siguiente.','en Colab, 12 lecturas seguidas → predecir la número 13.']
+  ],
+  refs:[
+   ['Hochreiter, S. y Schmidhuber, J. (1997). Long Short-Term Memory. Neural Computation, 9(8), 1735–1780.','https://doi.org/10.1162/neco.1997.9.8.1735','El artículo que propuso la LSTM y sus compuertas.'],
+   ['Bengio, Y., Simard, P. y Frasconi, P. (1994). Learning long-term dependencies with gradient descent is difficult. IEEE Transactions on Neural Networks, 5(2), 157–166.','https://doi.org/10.1109/72.279181','Explica por qué una red recurrente sencilla pierde las dependencias lejanas.'],
+   ['Goodfellow, I., Bengio, Y. y Courville, A. (2016). Deep Learning. MIT Press. Capítulo 10: Sequence Modeling: Recurrent and Recursive Nets.','https://www.deeplearningbook.org/contents/rnn.html','Libro de texto de referencia, de lectura libre: redes recurrentes, dependencias largas y LSTM.'],
+   ['Zhang, A., Lipton, Z. C., Li, M. y Smola, A. J. (2023). Dive into Deep Learning. Cambridge University Press. Sección 10.1: Long Short-Term Memory (LSTM).','https://d2l.ai/chapter_recurrent-modern/lstm.html','Libro abierto con código ejecutable: explica cada compuerta con figuras y la implementa.'],
+   ['PyTorch. Documentación de torch.nn.LSTM.','https://docs.pytorch.org/docs/stable/generated/torch.nn.LSTM.html','La capa que usa el cuaderno, con sus ecuaciones.']
   ],
   colab:'En Colab entrenarás una LSTM de verdad: recibe ventanas de 12 lecturas y aprende sola sus compuertas para pronosticar la siguiente. Compararás su error con el de repetir el último valor.'
  },
@@ -243,6 +288,11 @@ const TOPICS={
    ['red','🌡️','Temperatura','Control que hace el reparto más concentrado (baja) o más parejo (alta).','con 0,2 casi toda la atención va al más parecido.'],
    ['orange','🔄','Autoatención','Atención de una secuencia sobre sí misma: cada elemento es consulta y también clave.','la matriz de la figura 2.']
   ],
+  refs:[
+   ['Bahdanau, D., Cho, K. y Bengio, Y. (2015). Neural Machine Translation by Jointly Learning to Align and Translate. ICLR 2015.','https://arxiv.org/abs/1409.0473','Introdujo la atención para que un traductor consulte toda la frase de origen.'],
+   ['Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł. y Polosukhin, I. (2017). Attention Is All You Need. NeurIPS 2017.','https://arxiv.org/abs/1706.03762','Define la atención de producto punto escalado con consulta, clave y valor que calcula la figura.'],
+   ['Zhang, A., Lipton, Z. C., Li, M. y Smola, A. J. (2023). Dive into Deep Learning. Cambridge University Press. Capítulo 11: Attention Mechanisms and Transformers.','https://d2l.ai/chapter_attention-mechanisms-and-transformers/','Libro abierto con código ejecutable: consultas, claves y valores desde la intuición hasta el cálculo.']
+  ],
   colab:'En Colab calcularás esta misma operación con matrices: Q, K y V, el producto punto escalado y softmax. Los días 1 y 2 de la figura son exactamente los registros A = 10 y B = 20 del cuaderno.'
  },
  'dl-transformers':{
@@ -264,14 +314,20 @@ const TOPICS={
    ['red','➕','Atajo y normalización','El atajo (conexión residual) suma la entrada a la salida de cada bloque para no perder información; la normalización mantiene los números en un rango estable.','etapa 5.'],
    ['orange','🎯','Encoder y cabeza','El encoder es el conjunto de bloques que produce las representaciones; la cabeza es la capa final que las convierte en la respuesta de la tarea.','en Colab la cabeza elige entre clase 0 y clase 1.']
   ],
+  refs:[
+   ['Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł. y Polosukhin, I. (2017). Attention Is All You Need. NeurIPS 2017.','https://arxiv.org/abs/1706.03762','El artículo que propuso el Transformer: autoatención, varias cabezas y codificación posicional.'],
+   ['Bahdanau, D., Cho, K. y Bengio, Y. (2015). Neural Machine Translation by Jointly Learning to Align and Translate. ICLR 2015.','https://arxiv.org/abs/1409.0473','El antecedente: atención añadida a una red recurrente.'],
+   ['Zhang, A., Lipton, Z. C., Li, M. y Smola, A. J. (2023). Dive into Deep Learning. Cambridge University Press. Sección 11.6: Self-Attention and Positional Encoding.','https://d2l.ai/chapter_attention-mechanisms-and-transformers/self-attention-and-positional-encoding.html','Libro abierto con código ejecutable: por qué la autoatención necesita una señal de posición.']
+  ],
   colab:'En Colab entrenarás un Transformer pequeño (embedding, posición, un bloque encoder con 2 cabezas y una cabeza de salida) para decidir si el primer número es mayor que el último, y comprobarás sus respuestas en secuencias que no vio.'
  },
  'dl-yolo':{
+  opener:'Mira la canastilla de la figura durante tres segundos. ¿Cuántos frutos hay y de qué tipo? Acabas de localizar, nombrar y contar: eso es detectar. Hoy veremos cómo lo hace una red y cómo saber si lo hizo bien.',
   idea:'Un detector responde tres preguntas por cada objeto: ¿dónde está? (caja), ¿qué es? (categoría) y ¿qué tan seguro estoy? (confianza). YOLO, «solo se mira una vez», las responde para toda la imagen en una sola pasada de la red.',
   analogy:['Marcar frutas en una foto','Muchos ayudantes proponen recuadros sobre la foto de la canastilla, cada uno con su grado de seguridad. Después te quedas con los más seguros y quitas los que marcan la misma fruta dos veces.'],
   figures:()=>figure('detector','Figura 1 · De muchas propuestas a un registro limpio',
     slider('conf','Corte de confianza',5,95,5,25)+`<div class="vx-presets">${toggle('grid','Ver la rejilla',false)}${toggle('nms','Quitar repetidas (NMS)',false)}</div>`,
-    'empieza con el corte bajo: hay más cajas que frutos. Sube el corte para descartar las inseguras y activa «quitar repetidas» para dejar una caja por fruto. La rejilla muestra en amarillo la celda donde cae el centro de cada fruto: esa zona de la red es la responsable de proponerlo.'),
+    'empieza con el corte bajo: hay más cajas que frutos. Sube el corte para descartar las inseguras y activa «quitar repetidas» para dejar una caja por fruto. La rejilla muestra en amarillo la celda donde cae el centro de cada fruto: esa zona de la red es la responsable de proponerlo. Ningún corte deja los 5 frutos sin falsas alarmas: por eso el siguiente tema enseña a medir los errores.'),
   cards:[
    ['blue','🔎','Detección de objetos','Tarea que localiza y nombra varios objetos en una imagen. Clasificar dice «hay naranjas»; detectar dice «hay una naranja aquí y otra allá».','la canastilla de la figura.'],
    ['orange','⬜','Caja delimitadora','Rectángulo que encierra un objeto. Se escribe con las coordenadas de dos esquinas: [x₁, y₁, x₂, y₂], con el origen arriba a la izquierda.','P1 = [9, 11, 37, 39].'],
@@ -280,6 +336,10 @@ const TOPICS={
    ['amber','▦','Rejilla','La red divide la imagen en celdas y cada celda propone cajas para los objetos cuyo centro cae en ella. Los modelos actuales usan rejillas de varios tamaños para objetos grandes y pequeños.','las celdas amarillas.'],
    ['violet','✂️','Corte de confianza','Regla para conservar solo las cajas con confianza mayor que un valor elegido.','con corte 0,50 se descarta P3 (0,48).'],
    ['red','🧹','NMS · supresión de no máximos','Limpieza de repetidas: de las cajas de la misma categoría que se montan mucho, conserva la de mayor confianza. Algunos modelos recientes se entrenan para entregar una sola caja por objeto y omiten este paso.','P1, P2 y P3 marcan el mismo fruto; queda P1.']
+  ],
+  refs:[
+   ['Redmon, J., Divvala, S., Girshick, R. y Farhadi, A. (2016). You Only Look Once: Unified, Real-Time Object Detection. CVPR 2016, 779–788.','https://openaccess.thecvf.com/content_cvpr_2016/html/Redmon_You_Only_Look_CVPR_2016_paper.html','El artículo original de YOLO: rejilla, cajas y confianza en una sola pasada. Acceso abierto en las actas.'],
+   ['Ultralytics. Documentación del modo de predicción.','https://docs.ultralytics.com/modes/predict/','Cómo ejecutar el detector que usa el cuaderno y leer sus resultados.']
   ],
   colab:'En Colab ejecutarás un YOLO ya entrenado sobre una fotografía real, convertirás sus cajas en una tabla (categoría, confianza, coordenadas) y compararás cuántas quedan con tres cortes distintos.'
  },
@@ -302,6 +362,12 @@ const TOPICS={
    ['pink','🧲','Recall (exhaustividad)','De todo lo que había, qué fracción encontró: TP ÷ (TP + FN).','4 de 5 frutos = 80 %.'],
    ['orange','📈','Curva precisión-recall y mAP','La curva muestra el equilibrio al recorrer todos los cortes. AP resume su área para una categoría; mAP promedia las AP de todas las categorías.','mAP50 usa IoU mínima 0,50.']
   ],
+  refs:[
+   ['Everingham, M., Van Gool, L., Williams, C. K. I., Winn, J. y Zisserman, A. (2010). The PASCAL Visual Object Classes (VOC) Challenge. International Journal of Computer Vision, 88(2), 303–338.','https://doi.org/10.1007/s11263-009-0275-4','Describe el procedimiento de evaluación de detección que popularizó el criterio de IoU 0,50 y la precisión promedio.'],
+   ['Padilla, R., Netto, S. L. y da Silva, E. A. B. (2020). A Survey on Performance Metrics for Object-Detection Algorithms. IWSSIP 2020, 237–242.','https://doi.org/10.1109/IWSSIP48289.2020.9145130','Compara las variantes de precisión promedio (AP) y mAP y sus diferencias.'],
+   ['Lin, T.-Y., Maire, M., Belongie, S., Hays, J., Perona, P., Ramanan, D., Dollár, P. y Zitnick, C. L. (2014). Microsoft COCO: Common Objects in Context. ECCV 2014, 740–755.','https://arxiv.org/abs/1405.0312','El conjunto de datos con el que se entrenan y comparan la mayoría de los detectores actuales, incluido el del cuaderno.'],
+   ['Ultralytics. Documentación del modo de validación.','https://docs.ultralytics.com/modes/val/','Cómo calcula estas métricas la biblioteca del cuaderno.']
+  ],
   colab:'En Colab calcularás IoU con las mismas dos cajas de 40 × 40 píxeles y contarás TP, FP y FN al desplazar la propuesta 10 y 30 píxeles y al subir el corte a 0,90.'
  },
  'dl-integracion':{
@@ -319,6 +385,10 @@ const TOPICS={
    ['teal','🧪','Validación y prueba','El corte se elige con un conjunto de validación y se comprueba después en datos reservados que no se usaron para elegirlo.','elegir aquí y comprobar con otros diez granos.'],
    ['pink','👷','Persona en el circuito','El modelo prioriza; una persona revisa los casos dudosos. La solución completa incluye esa revisión, no solo la red.','los granos en ámbar pasan a inspección manual.']
   ],
+  refs:[
+   ['Elkan, C. (2001). The Foundations of Cost-Sensitive Learning. IJCAI 2001, 973–978.','https://mlanthology.org/ijcai/2001/elkan2001ijcai-foundations/','Cómo elegir el corte de decisión cuando los errores no cuestan lo mismo.'],
+   ['scikit-learn. Tuning the decision threshold for class prediction.','https://scikit-learn.org/stable/modules/classification_threshold.html','Guía práctica para ajustar el corte con datos de validación.']
+  ],
   colab:'En Colab calcularás esta misma tabla de costes con los mismos diez granos y verás cómo cambia la mejor regla al bajar el coste del defecto de 8 a 1. Estas puntuaciones de defecto son un dato del ejercicio: el detector del tema 1 reconoce categorías, no defectos.'
  }
 };
@@ -329,7 +399,7 @@ export const hasVisualExplainer=id=>Object.hasOwn(TOPICS,id);
 // Cada pieza se inserta en la sección del tema donde ya vivía ese contenido.
 export function renderVisualIdea(id){
  const t=TOPICS[id];if(!t)return '';
- return `<div class="vx vx-inline" data-vx-idea="${id}"><p class="vx-idea"><span>La idea en una frase</span>${esc(t.idea)}</p><p class="vx-analogy"><b>Piénsalo así · ${esc(t.analogy[0])}.</b> ${esc(t.analogy[1])}</p></div>`;
+ return `<div class="vx vx-inline" data-vx-idea="${id}">${t.opener?`<p class="vx-opener"><b>Para abrir la clase.</b> ${esc(t.opener)}</p>`:''}<p class="vx-idea"><span>La idea en una frase</span>${esc(t.idea)}</p><p class="vx-analogy"><b>Piénsalo así · ${esc(t.analogy[0])}.</b> ${esc(t.analogy[1])}</p></div>`;
 }
 export function renderVisualFigures(id){
  const t=TOPICS[id];if(!t)return '';
@@ -340,6 +410,54 @@ export function renderVisualCards(id){
  return `<div class="vx vx-inline" data-vx-cards="${id}"><dl class="vx-cards">${t.cards.map(c=>card(c[0],c[1],c[2],esc(c[3]),esc(c[4]))).join('')}</dl></div>`;
 }
 export const visualColabNote=id=>TOPICS[id]?.colab??'';
+export const topicReferences=id=>TOPICS[id]?.refs??[];
+const referenceList=refs=>`<ol class="vx-refs">${refs.map(([cite,url,why])=>`<li><span>${esc(cite)}</span> <a href="${esc(url)}" target="_blank" rel="noopener noreferrer">Abrir la fuente ↗</a><small>${esc(why)}</small></li>`).join('')}</ol>`;
+export function renderTopicBibliography(id){
+ const refs=topicReferences(id);if(!refs.length)return '';
+ return `<details class="dl-reference vx vx-inline" data-vx-refs="${id}"><summary>Bibliografía de este tema (${refs.length} fuentes)</summary>${referenceList(refs)}</details>`;
+}
+
+const ENCOUNTERS=[
+ {number:3,topics:['dl-secuencias','dl-atencion','dl-transformers'],names:['RNN y LSTM','Atención','Transformer'],recap:[
+  ['¿Por qué una red recurrente sencilla olvida el comienzo de una secuencia larga?','Porque la huella de los primeros pasos se multiplica muchas veces por números menores que 1 y casi se borra: es el desvanecimiento.'],
+  ['¿Qué decide cada compuerta de una LSTM?','Olvido: cuánto conservar de la memoria. Entrada: cuánta información nueva guardar. Salida: cuánto mostrar.'],
+  ['En atención, ¿qué son Q, K y V?','Q es la consulta (lo que busco), K la clave (la etiqueta de cada registro) y V el valor (lo que aporta cada registro).'],
+  ['¿Qué garantiza softmax sobre los pesos de atención?','Que sean positivos y sumen 100 %.'],
+  ['¿Por qué un Transformer necesita codificación posicional?','Porque la atención sola trata la entrada como un conjunto sin orden: sin esa señal, dos secuencias con los mismos elementos en distinto orden se ven iguales.'],
+  ['¿En qué se diferencia la forma de leer de una RNN y de un Transformer?','La RNN lee paso a paso y resume en una memoria; el Transformer mira toda la secuencia a la vez y relaciona sus elementos con atención.']]},
+ {number:4,topics:['dl-yolo','dl-evaluacion','dl-integracion'],names:['YOLO','Evaluación','Integración'],recap:[
+  ['¿Qué tres datos trae cada detección?','Una caja (dónde está), una categoría (qué es) y una confianza (qué tan seguro está el modelo).'],
+  ['¿Para qué sirve la supresión de no máximos (NMS)?','Para quitar cajas repetidas: entre las que marcan el mismo objeto conserva la de mayor confianza.'],
+  ['¿Qué mide IoU y entre qué valores está?','Cuánto coinciden dos cajas: área común dividida entre el área que cubren entre las dos. Va de 0 a 1.'],
+  ['¿Cuál es la diferencia entre un falso positivo y un falso negativo?','Falso positivo: el modelo marcó algo que no era. Falso negativo: había un objeto y el modelo no lo marcó.'],
+  ['Si subes el corte de confianza, ¿qué suele pasar con la precisión y el recall?','La precisión tiende a subir porque quedan las cajas más seguras, y el recall tiende a bajar porque se pierden objetos.'],
+  ['¿Por qué el mejor corte de decisión depende de los costes?','Porque revisar de más y dejar pasar un defecto no cuestan lo mismo: el corte más barato cambia cuando cambian esos costes.']]}
+];
+const encounterOf=id=>ENCOUNTERS.find(e=>e.topics.includes(id));
+
+// Todos los términos del encuentro, en orden alfabético y sin repetir.
+export function encounterGlossary(id){
+ const e=encounterOf(id);if(!e)return [];
+ const seen=new Set(),rows=[];
+ e.topics.forEach((topic,i)=>{for(const [color,,term,meaning] of TOPICS[topic].cards){if(seen.has(term))continue;seen.add(term);rows.push({term,meaning,color,topic:e.names[i]});}});
+ return rows.sort((a,b)=>a.term.localeCompare(b.term,'es'));
+}
+// Bibliografía del encuentro: las fuentes de sus tres temas, sin repetir.
+export function encounterReferences(id){
+ const e=encounterOf(id);if(!e)return [];
+ const seen=new Set();
+ return e.topics.flatMap(topic=>TOPICS[topic].refs).filter(([,url])=>!seen.has(url)&&seen.add(url));
+}
+const glossaryList=id=>`<dl class="vx-glossary">${encounterGlossary(id).map(r=>`<div><dt><span class="vx-dot vx-bg-${r.color}"></span>${esc(r.term)}<small>${esc(r.topic)}</small></dt><dd>${esc(r.meaning)}</dd></div>`).join('')}</dl>`;
+export function renderEncounterGlossary(id){
+ const e=encounterOf(id);if(!e)return '';
+ return `<details class="dl-reference vx vx-inline" data-vx-glossary="${id}"><summary>Glosario del encuentro ${e.number}: los ${encounterGlossary(id).length} términos y sus definiciones</summary>${glossaryList(id)}</details>`;
+}
+// Cierre para proyectar al terminar el tercer tema: repaso sin nota y glosario completo a la vista.
+export function renderEncounterClosing(id){
+ const e=encounterOf(id);if(!e||e.topics[2]!==id)return '';
+ return `<div class="vx vx-closing" data-vx-closing="${e.number}"><h3>Cierre del encuentro ${e.number}: repaso relámpago</h3><p class="vx-closing-lead">Sin nota. Responde en voz alta y después abre la tarjeta para comprobar.</p><div class="vx-flips">${e.recap.map(([q,a],i)=>`<details class="vx-flip vx-c-${['blue','pink','teal','amber','violet','green'][i]}"><summary><span>${i+1}</span>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div><h3>Glosario del encuentro ${e.number}</h3>${glossaryList(id)}<h3>Bibliografía del encuentro ${e.number}</h3>${referenceList(encounterReferences(id))}</div>`;
+}
 
 export const drawVisualFigure=(name,state={})=>DRAW[name]({...DEFAULTS[name],...state});
 export const visualFigureDefaults=name=>({...DEFAULTS[name]});
@@ -356,7 +474,12 @@ export function mountVisualExplainers(root=document){
    for(const output of fig.querySelectorAll('[data-vx-value]'))output.textContent=VALUE_LABELS[output.dataset.vxValue]?.(state)??state[output.dataset.vxValue];
    for(const tab of fig.querySelectorAll('[data-vx-tab]'))tab.setAttribute('aria-pressed',String(String(state[tab.dataset.vxKey])===tab.dataset.vxTab));
    out.innerHTML=DRAW[name](state);
+   const goals=GOALS[name];
+   if(goals&&armed){
+    goals.forEach((goal,i)=>{if(achieved.has(i)||!goal.test(state))return;achieved.add(i);const item=fig.querySelector(`[data-vx-goal="${i}"]`);item?.classList.add('is-done');const status=fig.querySelector('[data-vx-goal-status]');if(status)status.textContent=achieved.size===goals.length?'¡Lograste todos los retos de esta figura!':'Reto logrado. Falta '+(goals.length-achieved.size)+'.';});
+   }
   };
+  const achieved=new Set();let armed=false;
   let timer=null;const stop=()=>{if(timer){clearInterval(timer);timer=null;}};
   fig.addEventListener('input',event=>{const control=event.target.closest?.('[data-vx-control]');if(!control)return;stop();state[control.dataset.vxControl]=control.type==='checkbox'?control.checked:Number(control.value);sync();});
   fig.addEventListener('click',event=>{
@@ -378,6 +501,6 @@ export function mountVisualExplainers(root=document){
    out.addEventListener('pointermove',event=>{if(dragging)move(event);});
    for(const type of ['pointerup','pointercancel'])out.addEventListener(type,()=>{dragging=false;});
   }
-  sync();
+  sync();armed=true;
  }
 }

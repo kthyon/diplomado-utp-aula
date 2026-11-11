@@ -121,37 +121,37 @@
     {
       "id": "dl-secuencias",
       "course_id": "dl",
-      "title": "El orden puede cambiar el significado",
+      "title": "RNN y LSTM: el orden puede cambiar el significado",
       "position": 7
     },
     {
       "id": "dl-atencion",
       "course_id": "dl",
-      "title": "Relacionar elementos con contexto",
+      "title": "Atención: relacionar elementos con contexto",
       "position": 8
     },
     {
       "id": "dl-transformers",
       "course_id": "dl",
-      "title": "Atención más información de orden",
+      "title": "Transformer: atención más información de orden",
       "position": 9
     },
     {
       "id": "dl-yolo",
       "course_id": "dl",
-      "title": "De una foto a un registro",
+      "title": "YOLO: de una foto a un registro",
       "position": 10
     },
     {
       "id": "dl-evaluacion",
       "course_id": "dl",
-      "title": "Una imagen marcada no prueba calidad",
+      "title": "IoU, precisión y recall: una imagen marcada no prueba calidad",
       "position": 11
     },
     {
       "id": "dl-integracion",
       "course_id": "dl",
-      "title": "Del modelo a una decisión responsable",
+      "title": "Integración: del modelo a una decisión responsable",
       "position": 12
     }
   ]

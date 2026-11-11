@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,softmax,ATTENTION_DAYS,attention,selfAttention,encodeSequence,sameSummary,SCENE,overlap,iou,suppressDuplicates,detect,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,cheapestCut} from '../docs/dl-visual-models.js';
-import {VISUAL_TOPICS,hasVisualExplainer,renderVisualIdea,renderVisualFigures,renderVisualCards,visualColabNote,drawVisualFigure,mountVisualExplainers} from '../docs/dl-visual-explainers.js';
+import {VISUAL_TOPICS,hasVisualExplainer,renderVisualIdea,renderVisualFigures,renderVisualCards,visualColabNote,drawVisualFigure,mountVisualExplainers,visualGoals,visualFigureDefaults,encounterGlossary,renderEncounterClosing,topicReferences,encounterReferences} from '../docs/dl-visual-explainers.js';
 import {PRACTICAL_LESSONS,renderPracticalGuide,renderPracticalPractice} from '../docs/dl-practical-lessons.js';
 import {LESSONS} from '../docs/content.js';
 
@@ -114,4 +114,46 @@ test('los controles redibujan solo el resultado y conservan sus nodos',()=>{
  control.value='60';listeners.input({target:control});
  assert.match(out.innerHTML,/con confianza &gt; 0,60/);assert.notEqual(out.innerHTML,first);assert.equal(control.value,60);
  mountVisualExplainers(root);assert.match(out.innerHTML,/0,60/,'montar dos veces no reinicia el estado');
+});
+
+test('los retos no están cumplidos al abrir y todos tienen solución con los controles disponibles',()=>{
+ const solutions={memory:[{keep:90,day:12},{keep:10,day:12}],gates:[{forget:100,input:0,output:0},{forget:0,input:100}],attention:[{rain:true,market:true,temp:50},{rain:false,market:false}],order:[{position:true}],detector:[{conf:60,nms:true},{conf:30,nms:true}],iou:[{dx:1,dy:1},{dx:13,dy:0}],pr:[{conf:60},{conf:25}],review:[{cut:35,price:8},{cut:65,price:1}]};
+ for(const [name,answers] of Object.entries(solutions)){
+  const goals=visualGoals(name),start=visualFigureDefaults(name);assert.equal(goals.length,answers.length,name);
+  goals.forEach((goal,i)=>{assert.equal(goal.test(start),false,name+' reto '+i+' no cumplido al abrir');assert.equal(goal.test({...start,...answers[i]}),true,name+' reto '+i+' alcanzable');});
+ }
+ // Ningún corte deja los cinco frutos sin falsas alarmas: el reto no lo pide y la lectura lo dice.
+ for(let c=5;c<=95;c+=5){const e=evaluateScene(SCENE,c/100);assert.ok(!(e.tp===5&&e.fp===0),'corte '+c);}
+ assert.match(renderVisualFigures('dl-yolo'),/Ningún corte deja los 5 frutos sin falsas alarmas/);
+});
+
+test('el ejercicio anterior queda como reto opcional donde la figura lo cubre; Transformer lo conserva abierto',()=>{
+ for(const id of VISUAL_TOPICS){
+  const page=renderPracticalGuide(LESSONS.find(l=>l.id===id)),folded=page.includes('data-pw-challenge');
+  assert.equal(folded,id!=='dl-transformers',id);
+  if(folded){const open=page.indexOf('data-pw-challenge'),bench=page.search(/data-p3-topic=|data-p4-workbench=/),close=page.indexOf('</details>',bench);assert.ok(open<bench&&close>bench,id+' ejercicio dentro del reto opcional');assert.doesNotMatch(page.slice(page.lastIndexOf('<details',open),open),/\bopen\b/,id+' plegado');}
+  assert.match(page,/<details class="dl-reference pw-industry">/,id+' industria plegada');
+ }
+});
+
+test('cada encuentro tiene glosario completo, cierre con repaso y bibliografía con enlaces a fuentes primarias',()=>{
+ for(const [first,last] of [['dl-secuencias','dl-transformers'],['dl-yolo','dl-integracion']]){
+  const glossary=encounterGlossary(first),terms=glossary.map(g=>g.term);
+  assert.ok(glossary.length>=20,first+' glosario amplio');assert.equal(new Set(terms).size,terms.length,'sin términos repetidos');
+  assert.deepEqual(terms,[...terms].sort((a,b)=>a.localeCompare(b,'es')),'orden alfabético');
+  for(const g of glossary)assert.ok(g.meaning.length>30&&g.topic,g.term);
+  assert.equal(renderEncounterClosing(first),'');
+  const closing=renderEncounterClosing(last);
+  assert.equal((closing.match(/class="vx-flip /g)||[]).length,6);assert.match(closing,/Sin nota/);
+  for(const term of terms)assert.ok(closing.includes(term.replace(/&/g,'&amp;')),'cierre incluye '+term);
+  const refs=encounterReferences(first);assert.ok(refs.length>=4);assert.equal(new Set(refs.map(r=>r[1])).size,refs.length,'sin fuentes repetidas');
+  assert.ok(renderPracticalPractice(LESSONS.find(l=>l.id===last)).includes('data-vx-closing='),'cierre en el tercer tema');
+  assert.ok(!renderPracticalPractice(LESSONS.find(l=>l.id===first)).includes('data-vx-closing='));
+ }
+ for(const id of VISUAL_TOPICS){
+  const refs=topicReferences(id),page=renderPracticalGuide(LESSONS.find(l=>l.id===id));assert.ok(refs.length>=2,id+' al menos dos fuentes');
+  for(const [cite,url,why] of refs){assert.match(url,/^https:\/\/(doi\.org|arxiv\.org|docs\.pytorch\.org|docs\.ultralytics\.com|scikit-learn\.org|mlanthology\.org|d2l\.ai|www\.deeplearningbook\.org|openaccess\.thecvf\.com)\//,url);assert.ok(cite.length>20&&why.length>20);assert.ok(page.includes(url),id+' enlaza '+url);}
+  assert.match(page,/data-vx-glossary=/,id+' glosario disponible en el tema');
+  assert.match(LESSONS.find(l=>l.id===id).title,/^(RNN y LSTM|Atención|Transformer|YOLO|IoU, precisión y recall|Integración): /,id+' el título nombra el concepto');
+ }
 });

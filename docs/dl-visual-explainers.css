@@ -123,3 +123,41 @@
  .vx-mix{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){.vx-stack span{transition:none}}
+
+/* Apertura de clase */
+.dl-course-reading .vx .vx-opener,.vx .vx-opener{margin:0 0 16px;padding:14px 18px;border-radius:12px;border:2px dashed var(--vx-pink);background:color-mix(in srgb,var(--vx-pink) 8%,var(--paper));font-size:16px;line-height:1.65;max-width:none;color:var(--ink)}
+
+/* Retos con meta */
+.vx-goals{margin-top:14px;padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--vx-violet) 9%,var(--paper));border:1px solid color-mix(in srgb,var(--vx-violet) 35%,var(--line));font-size:15px;line-height:1.55}
+.vx-goals>b{display:block;margin-bottom:6px;color:var(--vx-violet);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.vx-goals ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.vx-goals li{display:flex;gap:10px;align-items:flex-start}
+.vx-goal-mark{flex:none;width:22px;height:22px;margin-top:1px;border-radius:50%;border:2px solid var(--vx-violet);display:grid;place-items:center;font-size:14px;font-weight:700;color:var(--vx-on)}
+.vx-goals li.is-done .vx-goal-mark{background:var(--vx-green);border-color:var(--vx-green)}
+.vx-goals li.is-done .vx-goal-mark::before{content:"✓"}
+.vx-goals li.is-done>span:last-child{text-decoration:line-through;text-decoration-color:var(--vx-green);opacity:.8}
+.vx .vx-goal-status{margin:8px 0 0;min-height:1.4em;font-size:14px;font-weight:700;color:var(--vx-green)}
+
+/* Glosario, bibliografía y cierre del encuentro */
+.vx-glossary{margin:10px 0 0;display:grid;gap:0}
+.vx-glossary>div{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:6px 16px;padding:10px 0;border-bottom:1px solid var(--line)}
+.vx-glossary dt{font-weight:700;font-size:15px;line-height:1.4}
+.vx-glossary dt small{display:block;margin:2px 0 0 16px;font-weight:400;font-size:12.5px;color:var(--muted)}
+.vx-glossary dd{margin:0;font-size:15px;line-height:1.6}
+.vx-refs{margin:10px 0 0;padding-left:22px;display:grid;gap:12px;font-size:14.5px;line-height:1.6}
+.vx-refs a{font-weight:600;white-space:nowrap}
+.vx-refs small{display:block;font-size:13.5px;color:var(--muted)}
+.vx.vx-closing{margin:36px 0 28px;padding:22px;border-radius:18px;border:2px solid var(--vx-violet);background:color-mix(in srgb,var(--vx-violet) 6%,var(--paper))}
+.vx-closing h3{margin:26px 0 8px;font-size:1.25rem;line-height:1.35}.vx-closing h3:first-child{margin-top:0}
+.dl-course-reading .vx .vx-closing-lead,.vx .vx-closing-lead{margin:0 0 14px;font-size:15px;color:var(--muted);max-width:none}
+.vx-flips{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.vx-flip{--c:var(--vx-blue);border-radius:14px;border:1px solid color-mix(in srgb,var(--c) 45%,var(--line));border-top:6px solid var(--c);background:color-mix(in srgb,var(--c) 7%,var(--paper));padding:0}
+.vx-flip summary{cursor:pointer;list-style:none;display:flex;gap:10px;align-items:flex-start;padding:14px 16px;font-weight:700;font-size:15.5px;line-height:1.45}
+.vx-flip summary::-webkit-details-marker{display:none}
+.vx-flip summary span{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--c);color:var(--vx-on);font-size:14px}
+.vx-flip summary::after{content:"Ver respuesta";margin-left:auto;flex:none;align-self:center;font-size:12px;font-weight:600;color:var(--c);white-space:nowrap;padding-left:8px}
+.vx-flip[open] summary::after{content:"Ocultar"}
+.vx-flip summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:10px}
+.dl-course-reading .vx .vx-flip p,.vx .vx-flip p{margin:0;padding:0 16px 16px;font-size:15px;line-height:1.6;max-width:none;color:var(--ink)}
+.pw-optional-challenge,.pw-industry{margin:22px 0}
+@media (max-width:720px){.vx-glossary>div{grid-template-columns:1fr}.vx.vx-closing{padding:16px 14px}.vx-flip summary::after{display:none}}

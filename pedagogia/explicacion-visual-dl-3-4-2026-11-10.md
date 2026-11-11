@@ -39,3 +39,27 @@ La canastilla es un dibujo con propuestas dadas; no es la salida de un detector.
 - Navegador sin errores de consola en los seis temas; sin desbordamiento global a 320, 390, 768, 1280 y 1440 px; revisión en claro y oscuro.
 - Interacción probada: deslizadores, casillas, preajustes, reproducción de la lectura y arrastre de la caja.
 - Cuadernos, calendario, roles, registro y backend sin cambios.
+
+## Segunda pasada (11 de noviembre)
+
+- **Títulos:** los seis temas nombran el concepto antes de la frase original (por ejemplo, «Transformer: atención más información de orden»).
+- **Sin repetición:** en Secuencias, Atención, YOLO, Evaluación e Integración el ejercicio de predicción queda plegado como reto opcional; la figura es el ejemplo principal. Transformer conserva su ejercicio abierto porque no repite la figura.
+- **Menos preámbulo:** el contexto de industria pasa a un desplegable. La galería de imágenes del encuentro 3 queda abierta.
+- **Retos con meta:** cada figura propone uno o dos retos que se marcan solos al cumplirse (por ejemplo, «deja 4 cajas y que las 4 sean correctas»). Sin nota.
+- **Apertura y cierre:** pregunta para abrir la clase en el primer tema de cada encuentro; en el tercero, seis tarjetas de repaso, glosario y bibliografía del encuentro.
+- **Términos y definiciones:** glosario del encuentro con 22 términos en orden alfabético, disponible en cada tema y completo en el cierre. Se conservan las tarjetas por tema y el vocabulario formal.
+
+### Bibliografía revisada
+
+Criterio: artículo original, libro de texto de acceso abierto y documentación de la biblioteca usada en el cuaderno. Datos de autores, año, medio, páginas y DOI contrastados con registros bibliográficos el 11 de noviembre de 2026.
+
+| Tema | Fuentes |
+|---|---|
+| RNN y LSTM | Hochreiter y Schmidhuber (1997), Neural Computation 9(8), 1735–1780; Bengio, Simard y Frasconi (1994), IEEE TNN 5(2), 157–166; Goodfellow, Bengio y Courville (2016), cap. 10; Dive into Deep Learning, sec. 10.1; documentación de torch.nn.LSTM |
+| Atención | Bahdanau, Cho y Bengio (2015), ICLR; Vaswani et al. (2017), NeurIPS; Dive into Deep Learning, cap. 11 |
+| Transformer | Vaswani et al. (2017); Bahdanau et al. (2015); Dive into Deep Learning, sec. 11.6 |
+| YOLO | Redmon, Divvala, Girshick y Farhadi (2016), CVPR, 779–788; documentación de predicción de Ultralytics |
+| Evaluación | Everingham et al. (2010), IJCV 88(2), 303–338; Padilla, Netto y da Silva (2020), IWSSIP, 237–242; Lin et al. (2014), ECCV, 740–755; documentación de validación de Ultralytics |
+| Integración | Elkan (2001), IJCAI, 973–978; guía de scikit-learn sobre el corte de decisión |
+
+Pendiente: el catálogo del backend (títulos en el panel docente) se actualiza al redesplegar el servicio. El encuentro 4 sigue sin fotografía real en la web.

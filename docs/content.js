@@ -365,7 +365,7 @@ const LESSON_BASE=[
   },
   {
     "id": "dl-secuencias",
-    "title": "El orden puede cambiar el significado",
+    "title": "RNN y LSTM: el orden puede cambiar el significado",
     "concept": "Una RNN actualiza su estado con los parámetros actuales en cada paso; durante el entrenamiento se ajustan esos parámetros con secuencias. LSTM añade mecanismos que controlan qué información se mantiene o actualiza. El promedio de una lista no cambia al reordenarla, pero una regla recurrente puede producir estados finales diferentes.",
     "notebooks": [
       "laboratorio-dl.ipynb"
@@ -384,7 +384,7 @@ const LESSON_BASE=[
   },
   {
     "id": "dl-atencion",
-    "title": "Relacionar elementos con contexto",
+    "title": "Atención: relacionar elementos con contexto",
     "concept": "En la atención escalada, las puntuaciones son Q·K divididas por la raíz cuadrada del número de componentes de cada clave. Softmax convierte esas puntuaciones en pesos y la salida es su suma ponderada de V. En una red, Q, K y V suelen obtenerse mediante transformaciones aprendidas. Un peso de atención describe una contribución interna, no una causa demostrada de la decisión final.",
     "notebooks": [
       "laboratorio-dl.ipynb"
@@ -403,7 +403,7 @@ const LESSON_BASE=[
   },
   {
     "id": "dl-transformers",
-    "title": "Atención más información de orden",
+    "title": "Transformer: atención más información de orden",
     "concept": "El encoder es el bloque que transforma la secuencia mediante atención y otras capas. En este cuaderno se añade un vector de posición y después se conserva cada posición al aplanar la salida para clasificar. La regla de etiquetas y el formato de las entradas deben mantenerse al crear casos nuevos. La exactitud se calcula comparando las predicciones con esas etiquetas.",
     "notebooks": [
       "laboratorio-dl.ipynb"
@@ -422,7 +422,7 @@ const LESSON_BASE=[
   },
   {
     "id": "dl-yolo",
-    "title": "De una foto a un registro",
+    "title": "YOLO: de una foto a un registro",
     "concept": "Una detección se conserva si cumple las reglas de salida del detector y del filtro aplicado. Coordenadas, categoría y puntuación permiten rastrear qué imagen produjo cada fila. Una misma escena puede producir omisiones o detecciones duplicadas, y un objeto de una categoría ausente del modelo puede no reconocerse. Por eso los conteos automáticos se revisan antes de usarse como inventario.",
     "notebooks": [
       "yolo-registro.ipynb"
@@ -441,7 +441,7 @@ const LESSON_BASE=[
   },
   {
     "id": "dl-evaluacion",
-    "title": "Una imagen marcada no prueba calidad",
+    "title": "IoU, precisión y recall: una imagen marcada no prueba calidad",
     "concept": "Primero se filtran propuestas por puntuación y después se relacionan con objetos de referencia de la misma categoría mediante IoU. Aquí hay un solo objeto y una sola propuesta. Para muchos objetos se necesita una regla de correspondencia que evite contar un objeto varias veces. mAP resume curvas de precision y recall en una evaluación con anotaciones; no es la puntuación de una caja.",
     "notebooks": [
       "yolo-registro.ipynb"
@@ -460,7 +460,7 @@ const LESSON_BASE=[
   },
   {
     "id": "dl-integracion",
-    "title": "Del modelo a una decisión responsable",
+    "title": "Integración: del modelo a una decisión responsable",
     "concept": "Para el caso se supone que una revisión detecta todo defecto y que revisar cuesta lo mismo para cada grano. Estos supuestos permiten comprobar la cuenta. Una operación real también necesita medir errores de revisión, capacidad por turno y consecuencias. Cambiar los costes conservando los casos permite estudiar cómo cambia la política preferida.",
     "notebooks": [
       "laboratorio-dl.ipynb"
