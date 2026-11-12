@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,softmax,ATTENTION_DAYS,attention,selfAttention,encodeSequence,sameSummary,SCENE,overlap,iou,suppressDuplicates,detect,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,cheapestCut} from '../docs/dl-visual-models.js';
-import {VISUAL_TOPICS,hasVisualExplainer,renderVisualIdea,renderVisualFigures,renderVisualCards,visualColabNote,drawVisualFigure,mountVisualExplainers,visualGoals,visualFigureDefaults,encounterGlossary,renderEncounterClosing,topicReferences,encounterReferences} from '../docs/dl-visual-explainers.js';
+import {VISUAL_TOPICS,hasVisualExplainer,renderVisualIdea,renderVisualFigures,renderVisualCards,visualColabNote,drawVisualFigure,mountVisualExplainers,visualGoals,visualFigureDefaults,encounterGlossary,renderEncounterClosing,topicReferences,encounterReferences,DIPLOMA_MAP} from '../docs/dl-visual-explainers.js';
 import {PRACTICAL_LESSONS,renderPracticalGuide,renderPracticalPractice} from '../docs/dl-practical-lessons.js';
 import {LESSONS,COURSES} from '../docs/content.js';
 import {CLASS_ROUTES,classRouteIndex,renderClassRoute,renderTopicRoute} from '../docs/dl-class-route.js';
@@ -200,4 +200,27 @@ test('cada tema define los términos de sus figuras y de su práctica',()=>{
   assert.ok((html.match(/class="vx-card /g)||[]).length>=11,id+' al menos once definiciones');
   assert.equal(new Set(glossary).size,glossary.length,'glosario sin repetidos');
  }
+});
+
+test('teoría de cierre: gradiente, modelos de lenguaje, detector del cuaderno, TN, corte teórico y mapa del diplomado',()=>{
+ const cards=id=>renderVisualCards(id);
+ assert.match(cards('dl-secuencias'),/al entrenar[^<]*gradiente/);assert.match(cards('dl-secuencias'),/se actualiza sumando/);
+ assert.match(renderVisualFigures('dl-secuencias'),/camino que suma/);
+ for(const term of ['Paralelo y coste','Decoder y máscara causal','LLM · modelo de lenguaje grande'])assert.ok(cards('dl-transformers').includes('</span>'+term),term);
+ assert.match(drawVisualFigure('pipeline',{stage:6}),/modelo de lenguaje/);
+ assert.match(cards('dl-yolo'),/YOLO26/);assert.ok(cards('dl-yolo').includes('</span>Extractor y cabeza de detección'));
+ assert.ok(cards('dl-evaluacion').includes('</span>TN · verdadero negativo'));
+ for(const term of ['Calibración','Corte teórico'])assert.ok(cards('dl-integracion').includes('</span>'+term),term);
+ // El corte teórico de Elkan (coste de revisar ÷ coste del defecto) se muestra con el coste elegido y se compara con el empírico.
+ near(reviewCost(REVIEW_UNITS,1/8,1,8).total,8);
+ assert.match(drawVisualFigure('review',{cut:35,price:8,truth:true}),/1 ÷ 8 = <b>0,125<\/b>, que aquí costaría 8/);
+ assert.match(drawVisualFigure('review',{cut:65,price:1,truth:true}),/1 ÷ 1 = <b>1,000<\/b>, que aquí cuesta lo mismo/);
+ assert.doesNotMatch(drawVisualFigure('review',{cut:35,price:8,truth:false}),/calibradas/);
+ for(let price=1;price<=12;price++)assert.ok(!/undefined|NaN/.test(drawVisualFigure('review',{cut:50,price,truth:true})),'coste '+price);
+ // El mapa del diplomado solo cierra el último encuentro y no añade tarjetas de repaso.
+ const last=renderEncounterClosing('dl-integracion');
+ assert.equal((last.match(/data-vx-diploma/g)||[]).length,1);assert.equal((last.match(/<div><dt><span class="vx-dot/g)||[]).length,DIPLOMA_MAP.length+encounterGlossary('dl-yolo').length);
+ assert.ok(last.indexOf('Cierre del diplomado')>last.indexOf('repaso relámpago')&&last.indexOf('Cierre del diplomado')<last.indexOf('Glosario del encuentro 4'));
+ assert.equal(renderEncounterClosing('dl-transformers').includes('data-vx-diploma'),false);
+ assert.match(renderEncounterClosing('dl-transformers'),/modelo de lenguaje como los asistentes/);
 });

@@ -2,7 +2,7 @@
 // Aportan a las secciones existentes de cada tema: la idea en una frase, una comparación cotidiana,
 // figuras manipulables y vocabulario en tarjetas de color.
 // Las figuras se recalculan con dl-visual-models.js; los datos son inventados y las cuentas son las mostradas.
-import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261111e';
+import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261112a';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>Number(v).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -148,7 +148,7 @@ const STAGES=[
  ['Posición','A cada vector se le suma una señal distinta según su lugar. Sin ella, el modelo no sabría cuál iba primero.'],
  ['Autoatención','Cada token consulta a todos los demás y decide cuánto mirar a cada uno. Cada fila suma 100 %.'],
  ['Red por posición','La mezcla pasa por una red pequeña, posición por posición. Un atajo suma la entrada original y una normalización mantiene estables los números.'],
- ['Salida','Una última capa, la cabeza, convierte el resultado en lo que pide la tarea: una clase, un número o el siguiente token. Sus pesos se aprenden entrenando.']
+ ['Salida','Una última capa, la cabeza, convierte el resultado en lo que pide la tarea: una clase, un número o el siguiente token. Sus pesos se aprenden entrenando. Si la tarea es predecir el siguiente token y el ciclo se repite, tienes un modelo de lenguaje.']
 ];
 const vectorBars=(x,y,v,color,scale=16)=>v.map((value,d)=>`<rect x="${x+d*16}" y="${value>=0?y-value*scale:y}" width="12" height="${Math.abs(value)*scale}" rx="3" class="vx-f-${color}"/>`).join('')+`<line x1="${x-4}" y1="${y}" x2="${x+32}" y2="${y}" class="vx-axis"/>`;
 DRAW.pipeline=({stage})=>{
@@ -235,7 +235,7 @@ DRAW.review=({cut,price,truth})=>{
   <line x1="${x(0)-20}" y1="150" x2="${x(1)+20}" y2="150" class="vx-axis"/>${ticks}${beans}
   <line x1="${x(c)}" y1="4" x2="${x(c)}" y2="176" class="vx-s-violet" stroke-width="3"/><text x="${x(c)}" y="190" class="vx-t-strong vx-tc-violet" text-anchor="middle">corte ${num(c)}</text>`)+
  `<div class="vx-cost"><span class="vx-bg-amber"><b>${r.reviewed}</b> revisiones × 1 = ${r.reviewTotal}</span><i>+</i><span class="vx-bg-red">${truth?`<b>${r.accepted}</b> ${r.accepted===1?'defecto aceptado':'defectos aceptados'} × ${price} = ${r.defectTotal}`:'defectos aceptados: <b>?</b>'}</span><i>=</i><span class="vx-cost-total">${truth?`<b>${r.total}</b> puntos`:'<b>?</b>'}</span></div>${chart}
- <p class="vx-readout">${truth?`${r.total<10?`Con este corte gastas <b>${r.total}</b>, menos que revisar los diez (10).`:r.total===10?'Con este corte gastas lo mismo que revisar los diez.':`Con este corte gastas <b>${r.total}</b>, más que revisar los diez (10): ${r.accepted} ${r.accepted===1?'defecto aceptado sale caro':'defectos aceptados salen caros'}.`} ${r.needless?`Revisas ${r.needless} ${r.needless===1?'grano sano':'granos sanos'} sin necesidad.`:''} El corte más barato con estos costes es <b>${num(best.cut)}</b>.`:'Sin las referencias (qué granos son defectuosos de verdad) no puedes saber cuánto cuesta una regla. Por eso se necesita un conjunto de validación con respuestas conocidas.'}</p>`;
+ <p class="vx-readout">${truth?`${r.total<10?`Con este corte gastas <b>${r.total}</b>, menos que revisar los diez (10).`:r.total===10?'Con este corte gastas lo mismo que revisar los diez.':`Con este corte gastas <b>${r.total}</b>, más que revisar los diez (10): ${r.accepted} ${r.accepted===1?'defecto aceptado sale caro':'defectos aceptados salen caros'}.`} ${r.needless?`Revisas ${r.needless} ${r.needless===1?'grano sano':'granos sanos'} sin necesidad.`:''} El corte más barato con estos costes es <b>${num(best.cut)}</b>. Con probabilidades calibradas, la teoría diría revisar desde 1 ÷ ${price} = <b>${num(1/price,3)}</b>${reviewCost(REVIEW_UNITS,1/price,1,price).total===best.total?', que aquí cuesta lo mismo':`, que aquí costaría ${reviewCost(REVIEW_UNITS,1/price,1,price).total}: estas puntuaciones no están calibradas y diez granos son pocos`}.`:'Sin las referencias (qué granos son defectuosos de verdad) no puedes saber cuánto cuesta una regla. Por eso se necesita un conjunto de validación con respuestas conocidas.'}</p>`;
 };
 
 /* ---------- Contenido de cada tema ---------- */
@@ -250,13 +250,13 @@ const TOPICS={
     'cada barra azul es una entrega. El punto naranja es la memoria después de leerla: una mezcla de la memoria anterior y la entrada de hoy. Las barras rosadas muestran cuánto influye cada día en esa memoria. Sube «conserva» y verás que recuerda más lejos pero reacciona más lento.')
    +figure('gates','Figura 2 · Las tres compuertas de una LSTM',
     slider('forget','Compuerta de olvido',0,100,5,50)+slider('input','Compuerta de entrada',0,100,5,50)+slider('output','Compuerta de salida',0,100,5,100)+`<div class="vx-presets">${preset('Recordar todo',{forget:100,input:0,output:100})}${preset('Borrar y reemplazar',{forget:0,input:100,output:100})}${preset('Mezclar',{forget:50,input:50,output:100})}${preset('Guardar en silencio',{forget:100,input:0,output:0})}</div>`,
-    'cada compuerta es una llave entre 0 % (cerrada) y 100 % (abierta). Aquí las mueves tú; en una LSTM real la red calcula las tres en cada paso a partir de la entrada y de su estado, con pesos que aprende entrenando.'),
+    'cada compuerta es una llave entre 0 % (cerrada) y 100 % (abierta). Aquí las mueves tú; en una LSTM real la red calcula las tres en cada paso a partir de la entrada y de su estado, con pesos que aprende entrenando. Fíjate en el «+»: la memoria nueva se arma sumando lo conservado y lo nuevo. Ese camino que suma es lo que evita el desvanecimiento de la figura 1.'),
   cards:[
    ['blue','📈','Secuencia','Datos en los que el orden importa: si lo cambias, cambia el significado.','las entregas de 12 días seguidos, o «el perro persigue al gato» frente a «el gato persigue al perro».'],
    ['orange','🧠','Estado oculto (memoria)','Número o lista de números que resume lo leído hasta ahora. Se actualiza en cada paso.','el punto naranja de la figura 1.'],
    ['teal','🔁','RNN · red neuronal recurrente','Red que repite la misma operación en cada paso: combina la entrada de hoy con el estado anterior.','leer 12 días aplica 12 veces la misma regla.'],
-   ['pink','🌫️','Desvanecimiento','En secuencias largas, la huella de los primeros pasos se multiplica muchas veces por números menores que 1 y casi se borra.','conservando el 50 %, el día 1 pesa 0,02 % tras 12 días.'],
-   ['violet','🗄️','LSTM · memoria de largo y corto plazo','Red recurrente con una memoria protegida (estado de celda) y tres compuertas que regulan qué entra, qué se queda y qué sale.','la figura 2.'],
+   ['pink','🌫️','Desvanecimiento','En secuencias largas, la huella de los primeros pasos se multiplica muchas veces por números menores que 1 y casi se borra. Pasa dos veces: al leer, la memoria olvida lo lejano; al entrenar, la corrección que debería llegar a los primeros pasos (el gradiente del encuentro 1) también se encoge, y la red no logra aprender relaciones lejanas.','conservando el 50 %, el día 1 pesa 0,02 % tras 12 días.'],
+   ['violet','🗄️','LSTM · memoria de largo y corto plazo','Red recurrente con una memoria protegida (estado de celda) y tres compuertas que regulan qué entra, qué se queda y qué sale. Esa memoria se actualiza sumando, no solo multiplicando: por eso lo guardado, y la corrección del entrenamiento, sobreviven muchos más pasos.','la figura 2: con el olvido en 100 %, el 0,80 pasa intacto.'],
    ['red','🚪','Compuerta','Valor entre 0 y 1 que actúa como llave: 0 bloquea, 1 deja pasar todo. Hay tres: olvido, entrada y salida.','olvido en 100 % y entrada en 0 % = «no toques la memoria».'],
    ['amber','🔲','Ventana','Las últimas lecturas que recibe el modelo para predecir la siguiente.','en Colab, 12 lecturas seguidas → predecir la número 13.'],
    ['green','⏱️','Paso de tiempo','Cada posición de la secuencia que la red lee, una después de otra.','el día 5 es el quinto paso; la figura 1 avanza un paso por día.'],
@@ -330,7 +330,10 @@ const TOPICS={
    ['green','⚙️','Red por posición (feed-forward)','Red pequeña que transforma cada posición por separado después de la atención.','etapa 5.'],
    ['red','➕','Atajo y normalización','El atajo (conexión residual) suma la entrada a la salida de cada bloque para no perder información; la normalización mantiene los números en un rango estable.','etapa 5.'],
    ['orange','🎯','Encoder y cabeza','El encoder es el conjunto de bloques que produce las representaciones; la cabeza es la capa final que las convierte en la respuesta de la tarea.','en Colab la cabeza elige entre clase 0 y clase 1.'],
-   ['blue','🧱','Bloque del encoder','La unidad que se repite en un Transformer: autoatención y red por posición, cada una con su atajo y su normalización.','el modelo del cuaderno usa un solo bloque.']
+   ['blue','🧱','Bloque del encoder','La unidad que se repite en un Transformer: autoatención y red por posición, cada una con su atajo y su normalización.','el modelo del cuaderno usa un solo bloque.'],
+   ['amber','⚡','Paralelo y coste','Como no lee paso a paso, un Transformer procesa todas las posiciones a la vez y conecta dos elementos cualesquiera con una sola operación de atención; una RNN necesita tantos pasos como distancia haya entre ellos. El precio: cada token mira a todos, así que la cuenta crece con el cuadrado de la longitud.','4 tokens dan 16 pesos en el mapa de la etapa 4; 1.000 tokens darían 1.000.000.'],
+   ['pink','✍️','Decoder y máscara causal','Variante del bloque en la que cada token solo puede mirar a los anteriores: una máscara tapa los que vienen después. Así se entrena para predecir el siguiente token.','al leer 6, 2, 5 no puede mirar el 3: tiene que predecirlo.'],
+   ['green','💬','LLM · modelo de lenguaje grande','«Large Language Model»: Transformer de tipo decoder, con muchos bloques, entrenado con enormes cantidades de texto para predecir el siguiente token. Genera repitiendo un ciclo: predice un token, lo añade a la entrada y vuelve a predecir.','los asistentes conversacionales de IA funcionan así; el modelo del cuaderno es un encoder pequeño que clasifica, no genera.']
   ],
   practice:[
    ['pink','🏷️','Clase y puntuación de clase','La clase es la respuesta posible que el modelo debe elegir; la puntuación indica cuánto se inclina por cada una.','clase 1 = «el primer número es mayor que el último».'],
@@ -359,9 +362,10 @@ const TOPICS={
    ['green','📊','Confianza','Puntuación entre 0 y 1 que acompaña a cada caja. Alta no significa correcta: solo que el modelo está más seguro.','P1 tiene 0,92; P11 tiene 0,27.'],
    ['amber','▦','Rejilla','La red divide la imagen en celdas y cada celda propone cajas para los objetos cuyo centro cae en ella. Los modelos actuales usan rejillas de varios tamaños para objetos grandes y pequeños.','las celdas amarillas.'],
    ['violet','✂️','Corte de confianza','Regla para conservar solo las cajas con confianza mayor que un valor elegido.','con corte 0,50 se descarta P3 (0,48).'],
-   ['red','🧹','NMS · supresión de no máximos','Limpieza de repetidas: de las cajas de la misma categoría que se montan mucho, conserva la de mayor confianza. Algunos modelos recientes se entrenan para entregar una sola caja por objeto y omiten este paso.','P1, P2 y P3 marcan el mismo fruto; queda P1.'],
+   ['red','🧹','NMS · supresión de no máximos','Limpieza de repetidas: de las cajas de la misma categoría que se montan mucho, conserva la de mayor confianza. Algunos modelos recientes se entrenan para entregar una sola caja por objeto y omiten este paso; el del cuaderno (YOLO26) es uno de ellos y resuelve las repetidas dentro de la red.','P1, P2 y P3 marcan el mismo fruto; queda P1.'],
    ['teal','📌','Propuesta','Cada caja candidata que entrega el modelo antes de filtrar. Una propuesta puede ser correcta, repetida o falsa.','la figura parte de 12 propuestas.'],
-   ['green','📐','Píxel y coordenadas','La imagen es una cuadrícula de puntos llamados píxeles. La coordenada x crece hacia la derecha y la y hacia abajo, desde la esquina superior izquierda.','el punto (9, 11) está 9 a la derecha y 11 hacia abajo.']
+   ['green','📐','Píxel y coordenadas','La imagen es una cuadrícula de puntos llamados píxeles. La coordenada x crece hacia la derecha y la y hacia abajo, desde la esquina superior izquierda.','el punto (9, 11) está 9 a la derecha y 11 hacia abajo.'],
+   ['teal','🧱','Extractor y cabeza de detección','Un detector reutiliza lo del encuentro 2: una red convolucional extrae mapas de respuestas de la imagen y una cabeza los convierte en cajas, categorías y confianzas. Se entrena comparando sus cajas con referencias anotadas: la pérdida castiga la caja mal ubicada y la categoría equivocada.','el modelo del cuaderno ya trae extractor y cabeza entrenados con COCO.']
   ],
   practice:[
    ['blue','📦','Modelo preentrenado','Red cuyos pesos ya se aprendieron con un conjunto grande de imágenes. Se usa tal como está, sin entrenarla de nuevo.','el cuaderno carga el archivo de pesos yolo26n.pt.'],
@@ -396,7 +400,8 @@ const TOPICS={
    ['amber','🚧','Umbral de IoU','El IoU mínimo para que una propuesta cuente como acierto. Es una regla que se elige, no algo que aprende el modelo.','aquí 0,50; con 0,75 se exige más ajuste.'],
    ['blue','📐','AP · precisión promedio','Número que resume la curva precisión-recall de una categoría: el área bajo la curva. Va de 0 a 1.','una curva que se mantiene alta da un AP cercano a 1.'],
    ['violet','🏁','mAP50 y mAP50-95','mAP es el promedio de las AP de todas las categorías. mAP50 usa un IoU mínimo de 0,50; mAP50-95 promedia los resultados con mínimos de 0,50 a 0,95, y es más exigente.','un mismo modelo siempre tiene mAP50 mayor o igual que mAP50-95.'],
-   ['green','🗃️','Conjunto de validación','Imágenes con referencias que no se usaron para entrenar. Se reservan para medir el modelo.','las cajas azules hacen de validación en las figuras.']
+   ['green','🗃️','Conjunto de validación','Imágenes con referencias que no se usaron para entrenar. Se reservan para medir el modelo.','las cajas azules hacen de validación en las figuras.'],
+   ['red','🚫','TN · verdadero negativo','En clasificación es un caso negativo bien descartado. En detección no se cuenta: los lugares de la imagen donde no hay objeto y tampoco se propuso caja no tienen límite. Por eso aquí no se usa la exactitud y se trabaja con precisión y recall, que no lo necesitan.','en las fórmulas de la figura 2 solo aparecen TP, FP y FN.']
   ],
   practice:[
   ],
@@ -426,7 +431,9 @@ const TOPICS={
    ['red','🕳️','Defecto aceptado','Grano defectuoso que queda por debajo del corte y pasa sin revisión. Es un falso negativo de la regla.','el grano 4 (0,40) cuando el corte es 0,50.'],
    ['amber','🔁','Revisión innecesaria','Grano sano que supera el corte y se envía a revisión. Es un falso positivo de la regla.','el grano 7 (0,60) con corte 0,50.'],
    ['blue','📏','Línea base «revisar todos»','La alternativa más simple contra la que se compara la regla: inspeccionar todas las unidades.','diez revisiones cuestan 10 puntos.'],
-   ['violet','📎','Supuesto del ejercicio','Lo que el ejercicio da por cierto y habría que comprobar en un caso real.','aquí se supone que la revisión manual detecta todos los defectos.']
+   ['violet','📎','Supuesto del ejercicio','Lo que el ejercicio da por cierto y habría que comprobar en un caso real.','aquí se supone que la revisión manual detecta todos los defectos.'],
+   ['teal','🎚️','Calibración','Una puntuación está calibrada si se puede leer como probabilidad: de los casos con 0,80, cerca del 80 % resultan positivos. Muchos modelos ordenan bien los casos sin estar calibrados.','aquí los tres granos con 0,20 y 0,30 no tienen ningún defecto.'],
+   ['green','🧭','Corte teórico','Si las puntuaciones son probabilidades calibradas, conviene revisar cuando probabilidad × coste del defecto es mayor o igual que el coste de revisar; es decir, desde coste de revisar ÷ coste del defecto (Elkan, 2001).','1 ÷ 8 = 0,125. Con estos diez granos el corte más barato es otro (0,35 a 0,40): la diferencia viene de la calibración y de tener pocos datos.']
   ],
   practice:[
   ],
@@ -469,21 +476,34 @@ export function renderTopicBibliography(id){
 
 const ENCOUNTERS=[
  {number:3,topics:['dl-secuencias','dl-atencion','dl-transformers'],names:['RNN y LSTM','Atención','Transformer'],recap:[
-  ['¿Por qué una red recurrente sencilla olvida el comienzo de una secuencia larga?','Porque la huella de los primeros pasos se multiplica muchas veces por números menores que 1 y casi se borra: es el desvanecimiento.'],
+  ['¿Por qué una red recurrente sencilla olvida el comienzo de una secuencia larga?','Porque la huella de los primeros pasos se multiplica muchas veces por números menores que 1 y casi se borra: es el desvanecimiento. Le pasa a la memoria al leer y a la corrección al entrenar; la LSTM lo evita con una memoria que se actualiza sumando.'],
   ['¿Qué decide cada compuerta de una LSTM?','Olvido: cuánto conservar de la memoria. Entrada: cuánta información nueva guardar. Salida: cuánto mostrar.'],
-  ['En atención, ¿qué son Q, K y V?','Q es la consulta (lo que busco), K la clave (la etiqueta de cada registro) y V el valor (lo que aporta cada registro).'],
-  ['¿Qué garantiza softmax sobre los pesos de atención?','Que sean positivos y sumen 100 %.'],
+  ['En atención, ¿qué son Q, K y V, y qué hace softmax?','Q es la consulta (lo que busco), K la clave (la etiqueta de cada registro) y V el valor (lo que aporta cada registro). Softmax convierte los parecidos en pesos positivos que suman 100 %.'],
   ['¿Por qué un Transformer necesita codificación posicional?','Porque la atención sola trata la entrada como un conjunto sin orden: sin esa señal, dos secuencias con los mismos elementos en distinto orden se ven iguales.'],
-  ['¿En qué se diferencia la forma de leer de una RNN y de un Transformer?','La RNN lee paso a paso y resume en una memoria; el Transformer mira toda la secuencia a la vez y relaciona sus elementos con atención.']]},
+  ['¿En qué se diferencia la forma de leer de una RNN y de un Transformer?','La RNN lee paso a paso y resume en una memoria; el Transformer mira toda la secuencia a la vez y relaciona sus elementos con atención. Gana paralelismo y conexiones directas; paga una cuenta que crece con el cuadrado de la longitud.'],
+  ['¿Qué le falta al Transformer de hoy para ser un modelo de lenguaje como los asistentes de IA?','Ser un decoder: que cada token solo mire a los anteriores, entrenarlo con muchísimo texto para predecir el siguiente token y generar repitiendo ese ciclo. Las piezas (tokens, embedding, posición, atención) son las mismas.']]},
  {number:4,topics:['dl-yolo','dl-evaluacion','dl-integracion'],names:['YOLO','Evaluación','Integración'],recap:[
   ['¿Qué tres datos trae cada detección?','Una caja (dónde está), una categoría (qué es) y una confianza (qué tan seguro está el modelo).'],
   ['¿Para qué sirve la supresión de no máximos (NMS)?','Para quitar cajas repetidas: entre las que marcan el mismo objeto conserva la de mayor confianza.'],
   ['¿Qué mide IoU y entre qué valores está?','Cuánto coinciden dos cajas: área común dividida entre el área que cubren entre las dos. Va de 0 a 1.'],
-  ['¿Cuál es la diferencia entre un falso positivo y un falso negativo?','Falso positivo: el modelo marcó algo que no era. Falso negativo: había un objeto y el modelo no lo marcó.'],
+  ['¿Cuál es la diferencia entre un falso positivo y un falso negativo, y por qué no se cuentan verdaderos negativos?','Falso positivo: el modelo marcó algo que no era. Falso negativo: había un objeto y el modelo no lo marcó. Los lugares vacíos sin caja no tienen límite, así que en detección no se cuentan ni se usa la exactitud.'],
   ['Si subes el corte de confianza, ¿qué suele pasar con la precisión y el recall?','La precisión tiende a subir porque quedan las cajas más seguras, y el recall tiende a bajar porque se pierden objetos.'],
-  ['¿Por qué el mejor corte de decisión depende de los costes?','Porque revisar de más y dejar pasar un defecto no cuestan lo mismo: el corte más barato cambia cuando cambian esos costes.']]}
+  ['¿Por qué el mejor corte de decisión depende de los costes?','Porque revisar de más y dejar pasar un defecto no cuestan lo mismo: el corte más barato cambia cuando cambian esos costes. Con probabilidades calibradas sería coste de revisar ÷ coste del defecto; con puntuaciones sin calibrar se elige con datos de validación.']]}
 ];
 const encounterOf=id=>ENCOUNTERS.find(e=>e.topics.includes(id));
+
+// Síntesis de las dos asignaturas: se muestra en el cierre del último encuentro, que la agenda ya anuncia como cierre del diplomado.
+export const DIPLOMA_MAP=[
+ ['blue','Una tabla con la respuesta conocida','ML · encuentros 1 a 3','Regresión si la respuesta es un número; clasificación si es una categoría. Los ensambles de árboles suelen ser el primer modelo que conviene probar.'],
+ ['teal','Datos sin etiqueta','ML · encuentro 3','Clustering para encontrar grupos y PCA para resumir muchas columnas en pocas.'],
+ ['amber','Una serie en el tiempo','ML 4 · DL 3','Primero una línea base y un modelo de series evaluado con fechas posteriores al corte; una LSTM cuando hay datos suficientes y patrones largos.'],
+ ['pink','Decisiones encadenadas con recompensa','ML · encuentro 4','Aprendizaje por refuerzo.'],
+ ['violet','Imágenes','DL · encuentros 2 y 4','Una etiqueta por imagen: CNN y transferencia desde un modelo preentrenado. Localizar y contar objetos: un detector como YOLO.'],
+ ['green','Texto y secuencias largas','DL · encuentro 3','Atención y Transformer; los modelos de lenguaje son Transformers entrenados para predecir el siguiente token.'],
+ ['red','En todos los casos','ML y DL','Datos reservados que el modelo no vio, una línea base, la métrica que corresponde a la tarea, un corte elegido según los costes y una persona que revisa los casos dudosos.'],
+ ['orange','Para seguir después del diplomado','Lo que queda abierto','Ajuste fino de modelos preentrenados con datos propios, modelos de lenguaje y segmentación de imágenes.']
+];
+const diplomaMap=()=>`<h3>Cierre del diplomado: qué modelo para qué dato</h3><dl class="vx-glossary" data-vx-diploma>${DIPLOMA_MAP.map(([color,data,where,what])=>`<div><dt><span class="vx-dot vx-bg-${color}"></span>${esc(data)}<small>${esc(where)}</small></dt><dd>${esc(what)}</dd></div>`).join('')}</dl>`;
 
 // Todos los términos del encuentro, en orden alfabético y sin repetir.
 export function encounterGlossary(id){
@@ -506,7 +526,7 @@ export function renderEncounterGlossary(id){
 // Cierre para proyectar al terminar el tercer tema: repaso sin nota y glosario completo a la vista.
 export function renderEncounterClosing(id){
  const e=encounterOf(id);if(!e||e.topics[2]!==id)return '';
- return `<div class="vx vx-closing" data-vx-closing="${e.number}"><h3>Cierre del encuentro ${e.number}: repaso relámpago</h3><p class="vx-closing-lead">Sin nota. Responde en voz alta y después abre la tarjeta para comprobar.</p><div class="vx-flips">${e.recap.map(([q,a],i)=>`<details class="vx-flip vx-c-${['blue','pink','teal','amber','violet','green'][i]}"><summary><span>${i+1}</span>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div><h3>Glosario del encuentro ${e.number}</h3>${glossaryList(id)}<h3>Bibliografía del encuentro ${e.number}</h3>${referenceList(encounterReferences(id))}</div>`;
+ return `<div class="vx vx-closing" data-vx-closing="${e.number}"><h3>Cierre del encuentro ${e.number}: repaso relámpago</h3><p class="vx-closing-lead">Sin nota. Responde en voz alta y después abre la tarjeta para comprobar.</p><div class="vx-flips">${e.recap.map(([q,a],i)=>`<details class="vx-flip vx-c-${['blue','pink','teal','amber','violet','green'][i]}"><summary><span>${i+1}</span>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>${e.number===4?diplomaMap():''}<h3>Glosario del encuentro ${e.number}</h3>${glossaryList(id)}<h3>Bibliografía del encuentro ${e.number}</h3>${referenceList(encounterReferences(id))}</div>`;
 }
 
 export const drawVisualFigure=(name,state={})=>DRAW[name]({...DEFAULTS[name],...state});
