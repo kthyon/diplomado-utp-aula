@@ -1,0 +1,72 @@
+/* Figura animada «Cómo aprende una neurona». Paleta propia por parte, con variante para el tema oscuro. */
+.nf{--nf-blue:#2563eb;--nf-teal:#0d9488;--nf-amber:#d97706;--nf-violet:#7c3aed;--nf-pink:#db2777;--nf-orange:#ea580c;--nf-green:#16a34a;--nf-red:#dc2626;--nf-magenta:#c026d3;--nf-on:#fff;margin:14px 0 6px;min-width:0;color:var(--ink)}
+[data-theme=dark] .nf{--nf-blue:#60a5fa;--nf-teal:#2dd4bf;--nf-amber:#fbbf24;--nf-violet:#a78bfa;--nf-pink:#f472b6;--nf-orange:#fb923c;--nf-green:#4ade80;--nf-red:#f87171;--nf-magenta:#e879f9;--nf-on:#111}
+.nf *{box-sizing:border-box}
+.resource-grid .panel.nf-panel{grid-column:1/-1;min-width:0}
+.nf figcaption{font-weight:700;font-size:19px;line-height:1.35;margin-bottom:14px}
+.nf figcaption small{display:block;font-size:14px;font-weight:600;color:var(--muted);margin-top:2px}
+
+.nf-steps{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.nf-step{font:inherit;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;min-height:40px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.nf-step span{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--soft);font-weight:700}
+.nf-step:hover{border-color:var(--nf-violet)}
+.nf-step[aria-pressed=true]{background:var(--nf-violet);border-color:var(--nf-violet);color:var(--nf-on)}
+.nf-step[aria-pressed=true] span{background:var(--nf-on);color:var(--nf-violet)}
+.nf .nf-title{margin:0 0 8px;font-size:17px;line-height:1.4;font-weight:600;max-width:none}
+.nf .nf-title b{color:var(--nf-violet)}
+
+.nf-out{border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:8px}
+.nf-scroll{overflow-x:auto;max-width:100%}
+.nf-svg{display:block;width:100%;min-width:640px;height:auto;font-family:inherit}
+.nf-box,.nf-node,.nf-chip{fill:var(--paper);stroke-width:2.2}
+.nf-b-blue{stroke:var(--nf-blue);fill:color-mix(in srgb,var(--nf-blue) 10%,var(--paper))}
+.nf-b-teal{stroke:var(--nf-teal);fill:color-mix(in srgb,var(--nf-teal) 14%,var(--paper))}
+.nf-b-amber{stroke:var(--nf-amber);fill:color-mix(in srgb,var(--nf-amber) 13%,var(--paper))}
+.nf-b-violet{stroke:var(--nf-violet);fill:color-mix(in srgb,var(--nf-violet) 11%,var(--paper))}
+.nf-b-pink{stroke:var(--nf-pink);fill:color-mix(in srgb,var(--nf-pink) 9%,var(--paper))}
+.nf-b-orange{stroke:var(--nf-orange);fill:color-mix(in srgb,var(--nf-orange) 11%,var(--paper))}
+.nf-b-green{stroke:var(--nf-green);fill:color-mix(in srgb,var(--nf-green) 11%,var(--paper))}
+.nf-b-red{stroke:var(--nf-red);fill:color-mix(in srgb,var(--nf-red) 10%,var(--paper))}
+.nf-edge{stroke:var(--nf-teal);stroke-linecap:round;opacity:.75}
+.nf-flow{stroke:var(--ink);stroke-width:2}
+.nf-back{stroke:var(--nf-magenta);stroke-width:2.2;stroke-dasharray:6 4}
+.nf-axis{stroke:var(--line);stroke-width:1.5}
+.nf-curve{fill:none;stroke:var(--nf-pink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.nf-f-ink{fill:var(--ink)}.nf-f-magenta{fill:var(--nf-magenta)}.nf-f-pink{fill:var(--nf-pink);stroke:var(--paper);stroke-width:2}
+.nf-t-small{font-size:13px;fill:var(--muted);font-weight:600}
+.nf-t-strong{font-size:14.5px;fill:var(--ink);font-weight:700}
+.nf-t-big{font-size:19px;fill:var(--ink);font-weight:700}
+.nf-t-sigma{font-size:38px;fill:var(--nf-violet);font-weight:700}
+.nf-tc-teal{fill:var(--nf-teal)}.nf-tc-violet{fill:var(--nf-violet)}.nf-tc-pink{fill:var(--nf-pink)}.nf-tc-magenta{fill:var(--nf-magenta)}
+
+/* La parte activa de cada paso se resalta; al elegir una parte, las demás se atenúan. */
+.nf-svg [data-nf-part]{transition:opacity .35s ease}
+.nf-svg [data-nf-part]:not(.is-active){opacity:.5}
+.nf-svg [data-nf-part="grad"]{opacity:1}
+.nf[data-nf-focus] .nf-svg [data-nf-part]{opacity:.22}
+.nf[data-nf-focus="inputs"] [data-nf-part="inputs"],.nf[data-nf-focus="weights"] [data-nf-part="weights"],.nf[data-nf-focus="bias"] [data-nf-part="bias"],.nf[data-nf-focus="sum"] [data-nf-part="sum"],.nf[data-nf-focus="act"] [data-nf-part="act"],.nf[data-nf-focus="out"] [data-nf-part="out"],.nf[data-nf-focus="label"] [data-nf-part="label"],.nf[data-nf-focus="loss"] [data-nf-part="loss"],.nf[data-nf-focus="grad"] [data-nf-part="grad"]{opacity:1}
+
+/* Paquetes que viajan: datos hacia delante, gradientes hacia atrás. */
+.nf-packet rect{stroke-width:2}
+.nf-packet text{font-size:13.5px;font-weight:700}
+.nf-k-data rect{fill:var(--ink);stroke:var(--paper)}.nf-k-data text{fill:var(--paper)}
+.nf-k-grad rect{fill:var(--nf-magenta);stroke:var(--paper)}.nf-k-grad text{fill:var(--nf-on)}
+
+.nf-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+.nf-button{font:inherit;font-size:14px;font-weight:600;padding:8px 16px;min-height:42px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.nf-button:hover{border-color:var(--nf-violet)}
+.nf-button.is-primary{background:var(--nf-violet);border-color:var(--nf-violet);color:var(--nf-on)}
+.nf :is(.nf-step,.nf-button,.nf-part):focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.nf .nf-reading{margin:12px 0 0;padding:14px 16px;border-radius:12px;background:var(--soft);font-size:16px;line-height:1.7;max-width:none;min-height:4.2em}
+
+.nf-parts{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:15px}
+.nf-parts-hint{margin-left:8px;color:var(--muted);font-size:13.5px}
+.nf-part-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.nf-part{font:inherit;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;padding:6px 12px;min-height:38px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.nf-part[aria-pressed=true]{border-color:var(--ink);background:var(--soft)}
+.nf-dot{width:12px;height:12px;border-radius:50%;flex:none}
+.nf-bg-blue{background:var(--nf-blue)}.nf-bg-teal{background:var(--nf-teal)}.nf-bg-amber{background:var(--nf-amber)}.nf-bg-violet{background:var(--nf-violet)}.nf-bg-pink{background:var(--nf-pink)}.nf-bg-orange{background:var(--nf-orange)}.nf-bg-green{background:var(--nf-green)}.nf-bg-red{background:var(--nf-red)}.nf-bg-magenta{background:var(--nf-magenta)}
+.nf .nf-part-text{margin:10px 0 0;font-size:15px;line-height:1.65;max-width:none;min-height:1.65em}
+.nf .nf-notes{margin:14px 0 0;padding:0 0 0 18px;font-size:14px;line-height:1.65;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.nf-svg [data-nf-part]{transition:none}}
+@media (max-width:600px){.nf-step{padding-right:10px;font-size:13px}.nf figcaption{font-size:17px}}
