@@ -91,6 +91,6 @@ test('el nuevo recorrido no invade otros temas ni duplica su figura principal',(
  for(const id of ['dl-secuencias','dl-atencion','dl-transformers']){
   const html=render(id);assert.equal(isEncounterThree(id),true);
   assert.equal((html.match(/data-dl-primary-example=/g)||[]).length,1);assert.equal((html.match(/data-dl-diagram=/g)||[]).length,1);
-  assert.equal((html.match(/<svg\b/g)||[]).length,1);assert.match(html,/¿el último día llegaron menos cajas que el primero\?/);
+  assert.equal((html.replace(/<svg class="nf-svg tf-svg"[\s\S]*?<\/svg>/,'').match(/<svg\b/g)||[]).length,1,'un solo gráfico principal; la arquitectura animada de la galería es apoyo');assert.match(html,/¿el último día llegaron menos cajas que el primero\?/);
  }
 });

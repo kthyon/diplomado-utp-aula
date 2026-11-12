@@ -1,9 +1,9 @@
-import {renderDLGuide,renderDLPractice} from './dl-course-journey.js?v=visual-20261112a';
+import {renderDLGuide,renderDLPractice} from './dl-course-journey.js?v=visual-20261112b';
 import {renderTopicContext,renderTopicVocabulary,renderTopicOutcome,renderCaseEvidence} from './lesson-context.js?v=organizacion-20261027';
 import {LESSON_OFFERING,renderNotebookBridge,renderExplorerLink} from './lesson-offering.js?v=revision-dl-20261102c';
 import {renderConceptConnections} from './concept-connections.js?v=definiciones-20261027';
 import {LESSON_SCENES,renderCaseDetail} from './lesson-scenes.js';
-import {isOrganizedTopic} from './learning-organization.js?v=visual-20261112a';
+import {isOrganizedTopic} from './learning-organization.js?v=visual-20261112b';
 import {renderDLPrerequisites,renderDLReason,renderDLCheck,renderActivationBridge} from './dl-foundations.js?v=dl-recorrido-20261105';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const CLASS_PURPOSES={

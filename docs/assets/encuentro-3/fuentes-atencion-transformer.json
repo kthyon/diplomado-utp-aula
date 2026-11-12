@@ -26,7 +26,7 @@
       "author": "Daniel Voigt Godoy (dvgodoy)",
       "license": "CC BY 4.0",
       "license_url": "https://creativecommons.org/licenses/by/4.0/",
-      "changes": "Ninguna; original alojado localmente. Guía en español añadida fuera de la imagen."
+      "changes": "El archivo local es el original sin cambios y se enlaza como fuente. En la página se muestra una adaptación propia: redibujada en SVG, traducida al español, con colores por parte y un recorrido animado (docs/transformer-flow.js)."
     }
   ]
 }
