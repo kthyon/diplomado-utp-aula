@@ -1,14 +1,14 @@
-import {PRACTICAL_E3,renderE3Workbench,mountE3Workbench} from './practical-e3.js?v=visual-20261112b';
-import {PRACTICAL_E4,renderE4Workbench,mountE4Workbench} from './practical-e4.js?v=visual-20261112b';
+import {PRACTICAL_E3,renderE3Workbench,mountE3Workbench} from './practical-e3.js?v=visual-20261113a';
+import {PRACTICAL_E4,renderE4Workbench,mountE4Workbench} from './practical-e4.js?v=visual-20261113a';
 import {DL_LEARNING_PATHS} from './dl-learning-paths.js?v=dl-precision-20261105';
 import {renderTopicVocabulary} from './lesson-context.js';
-import {renderEncounterThreeMedia} from './dl-encounter-three-media.js?v=visual-20261112b';
+import {renderEncounterThreeMedia} from './dl-encounter-three-media.js?v=visual-20261113a';
 import {NOTEBOOK_PATHS} from './notebook-paths.js?v=dl-precision-20261105';
 import {encounterForTopic,colabNotebookUrl} from './encounter-notebooks.js';
-import {PRACTICAL_STORY,renderStudentStory} from './dl-practical-story.js?v=visual-20261112b';
-import {renderIndustryContext} from './dl-industry-context.js?v=visual-20261112b';
+import {PRACTICAL_STORY,renderStudentStory} from './dl-practical-story.js?v=visual-20261113a';
+import {renderIndustryContext} from './dl-industry-context.js?v=visual-20261113a';
 import {renderTopicRoute} from './dl-class-route.js?v=ruta-20261111b';
-import {renderVisualOpener,renderVisualIdea,renderVisualFigures,renderVisualCards,visualColabNote,renderEncounterGlossary,renderTopicBibliography,renderEncounterClosing,mountVisualExplainers} from './dl-visual-explainers.js?v=visual-20261112b';
+import {renderVisualOpener,renderVisualIdea,renderVisualFigures,renderVisualCards,visualColabNote,renderEncounterGlossary,renderTopicBibliography,renderEncounterClosing,mountVisualExplainers} from './dl-visual-explainers.js?v=visual-20261113a';
 
 export const PRACTICAL_LESSONS=Object.fromEntries(Object.entries({...PRACTICAL_E3,...PRACTICAL_E4}).map(([id,p])=>[id,{...p,problem:PRACTICAL_STORY[id].resume,bridge:PRACTICAL_STORY[id].next,colabBridge:PRACTICAL_STORY[id].reading}]));
 export const isPracticalLesson=id=>Object.hasOwn(PRACTICAL_LESSONS,id);

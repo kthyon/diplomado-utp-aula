@@ -2,7 +2,7 @@
 // Aportan a las secciones existentes de cada tema: la idea en una frase, una comparación cotidiana,
 // figuras manipulables y vocabulario en tarjetas de color.
 // Las figuras se recalculan con dl-visual-models.js; los datos son inventados y las cuentas son las mostradas.
-import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261112b';
+import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261113a';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>Number(v).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -26,7 +26,7 @@ const DEFAULTS={
  memory:{keep:50,day:12},
  gates:{forget:50,input:50,output:100},
  attention:{rain:true,market:false,temp:100},
- selfattention:{temp:100},
+ selfattention:{row:0},
  pipeline:{stage:1},
  order:{position:false},
  detector:{grid:false,conf:25,nms:false},
@@ -134,11 +134,25 @@ DRAW.attention=s=>{
  <p class="vx-readout">${q[0]+q[1]===0?'Con Q = [0, 0] ningún día se parece más que otro: todos pesan 25 % y el resumen es el promedio simple.':`El resumen se inclina hacia los días que comparten condiciones con la consulta. ${s.temp<100?'Con temperatura baja, el reparto se concentra en los más parecidos.':s.temp>100?'Con temperatura alta, el reparto se aplana.':''}`}</p>`;
 };
 
+// Autoatención: una sola idea por figura. La temperatura se queda en la Figura 1.
+// El día elegido pregunta con sus propias condiciones (Q) y se compara con las de los cuatro días (K), incluido él mismo.
 DRAW.selfattention=s=>{
- const keys=ATTENTION_DAYS.map(d=>d.key),m=selfAttention(keys,s.temp/100),cell=58,x0=130,y0=46;
- const head=ATTENTION_DAYS.map((d,j)=>`<text x="${x0+j*cell+cell/2}" y="${y0-10}" class="vx-t-small" text-anchor="middle">${d.name}</text>`).join('');
- const body=m.map((row,i)=>`<text x="${x0-10}" y="${y0+i*cell+cell/2+4}" class="vx-t-small" text-anchor="end">${ATTENTION_DAYS[i].name} pregunta</text>`+row.map((w,j)=>`<rect x="${x0+j*cell+2}" y="${y0+i*cell+2}" width="${cell-4}" height="${cell-4}" rx="8" class="vx-f-violet" fill-opacity="${.08+w*.92}"/><text x="${x0+j*cell+cell/2}" y="${y0+i*cell+cell/2+5}" class="vx-t-strong ${w>.45?'vx-t-on':''}" text-anchor="middle">${pct(w)}</text>`).join('')).join('');
- return svg(400,290,'Matriz de autoatención entre los cuatro días',`<text x="${x0+cell*2}" y="14" class="vx-t-label" text-anchor="middle">… mira a →</text>${head}${body}`);
+ const keys=ATTENTION_DAYS.map(d=>d.key),m=selfAttention(keys,1),r=s.row,q=keys[r],cw=80,ch=54,x0=178,y0=78;
+ const rain=k=>k[0]?'llovió':'sin lluvia',market=k=>k[1]?'mercado':'sin mercado';
+ const scores=keys.map(k=>(q[0]*k[0]+q[1]*k[1])/Math.SQRT2),exps=scores.map(Math.exp),total=exps.reduce((x,y)=>x+y,0);
+ const head=ATTENTION_DAYS.map((d,j)=>`<text x="${x0+j*cw+cw/2}" y="${y0-38}" class="vx-t-strong" text-anchor="middle">${d.name}</text><text x="${x0+j*cw+cw/2}" y="${y0-22}" class="vx-t-small" text-anchor="middle">${rain(d.key)}</text><text x="${x0+j*cw+cw/2}" y="${y0-8}" class="vx-t-small" text-anchor="middle">${market(d.key)}</text>`).join('');
+ const body=m.map((row,i)=>`<g opacity="${i===r?1:.4}"><text x="${x0-12}" y="${y0+i*ch+ch/2-3}" class="vx-t-strong" text-anchor="end">${i===r?'▶ ':''}${ATTENTION_DAYS[i].name} pregunta</text><text x="${x0-12}" y="${y0+i*ch+ch/2+13}" class="vx-t-small" text-anchor="end">${rain(keys[i])} · ${market(keys[i])}</text>`+row.map((w,j)=>`<rect x="${x0+j*cw+2}" y="${y0+i*ch+2}" width="${cw-4}" height="${ch-4}" rx="8" class="vx-f-violet" fill-opacity="${.08+w*.92}"/><text x="${x0+j*cw+cw/2}" y="${y0+i*ch+ch/2+5}" class="vx-t-strong ${w>.45?'vx-t-on':''}" text-anchor="middle">${pct(w)}</text>`).join('')+`</g>`).join('');
+ const frame=`<rect x="${x0-1}" y="${y0+r*ch-1}" width="${cw*4+2}" height="${ch+2}" rx="10" fill="none" class="vx-s-violet" stroke-width="2.5"/>`;
+ const common=k=>{const c=[q[0]&&k[0]?'lluvia':'',q[1]&&k[1]?'mercado':''].filter(Boolean);return c.length?c.join(' y '):'ninguna';};
+ const rows=ATTENTION_DAYS.map((d,j)=>`<tr><th scope="row"><span class="vx-dot vx-bg-${DAY_COLORS[j]}"></span>${d.name}${j===r?' (él mismo)':''}</th><td>${rain(d.key)} · ${market(d.key)}</td><td>${common(d.key)} → ${q[0]*d.key[0]+q[1]*d.key[1]}</td><td>${num(scores[j])}</td><td>${num(exps[j])}</td><td><b>${pct(m[r][j])}</b></td></tr>`).join('');
+ const name=ATTENTION_DAYS[r].name,top=Math.max(...m[r]),winners=ATTENTION_DAYS.filter((d,j)=>m[r][j]>top-1e-9).map(d=>d.name===name?'sí mismo':d.name);
+ const reading=q[0]+q[1]===0
+  ?`<b>${name}</b> no tuvo lluvia ni mercado: no tiene ninguna condición marcada, así que no coincide con nadie (ni consigo mismo) y todas las puntuaciones dan 0. Sin nada que distinga, reparte por igual: <b>25 %</b> a cada día. Es un límite de esta forma sencilla de anotar los días: solo cuenta las condiciones que <i>sí</i> ocurrieron.`
+  :`<b>${name}</b> (${rain(q)}, ${market(q)}) mira más a <b>${winners.join(' y a ')}</b> con <b>${pct(top)}</b>${winners.length>1?' cada uno':''}, porque ${winners.length>1?'son los días':'es el día'} con más condiciones en común. Los demás no quedan en 0 %: la atención siempre reparte algo a todos.`;
+ return svg(510,304,`Matriz de autoatención entre los cuatro días; pregunta ${name}`,`<text x="${x0+cw*2}" y="14" class="vx-t-label" text-anchor="middle">Columnas: el día al que se mira ↓</text><text x="${x0-12}" y="${y0-8}" class="vx-t-label" text-anchor="end">Filas: quién pregunta →</text>${head}${body}${frame}`)+
+ `<p class="vx-readout">${reading}</p>
+ <div class="vx-table-wrap"><table class="vx-table"><caption class="vx-caption">La cuenta de la fila resaltada, paso a paso: ${name} se compara con cada día</caption><thead><tr><th scope="col">Se compara con</th><th scope="col">Condiciones de ese día</th><th scope="col">1 · Condiciones en común</th><th scope="col">2 · Puntuación = común ÷ √2</th><th scope="col">3 · e<sup>puntuación</sup></th><th scope="col">4 · Atención = paso 3 ÷ ${num(total)}</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><th scope="row">Suma</th><td></td><td></td><td></td><td>${num(total)}</td><td><b>100 %</b></td></tr></tfoot></table></div>
+ <ol class="vx-parts"><li><b>Fila = quién pregunta.</b> El día usa sus propias condiciones como consulta (Q): «¿qué días se parecen a mí?».</li><li><b>Columna = a quién mira.</b> Las condiciones de cada día son su clave (K). El día también se compara consigo mismo.</li><li><b>Casilla = cuánta atención.</b> Es el porcentaje que el día de la fila le da al día de la columna. Morado más intenso = más atención.</li><li><b>Cada fila suma 100 %.</b> Es un reparto: si un día recibe más, los otros reciben menos. Las columnas no tienen por qué sumar 100 %.</li><li><b>¿Para qué sirve?</b> Con esos porcentajes, cada día arma una versión nueva de sí mismo mezclando la información de todos. Eso hace cada capa de un Transformer con todas las palabras de una frase a la vez.</li></ol>`;
 };
 
 const TOKENS=[6,2,5,3];
@@ -285,9 +299,9 @@ const TOPICS={
   figures:()=>figure('attention','Figura 1 · Una consulta reparte su atención entre cuatro registros',
     `<div class="vx-presets"><span class="vx-controls-label">Mañana…</span>${toggle('rain','lloverá',true)}${toggle('market','habrá mercado',false)}</div>`+slider('temp','Temperatura del reparto',20,200,10,100),
     'el grosor de cada línea es el peso de atención. Cambia la consulta y fíjate en qué días engordan: los que comparten condiciones. La barra de colores suma los aportes (peso × cajas) para dar el resumen. Baja la temperatura para concentrar la atención; súbela para repartirla.')
-   +figure('selfattention','Figura 2 · Autoatención: cada día consulta a todos los demás',
-    slider('temp','Temperatura del reparto',20,200,10,100),
-    'cada fila es un día que pregunta «¿quién se parece a mí?». Cuanto más oscuro el cuadro, más atención. Cada fila suma 100 %. Así un Transformer relaciona todos los elementos de una secuencia entre sí.'),
+   +figure('selfattention','Figura 2 · Autoatención: cada día se compara con todos los días',
+    `<div class="vx-presets"><span class="vx-controls-label">Elige el día que pregunta:</span>${ATTENTION_DAYS.map((d,i)=>preset(d.name,{row:i},'row')).join('')}</div>`,
+    'en la Figura 1 la pregunta venía de fuera (mañana). Aquí no hay pregunta externa: cada día pregunta por sí mismo. Elige un día arriba; su fila se resalta y la tabla muestra de dónde sale cada porcentaje. Aquí la temperatura no se cambia (vale 1), para ver una sola idea a la vez.'),
   cards:[
    ['green','➡️','Vector','Lista ordenada de números que representa algo. El lugar de cada número importa.','la clave del día 3 es el vector [1, 1].'],
    ['violet','❓','Consulta (Q, query)','Lo que estoy buscando ahora, expresado como una lista de números.','«mañana lloverá y no habrá mercado» → Q = [1, 0].'],

@@ -1,4 +1,4 @@
-import {renderEncounterThreeMedia} from './dl-encounter-three-media.js?v=visual-20261112b';
+import {renderEncounterThreeMedia} from './dl-encounter-three-media.js?v=visual-20261113a';
 import {DL_LEARNING_PATHS} from './dl-learning-paths.js?e3-20261107';
 import {DL_FOUNDATIONS} from './dl-foundations.js?e3-20261107';
 import {renderTopicVocabulary} from './lesson-context.js';

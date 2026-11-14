@@ -257,3 +257,7 @@
  .organized-meeting .e3-meeting-story{padding:6px 22px 4px}
  .organized-meeting .class-route{padding:20px 22px 22px}
 }
+
+.vx-caption{caption-side:top;text-align:left;font-size:14px;font-weight:700;padding:0 0 6px;color:var(--ink)}
+.vx-table tfoot :is(th,td){border-bottom:0;font-weight:700}
+.dl-course-reading .vx .vx-parts,.vx .vx-parts{margin:14px 0 0;padding:0 0 0 22px;display:grid;gap:8px;font-size:15px;line-height:1.6;max-width:none;color:var(--ink)}
