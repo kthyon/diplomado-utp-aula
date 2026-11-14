@@ -2,7 +2,7 @@
 // Aportan a las secciones existentes de cada tema: la idea en una frase, una comparación cotidiana,
 // figuras manipulables y vocabulario en tarjetas de color.
 // Las figuras se recalculan con dl-visual-models.js; los datos son inventados y las cuentas son las mostradas.
-import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261113a';
+import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261113b';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>Number(v).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -164,6 +164,15 @@ const STAGES=[
  ['Red por posición','La mezcla pasa por una red pequeña, posición por posición. Un atajo suma la entrada original y una normalización mantiene estables los números.'],
  ['Salida','Una última capa, la cabeza, convierte el resultado en lo que pide la tarea: una clase, un número o el siguiente token. Sus pesos se aprenden entrenando. Si la tarea es predecir el siguiente token y el ciclo se repite, tienes un modelo de lenguaje.']
 ];
+// Para cada etapa: la pregunta que responde, qué entra, qué hace, qué sale y un ejemplo con palabras.
+const STAGE_GUIDE=[
+ ['¿En qué piezas parto la entrada?','La secuencia completa: 6, 2, 5, 3.','La separa en unidades y anota el lugar de cada una.','4 tokens, en los lugares 1 a 4.','Con texto, la frase «el banco del parque» se partiría en palabras o trozos de palabra.'],
+ ['¿Cómo convierto cada pieza en números que se puedan comparar?','Los 4 tokens.','Busca cada token en una tabla y lo cambia por su vector. Tokens iguales reciben siempre el mismo vector.','4 vectores de 2 números cada uno (en el cuaderno son de 16).','El token 6 se convierte en [0,4; 1,5]. Todavía no sabe en qué lugar está ni quiénes son sus vecinos.'],
+ ['¿Cómo sabe cada pieza en qué lugar iba?','Los 4 vectores, que aún no llevan su lugar.','Suma a cada vector una señal distinta para el lugar 1, el 2, el 3 y el 4.','4 vectores que dicen dos cosas a la vez: «qué soy» y «dónde estoy».','Así el 6 del primer lugar deja de ser idéntico a un 6 que estuviera al final.'],
+ ['¿Qué otras piezas le importan a cada una?','Los 4 vectores con posición.','Cada token se compara con todos, él incluido, y reparte su 100 % de atención: más a los que más se le parecen.','4 vectores nuevos; cada uno es una mezcla de todos según su fila del mapa morado.','En una frase, así «banco» mira a «parque» y entiende que es un asiento y no una entidad financiera.'],
+ ['¿Qué hago con lo que cada pieza recogió de las demás?','Las 4 mezclas que dejó la atención.','Suma la entrada original (atajo), normaliza y pasa cada posición por una red pequeña.','4 vectores refinados. Aquí termina un bloque; los modelos grandes repiten el bloque muchas veces.','El atajo evita que la mezcla borre lo que el token ya sabía de sí mismo.'],
+ ['¿Cuál es la respuesta a la tarea?','Los 4 vectores finales.','La cabeza los combina y calcula una puntuación para cada respuesta posible.','La respuesta: en el cuaderno, clase 0 o clase 1.','En un asistente de IA la respuesta sería el siguiente token del texto.']
+];
 const vectorBars=(x,y,v,color,scale=16)=>v.map((value,d)=>`<rect x="${x+d*16}" y="${value>=0?y-value*scale:y}" width="12" height="${Math.abs(value)*scale}" rx="3" class="vx-f-${color}"/>`).join('')+`<line x1="${x-4}" y1="${y}" x2="${x+32}" y2="${y}" class="vx-axis"/>`;
 DRAW.pipeline=({stage})=>{
  const enc=encodeSequence(TOKENS,true),cx=i=>150+i*110;
@@ -175,7 +184,7 @@ DRAW.pipeline=({stage})=>{
  if(stage===4)detail=enc.weights.map((row,i)=>row.map((w,j)=>`<rect x="${cx(j)-24}" y="${124+i*26}" width="48" height="23" rx="5" class="vx-f-violet" fill-opacity="${.08+w*.92}"/><text x="${cx(j)}" y="${140+i*26}" class="vx-t-small ${w>.45?'vx-t-on':''}" text-anchor="middle">${pct(w)}</text>`).join('')+`<text x="${cx(0)-34}" y="${140+i*26}" class="vx-t-small" text-anchor="end">${TOKENS[i]} mira a</text>`).join('');
  if(stage===5)detail=`${arrowDefs}`+[['Mezcla de atención','violet'],['+ entrada original (atajo)','teal'],['Normalizar','amber'],['Red pequeña por posición','pink']].map(([label,color],i)=>`<rect x="${20+i*150}" y="140" width="132" height="46" rx="10" class="vx-box vx-b-${color}"/><text x="${86+i*150}" y="168" class="vx-t-small" text-anchor="middle">${label}</text>${i<3?`<line x1="${152+i*150}" y1="163" x2="${168+i*150}" y2="163" class="vx-flow" marker-end="url(#vx-arrow)"/>`:''}`).join('');
  if(stage===6)detail=`${arrowDefs}`+TOKENS.map((t,i)=>vectorBars(cx(i)-14,176,enc.mixed[i],'violet')).join('')+`<line x1="500" y1="160" x2="528" y2="160" class="vx-flow" marker-end="url(#vx-arrow)"/><rect x="532" y="134" width="80" height="52" rx="10" class="vx-box vx-b-orange"/><text x="572" y="156" class="vx-t-strong" text-anchor="middle">Cabeza</text><text x="572" y="174" class="vx-t-small" text-anchor="middle">→ respuesta</text>`;
- return svg(620,stage===3?262:172,`Recorrido de un Transformer, etapa ${stage}: ${STAGES[stage-1][0]}`,`<g transform="translate(0,-62)">${stage<5||stage===6?chips:''}${detail}</g>`)+`<p class="vx-readout"><b>${stage}. ${STAGES[stage-1][0]}.</b> ${STAGES[stage-1][1]}</p>`;
+ return svg(620,stage===3?262:172,`Recorrido de un Transformer, etapa ${stage}: ${STAGES[stage-1][0]}`,`<g transform="translate(0,-62)">${stage<5||stage===6?chips:''}${detail}</g>`)+`<p class="vx-readout"><b>${stage}. ${STAGES[stage-1][0]}.</b> ${STAGES[stage-1][1]}</p><dl class="vx-io"><div class="vx-io-q"><dt>Pregunta que responde</dt><dd>${STAGE_GUIDE[stage-1][0]}</dd></div><div><dt>Entra</dt><dd>${STAGE_GUIDE[stage-1][1]}</dd></div><div><dt>Hace</dt><dd>${STAGE_GUIDE[stage-1][2]}</dd></div><div><dt>Sale</dt><dd>${STAGE_GUIDE[stage-1][3]}</dd></div><div class="vx-io-q"><dt>Ejemplo</dt><dd>${STAGE_GUIDE[stage-1][4]}</dd></div></dl><p class="vx-step-nav">${stage>1?`<button type="button" class="vx-chip" data-vx-set='{"stage":${stage-1}}'>← Etapa anterior</button>`:''}${stage<6?`<button type="button" class="vx-chip vx-play" data-vx-set='{"stage":${stage+1}}'>Siguiente etapa: ${STAGES[stage][0]} →</button>`:'<b>Fin del recorrido.</b> Vuelve a la etapa 1 y cuéntalo con tus palabras.'}</p>`;
 };
 
 DRAW.order=({position})=>{
@@ -326,11 +335,11 @@ const TOPICS={
   colab:'En Colab calcularás esta misma operación con matrices: Q, K y V, el producto punto escalado y softmax. Los días 1 y 2 de la figura son exactamente los registros A = 10 y B = 20 del cuaderno.'
  },
  'dl-transformers':{
-  idea:'Un Transformer no lee paso a paso: mira toda la secuencia a la vez y deja que cada elemento consulte a los demás con atención. Como así se pierde el orden, se le devuelve con una señal de posición.',
+  idea:'Un Transformer no lee paso a paso: mira toda la secuencia a la vez y deja que cada elemento consulte a los demás con atención. Como así se pierde el orden, se le devuelve con una señal de posición. En corto: Transformer = convertir en números + anotar el lugar + dejar que todos se consulten + sacar una respuesta.',
   analogy:['Una mesa redonda','Todos conversan con todos al mismo tiempo (atención) en lugar de pasarse el mensaje uno a uno. Pero si las sillas no están numeradas, nadie sabe quién habló primero: por eso hace falta la posición.'],
   figures:()=>figure('pipeline','Figura 1 · El recorrido de la información por un Transformer',
     `<div class="vx-presets">${STAGES.map(([name],i)=>preset(`${i+1}. ${name}`,{stage:i+1},'stage')).join('')}</div>`,
-    'pulsa cada etapa en orden. La secuencia de ejemplo es 6, 2, 5, 3. Las barras son los números de cada vector; el mapa morado es la atención entre tokens.')
+    'sigue las seis etapas en orden, como una línea de producción: lo que sale de una etapa entra a la siguiente. En cada una lee la pregunta que responde, qué entra, qué hace y qué sale. La secuencia de ejemplo es 6, 2, 5, 3. Las barras son los números de cada vector; el mapa morado es la atención entre tokens.')
    +figure('order','Figura 2 · Experimento: ¿qué pasa si quitamos la posición?',
     toggle('position','Sumar la señal de posición',false),
     'las dos secuencias tienen los mismos números en orden contrario. Compara los dos resúmenes con la posición apagada y encendida. En esta cuenta el resumen es el promedio de las salidas de la atención.'),
@@ -346,13 +355,25 @@ const TOPICS={
    ['orange','🎯','Encoder y cabeza','El encoder es el conjunto de bloques que produce las representaciones; la cabeza es la capa final que las convierte en la respuesta de la tarea.','en Colab la cabeza elige entre clase 0 y clase 1.'],
    ['blue','🧱','Bloque del encoder','La unidad que se repite en un Transformer: autoatención y red por posición, cada una con su atajo y su normalización.','el modelo del cuaderno usa un solo bloque.'],
    ['amber','⚡','Paralelo y coste','Como no lee paso a paso, un Transformer procesa todas las posiciones a la vez y conecta dos elementos cualesquiera con una sola operación de atención; una RNN necesita tantos pasos como distancia haya entre ellos. El precio: cada token mira a todos, así que la cuenta crece con el cuadrado de la longitud.','4 tokens dan 16 pesos en el mapa de la etapa 4; 1.000 tokens darían 1.000.000.'],
+   ['teal','✂️','Tokenizador','Programa que parte la entrada en tokens y le da a cada uno un número de identificación. Es el primer paso, antes de la red.','en el cuaderno no hace falta: cada número de la secuencia ya es un token.'],
+   ['blue','📚','Vocabulario','Lista de todos los tokens que el modelo conoce. La tabla de embeddings tiene una fila por cada uno.','nn.Embedding(8, 16) en el cuaderno: 8 tokens posibles, cada uno con un vector de 16 números.'],
+   ['green','📏','Dimensión del modelo (d_model)','Cuántos números tiene el vector de cada token. Más números permiten guardar más matices, y cuestan más cálculo.','2 en la figura para poder dibujarlo; d_model=16 en el cuaderno.'],
+   ['violet','🪜','Profundidad (número de capas)','Cuántas veces se repite el bloque, uno encima de otro. Cada capa vuelve a mezclar y refinar lo que dejó la anterior.','num_layers=1 en el cuaderno; los modelos de lenguaje grandes apilan decenas.'],
+   ['orange','🧮','Logits','Las puntuaciones sin normalizar que entrega la cabeza, una por cada respuesta posible. Softmax las convierte en valores entre 0 y 1 que suman 1.','nn.Linear(4*16, 2) entrega 2 logits: uno para la clase 0 y otro para la clase 1.'],
+   ['red','🪟','Ventana de contexto','Número máximo de tokens que el modelo puede mirar a la vez. Lo que queda fuera no existe para él.','el modelo del cuaderno solo acepta secuencias de 4 tokens: self.pos tiene 4 posiciones.'],
+   ['amber','🔀','Atención cruzada','Atención en la que el decoder consulta lo que produjo el encoder: la consulta (Q) sale del decoder y las claves y valores (K, V) llegan del encoder. Sirve para tareas de entrada → salida, como traducir.','el paso «cruce» de la arquitectura animada de la galería.'],
+   ['blue','👪','Tres familias de Transformer','Solo encoder: lee toda la entrada y la entiende o clasifica (como BERT). Solo decoder: genera texto token a token (como GPT). Encoder + decoder: transforma una secuencia en otra, como al traducir (el Transformer original de 2017).','el del cuaderno es de la primera familia: solo encoder, y clasifica.'],
    ['pink','✍️','Decoder y máscara causal','Variante del bloque en la que cada token solo puede mirar a los anteriores: una máscara tapa los que vienen después. Así se entrena para predecir el siguiente token.','al leer 6, 2, 5 no puede mirar el 3: tiene que predecirlo.'],
    ['green','💬','LLM · modelo de lenguaje grande','«Large Language Model»: Transformer de tipo decoder, con muchos bloques, entrenado con enormes cantidades de texto para predecir el siguiente token. Genera repitiendo un ciclo: predice un token, lo añade a la entrada y vuelve a predecir.','los asistentes conversacionales de IA funcionan así; el modelo del cuaderno es un encoder pequeño que clasifica, no genera.']
   ],
   practice:[
    ['pink','🏷️','Clase y puntuación de clase','La clase es la respuesta posible que el modelo debe elegir; la puntuación indica cuánto se inclina por cada una.','clase 1 = «el primer número es mayor que el último».'],
    ['teal','✂️','Entrenamiento y prueba','Con los ejemplos de entrenamiento se ajustan los pesos; con los de prueba, que el modelo nunca vio, se mide si aprendió la regla.','en el cuaderno ninguna secuencia de prueba aparece en el entrenamiento.'],
-   ['green','✅','Exactitud (accuracy)','Fracción de respuestas correctas sobre el total. Va de 0 a 1.','0,95 significa 95 aciertos de cada 100.']
+   ['green','✅','Exactitud (accuracy)','Fracción de respuestas correctas sobre el total. Va de 0 a 1.','0,95 significa 95 aciertos de cada 100.'],
+   ['blue','📦','Lote (batch)','Grupo de ejemplos que el modelo procesa junto antes de hacer un ajuste de sus pesos.','batch_size=64: ajusta los pesos cada 64 secuencias.'],
+   ['red','📉','Entropía cruzada','La pérdida habitual para clasificar: es baja cuando el modelo da puntuación alta a la clase correcta y alta cuando se la da a la equivocada.','nn.functional.cross_entropy(transformer(bx), by).'],
+   ['violet','🧭','Optimizador Adam','El procedimiento que usa los gradientes para ajustar los pesos; Adam adapta el tamaño del paso de cada peso según su historial.','torch.optim.Adam(transformer.parameters(), lr=.005).'],
+   ['amber','🎲','Dropout','Apagar al azar una parte de las conexiones durante el entrenamiento para que el modelo no memorice. Con 0 queda desactivado.','dropout=0 en el cuaderno, para que el resultado sea más fácil de seguir.']
   ],
   refs:[
    ['Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł. y Polosukhin, I. (2017). Attention Is All You Need. NeurIPS 2017.','https://arxiv.org/abs/1706.03762','El artículo que propuso el Transformer: autoatención, varias cabezas y codificación posicional.'],

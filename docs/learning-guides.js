@@ -2440,7 +2440,7 @@ export const LESSON_GUIDES={
   "dl-transformers": {
     "objective": "Construir una prueba de clasificación de secuencias con respuestas verificables.",
     "concept": "Un Transformer organiza bloques de atención y otras transformaciones para construir representaciones con contexto. En la tarea del cuaderno cada número es un token, una unidad de entrada, y una tabla aprendida llamada embedding lo convierte en un vector. La autoatención mezcla información de la misma secuencia. El modelo añade información de posición y combina las cuatro posiciones para producir dos puntuaciones de clase. El orden puede estar disponible tanto por esa información añadida como por la manera de leer las posiciones al final: este experimento no aísla el efecto de la posición añadida.",
-    "relevance": "Una arquitectura solo puede evaluarse después de definir qué debería responder.",
+    "relevance": "Es la arquitectura de los asistentes de IA actuales. Aquí la recorres pieza por pieza: qué entra, qué hace y qué sale en cada etapa.",
     "case": {
       "title": "¿El primero es mayor que el último?",
       "context": "Cada fila contiene cajas recibidas en cuatro horas ficticias. La etiqueta 1 significa que la última cantidad es menor que la primera; en caso contrario, 0. Es una comparación de extremos, no una afirmación de que todas las horas hayan bajado ni un pronóstico de demanda. Las cantidades entre 1 y 7 se eligieron para poder calcular las etiquetas a mano.",

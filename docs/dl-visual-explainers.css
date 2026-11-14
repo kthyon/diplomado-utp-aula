@@ -261,3 +261,10 @@
 .vx-caption{caption-side:top;text-align:left;font-size:14px;font-weight:700;padding:0 0 6px;color:var(--ink)}
 .vx-table tfoot :is(th,td){border-bottom:0;font-weight:700}
 .dl-course-reading .vx .vx-parts,.vx .vx-parts{margin:14px 0 0;padding:0 0 0 22px;display:grid;gap:8px;font-size:15px;line-height:1.6;max-width:none;color:var(--ink)}
+.vx .vx-io{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0 0}
+.vx .vx-io>div{padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper)}
+.vx .vx-io>.vx-io-q{grid-column:1/-1;border-color:var(--vx-violet)}
+.vx .vx-io dt{font-size:12.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+.vx .vx-io dd{margin:0;font-size:15px;line-height:1.55;color:var(--ink)}
+.vx .vx-step-nav{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0 0;max-width:none}
+@media (max-width:640px){.vx .vx-io{grid-template-columns:1fr}}
