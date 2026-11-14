@@ -2,7 +2,7 @@
 // Aportan a las secciones existentes de cada tema: la idea en una frase, una comparación cotidiana,
 // figuras manipulables y vocabulario en tarjetas de color.
 // Las figuras se recalculan con dl-visual-models.js; los datos son inventados y las cuentas son las mostradas.
-import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261114e';
+import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261114f';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>Number(v).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -682,7 +682,7 @@ export const DIPLOMA_QUESTIONS=[
  'Nombra una decisión de tu trabajo que hoy se toma a ojo. ¿Qué dato ya se registra y cuál faltaría para probar un modelo?',
  '¿Qué harás distinto el lunes con lo que aprendiste? Una sola acción concreta. Y si el diplomado se repitiera, ¿qué tema quitarías y cuál alargarías?'
 ];
-export const DIPLOMA_FAREWELL='Gracias por el tiempo, las preguntas y la paciencia de estos ocho encuentros. Ha sido un gusto acompañarlos; ojalá estas ideas les sirvan para mirar sus datos con más calma y más criterio.';
+export const DIPLOMA_FAREWELL='Empezamos con una recta que apenas pasaba entre unos puntos y terminamos discutiendo cuánto cuesta equivocarse. Desde hoy, cuando alguien les muestre un modelo que «acierta el 95 %», ya saben qué preguntar: ¿con qué datos?, ¿comparado con qué?, ¿y qué cuesta el otro 5 %? Esa desconfianza bien informada vale más que cualquier fórmula. Gracias por estos ocho encuentros.';
 export const renderDiplomaClosing=()=>diplomaClosing();
 const diplomaClosing=()=>`<div data-vx-course-closing><h3>Conclusiones del diplomado</h3><p class="vx-closing-lead">Lo que queda de las dos asignaturas, Machine Learning y Deep Learning.</p><dl class="vx-glossary vx-conclusions">${DIPLOMA_CONCLUSIONS.map(([title,text],i)=>`<div><dt>${i+1}. ${esc(title)}</dt><dd>${esc(text)}</dd></div>`).join('')}</dl><h3>Conversemos para cerrar</h3><p class="vx-closing-lead">Conversatorio: cada respuesta con un ejemplo concreto, de tu trabajo o de una figura del curso. Estas preguntas son para conversar en clase. No se escribe ni se guarda nada en la plataforma.</p><ol class="vx-closing-questions">${DIPLOMA_QUESTIONS.map(q=>`<li>${esc(q)}</li>`).join('')}</ol><p class="vx-closing-farewell">${esc(DIPLOMA_FAREWELL)}</p></div>`;
 

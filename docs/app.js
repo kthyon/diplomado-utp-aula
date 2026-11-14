@@ -1,6 +1,6 @@
-import {mountPracticalLessons,isPracticalLesson} from './dl-practical-lessons.js?v=visual-20261114e';
-import {renderDLContinuation} from './dl-course-journey.js?v=visual-20261114e';
-import {isOrganizedTopic,renderTopicCompass,renderOrganizedFinish,mountLessonSections} from './learning-organization.js?v=visual-20261114e';
+import {mountPracticalLessons,isPracticalLesson} from './dl-practical-lessons.js?v=visual-20261114f';
+import {renderDLContinuation} from './dl-course-journey.js?v=visual-20261114f';
+import {isOrganizedTopic,renderTopicCompass,renderOrganizedFinish,mountLessonSections} from './learning-organization.js?v=visual-20261114f';
 import {renderGlossary} from './definitions.js?v=revision-dl-20261113';
 import {notebookResourceRole} from './notebook-paths.js?v=dl-precision-20261105';
 import {colabNotebookUrl} from './encounter-notebooks.js';
@@ -8,7 +8,7 @@ import {mountRoadmap} from './roadmap.js?v=1';
 import {renderLearningMap} from './learning-map.js?v=1';
 import {courseHours} from './session-plans.js?v=1';
 import {renderClassRoute} from './dl-class-route.js?v=ruta-20261111b';
-import {renderDiplomaClosing} from './dl-visual-explainers.js?v=visual-20261114e';
+import {renderDiplomaClosing} from './dl-visual-explainers.js?v=visual-20261114f';
 import {renderMeetingOffering} from './lesson-offering.js?v=e3-20261107';
 import {getJourney,getCalendarMoment,getTopicCompletion,hasNewTopics} from './journey-models.js';
 import {offerProgressDownload} from './progress-download.js';
@@ -16,7 +16,7 @@ import {renderFlowGuide,renderLessonFlow} from './flow-guidance.js?v=descripcion
 import {laboratoryDestination} from './lab-access.js';
 import {readReferenceOffset,nextScheduleDelay} from './schedule-clock.js';
 import {summarizeProgress,renderProgressDashboard} from './progress-dashboard.js';
-import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=visual-20261114e';
+import {renderLearningGuide,renderLearningLab,renderCourseGuide,CLASS_PURPOSES} from './learning-layout.js?v=visual-20261114f';
 import {mountProblemExplorer} from './learning-explorers.js';
 import {mountActivationBridge} from './dl-foundations.js?v=dl-recorrido-20261105';
 import {mountDLExplorer} from './dl-explorers.js?v=dl-recorrido-20261105';
