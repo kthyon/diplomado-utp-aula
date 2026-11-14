@@ -1,5 +1,0 @@
-/* Cierre de las dos asignaturas (encuentro 4 de DL). Pendiente de integrar en dl-visual-explainers.css. Solo colores y trazos del sitio. */
-.vx-closing-questions{margin:10px 0 0;padding:0 0 0 1.5em;display:grid;gap:0}
-.vx-closing-questions li{padding:10px 0 10px 4px;border-bottom:1px solid var(--line);font-size:1.05rem;line-height:1.5}
-.vx-closing-questions li::marker{font-weight:700;color:var(--muted)}
-.dl-course-reading .vx .vx-closing-farewell,.vx .vx-closing-farewell{margin:22px 0 0;padding:0 0 0 14px;border-left:3px solid var(--line);font-size:1.05rem;line-height:1.6;max-width:none}
