@@ -2,7 +2,7 @@
 // Aportan a las secciones existentes de cada tema: la idea en una frase, una comparación cotidiana,
 // figuras manipulables y vocabulario en tarjetas de color.
 // Las figuras se recalculan con dl-visual-models.js; los datos son inventados y las cuentas son las mostradas.
-import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261114d';
+import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261114e';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>Number(v).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -671,20 +671,20 @@ export const DIPLOMA_CONCLUSIONS=[
  ['La métrica depende de la tarea','No hay una sola forma de medir. Precisión y recall cuentan errores distintos, y conviene mirar la que corresponde a lo que se quiere cuidar.'],
  ['Deep Learning aprende sus propias representaciones','Una red transforma los números capa por capa. Así trabaja con imágenes, secuencias y texto sin que alguien describa cada rasgo a mano.'],
  ['Una puntuación no es una decisión','Para actuar hacen falta un corte elegido según los costes de cada error y una persona responsable que revise los casos dudosos.'],
- ['Los ejemplos del curso son para aprender','Usamos datos inventados o pequeños. Sirven para entender cómo funciona cada idea, no demuestran el desempeño en una finca o una operación real.']
+ ['Los ejemplos del curso son para aprender','Usamos datos inventados o pequeños. Sirven para entender cómo funciona cada idea, no demuestran el desempeño en una operación real.']
 ];
 export const DIPLOMA_QUESTIONS=[
- '¿Qué idea del diplomado te llevas?',
- '¿Qué fue lo que más te costó entender?',
- '¿Qué te sorprendió?',
- '¿Qué problema de tu trabajo o de tu finca te gustaría mirar con datos?',
- '¿Qué dato tendrías que empezar a registrar para poder hacerlo?',
- '¿Qué cambiarías del diplomado?',
- '¿Qué quieres aprender después?'
+ 'Si mañana alguien en tu trabajo dice «pongámosle inteligencia artificial a esto», ¿cuál es la primera pregunta que harías ahora y que antes del diplomado no habrías hecho?',
+ '¿Qué creías sobre la inteligencia artificial antes de empezar que hoy sabes que no es así?',
+ '¿En qué momento exacto dijiste «ah, ya entendí»? Cuenta qué figura, ejemplo o cuaderno estabas usando.',
+ 'Si lo más difícil fueron las matemáticas, di cuál cuenta te frenó (el gradiente, el softmax, el IoU u otra) y qué te habría ayudado a pasarla.',
+ 'Vimos que una puntuación no es una decisión. En tu trabajo, ¿qué error sale más caro: dejar pasar algo malo o revisar de más? ¿Quién debería elegir ese corte?',
+ 'Nombra una decisión de tu trabajo que hoy se toma a ojo. ¿Qué dato ya se registra y cuál faltaría para probar un modelo?',
+ '¿Qué harás distinto el lunes con lo que aprendiste? Una sola acción concreta. Y si el diplomado se repitiera, ¿qué tema quitarías y cuál alargarías?'
 ];
 export const DIPLOMA_FAREWELL='Gracias por el tiempo, las preguntas y la paciencia de estos ocho encuentros. Ha sido un gusto acompañarlos; ojalá estas ideas les sirvan para mirar sus datos con más calma y más criterio.';
 export const renderDiplomaClosing=()=>diplomaClosing();
-const diplomaClosing=()=>`<div data-vx-course-closing><h3>Conclusiones del diplomado</h3><p class="vx-closing-lead">Lo que queda de las dos asignaturas, Machine Learning y Deep Learning.</p><dl class="vx-glossary vx-conclusions">${DIPLOMA_CONCLUSIONS.map(([title,text],i)=>`<div><dt>${i+1}. ${esc(title)}</dt><dd>${esc(text)}</dd></div>`).join('')}</dl><h3>Conversemos para cerrar</h3><p class="vx-closing-lead">Estas preguntas son para conversar en clase. No se escribe ni se guarda nada en la plataforma.</p><ol class="vx-closing-questions">${DIPLOMA_QUESTIONS.map(q=>`<li>${esc(q)}</li>`).join('')}</ol><p class="vx-closing-farewell">${esc(DIPLOMA_FAREWELL)}</p></div>`;
+const diplomaClosing=()=>`<div data-vx-course-closing><h3>Conclusiones del diplomado</h3><p class="vx-closing-lead">Lo que queda de las dos asignaturas, Machine Learning y Deep Learning.</p><dl class="vx-glossary vx-conclusions">${DIPLOMA_CONCLUSIONS.map(([title,text],i)=>`<div><dt>${i+1}. ${esc(title)}</dt><dd>${esc(text)}</dd></div>`).join('')}</dl><h3>Conversemos para cerrar</h3><p class="vx-closing-lead">Conversatorio: cada respuesta con un ejemplo concreto, de tu trabajo o de una figura del curso. Estas preguntas son para conversar en clase. No se escribe ni se guarda nada en la plataforma.</p><ol class="vx-closing-questions">${DIPLOMA_QUESTIONS.map(q=>`<li>${esc(q)}</li>`).join('')}</ol><p class="vx-closing-farewell">${esc(DIPLOMA_FAREWELL)}</p></div>`;
 
 // Todos los términos del encuentro, en orden alfabético y sin repetir.
 export function encounterGlossary(id){
