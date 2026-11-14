@@ -540,6 +540,29 @@ export const DIPLOMA_MAP=[
 ];
 const diplomaMap=()=>`<h3>Cierre del diplomado: qué modelo para qué dato</h3><dl class="vx-glossary" data-vx-diploma>${DIPLOMA_MAP.map(([color,data,where,what])=>`<div><dt><span class="vx-dot vx-bg-${color}"></span>${esc(data)}<small>${esc(where)}</small></dt><dd>${esc(what)}</dd></div>`).join('')}</dl>`;
 
+// Cierre de las dos asignaturas (Machine Learning y Deep Learning): conclusiones y conversación final. Solo en el último encuentro; se lee y se conversa, no registra nada.
+export const DIPLOMA_CONCLUSIONS=[
+ ['Un modelo aprende de datos','No le escribimos las reglas a mano: las ajusta a partir de ejemplos. Por eso sus aciertos y sus errores dependen de los datos que recibió.'],
+ ['Primero la pregunta y el dato; después el modelo','Antes de elegir un modelo hay que saber qué se quiere decidir y qué dato se tiene: una tabla, una serie en el tiempo, imágenes o texto.'],
+ ['Entrenar no es comprobar','Acertar con los datos de entrenamiento no dice si el modelo sirve. Se comprueba con datos reservados que el modelo no vio.'],
+ ['Empezar por lo simple','Una línea base y un modelo sencillo muestran cuánto mejora de verdad uno más complejo. Si no mejora, lo simple es suficiente.'],
+ ['La métrica depende de la tarea','No hay una sola forma de medir. Precisión y recall cuentan errores distintos, y conviene mirar la que corresponde a lo que se quiere cuidar.'],
+ ['Deep Learning aprende sus propias representaciones','Una red transforma los números capa por capa. Así trabaja con imágenes, secuencias y texto sin que alguien describa cada rasgo a mano.'],
+ ['Una puntuación no es una decisión','Para actuar hacen falta un corte elegido según los costes de cada error y una persona responsable que revise los casos dudosos.'],
+ ['Los ejemplos del curso son para aprender','Usamos datos inventados o pequeños. Sirven para entender cómo funciona cada idea, no demuestran el desempeño en una finca o una operación real.']
+];
+export const DIPLOMA_QUESTIONS=[
+ '¿Qué idea del diplomado te llevas?',
+ '¿Qué fue lo que más te costó entender?',
+ '¿Qué te sorprendió?',
+ '¿Qué problema de tu trabajo o de tu finca te gustaría mirar con datos?',
+ '¿Qué dato tendrías que empezar a registrar para poder hacerlo?',
+ '¿Qué cambiarías del diplomado?',
+ '¿Qué quieres aprender después?'
+];
+export const DIPLOMA_FAREWELL='Gracias por el tiempo, las preguntas y la paciencia de estos ocho encuentros. Ha sido un gusto acompañarlos; ojalá estas ideas les sirvan para mirar sus datos con más calma y más criterio.';
+const diplomaClosing=()=>`<div data-vx-course-closing><h3>Conclusiones del diplomado</h3><p class="vx-closing-lead">Lo que queda de las dos asignaturas, Machine Learning y Deep Learning.</p><dl class="vx-glossary vx-conclusions">${DIPLOMA_CONCLUSIONS.map(([title,text],i)=>`<div><dt>${i+1}. ${esc(title)}</dt><dd>${esc(text)}</dd></div>`).join('')}</dl><h3>Conversemos para cerrar</h3><p class="vx-closing-lead">Estas preguntas son para conversar en clase. No se escribe ni se guarda nada en la plataforma.</p><ol class="vx-closing-questions">${DIPLOMA_QUESTIONS.map(q=>`<li>${esc(q)}</li>`).join('')}</ol><p class="vx-closing-farewell">${esc(DIPLOMA_FAREWELL)}</p></div>`;
+
 // Todos los términos del encuentro, en orden alfabético y sin repetir.
 export function encounterGlossary(id){
  const e=encounterOf(id);if(!e)return [];
@@ -561,7 +584,7 @@ export function renderEncounterGlossary(id){
 // Cierre para proyectar al terminar el tercer tema: repaso sin nota y glosario completo a la vista.
 export function renderEncounterClosing(id){
  const e=encounterOf(id);if(!e||e.topics[2]!==id)return '';
- return `<div class="vx vx-closing" data-vx-closing="${e.number}"><h3>Cierre del encuentro ${e.number}: repaso relámpago</h3><p class="vx-closing-lead">Sin nota. Responde en voz alta y después abre la tarjeta para comprobar.</p><div class="vx-flips">${e.recap.map(([q,a],i)=>`<details class="vx-flip vx-c-${['blue','pink','teal','amber','violet','green'][i]}"><summary><span>${i+1}</span>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>${e.number===4?diplomaMap():''}<h3>Glosario del encuentro ${e.number}</h3>${glossaryList(id)}<h3>Bibliografía del encuentro ${e.number}</h3>${referenceList(encounterReferences(id))}</div>`;
+ return `<div class="vx vx-closing" data-vx-closing="${e.number}"><h3>Cierre del encuentro ${e.number}: repaso relámpago</h3><p class="vx-closing-lead">Sin nota. Responde en voz alta y después abre la tarjeta para comprobar.</p><div class="vx-flips">${e.recap.map(([q,a],i)=>`<details class="vx-flip vx-c-${['blue','pink','teal','amber','violet','green'][i]}"><summary><span>${i+1}</span>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>${e.number===4?diplomaMap()+diplomaClosing():''}<h3>Glosario del encuentro ${e.number}</h3>${glossaryList(id)}<h3>Bibliografía del encuentro ${e.number}</h3>${referenceList(encounterReferences(id))}</div>`;
 }
 
 export const drawVisualFigure=(name,state={})=>DRAW[name]({...DEFAULTS[name],...state});

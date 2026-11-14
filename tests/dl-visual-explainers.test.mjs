@@ -224,3 +224,20 @@ test('teoría de cierre: gradiente, modelos de lenguaje, detector del cuaderno, 
  assert.equal(renderEncounterClosing('dl-transformers').includes('data-vx-diploma'),false);
  assert.match(renderEncounterClosing('dl-transformers'),/modelo de lenguaje como los asistentes/);
 });
+
+test('cierre de las dos asignaturas: conclusiones y conversación final, solo en el encuentro 4 y sin registro',async()=>{
+ const {DIPLOMA_CONCLUSIONS,DIPLOMA_QUESTIONS,DIPLOMA_FAREWELL}=await import('../docs/dl-visual-explainers.js');
+ assert.ok(DIPLOMA_CONCLUSIONS.length>=6&&DIPLOMA_CONCLUSIONS.length<=8);assert.ok(DIPLOMA_QUESTIONS.length>=5&&DIPLOMA_QUESTIONS.length<=7);
+ const last=renderEncounterClosing('dl-integracion');
+ assert.equal((last.match(/data-vx-course-closing/g)||[]).length,1);
+ for(const [title] of DIPLOMA_CONCLUSIONS)assert.ok(last.includes(title),title);
+ for(const question of DIPLOMA_QUESTIONS)assert.ok(last.includes('<li>'+question+'</li>'),question);
+ assert.ok(last.includes('Estas preguntas son para conversar en clase. No se escribe ni se guarda nada en la plataforma.'));
+ assert.ok(last.includes(DIPLOMA_FAREWELL));
+ for(const tag of ['<input','<textarea','<form','<button','<select','contenteditable'])assert.equal(last.includes(tag),false,tag);
+ // Va después del mapa «qué modelo para qué dato» y antes del glosario.
+ const at=text=>last.indexOf(text);
+ assert.ok(at('data-vx-diploma>')<at('Conclusiones del diplomado')&&at('Conclusiones del diplomado')<at('Conversemos para cerrar')&&at('Conversemos para cerrar')<at('Glosario del encuentro 4'));
+ const third=renderEncounterClosing('dl-transformers');
+ for(const text of ['data-vx-course-closing','Conclusiones del diplomado','Conversemos para cerrar'])assert.equal(third.includes(text),false,text);
+});
