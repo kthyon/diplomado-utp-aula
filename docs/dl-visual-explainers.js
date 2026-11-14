@@ -2,7 +2,7 @@
 // Aportan a las secciones existentes de cada tema: la idea en una frase, una comparación cotidiana,
 // figuras manipulables y vocabulario en tarjetas de color.
 // Las figuras se recalculan con dl-visual-models.js; los datos son inventados y las cuentas son las mostradas.
-import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261114b';
+import {DELIVERIES,recurrentStates,memoryWeights,lstmStep,ATTENTION_DAYS,attention,selfAttention,embedToken,positionSignal,encodeSequence,sameSummary,SCENE,overlap,detect,matchDetections,evaluateScene,precisionRecallCurve,REVIEW_UNITS,reviewCost,costCurve,cheapestCut} from './dl-visual-models.js?v=visual-20261114d';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>Number(v).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -591,9 +591,32 @@ export function renderVisualIdea(id){
  const t=TOPICS[id];if(!t)return '';
  return `<div class="vx vx-inline" data-vx-idea="${id}"><p class="vx-idea"><span>La idea en una frase</span>${esc(t.idea)}</p><p class="vx-analogy"><b>Piénsalo así · ${esc(t.analogy[0])}.</b> ${esc(t.analogy[1])}</p></div>`;
 }
+// Apoyo de la sección 2 en el encuentro 4: cómo usarla, las palabras que hacen falta ANTES de la figura,
+// las confusiones frecuentes y lo que se debe poder explicar al terminar. Las cifras salen de las figuras.
+const SECTION_GUIDE={
+ 'dl-yolo':{
+  steps:['Lee las cuatro palabras de abajo: son las que aparecen en la figura.','Juega con la figura: mueve el corte y activa «quitar repetidas». Di tu predicción antes de cada cambio.','Ponle nombre a lo que viste con las tarjetas y, si quieres, prueba el reto opcional.'],
+  words:[['Propuesta (P1, P2…)','Cada rectángulo es una caja que el modelo propone: «aquí creo que hay un fruto». En la figura hay 12 propuestas para 5 frutos.'],['Confianza (de 0 a 1)','El número junto a cada caja: qué tan seguro está el modelo de esa propuesta. P1 con 0,92 es muy segura; P11 con 0,27, poco.'],['Corte de confianza','El límite que eliges tú. Solo se conservan las propuestas con confianza mayor que el corte.'],['Repetidas (NMS)','Varias cajas sobre el mismo fruto. «Quitar repetidas» deja solo la más segura de cada grupo.']],
+  mistakes:[['«Confianza alta quiere decir caja correcta»','No. La confianza es lo que cree el modelo. P12 tiene 0,52 y debajo no hay ningún fruto.'],['«Hay tantos frutos como cajas»','No. Puede haber cajas repetidas, falsas alarmas y frutos sin caja. Con el corte en 0,25 hay 12 cajas y solo 5 frutos.'],['«Subir el corte lo arregla todo»','No. Quita falsas alarmas, pero también puede quitar frutos de verdad. Ningún corte deja los 5 frutos sin falsas alarmas.']],
+  learn:['Qué trae cada propuesta: categoría, caja y confianza.','Qué hace el corte de confianza y qué hace «quitar repetidas».','Por qué contar cajas no es lo mismo que contar frutos.']},
+ 'dl-evaluacion':{
+  steps:['Lee las cuatro palabras de abajo: son las que aparecen en las dos figuras.','Figura 1: mueve la caja naranja y mira cómo cambia el IoU. Figura 2: mueve el corte y cuenta aciertos, falsas alarmas y frutos perdidos.','Ponle nombre a lo que viste con las tarjetas y, si quieres, prueba el reto opcional.'],
+  words:[['Referencia','La caja correcta, marcada por una persona. En la Figura 1 es la azul y no se mueve.'],['IoU (de 0 a 1)','Cuánto coinciden dos cajas: zona común ÷ zona total cubierta. 1 es idénticas; 0 es que no se tocan.'],['TP, FP y FN','TP: caja que acierta un fruto. FP: falsa alarma, caja sin fruto. FN: fruto que se quedó sin caja.'],['Precisión y recall','Precisión: de las cajas que mostró, ¿cuántas acertaron? Recall: de los frutos reales, ¿cuántos encontró?']],
+  mistakes:[['«IoU y confianza son lo mismo»','No. La confianza la da el modelo antes de comparar. El IoU se mide después, contra la referencia.'],['«Con precisión alta el modelo ya es bueno»','No basta. Un modelo que muestra una sola caja y acierta tiene precisión de 100 % y deja casi todos los frutos sin encontrar.'],['«Moviendo el corte suben las dos a la vez»','En esta escena no. Al subir el corte suele subir la precisión y bajar el recall: hay que elegir un equilibrio.']],
+  learn:['Calcular un IoU a mano: intersección ÷ unión.','Decir por qué una caja es TP, FP o FN.','Calcular precisión y recall con los tres contadores.']},
+ 'dl-integracion':{
+  steps:['Lee las cuatro palabras de abajo: son las que aparecen en la figura.','Mueve el corte y el coste del defecto. Antes de cada cambio, di en voz alta si el total sube o baja.','Ponle nombre a lo que viste con las tarjetas y, si quieres, prueba el reto opcional.'],
+  words:[['Puntuación de defecto (de 0 a 1)','El número que el modelo le da a cada grano. Más alto quiere decir más sospechoso de ser defectuoso.'],['Corte','El límite que eliges tú. Los granos con puntuación mayor o igual al corte van a revisión; los demás se aceptan.'],['Coste de revisar','Lo que cuesta que una persona revise un grano. Aquí es 1 punto por grano.'],['Coste del defecto','Lo que cuesta aceptar un grano defectuoso sin revisarlo. Aquí empieza en 8 puntos y lo puedes cambiar.']],
+  mistakes:[['«El modelo decide»','No. El modelo solo da puntuaciones. La decisión sale del corte, y el corte lo elige una persona según los costes.'],['«El mejor corte siempre es 0,50»','No. Depende de cuánto cuesta cada error. Con el defecto a 8 puntos, el corte más barato de la figura es 0,35.'],['«Revisar todo es lo mejor porque es lo más seguro»','Es lo más seguro, pero cuesta 10 puntos. Con corte 0,35 se revisan 5 granos, no se escapa ningún defecto y cuesta 5.']],
+  learn:['Diferenciar puntuación, corte y decisión.','Calcular el coste total: revisiones × 1 + defectos aceptados × su coste.','Explicar por qué el corte cambia cuando cambian los costes.']}
+};
+const sectionBefore=id=>{const g=SECTION_GUIDE[id];if(!g)return '';
+ return `<div class="vx-guide" data-vx-guide="antes"><p class="vx-guide-title">Cómo aprovechar esta sección</p><ol class="vx-parts">${g.steps.map(t=>`<li>${esc(t)}</li>`).join('')}</ol><p class="vx-guide-title">Palabras que necesitas antes de mirar la figura</p><dl class="vx-io vx-io-words">${g.words.map(([term,meaning])=>`<div><dt>${esc(term)}</dt><dd>${esc(meaning)}</dd></div>`).join('')}</dl></div>`;};
+const sectionAfter=id=>{const g=SECTION_GUIDE[id];if(!g)return '';
+ return `<div class="vx-guide" data-vx-guide="despues"><p class="vx-guide-title">No confundas</p><dl class="vx-io vx-io-words">${g.mistakes.map(([wrong,right])=>`<div><dt>${esc(wrong)}</dt><dd>${esc(right)}</dd></div>`).join('')}</dl><p class="vx-guide-title">Antes de seguir, comprueba que puedes explicar</p><ol class="vx-parts">${g.learn.map(t=>`<li>${esc(t)}</li>`).join('')}</ol></div>`;};
 export function renderVisualFigures(id){
  const t=TOPICS[id];if(!t)return '';
- return `<div class="vx vx-inline" data-vx-topic="${id}">${t.figures()}<p class="vx-note">Los datos de estas figuras son inventados para explicar. Las cuentas son reales: puedes rehacerlas a mano con los valores visibles.</p></div>`;
+ return `<div class="vx vx-inline" data-vx-topic="${id}">${sectionBefore(id)}${t.figures()}${sectionAfter(id)}<p class="vx-note">Los datos de estas figuras son inventados para explicar. Las cuentas son reales: puedes rehacerlas a mano con los valores visibles.</p></div>`;
 }
 export function renderVisualCards(id){
  const t=TOPICS[id];if(!t)return '';
@@ -660,6 +683,7 @@ export const DIPLOMA_QUESTIONS=[
  '¿Qué quieres aprender después?'
 ];
 export const DIPLOMA_FAREWELL='Gracias por el tiempo, las preguntas y la paciencia de estos ocho encuentros. Ha sido un gusto acompañarlos; ojalá estas ideas les sirvan para mirar sus datos con más calma y más criterio.';
+export const renderDiplomaClosing=()=>diplomaClosing();
 const diplomaClosing=()=>`<div data-vx-course-closing><h3>Conclusiones del diplomado</h3><p class="vx-closing-lead">Lo que queda de las dos asignaturas, Machine Learning y Deep Learning.</p><dl class="vx-glossary vx-conclusions">${DIPLOMA_CONCLUSIONS.map(([title,text],i)=>`<div><dt>${i+1}. ${esc(title)}</dt><dd>${esc(text)}</dd></div>`).join('')}</dl><h3>Conversemos para cerrar</h3><p class="vx-closing-lead">Estas preguntas son para conversar en clase. No se escribe ni se guarda nada en la plataforma.</p><ol class="vx-closing-questions">${DIPLOMA_QUESTIONS.map(q=>`<li>${esc(q)}</li>`).join('')}</ol><p class="vx-closing-farewell">${esc(DIPLOMA_FAREWELL)}</p></div>`;
 
 // Todos los términos del encuentro, en orden alfabético y sin repetir.

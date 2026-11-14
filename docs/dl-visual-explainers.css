@@ -273,3 +273,12 @@
 .vx-closing-questions li{padding:10px 0 10px 4px;border-bottom:1px solid var(--line);font-size:1.05rem;line-height:1.5}
 .vx-closing-questions li::marker{font-weight:700;color:var(--muted)}
 .dl-course-reading .vx .vx-closing-farewell,.vx .vx-closing-farewell{margin:22px 0 0;padding:0 0 0 14px;border-left:3px solid var(--line);font-size:1.05rem;line-height:1.6;max-width:none}
+.vx .vx-guide{margin:0 0 18px}
+.vx .vx-guide[data-vx-guide=despues]{margin:18px 0 0}
+.dl-course-reading .vx .vx-guide-title,.vx .vx-guide-title{margin:14px 0 0;font-size:16px;font-weight:700;color:var(--ink);max-width:none}
+.vx .vx-io.vx-io-words{grid-template-columns:repeat(2,minmax(0,1fr))}
+.vx .vx-io.vx-io-words dt{text-transform:none;font-size:14.5px;letter-spacing:0;color:var(--ink)}
+@media (max-width:640px){.vx .vx-io.vx-io-words{grid-template-columns:1fr}}
+.organized-meeting .diploma-closing-body{padding:6px 28px 26px}
+.organized-meeting .diploma-closing-body h3{margin:22px 0 6px;font-size:19px}
+@media (max-width:720px){.organized-meeting .diploma-closing-body{padding:6px 22px 22px}}
